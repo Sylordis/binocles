@@ -8,20 +8,9 @@
  */
  
 plugins {
+  id 'eclipse'
   id 'application'
   id 'org.openjfx.javafxplugin' version '0.0.10'
-  id 'org.beryx.jlink' version '2.24.4'
-}
-
-javafx {
-    version = "17.0.1"
-    modules = [ 'javafx.controls' ]
-}
-
-jlink {
-    launcher {
-        name = 'hellofx'
-    }
 }
 
 repositories {
@@ -36,17 +25,20 @@ dependencies {
 	testImplementation 'org.mockito:mockito-junit-jupiter:4.4.0'
 }
 
-testing {
-    suites {
-        // Configure the built-in test suite
-        test {
-            // Use JUnit Jupiter test framework
-            useJUnitJupiter('5.8.1')
-        }
-    }
+run {
+	standardInput = System.in
 }
 
 application {
     // Define the main class for the application.
     mainClass = 'org.github.sylordis.brease.gui.BreaseGUI'
+}
+
+javafx {
+    version = "17.0.1"
+    modules = [ 'javafx.controls', 'javafx.media', 'javafx.fxml' ]
+}
+
+test {
+	runJUnitPlatform()
 }

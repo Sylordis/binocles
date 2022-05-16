@@ -9,4 +9,4 @@
  */
 
 rootProject.name = 'BREASE'
-include('app')
+include 'brease-app'
