@@ -1,12 +1,14 @@
 package org.github.sylordis.binocle.model.text;
 
+import org.github.sylordis.binocle.model.review.ReviewableContent;
+
 /**
  * Represents a chapter in a book, with a possible title and its content.
  * 
  * @author sylordis
  *
  */
-public class Chapter {
+public class Chapter extends ReviewableContent {
 
 	/**
 	 * Title of the book, optional.
@@ -39,6 +41,7 @@ public class Chapter {
 	 * @param text
 	 */
 	public Chapter(String title, String text) {
+		super();
 		this.title = title;
 		this.text = text;
 	}
