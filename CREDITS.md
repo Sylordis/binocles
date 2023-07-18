@@ -1,0 +1,6 @@
+# Icons & images
+book_by_Freepik_from_flaticon
+chapter_by_Talha_Dogar_from_flaticon
+options_by_DinosoftLabs_from_flaticon
+typography_by_DinosoftLabs_from_flaticon
+ink_by_Freepik_from_Flaticon

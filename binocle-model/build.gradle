@@ -3,13 +3,10 @@
  */
 
 plugins {
-    id 'org.github.sylordis.binocle.java-library-conventions'
+    id 'com.github.sylordis.binocle.java-library-conventions'
 }
 
 dependencies {
-    implementation 'org.apache.commons:commons-text'
     implementation project(':binocle-utils')
     implementation 'com.google.guava:guava:31.1-jre'
-	testImplementation 'org.hamcrest:hamcrest:2.2'
-	testImplementation 'org.mockito:mockito-junit-jupiter:4.4.0'
 }

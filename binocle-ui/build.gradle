@@ -2,19 +2,19 @@
  * Build.gradle file for the binocle-ui component.
  */
 plugins {
-    id 'org.github.sylordis.binocle.java-application-conventions'
+    id 'com.github.sylordis.binocle.java-application-conventions'
   	id 'org.openjfx.javafxplugin' version '0.0.14'
   	id 'org.beryx.jlink' version '2.26.0'
 }
 
 dependencies {
     implementation 'org.apache.commons:commons-text'
-    implementation project(':binocle-utils')
+    implementation project(':binocle-model')
 }
 
 application {
     // Define the main class for the application.
-    mainClass = 'org.github.sylordis.binocle.ui.BinocleApp'
+    mainClass = 'com.github.sylordis.binocle.ui.BinocleApp'
 }
 
 javafx {

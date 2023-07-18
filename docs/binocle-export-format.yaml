@@ -1,0 +1,64 @@
+binocle:
+  version: <software version number/version number>
+  legend:
+    name: <legend name/string>
+    types:
+        - [type1/review type]
+        - [type2/review type]
+        - [..]
+        - [type n/review type]
+    book:
+        name: <book name/string>
+        synopsis: >
+            <book synopsis/long string>
+        description: >
+            <book description/long string>
+        generalComment: >
+            <book general comment/long string>
+        metadata:
+            - author: <author/string>
+            - metadata2property: <metadata2value>
+            - [..]
+        chapters:
+            - [chapter 1/chapter]
+            - [chapter 2/chapter]
+            - [..]
+            - [chapter n/chapter]
+---
+# review type
+name: <type-name/string>
+description: >
+    <type-description/long string>
+fields:
+    - typefield1name: typefield1value
+    - typefield2name: typefield2value
+    - [..]
+    - typefieldnname: typefieldnvalue
+styles:
+    - typestyle1property: typestyle1value
+    - typestyle2property: typestyle2value
+    - [..]
+    - typestylenproperty: typestylenvalue
+---
+# chapter
+name: <chapter name/string>
+content: >
+    <chapter content/long string>
+generalComment: >
+    <chapter general comment/long string>
+comments:
+    - [comment 1/comment]
+    - [comment 2/comment]
+    - [..]
+    - [comment n/comment]
+---
+# comment
+type: <review type>
+range: <startIndex/integer>-<endIndex/integer>
+fields:
+    - value: >
+        <value/long string>
+    - field2name: <field2value/string>
+    - [..]
+    - fieldnname: <fieldnvalue/string>
+ 

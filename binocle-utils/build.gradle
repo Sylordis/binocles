@@ -3,5 +3,5 @@
  */
 
 plugins {
-    id 'org.github.sylordis.binocle.java-library-conventions'
+    id 'com.github.sylordis.binocle.java-library-conventions'
 }
