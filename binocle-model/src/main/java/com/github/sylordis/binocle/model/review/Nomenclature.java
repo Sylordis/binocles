@@ -3,7 +3,7 @@ package com.github.sylordis.binocle.model.review;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.sylordis.binocle.model.common.Identifiable;
+import com.github.sylordis.binocle.utils.Identifiable;
 import com.google.common.base.Preconditions;
 
 /**
@@ -50,7 +50,7 @@ public class Nomenclature implements Identifiable {
 
 	@Override
 	public String getId() {
-		return name.toLowerCase();
+		return Identifiable.formatId(name);
 	}
 	
 	@Override

@@ -4,9 +4,13 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.github.sylordis.binocle.model.exceptions.UniqueNameException;
 import com.github.sylordis.binocle.model.review.Nomenclature;
 import com.github.sylordis.binocle.model.text.Book;
+import com.github.sylordis.binocle.utils.Identifiable;
 import com.google.common.base.Preconditions;
 
 /**
@@ -25,6 +29,11 @@ public class BinocleModel {
 	 * Set of nomenclatures.
 	 */
 	private final Set<Nomenclature> nomenclatures;
+	
+	/**
+	 * Local logger.
+	 */
+	private final Logger logger = LogManager.getLogger();
 
 	/**
 	 * Creates a new model.
@@ -47,6 +56,7 @@ public class BinocleModel {
 			throw new UniqueNameException(Book.class, book.getTitle());
 		}
 		books.add(book);
+		logger.info("New book added: '{}'", book.getTitle());
 	}
 
 	/**
@@ -61,6 +71,7 @@ public class BinocleModel {
 			throw new UniqueNameException(Nomenclature.class, nomenclature.getName());
 		}
 		nomenclatures.add(nomenclature);
+		logger.info("New nomenclature added: '{}'", nomenclature.getName());
 	}
 
 	/**
@@ -70,6 +81,24 @@ public class BinocleModel {
 		return books;
 	}
 
+	/**
+	 * Checks if the model has a book which can be identified as the provided one.
+	 * @param title
+	 * @return true if the book is not null and is the same as an existing one.
+	 */
+	public boolean hasBook(String title) {
+		return null != title && books.stream().anyMatch(b -> b.is(Identifiable.formatId(title)));
+	}
+	
+	/**
+	 * Checks if the model has a book which can be identified as the provided one.
+	 * @param book
+	 * @return true if the book is not null and is the same as an existing one.
+	 */
+	public boolean hasBook(Book book) {
+		return book != null && books.stream().anyMatch(n -> n.is(book));
+	}
+	
 	/**
 	 * Checks if the model has a nomenclature which can be identified as the provided one.
 	 * 

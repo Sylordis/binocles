@@ -1,6 +1,7 @@
 package com.github.sylordis.binocle.model.text;
 
 import com.github.sylordis.binocle.model.review.ReviewableContent;
+import com.github.sylordis.binocle.utils.Identifiable;
 
 /**
  * Represents a chapter in a book, with a possible title and its content.
@@ -48,7 +49,7 @@ public class Chapter extends ReviewableContent {
 
 	@Override
 	public String getId() {
-		return title.toLowerCase();
+		return Identifiable.formatId(title);
 	}
 	
 	@Override

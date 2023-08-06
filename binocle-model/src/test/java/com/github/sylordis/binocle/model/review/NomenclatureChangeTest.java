@@ -1,4 +1,4 @@
-package com.github.sylordis.binocle.model.legend;
+package com.github.sylordis.binocle.model.review;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -17,13 +17,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.github.sylordis.binocle.model.review.CommentType;
-import com.github.sylordis.binocle.model.review.Nomenclature;
-import com.github.sylordis.binocle.model.review.NomenclatureChange;
-import com.github.sylordis.binocle.model.review.NomenclatureCommentTypeChange;
-
 @ExtendWith(MockitoExtension.class)
-class LegendConfigurationChangeTest {
+class NomenclatureChangeTest {
 
 	@Mock
 	private Nomenclature next;
@@ -50,26 +45,26 @@ class LegendConfigurationChangeTest {
 	}
 
 	@Test
-	void testLegendConfigurationChange() {
+	void testNomenclatureChange() {
 		change = new NomenclatureChange();
 		assertNotNull(change);
 		assertNull(change.getNextConfiguration());
 	}
 
 	@Test
-	void testLegendConfigurationChangeLegendConfiguration() {
+	void testNomenclatureChangeLegendConfiguration() {
 		assertNotNull(change);
 	}
 
 	@Test
-	void testLegendConfigurationChangeLegendConfiguration_Null() {
+	void testNomenclatureChangeLegendConfiguration_Null() {
 		change = new NomenclatureChange(null);
 		assertNotNull(change);
 		assertNull(change.getNextConfiguration());
 	}
 
 	@Test
-	void testLegendConfigurationChangeLegendConfigurationMapOfLegendConfigurationTypeLegendConfigurationTypeChange(
+	void testNomenclatureChangeLegendConfigurationMapOfLegendConfigurationTypeLegendConfigurationTypeChange(
 			@Mock Nomenclature nextCfg) {
 		change = new NomenclatureChange(nextCfg, converts);
 		assertNotNull(change);

@@ -44,6 +44,7 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -57,7 +58,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" stylesheets="@styles/main.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.sylordis.binocle.ui.BinocleController">
+<VBox prefHeight="600.0" prefWidth="900.0" stylesheets="@../styles/main.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.sylordis.binocle.ui.BinocleController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -129,48 +130,63 @@
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/open.png" />
+                        <Image url="@../img/open.png" />
                      </image>
                   </ImageView>
-               </graphic></Button>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Open file" />
+               </tooltip></Button>
             <Button fx:id="navSave" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" text="Save">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/save.png" />
+                        <Image url="@../img/save.png" />
                      </image>
                   </ImageView>
-               </graphic></Button>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Save all reviews" />
+               </tooltip></Button>
             <Button fx:id="navSaveAs" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" text="Save As">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/save-as.png" />
+                        <Image url="@../img/save-as.png" />
                      </image>
                   </ImageView>
-               </graphic></Button>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Save all reviews in a new file" />
+               </tooltip></Button>
             <Button fx:id="navExportStruct" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" text="Export (Struct)">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/export.png" />
+                        <Image url="@../img/export.png" />
                      </image>
                   </ImageView>
-               </graphic></Button>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Export a structural save" />
+               </tooltip></Button>
             <Button fx:id="navExportRender" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" text="Export (Render)">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/export_render.png" />
+                        <Image url="@../img/export_render.png" />
                      </image>
                   </ImageView>
-               </graphic></Button>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Export the render of a review" />
+               </tooltip></Button>
             <Separator maxHeight="16.0" orientation="VERTICAL" prefHeight="16.0" />
             <Button fx:id="navCreateBook" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#createBookAction" text="New Book">
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/book.png" />
+                        <Image url="@../img/book.png" />
                      </image>
                   </ImageView>
                </graphic></Button>
@@ -178,7 +194,7 @@
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/chapter.png" />
+                        <Image url="@../img/chapter.png" />
                      </image>
                   </ImageView>
                </graphic></Button>
@@ -186,7 +202,7 @@
                <graphic>
                   <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@img/chapter.png" />
+                        <Image url="@../img/chapter.png" />
                      </image>
                   </ImageView>
                </graphic></Button>
@@ -242,7 +258,7 @@
                            <children>
                               <VBox prefHeight="551.0" prefWidth="443.0">
                                  <children>
-                                    <Text id="chapter-title" fx:id="textZoneChapterTitle" strokeType="OUTSIDE" strokeWidth="0.0">
+                                    <Text id="chapter-title" strokeType="OUTSIDE" strokeWidth="0.0">
                                        <font>
                                           <Font size="20.0" />
                                        </font>
@@ -250,7 +266,10 @@
                                           <Insets bottom="10.0" />
                                        </VBox.margin>
                                     </Text>
-                                    <TextFlow id="chapter-content" fx:id="textZoneChapterContent" textAlignment="JUSTIFY" />
+                                    <TextFlow id="chapter-content" textAlignment="JUSTIFY">
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Please create/select a chapter in the review tree." />
+                                       </children></TextFlow>
                                  </children>
                                  <opaqueInsets>
                                     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

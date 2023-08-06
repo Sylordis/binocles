@@ -14,4 +14,8 @@ public final class ReviewTreeRoot extends ReviewableContent {
 	public String toString() {
 		return "Reviews root";
 	}
+
+	public String getId() {
+		return "THEREVIEWROOT";
+	}
 }

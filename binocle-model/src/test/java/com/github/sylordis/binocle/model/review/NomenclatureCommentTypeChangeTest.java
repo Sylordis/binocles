@@ -1,4 +1,4 @@
-package com.github.sylordis.binocle.model.legend;
+package com.github.sylordis.binocle.model.review;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -14,10 +14,6 @@ import static org.mockito.Mockito.verify;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.github.sylordis.binocle.model.review.Comment;
-import com.github.sylordis.binocle.model.review.CommentType;
-import com.github.sylordis.binocle.model.review.NomenclatureCommentTypeChange;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +22,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class LegendConfigurationTypeChangeTest {
+class NomenclatureCommentTypeChangeTest {
 
 	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
 	private Comment comment;
@@ -47,19 +43,19 @@ class LegendConfigurationTypeChangeTest {
 	}
 
 	@Test
-	void testLegendConfigurationTypeChangeLegendConfigurationType() {
+	void testNomenclatureCommentTypeChangeCommentType() {
 		assertNotNull(change);
 	}
 
 	@Test
-	void testLegendConfigurationTypeChangeLegendConfigurationTypeMapOfStringString() {
+	void testNomenclatureCommentTypeChangeCommentTypeMapOfStringString() {
 		change = new NomenclatureCommentTypeChange(future, subst);
 		assertNotNull(change);
 		assertEquals(subst, change.getSubstitutions());
 	}
 
 	@Test
-	void testLegendConfigurationTypeChangeLegendConfigurationTypeMapOfStringString_Null() {
+	void testNomenclatureCommentTypeChangeCommentTypeMapOfStringString_Null() {
 		change = new NomenclatureCommentTypeChange(future, null);
 		assertNotNull(change);
 		assertNotNull(change.getSubstitutions());

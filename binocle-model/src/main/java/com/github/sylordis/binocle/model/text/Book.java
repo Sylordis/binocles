@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.github.sylordis.binocle.model.review.Nomenclature;
 import com.github.sylordis.binocle.model.review.ReviewableContent;
+import com.github.sylordis.binocle.utils.Identifiable;
 
 /**
  * Represents a book that can contain several chapters. Books will be the base entity that is
@@ -62,12 +63,12 @@ public class Book extends ReviewableContent {
 
 	@Override
 	public String toString() {
-		return title + "<" + nomenclature + ">";
+		return title + "<" + (null != nomenclature ? nomenclature : "none") + ">";
 	}
 
 	@Override
 	public String getId() {
-		return title.toLowerCase();
+		return Identifiable.formatId(title);
 	}
 	
 	/**
@@ -160,6 +161,16 @@ public class Book extends ReviewableContent {
 	 */
 	public void setNomenclature(Nomenclature nomenclature) {
 		this.nomenclature = nomenclature;
+	}
+
+	/**
+	 * Checks that the book has a given chapter, matching on ID.
+	 * @param n
+	 * @see Identifiable#is(String)
+	 * @return
+	 */
+	public boolean hasChapter(String n) {
+		return this.chapters.stream().anyMatch(c -> c.is(n));
 	}
 
 }

@@ -10,10 +10,10 @@ public class BinocleApp extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		Parent root = FXMLLoader.load(this.getClass().getResource("scene.fxml"));
+		Parent root = FXMLLoader.load(this.getClass().getResource("fxml/scene.fxml"));
 
-		Scene scene = new Scene(root, 600, 400);
-		
+		Scene scene = new Scene(root);
+
 		primaryStage.getIcons().add(AppIcons.ICON_SOFTWARE);
 		primaryStage.setTitle("Binocle");
 		primaryStage.setScene(scene);

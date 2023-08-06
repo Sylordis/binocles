@@ -16,7 +16,7 @@ import javafx.scene.image.ImageView;
  *
  */
 public final class AppIcons {
-	
+
 	/**
 	 * Icon for the software.
 	 */

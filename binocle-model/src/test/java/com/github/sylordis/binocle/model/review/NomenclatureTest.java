@@ -1,4 +1,4 @@
-package com.github.sylordis.binocle.model.legend;
+package com.github.sylordis.binocle.model.review;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -16,11 +16,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.github.sylordis.binocle.model.review.CommentType;
-import com.github.sylordis.binocle.model.review.Nomenclature;
-
 @ExtendWith(MockitoExtension.class)
-class LegendConfigurationTest {
+class NomenclatureTest {
 
 	private final String NAME = "Configuy";
 
@@ -45,22 +42,22 @@ class LegendConfigurationTest {
 	}
 
 	@Test
-	void testLegendConfigurationString() {
+	void testNomenclatureString() {
 		assertNotNull(cfg);
 	}
 
 	@Test
-	void testLegendConfigurationString_NameBlank() {
+	void testNomenclatureString_NameBlank() {
 		assertThrows(IllegalArgumentException.class, () -> new Nomenclature("   "));
 	}
 
 	@Test
-	void testLegendConfigurationString_NameNull() {
+	void testNomenclatureString_NameNull() {
 		assertThrows(NullPointerException.class, () -> new Nomenclature(null));
 	}
 
 	@Test
-	void testLegendConfigurationStringListOfLegendConfigurationType() {
+	void testNomenclatureStringListOfCommentType() {
 		List<CommentType> types = new ArrayList<>(typesAll);
 		final String name = "HotSauce";
 		cfg = new Nomenclature(name, types);
@@ -69,22 +66,22 @@ class LegendConfigurationTest {
 	}
 
 	@Test
-	void testLegendConfigurationStringListOfLegendConfigurationType_NameBlank() {
+	void testNomenclatureStringListOfCommentType_NameBlank() {
 		assertThrows(IllegalArgumentException.class, () -> new Nomenclature("   ", new ArrayList<>()));
 	}
 
 	@Test
-	void testLegendConfigurationStringListOfLegendConfigurationType_NameNull() {
+	void testNomenclatureStringListOfCommentType_NameNull() {
 		assertThrows(NullPointerException.class, () -> new Nomenclature(null, new ArrayList<>()));
 	}
 
 	@Test
-	void testLegendConfigurationStringListOfLegendConfigurationType_TypesNull() {
+	void testNomenclatureStringListOfCommentType_TypesNull() {
 		assertThrows(NullPointerException.class, () -> new Nomenclature(NAME, null));
 	}
 
 	@Test
-	void testLegendConfigurationStringListOfLegendConfigurationType_TypesEmpty() {
+	void testNomenclatureStringListOfCommentType_TypesEmpty() {
 		List<CommentType> types = new ArrayList<>();
 		final String name = "Chwing";
 		cfg = new Nomenclature(name, types);

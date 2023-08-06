@@ -1,4 +1,4 @@
-package com.github.sylordis.binocle.model.legend;
+package com.github.sylordis.binocle.model.review;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -18,9 +18,7 @@ import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.github.sylordis.binocle.model.review.CommentType;
-
-class LegendConfigurationTypeTest {
+class CommentTypeTest {
 
 	private final String NAME = "Namey";
 	private final String DESCRIPTION = "Descriptive description mmh";
