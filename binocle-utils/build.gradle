@@ -1,7 +1,0 @@
-/*
- * Build.gradle file for the binocle-utils component.
- */
-
-plugins {
-    id 'com.github.sylordis.binocle.java-library-conventions'
-}

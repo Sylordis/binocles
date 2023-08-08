@@ -10,5 +10,5 @@ plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '0.4.0'
 }
 
-rootProject.name = 'binocle'
-include('binocle-model', 'binocle-ui', 'binocle-utils')
+rootProject.name = 'binocles'
+include('binocles-model', 'binocles-ui', 'binocles-utils')

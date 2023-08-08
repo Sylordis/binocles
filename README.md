@@ -1,4 +1,4 @@
-# Binocle
+# Binocles
 The software’s purpose is to facilitate the beta reading of texts by their users, by allowing them to comment such texts with comments of different types, in a harmonised manner.
 
 # Dependencies

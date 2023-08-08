@@ -1,0 +1,60 @@
+.icon {
+	-fx-pref-height: 16;
+	-fx-pref-width: 16;
+}
+
+GridPane.form {
+	-fx-border-insets: 20 150 10 10;
+    -fx-hgap: 10;
+    -fx-vgap: 10;
+}
+
+.anchor-pane {
+	-fx-padding: 0;
+}
+
+.text-danger {
+	-fx-fill: #dc3545;
+}
+.text-muted {
+	-fx-fill: #6c757d;
+}
+.text-secondary {
+	-fx-fill: #6c757d;
+}
+.text-success {
+	-fx-fill: #28a745;
+}
+.text-warning {
+	-fx-fill: #ffc107;
+}
+
+.titled-pane {
+	-fx-margin: 0;
+	-fx-background-insets: 0;
+	-fx-padding: 0;
+}
+.tree-view {
+	-fx-margin: 0;
+	-fx-background-insets: 0;
+	-fx-padding: 0;
+}
+
+#about-dialog {
+	-fx-padding: 10px;
+}
+#about-dialog .label {
+	-fx-font-weight: bold;
+}
+#toolbar .button {
+	-fx-background-color: transparent;
+	-fx-padding: 3;
+	-fx-margin-left: 2;
+	-fx-margin-right: 2;
+}
+#toolbar .button:hover {
+	-fx-background-color: #AAA;
+}
+#toolbar .separator {
+	-fx-height: 16px;
+}

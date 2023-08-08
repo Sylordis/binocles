@@ -1,0 +1,12 @@
+/*
+ * Build.gradle file for the binocles-model component.
+ */
+
+plugins {
+    id 'com.github.sylordis.binocles.java-library-conventions'
+}
+
+dependencies {
+    implementation project(':binocles-utils')
+    implementation 'com.google.guava:guava:31.1-jre'
+}
