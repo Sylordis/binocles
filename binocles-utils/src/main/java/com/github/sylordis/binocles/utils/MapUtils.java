@@ -1,4 +1,4 @@
-package com.github.sylordis.binocle.utils;
+package com.github.sylordis.binocles.utils;
 
 import java.util.HashMap;
 import java.util.Map;

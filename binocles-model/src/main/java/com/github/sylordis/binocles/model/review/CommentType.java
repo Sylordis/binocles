@@ -5,8 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.github.sylordis.binocle.utils.MapUtils;
-
+import com.github.sylordis.binocles.utils.MapUtils;
 import com.google.common.base.Preconditions;
 
 /**

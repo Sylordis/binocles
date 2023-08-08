@@ -36,7 +36,7 @@ Just download the latest JAR.
 `./gradlew test`
 
 # Help
-Check out the [wiki on Github](https://github.com/Sylordis/csv-reorganiser/wiki).
+Check out the [wiki on Github](https://github.com/Sylordis/binocles/wiki).
 
 # Author & Contributors
 The only contributor and author is Sylvain "Sylordis" Domenjoud.
@@ -45,4 +45,4 @@ The only contributor and author is Sylvain "Sylordis" Domenjoud.
 This project is distributed under the license [GNU Affero General Public License v3.0](https://www.gnu.org/licenses/agpl-3.0.en.html).
 
 # Links
-Project website: https://github.com/Sylordis/binocle
+Project website: https://github.com/Sylordis/binocles

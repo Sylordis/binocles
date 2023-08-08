@@ -3,7 +3,7 @@ package com.github.sylordis.binocles.model.review;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.sylordis.binocle.utils.Identifiable;
+import com.github.sylordis.binocles.utils.Identifiable;
 import com.google.common.base.Preconditions;
 
 /**

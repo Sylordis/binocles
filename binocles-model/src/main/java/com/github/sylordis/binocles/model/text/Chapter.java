@@ -1,7 +1,7 @@
 package com.github.sylordis.binocles.model.text;
 
-import com.github.sylordis.binocle.utils.Identifiable;
 import com.github.sylordis.binocles.model.review.ReviewableContent;
+import com.github.sylordis.binocles.utils.Identifiable;
 
 /**
  * Represents a chapter in a book, with a possible title and its content.

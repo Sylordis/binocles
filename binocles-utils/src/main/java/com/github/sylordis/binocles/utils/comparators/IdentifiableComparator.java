@@ -1,8 +1,8 @@
-package com.github.sylordis.binocle.utils.comparators;
+package com.github.sylordis.binocles.utils.comparators;
 
 import java.util.Comparator;
 
-import com.github.sylordis.binocle.utils.Identifiable;
+import com.github.sylordis.binocles.utils.Identifiable;
 
 /**
  * Comparator on {@link Identifiable} class. An {@link Identifiable} i1 will be located before i2 if

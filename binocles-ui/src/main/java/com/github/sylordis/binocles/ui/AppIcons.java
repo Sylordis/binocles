@@ -3,12 +3,12 @@ package com.github.sylordis.binocles.ui;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.github.sylordis.binocle.utils.MapUtils;
 import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.ui.settings.BinoclesConfiguration;
+import com.github.sylordis.binocles.utils.MapUtils;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -26,7 +26,7 @@ public final class AppIcons {
 	/**
 	 * Icon for the software.
 	 */
-	public static final Image ICON_SOFTWARE = new Image(AppIcons.class.getResourceAsStream("img/binocle.png"));
+	public static final Image ICON_SOFTWARE = new Image(AppIcons.class.getResourceAsStream("img/binocles.png"));
 
 	/**
 	 * Icon for {@link Book}.

@@ -7,7 +7,6 @@ import java.util.ResourceBundle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.sylordis.binocle.utils.comparators.IdentifiableComparator;
 import com.github.sylordis.binocles.model.BinoclesModel;
 import com.github.sylordis.binocles.model.exceptions.UniqueNameException;
 import com.github.sylordis.binocles.model.review.Nomenclature;
@@ -27,6 +26,7 @@ import com.github.sylordis.binocles.ui.dialogs.CreateChapterDialog;
 import com.github.sylordis.binocles.ui.javafxutils.Browser;
 import com.github.sylordis.binocles.ui.javafxutils.TreeViewUtils;
 import com.github.sylordis.binocles.ui.settings.BinoclesConstants;
+import com.github.sylordis.binocles.utils.comparators.IdentifiableComparator;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -85,6 +85,11 @@ public class BinoclesController implements Initializable {
 	private MenuItem menuHelpDocumentation;
 	@FXML
 	private MenuItem menuHelpAbout;
+	
+	@FXML
+	private MenuItem reviewTreeMenuEdit;
+	@FXML
+	private MenuItem reviewTreeMenuDelete;
 
 	@FXML
 	private Button toolbarOpen;
@@ -126,14 +131,12 @@ public class BinoclesController implements Initializable {
 		// Initialise the tree for reviews
 		TreeItem<ReviewableContent> reviewsTreeRoot = new TreeItem<>(new ReviewableContentTreeRoot());
 		reviewTree.setRoot(reviewsTreeRoot);
-		reviewTree.setShowRoot(false);
 		reviewTree.setCellFactory(p -> {
 			return new ReviewTreeCell();
 		});
 		// Initialise the tree for nomenclatures
 		TreeItem<NomenclatureItem> nomenclaturesTreeRoot = new TreeItem<>(new NomenclatureTreeRoot());
 		nomenclatureTree.setRoot(nomenclaturesTreeRoot);
-		nomenclatureTree.setShowRoot(false);
 		nomenclatureTree.setCellFactory(p -> {
 			return new NomenclatureTreeCell();
 		});
@@ -150,8 +153,9 @@ public class BinoclesController implements Initializable {
 		        });
 		textZoneChapterContent.setText("Please select/create a chapter in the review tree.");
 		// Setup other components
-		textZoneChapterTitle.wrappingWidthProperty().bind(textZoneScrollPane.prefViewportWidthProperty());
-		textZoneChapterContent.wrappingWidthProperty().bind(textZoneScrollPane.prefViewportWidthProperty());
+		textZoneChapterTitle.wrappingWidthProperty().bind(textZoneScrollPane.widthProperty());
+		textZoneChapterContent.wrappingWidthProperty().bind(textZoneScrollPane.widthProperty());
+		// TODO not working properly because not accounting the scrollbar. How does one get the viewport width property?
 	}
 
 	@FXML
@@ -221,6 +225,7 @@ public class BinoclesController implements Initializable {
 				TreeItem<ReviewableContent> chapterTreeItem = new TreeItem<>(chapter);
 				TreeItem<ReviewableContent> currentBookParent = TreeViewUtils.getTreeViewItem(reviewTree.getRoot(), bookParent);
 				currentBookParent.getChildren().add(chapterTreeItem);
+				reviewTree.getSelectionModel().select(chapterTreeItem);
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-package com.github.sylordis.binocle.model.review;
+package com.github.sylordis.binocles.model.review;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -16,8 +16,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
-
-import com.github.sylordis.binocles.model.review.CommentType;
 
 class CommentTypeTest {
 

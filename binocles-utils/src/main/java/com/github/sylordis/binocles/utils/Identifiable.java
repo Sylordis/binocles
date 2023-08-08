@@ -1,4 +1,4 @@
-package com.github.sylordis.binocle.utils;
+package com.github.sylordis.binocles.utils;
 
 /**
  * Identifiable classes possess a unique ID amongst their peers.

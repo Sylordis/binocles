@@ -1,4 +1,4 @@
-package com.github.sylordis.binocle.model.review;
+package com.github.sylordis.binocles.model.review;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -15,9 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.github.sylordis.binocles.model.review.CommentType;
-import com.github.sylordis.binocles.model.review.Nomenclature;
 
 @ExtendWith(MockitoExtension.class)
 class NomenclatureTest {

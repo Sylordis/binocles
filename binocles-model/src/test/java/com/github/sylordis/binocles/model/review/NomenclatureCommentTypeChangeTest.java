@@ -1,4 +1,4 @@
-package com.github.sylordis.binocle.model.review;
+package com.github.sylordis.binocles.model.review;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -20,10 +20,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import com.github.sylordis.binocles.model.review.Comment;
-import com.github.sylordis.binocles.model.review.CommentType;
-import com.github.sylordis.binocles.model.review.NomenclatureCommentTypeChange;
 
 @ExtendWith(MockitoExtension.class)
 class NomenclatureCommentTypeChangeTest {

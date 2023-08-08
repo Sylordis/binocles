@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.github.sylordis.binocle.utils.Identifiable;
+import com.github.sylordis.binocles.utils.Identifiable;
 
 /**
  * Reviewable content is a class to be inherited for all content that can hold comments.

@@ -7,10 +7,10 @@ import java.util.TreeSet;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.sylordis.binocle.utils.Identifiable;
 import com.github.sylordis.binocles.model.exceptions.UniqueNameException;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.text.Book;
+import com.github.sylordis.binocles.utils.Identifiable;
 import com.google.common.base.Preconditions;
 
 /**

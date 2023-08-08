@@ -8,8 +8,8 @@ package com.github.sylordis.binocles.ui.settings;
 public final class BinoclesConstants {
 
 	public final static String SOFTWARE_NAME = "Binocles";
-	public final static String WEBSITE_LINK = "https://github.com/Sylordis/binocle/";
-	public final static String DOCUMENTATION_LINK = "https://github.com/Sylordis/binocle/wiki";
+	public final static String WEBSITE_LINK = "https://github.com/Sylordis/binocles/";
+	public final static String DOCUMENTATION_LINK = "https://github.com/Sylordis/binocles/wiki";
 	public static final String LICENSE_SHORT = """
 This software is distributed under the GNU Affero General Public License Version 3.
 

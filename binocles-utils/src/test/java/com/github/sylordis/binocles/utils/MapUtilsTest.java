@@ -1,4 +1,4 @@
-package com.github.sylordis.binocle.utils;
+package com.github.sylordis.binocles.utils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -44,14 +44,6 @@ class MapUtilsTest {
 		assertNotNull(map);
 		assertTrue(map.isEmpty());
 	}
-//
-//	@Test
-//	public void testCreate_NullEntry() {
-//		Map<Integer, String> map = MapUtils.create(new Integer[] { null }, new String[] { null });
-//		assertNotNull(map);
-//		assertEquals(1, map.size());
-//		assertThat(map, hasEntry((Integer) null, (String) null));
-//	}
 
 	@Test
 	public void testCreate_EmptyValues() {

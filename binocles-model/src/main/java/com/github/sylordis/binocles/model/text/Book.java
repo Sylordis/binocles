@@ -3,9 +3,9 @@ package com.github.sylordis.binocles.model.text;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.sylordis.binocle.utils.Identifiable;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.review.ReviewableContent;
+import com.github.sylordis.binocles.utils.Identifiable;
 
 /**
  * Represents a book that can contain several chapters. Books will be the base entity that is

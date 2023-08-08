@@ -1,4 +1,4 @@
-binocle:
+binocles:
   version: <software version number/version number>
   legend:
     name: <legend name/string>
