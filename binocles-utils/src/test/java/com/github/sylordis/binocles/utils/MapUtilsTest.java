@@ -91,6 +91,14 @@ class MapUtilsTest {
 	}
 
 	@Test
+	void testConvertMap() {
+		Map<String,Object> origin = Map.of("1", "hello", "5", "world");
+		Map<Integer,String> expected = Map.of(1, "hello", 5, "world");
+		Map<Integer,String> result = MapUtils.convertMap(origin, e -> Integer.parseInt(e.getKey()), e -> (String) e.getValue());
+		assertEquals(expected, result);
+	}
+	
+	@Test
 	void testPutOrRemoveIfNull_PutOnly() {
 		final Map<String, String> map = new HashMap<>(Map.of("c", "C", "d", "D"));
 		MapUtils.putOrRemoveIfNull(map, "a", "b");

@@ -159,15 +159,6 @@ public class BinoclesController implements Initializable {
 	}
 
 	@FXML
-	public void exitAction(ActionEvent event) {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setHeaderText("Are you sure you want to quit?");
-		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == ButtonType.OK)
-			Platform.exit();
-	}
-
-	@FXML
 	public void createBookAction(ActionEvent event) {
 		CreateBookDialog dialog = new CreateBookDialog(model);
 		Optional<CreateBookAnswer> answer = dialog.display();
@@ -199,14 +190,8 @@ public class BinoclesController implements Initializable {
 	}
 
 	@FXML
-	public void deleteElementsAction(ActionEvent event) {
-		// TODO Get all selected elements in the tree, open confirmation dialog.
-		triggerNotImplementedAlert();
-	}
-
-	@FXML
 	public void createChapterAction(ActionEvent event) {
-		// Get book first
+		// Get currently selected item
 		TreeItem<ReviewableContent> treeSelected = reviewTree.getSelectionModel().getSelectedItem();
 		if (null != treeSelected) {
 			// Get current book
@@ -225,19 +210,46 @@ public class BinoclesController implements Initializable {
 				TreeItem<ReviewableContent> chapterTreeItem = new TreeItem<>(chapter);
 				TreeItem<ReviewableContent> currentBookParent = TreeViewUtils.getTreeViewItem(reviewTree.getRoot(), bookParent);
 				currentBookParent.getChildren().add(chapterTreeItem);
+				currentBookParent.setExpanded(true);
 				reviewTree.getSelectionModel().select(chapterTreeItem);
 			}
 		}
 	}
 
 	@FXML
-	public void openDocumentation(ActionEvent event) {
+	public void deleteElementsAction(ActionEvent event) {
+		// TODO Get all selected elements in the tree, open confirmation dialog.
+		showNotImplementedAlert();
+	}
+
+	@FXML
+	public void exitAction(ActionEvent event) {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setHeaderText("Are you sure you want to quit?");
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK)
+			Platform.exit();
+	}
+
+	@FXML
+	public void openAboutAction(ActionEvent event) {
+		new AboutDialog().display();
+	}
+	
+	@FXML
+	public void openDocumentationAction(ActionEvent event) {
 		new Browser().open(BinoclesConstants.DOCUMENTATION_LINK);
 	}
 
 	@FXML
-	public void openAbout(ActionEvent event) {
-		new AboutDialog().display();
+	public void openFileAction(ActionEvent event) {
+		// TODO FileChooser
+		// TODO Read file according to type
+		// TODO Replace model
+		// TODO (Later) Add to model: conflict management (same IDs?)
+		// TODO Refresh interface
+		// - Re-populate trees
+		// - Set disable statuses
 	}
 	
 	/**
@@ -263,7 +275,7 @@ public class BinoclesController implements Initializable {
 	/**
 	 * Displays a small alert dialog that the feature is not implemented yet.
 	 */
-	private void triggerNotImplementedAlert() {
+	private void showNotImplementedAlert() {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Uhoh");
 		alert.setHeaderText(null);

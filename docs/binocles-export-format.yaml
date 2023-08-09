@@ -1,64 +1,80 @@
 binocles:
   version: <software version number/version number>
-  legend:
-    name: <legend name/string>
-    types:
-        - [type1/review type]
-        - [type2/review type]
-        - [..]
-        - [type n/review type]
-    book:
-        name: <book name/string>
-        synopsis: >
-            <book synopsis/long string>
-        description: >
-            <book description/long string>
-        generalComment: >
-            <book general comment/long string>
-        metadata:
-            - author: <author/string>
-            - metadata2property: <metadata2value>
-            - [..]
-        chapters:
-            - [chapter 1/chapter]
-            - [chapter 2/chapter]
-            - [..]
-            - [chapter n/chapter]
+  nomenclatures:
+    - [nomenclature 1/nomenclature type]
+    - [nomenclature 2/nomenclature type]
+    - [..]
+    - [nomenclature n/nomenclature type]
+  library:
+    - [book 1/book type]
+    - [book 2/book type]
+    - [..]
+    - [book n/book type]
 ---
-# review type
+# nomenclature type
+name: <nomenclature-name/string>
+types:
+  - [comment type 1/comment type type]
+  - [comment type 2/comment type type]
+  - [..]
+  - [comment type n/comment type type]
+---
+# comment type
 name: <type-name/string>
-description: >
+description: |-
     <type-description/long string>
 fields:
-    - typefield1name: typefield1value
-    - typefield2name: typefield2value
-    - [..]
-    - typefieldnname: typefieldnvalue
+    typefield1name: typefield1value
+    typefield2name: typefield2value
+    # [..]
+    typefieldnname: typefieldnvalue
 styles:
-    - typestyle1property: typestyle1value
-    - typestyle2property: typestyle2value
+    typestyle1property: typestyle1value
+    typestyle2property: typestyle2value
+    # [..]
+    typestylenproperty: typestylenvalue
+---
+# book type
+title: <book title/string>
+synopsis: |-
+    <book synopsis/long string>
+description: |-
+    <book description/long string>
+generalcomment: |-
+    <book general comment/long string>
+metadata:
+    author: <author/string>
+    source: <source/string>
+    metadata2property: <metadata2value>
+    # [..]
+nomenclature: <nomenclature name/string>
+chapters:
+    - [chapter 1/chapter]
+    - [chapter 2/chapter]
     - [..]
-    - typestylenproperty: typestylenvalue
+    - [chapter n/chapter]
 ---
 # chapter
-name: <chapter name/string>
-content: >
+title: <chapter title/string>
+content: |-
     <chapter content/long string>
-generalComment: >
+generalcomment: |-
     <chapter general comment/long string>
 comments:
-    - [comment 1/comment]
-    - [comment 2/comment]
+    - [comment 1/comment type]
+    - [comment 2/comment type]
     - [..]
-    - [comment n/comment]
+    - [comment n/comment type]
 ---
 # comment
 type: <review type>
-range: <startIndex/integer>-<endIndex/integer>
+range:
+  start: <startIndex/integer>
+  end: <endIndex/integer>
 fields:
-    - value: >
-        <value/long string>
-    - field2name: <field2value/string>
-    - [..]
-    - fieldnname: <fieldnvalue/string>
+    value: |-
+        <value/text>
+    field2name: <field2value/string>
+    # [..]
+    fieldnname: <fieldnvalue/string>
  

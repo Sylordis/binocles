@@ -1,13 +1,15 @@
 package com.github.sylordis.binocles.model.review;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 
 import com.github.sylordis.binocles.utils.Identifiable;
 
 /**
  * Reviewable content is a class to be inherited for all content that can hold comments.
+ * It will provide the class the capacity to receive a general comment and to set comments.
  * 
  * @author sylordis
  *
@@ -15,21 +17,21 @@ import com.github.sylordis.binocles.utils.Identifiable;
 public abstract class ReviewableContent implements Identifiable {
 
 	/**
-	 * The global comment on the content.
+	 * The general comment on the content.
 	 */
-	private String globalComment;
+	private String generalComment;
 
 	/**
 	 * List of comments of the content. This list cannot be null.
 	 */
-	private Set<Comment> comments;
+	private List<Comment> comments;
 
 	/**
 	 * Creates a new reviewable content, initialising all fields to defaults.
 	 */
 	public ReviewableContent() {
-		this.globalComment = "";
-		this.comments = new TreeSet<>();
+		this.generalComment = "";
+		this.comments = new ArrayList<>();
 	}
 
 	/**
@@ -44,7 +46,7 @@ public abstract class ReviewableContent implements Identifiable {
 	 * @return
 	 */
 	public String getGlobalComment() {
-		return globalComment;
+		return generalComment;
 	}
 
 	/**
@@ -52,7 +54,7 @@ public abstract class ReviewableContent implements Identifiable {
 	 * 
 	 * @return
 	 */
-	public Set<Comment> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
@@ -78,6 +80,20 @@ public abstract class ReviewableContent implements Identifiable {
 	public boolean removeComment(Comment comment) {
 		return this.comments.remove(comment);
 	}
+	
+	/**
+	 * Replaces the current list of comments. Null objects will be ignored.
+	 * @param comments
+	 */
+	public void setComments(List<Comment> comments) {
+		this.comments.clear();
+		if (null != comments) {
+			for (Comment comment : comments) {
+				if (null != comment)
+					this.comments.add(comment);
+			}
+		}
+	}
 
 	/**
 	 * Removes all registered comments.
@@ -87,10 +103,10 @@ public abstract class ReviewableContent implements Identifiable {
 	}
 
 	/**
-	 * @param globalComment the globalComment to set
+	 * @param generalComment the globalComment to set
 	 */
-	public void setGlobalComment(String globalComment) {
-		this.globalComment = globalComment;
+	public void setGeneralComment(String generalComment) {
+		this.generalComment = generalComment;
 	}
 
 	/**

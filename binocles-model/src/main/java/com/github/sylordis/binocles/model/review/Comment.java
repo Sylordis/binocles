@@ -152,15 +152,17 @@ public class Comment implements Comparable<Comment>, Serializable {
 	}
 
 	/**
-	 * Sets start and end indexes according to the lowest and highest indexes given.
+	 * Sets start and end indexes according to provided indexes. Lowest one will be the start, Highest
+	 * one will be the end.
 	 *
 	 * @param index1
 	 * @param index2
-	 * @throws IllegalArgumentException if any of the provided index is negative.
+	 * @throws IllegalArgumentException if any of the provided index is negative or if both are equal.
 	 */
 	public void setAdaptativeBoundaries(int index1, int index2) {
 		Preconditions.checkArgument(index1 >= 0 && index2 >= 0,
-				"The start and end indexes of a comment should be a positive integer.");
+		        "The start and end indexes of a comment should be a positive integer.");
+		Preconditions.checkArgument(index1 == index2, "Both indexes cannot be equal.");
 		this.startIndex = Math.min(index1, index2);
 		this.endIndex = Math.max(index1, index2);
 	}
@@ -203,9 +205,8 @@ public class Comment implements Comparable<Comment>, Serializable {
 	}
 
 	/**
-	 * Sets all fields, replacing previous ones. Calling
-	 * {@link #setField(String, String)} for each value. The state of the map is
-	 * uncertain is any of the keys is null or blank.
+	 * Sets all fields, replacing previous ones. Calling {@link #setField(String, String)} for each
+	 * value. The state of the map is uncertain is any of the keys is null or blank.
 	 *
 	 * @precondition No key is null or blank
 	 * @param fields

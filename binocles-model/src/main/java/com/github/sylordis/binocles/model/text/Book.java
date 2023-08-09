@@ -2,6 +2,8 @@ package com.github.sylordis.binocles.model.text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.review.ReviewableContent;
@@ -34,6 +36,11 @@ public class Book extends ReviewableContent {
 	 */
 	private String description;
 	/**
+	 * Any other metadata concerning the book (author, source, publication year, ...). This map is never
+	 * null.
+	 */
+	private final Map<String, String> metadata;
+	/**
 	 * Current nomenclature for the review.
 	 */
 	private Nomenclature nomenclature;
@@ -59,6 +66,7 @@ public class Book extends ReviewableContent {
 		this.chapters = new ArrayList<>();
 		this.synopsis = synopsis;
 		this.description = description;
+		this.metadata = new TreeMap<>();
 	}
 
 	@Override
@@ -70,7 +78,7 @@ public class Book extends ReviewableContent {
 	public String getId() {
 		return Identifiable.formatId(title);
 	}
-	
+
 	/**
 	 * @return the title
 	 */
@@ -165,12 +173,36 @@ public class Book extends ReviewableContent {
 
 	/**
 	 * Checks that the book has a given chapter, matching on ID.
+	 * 
 	 * @param n
 	 * @see Identifiable#is(String)
 	 * @return
 	 */
 	public boolean hasChapter(String n) {
 		return this.chapters.stream().anyMatch(c -> c.is(n));
+	}
+
+	/**
+	 * Replaces the metadata. Null key will not be added and null values will be inserted as empty
+	 * strings.
+	 * 
+	 * @param metadatas
+	 */
+	public void setMetadata(Map<String, String> metadata) {
+		this.metadata.clear();
+		if (metadata != null) {
+			for (Map.Entry<String, String> data : metadata.entrySet()) {
+				if (null != data.getKey())
+					this.metadata.put(data.getKey(), null != data.getValue() ? data.getValue() : "");
+			}
+		}
+	}
+
+	/**
+	 * @return the metadata
+	 */
+	public Map<String, String> getMetadata() {
+		return metadata;
 	}
 
 }

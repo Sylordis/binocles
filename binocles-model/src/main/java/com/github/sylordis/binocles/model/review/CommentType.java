@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.github.sylordis.binocles.utils.Identifiable;
 import com.github.sylordis.binocles.utils.MapUtils;
 import com.google.common.base.Preconditions;
 
@@ -15,7 +16,7 @@ import com.google.common.base.Preconditions;
  * @author Sylordis
  *
  */
-public class CommentType implements Serializable, NomenclatureItem {
+public class CommentType implements Serializable, NomenclatureItem, Identifiable {
 
 	/**
 	 *
@@ -68,6 +69,11 @@ public class CommentType implements Serializable, NomenclatureItem {
 		this.fields = new HashMap<>();
 	}
 
+	@Override
+	public String getId() {
+		return Identifiable.formatId(this.name);
+	}
+	
 	/**
 	 * @return the name
 	 */

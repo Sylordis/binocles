@@ -1,5 +1,6 @@
 package com.github.sylordis.binocles.model;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -29,7 +30,7 @@ public class BinoclesModel {
 	 * Set of nomenclatures.
 	 */
 	private final Set<Nomenclature> nomenclatures;
-	
+
 	/**
 	 * Local logger.
 	 */
@@ -82,23 +83,36 @@ public class BinoclesModel {
 	}
 
 	/**
+	 * Replaces all books. Providing a null object does not nullify the current collection but
+	 * will just empty it.
+	 * 
+	 * @param books
+	 */
+	public void setBooks(Collection<? extends Book> books) {
+		this.books.clear();
+		if (null != books)
+			this.books.addAll(books);
+	}
+	/**
 	 * Checks if the model has a book which can be identified as the provided one.
+	 * 
 	 * @param title
 	 * @return true if the book is not null and is the same as an existing one.
 	 */
 	public boolean hasBook(String title) {
 		return null != title && books.stream().anyMatch(b -> b.is(Identifiable.formatId(title)));
 	}
-	
+
 	/**
 	 * Checks if the model has a book which can be identified as the provided one.
+	 * 
 	 * @param book
 	 * @return true if the book is not null and is the same as an existing one.
 	 */
 	public boolean hasBook(Book book) {
 		return book != null && books.stream().anyMatch(n -> n.is(book));
 	}
-	
+
 	/**
 	 * Checks if the model has a nomenclature which can be identified as the provided one.
 	 * 
@@ -116,4 +130,15 @@ public class BinoclesModel {
 		return nomenclatures;
 	}
 
+	/**
+	 * Replaces all nomenclatures. Providing a null object does not nullify the current collection but
+	 * will just empty it.
+	 * 
+	 * @param nomenclatures
+	 */
+	public void setNomenclatures(Collection<? extends Nomenclature> nomenclatures) {
+		this.nomenclatures.clear();
+		if (null != nomenclatures)
+			this.nomenclatures.addAll(nomenclatures);
+	}
 }

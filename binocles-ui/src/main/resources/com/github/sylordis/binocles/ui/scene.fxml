@@ -201,22 +201,22 @@
             </Menu>
         <Menu mnemonicParsing="false" text="Help">
           <items>
-            <MenuItem fx:id="menuHelpDocumentation" mnemonicParsing="false" onAction="#openDocumentation" text="Documentation" />
-                  <MenuItem fx:id="menuHelpAbout" mnemonicParsing="false" onAction="#openAbout" text="About Binocles">
-                     <accelerator>
-                        <KeyCodeCombination alt="UP" code="F1" control="UP" meta="UP" shift="UP" shortcut="UP" />
-                     </accelerator>
-                     <graphic>
-                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@img/help.png" />
-                           </image>
-                           <viewport>
-                              <Rectangle2D />
-                           </viewport>
-                        </ImageView>
-                     </graphic>
-              </MenuItem>
+            <MenuItem fx:id="menuHelpDocumentation" mnemonicParsing="false" onAction="#openDocumentationAction" text="Documentation" />
+            <MenuItem fx:id="menuHelpAbout" mnemonicParsing="false" onAction="#openAboutAction" text="About Binocles">
+	             <accelerator>
+	                <KeyCodeCombination alt="UP" code="F1" control="UP" meta="UP" shift="UP" shortcut="UP" />
+	             </accelerator>
+	             <graphic>
+	                <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+	                   <image>
+	                      <Image url="@img/help.png" />
+	                   </image>
+	                   <viewport>
+	                      <Rectangle2D />
+	                   </viewport>
+	                </ImageView>
+	             </graphic>
+          	</MenuItem>
           </items>
         </Menu>
       </menus>
@@ -373,7 +373,10 @@
                                           <Font size="20.0" />
                                        </font>
                                     </Text>
-                                    <Text id="chapter-content" fx:id="textZoneChapterContent" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="JUSTIFY" />
+                                    <Text id="chapter-content" fx:id="textZoneChapterContent" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="JUSTIFY">
+                                       <VBox.margin>
+                                          <Insets right="5.0" />
+                                       </VBox.margin></Text>
                                  </children>
                               </VBox>
                            </children>

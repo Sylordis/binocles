@@ -2,6 +2,8 @@ package com.github.sylordis.binocles.utils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Utils for maps.
@@ -23,8 +25,8 @@ public final class MapUtils {
 	 * entries with keys(i) => values(i). If both arrays do not match in length, data will only be
 	 * inserted up to the shortest array. This method does not manage null values in arrays.
 	 * 
-	 * @param <K> Type of the keys
-	 * @param <V> Type of the values
+	 * @param <K>    Type of the keys
+	 * @param <V>    Type of the values
 	 * @param map    base map instance for a particular type
 	 * @param keys   Keys to add to the map
 	 * @param values Values to link to the keys
@@ -47,14 +49,33 @@ public final class MapUtils {
 	 * entries with keys(i) => values(i). If both arrays do not match in length, data will only be
 	 * inserted up to the shortest array. This method does not manage null values in arrays.
 	 *
-	 * @param <K> Type of the keys
-	 * @param <V> Type of the values
+	 * @param <K>    Type of the keys
+	 * @param <V>    Type of the values
 	 * @param keys   Keys to add to the map
 	 * @param values Values to link to the keys
 	 * @return a new {@link HashMap} with the keys associated to the values.
 	 */
 	public static <K, V> Map<K, V> create(K[] keys, V[] values) {
 		return create(new HashMap<>(), keys, values);
+	}
+
+	/**
+	 * Converts the types defined in a Map to other types.
+	 * 
+	 * @param <Ko>        Type of the origin map's keys
+	 * @param <Vo>        Type of the origin map's values
+	 * @param <Kn>        Type of the new map's keys
+	 * @param <Vn>        Type of the new map's values
+	 * @param origin      Map to convert
+	 * @param keyMapper   Mapper to create new keys
+	 * @param valueMapper Mapper to create new values
+	 * @return a new map with the converted types
+	 */
+	public static <Ko, Vo, Kn, Vn> Map<Kn, Vn> convertMap(Map<Ko, Vo> origin,
+	        Function<? super Map.Entry<Ko, Vo>, ? extends Kn> keyMapper,
+	        Function<? super Map.Entry<Ko, Vo>, ? extends Vn> valueMapper) {
+		Map<Kn, Vn> result = origin.entrySet().stream().collect(Collectors.toMap(keyMapper, valueMapper));
+		return result;
 	}
 
 	/**
