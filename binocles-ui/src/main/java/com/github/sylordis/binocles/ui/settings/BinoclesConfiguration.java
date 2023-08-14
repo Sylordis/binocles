@@ -1,14 +1,25 @@
 package com.github.sylordis.binocles.ui.settings;
 
+import java.util.List;
+
+import javafx.stage.FileChooser;
+
 /**
  * Main configuration class.
+ * 
  * @author sylordis
  *
  */
 public class BinoclesConfiguration {
 
 	/**
+	 * Display size.
+	 */
+	private DisplaySize displaySize;
+
+	/**
 	 * Holder for singleton instance.
+	 * 
 	 * @author sylordis
 	 *
 	 */
@@ -18,25 +29,26 @@ public class BinoclesConfiguration {
 		 */
 		private static final BinoclesConfiguration instance = new BinoclesConfiguration();
 	}
-	
+
 	/**
 	 * Gets the singleton instance of the configuration.
+	 * 
 	 * @return
 	 */
 	public static BinoclesConfiguration getInstance() {
 		return BinocleConfigurationHolder.instance;
 	}
-	
-	/**
-	 * Display size.
-	 */
-	private DisplaySize displaySize;
-	
+
 	/**
 	 * Creates a new instance.
 	 */
 	private BinoclesConfiguration() {
 		displaySize = DisplaySize.NORMAL;
+	}
+
+	public List<FileChooser.ExtensionFilter> getFileFilters() {
+		return List.of(new FileChooser.ExtensionFilter("Binocles format", "*.bino"),
+		        new FileChooser.ExtensionFilter("YAML file", "*.yaml"));
 	}
 
 	/**

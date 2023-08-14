@@ -1,14 +1,21 @@
 package com.github.sylordis.binocles.ui;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.message.Message;
+import org.apache.logging.log4j.message.StringFormattedMessage;
 
 import com.github.sylordis.binocles.model.BinoclesModel;
+import com.github.sylordis.binocles.model.exceptions.ImporterException;
 import com.github.sylordis.binocles.model.exceptions.UniqueNameException;
+import com.github.sylordis.binocles.model.io.FileImporter;
+import com.github.sylordis.binocles.model.io.IOFactory;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.review.NomenclatureItem;
 import com.github.sylordis.binocles.model.review.ReviewableContent;
@@ -25,6 +32,7 @@ import com.github.sylordis.binocles.ui.dialogs.CreateBookDialog;
 import com.github.sylordis.binocles.ui.dialogs.CreateChapterDialog;
 import com.github.sylordis.binocles.ui.javafxutils.Browser;
 import com.github.sylordis.binocles.ui.javafxutils.TreeViewUtils;
+import com.github.sylordis.binocles.ui.settings.BinoclesConfiguration;
 import com.github.sylordis.binocles.ui.settings.BinoclesConstants;
 import com.github.sylordis.binocles.utils.comparators.IdentifiableComparator;
 
@@ -34,6 +42,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -43,6 +52,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 /**
  * Controller for the application.
@@ -85,7 +96,7 @@ public class BinoclesController implements Initializable {
 	private MenuItem menuHelpDocumentation;
 	@FXML
 	private MenuItem menuHelpAbout;
-	
+
 	@FXML
 	private MenuItem reviewTreeMenuEdit;
 	@FXML
@@ -155,7 +166,8 @@ public class BinoclesController implements Initializable {
 		// Setup other components
 		textZoneChapterTitle.wrappingWidthProperty().bind(textZoneScrollPane.widthProperty());
 		textZoneChapterContent.wrappingWidthProperty().bind(textZoneScrollPane.widthProperty());
-		// TODO not working properly because not accounting the scrollbar. How does one get the viewport width property?
+		// TODO not working properly because not accounting the scrollbar. How does one get the viewport
+		// width property?
 	}
 
 	@FXML
@@ -181,8 +193,8 @@ public class BinoclesController implements Initializable {
 				        .sort((s1, s2) -> new IdentifiableComparator().compare(s1.getValue(), s2.getValue()));
 				reviewTree.getSelectionModel().select(bookItem);
 				// Affect UI
-		        menuReviewChapterCreate.setDisable(false);
-		        toolbarCreateChapter.setDisable(false);
+				menuReviewChapterCreate.setDisable(false);
+				toolbarCreateChapter.setDisable(false);
 			} catch (UniqueNameException e) {
 				logger.error(e);
 			}
@@ -208,7 +220,8 @@ public class BinoclesController implements Initializable {
 				Chapter chapter = new Chapter(answer.get().title(), answer.get().content());
 				currentBook.addChapter(chapter);
 				TreeItem<ReviewableContent> chapterTreeItem = new TreeItem<>(chapter);
-				TreeItem<ReviewableContent> currentBookParent = TreeViewUtils.getTreeViewItem(reviewTree.getRoot(), bookParent);
+				TreeItem<ReviewableContent> currentBookParent = TreeViewUtils.getTreeViewItem(reviewTree.getRoot(),
+				        bookParent);
 				currentBookParent.getChildren().add(chapterTreeItem);
 				currentBookParent.setExpanded(true);
 				reviewTree.getSelectionModel().select(chapterTreeItem);
@@ -235,7 +248,7 @@ public class BinoclesController implements Initializable {
 	public void openAboutAction(ActionEvent event) {
 		new AboutDialog().display();
 	}
-	
+
 	@FXML
 	public void openDocumentationAction(ActionEvent event) {
 		new Browser().open(BinoclesConstants.DOCUMENTATION_LINK);
@@ -243,15 +256,35 @@ public class BinoclesController implements Initializable {
 
 	@FXML
 	public void openFileAction(ActionEvent event) {
-		// TODO FileChooser
-		// TODO Read file according to type
-		// TODO Replace model
-		// TODO (Later) Add to model: conflict management (same IDs?)
-		// TODO Refresh interface
-		// - Re-populate trees
-		// - Set disable statuses
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Open a file");
+		fileChooser.getExtensionFilters().addAll(BinoclesConfiguration.getInstance().getFileFilters());
+		// Open file chooser
+		Node node = (Node) event.getSource();
+		Stage stage = (Stage) node.getScene().getWindow();
+		File file = fileChooser.showOpenDialog(stage);
+		FileImporter<BinoclesModel> importer = new IOFactory().getFileImporter(file);
+		if (null == importer) {
+			Message msg = new StringFormattedMessage("Cannot import file '{}', file type is not managed.", file);
+			logger.error(msg);
+			showErrorAlert(msg.toString());
+		} else {
+			try {
+				BinoclesModel importedModel = importer.load(file);
+				// TODO Read file according to type
+				// TODO Replace model
+				// TODO (Later) Add to model: conflict management (same IDs?)
+				// TODO Refresh interface
+				// - Re-populate trees
+				// - Set disable statuses
+			} catch (IOException e) {
+				logger.atError().withThrowable(e).log("Could not read the selected file.");
+			} catch (ImporterException e) {
+				logger.atError().withThrowable(e).log("Could not import the selected file.");
+			}
+		}
 	}
-	
+
 	/**
 	 * Sets the chapter content's value according to what is selected.
 	 * 
@@ -281,6 +314,16 @@ public class BinoclesController implements Initializable {
 		alert.setHeaderText(null);
 		alert.setContentText("It seems this feature is not implemented yet, please come back later =)");
 		alert.showAndWait();
+	}
+
+	/**
+	 * Shows a small error alert dialog.
+	 * 
+	 * @param string Message of the alert.
+	 */
+	private void showErrorAlert(String string) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

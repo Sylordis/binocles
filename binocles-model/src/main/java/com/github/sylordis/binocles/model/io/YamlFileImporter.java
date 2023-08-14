@@ -2,7 +2,7 @@ package com.github.sylordis.binocles.model.io;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
 
 import com.github.sylordis.binocles.model.BinoclesModel;
+import com.github.sylordis.binocles.model.exceptions.ImporterException;
 import com.github.sylordis.binocles.model.review.Comment;
 import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.Nomenclature;
@@ -29,7 +30,7 @@ import com.github.sylordis.binocles.utils.yaml.YAMLUtils;
  * @author sylordis
  *
  */
-public final class YamlImporter {
+public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 
 	/**
 	 * Class logger.
@@ -42,12 +43,14 @@ public final class YamlImporter {
 	 * 
 	 * @param yamlFile File to load
 	 * @return a model populated from the file
-	 * @throws FileNotFoundException
+	 * @throws ImporterException
+	 * @throws IOException
+	 * @Throws ImporterException
 	 */
-	public BinoclesModel load(File yamlFile) throws FileNotFoundException {
-		logger.info("Loading YAML file {}", yamlFile);
+	public BinoclesModel load(File file) throws ImporterException, IOException {
+		logger.info("Loading YAML file {}", file);
 		BinoclesModel model = new BinoclesModel();
-		InputStream inputStream = new FileInputStream(yamlFile);
+		InputStream inputStream = new FileInputStream(file);
 		Yaml yaml = new Yaml();
 		Map<String, Object> data = yaml.load(inputStream);
 		if (data.containsKey("binocles")) {
@@ -68,7 +71,9 @@ public final class YamlImporter {
 			// - range compared to chapter range
 			// - fields existence & values
 		} else {
-			logger.error("YAML import error: no proper root 'binocles' can be found");
+			String message = "YAML import error: no proper root 'binocles' can be found";
+			logger.error(message);
+			throw new ImporterException(message);
 		}
 		return model;
 	}
@@ -157,7 +162,8 @@ public final class YamlImporter {
 			Nomenclature nomenclature = book.getNomenclature();
 			CommentType type = null;
 			if (null != nomenclature) {
-				type = nomenclature.getTypes().stream().filter(t -> t.getId().equals(commentTypeName)).findFirst().get();
+				type = nomenclature.getTypes().stream().filter(t -> t.getId().equals(commentTypeName)).findFirst()
+				        .get();
 			}
 			// Instance
 			Comment comment = new Comment(type, rangeStart, rangeEnd);
