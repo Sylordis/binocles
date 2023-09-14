@@ -225,6 +225,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 				type.editStyles(styles);
 			}
 			result.add(type);
+			logger.debug("Imported comment type {}", type.getName());
 		}
 		return result;
 	}

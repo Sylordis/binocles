@@ -51,6 +51,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
@@ -327,8 +328,17 @@
       </HBox>
     <SplitPane dividerPositions="0.25, 0.75" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <items>
-            <VBox>
-               <children>
+            <SplitPane dividerPositions="0.3" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+              <items>
+                <TitledPane animated="false" text="Nomenclatures">
+                  <content>
+                    <AnchorPane>
+                           <children>
+                              <TreeView id="tree-nomenclatures" fx:id="nomenclatureTree" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                  </content>
+                </TitledPane>
                 <TitledPane animated="false" text="Reviews">
                   <content>
                     <AnchorPane>
@@ -341,22 +351,14 @@
                                         <MenuItem fx:id="reviewTreeMenuDelete" disable="true" mnemonicParsing="false" text="Delete" />
                                       </items>
                                     </ContextMenu>
-                                 </contextMenu></TreeView>
+                                 </contextMenu>
+                              </TreeView>
                            </children>
                         </AnchorPane>
                   </content>
                 </TitledPane>
-                <TitledPane animated="false" text="Nomenclatures">
-                  <content>
-                    <AnchorPane>
-                           <children>
-                              <TreeView id="tree-nomenclatures" fx:id="nomenclatureTree" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                           </children>
-                        </AnchorPane>
-                  </content>
-                </TitledPane>
-               </children>
-            </VBox>
+              </items>
+            </SplitPane>
             <VBox>
                <children>
               <ScrollPane fx:id="textZoneScrollPane" fitToHeight="true" fitToWidth="true" focusTraversable="false" hbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -373,10 +375,7 @@
                                           <Font size="20.0" />
                                        </font>
                                     </Text>
-                                    <Text id="chapter-content" fx:id="textZoneChapterContent" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="JUSTIFY">
-                                       <VBox.margin>
-                                          <Insets right="5.0" />
-                                       </VBox.margin></Text>
+                                    <FlowPane fx:id="textZoneChapterContent" prefHeight="200.0" prefWidth="200.0" />
                                  </children>
                               </VBox>
                            </children>

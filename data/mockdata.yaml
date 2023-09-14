@@ -18,7 +18,7 @@ binocles:
       metadata:
         author: Rhiannon Frater
         source: https://www.goodreads.com/book/show/9648068-the-first-days
-        publication: "2008-08-14"
+        publication: 2008-08-14
       synopsis: |-
         Katie is driving to work one beautiful day when a dead man jumps into her car and tries to eat her.  That same morning, Jenni opens a bedroom door to find her husband devouring their toddler son.
         Fate puts Jenni and Katie—total strangers—together in a pickup, fleeing the suddenly zombie-filled streets of the Texas city in which they live. Before the sun has set, they have become more than just friends and allies—they are bonded as tightly as any two people who have been to war together. 
@@ -117,12 +117,12 @@ binocles:
       generalcomment: |-
         
       chapters:
-        - title: the smallest
+        - title: The Smallest
           content: |-
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque molestie tortor quis lobortis sollicitudin. Proin et tincidunt diam, at faucibus ex. Cras auctor ante lorem, sit amet tempor odio porttitor cursus. Proin posuere leo eget enim laoreet, et maximus justo tempus. Cras elit diam, commodo vitae ipsum vitae, sollicitudin consectetur leo. Nullam sed massa et elit ullamcorper congue eu eu dui. Fusce nisi turpis, pulvinar in aliquet ac, pharetra vel nisi. Fusce consequat vehicula orci, et vehicula lorem ornare sit amet. Donec nec sem ut sapien placerat vestibulum. Donec sagittis lobortis libero nec iaculis.
           generalcomment: |-
           
-        - title: the medium
+        - title: The Medium
           content: |-
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam mollis arcu est, convallis fermentum ipsum porta vitae. Fusce orci mauris, pharetra eget justo ac, sagittis sodales lorem. In volutpat id nibh nec laoreet. In efficitur risus quis velit faucibus, non vestibulum sapien ornare. Nunc convallis, lacus non congue porttitor, nunc mi suscipit metus, sit amet blandit metus ipsum id ipsum. Maecenas sagittis sagittis nisl dictum laoreet. Nam magna turpis, consequat sed ligula interdum, suscipit eleifend elit. Fusce laoreet purus ut nulla vehicula tempor.
             Morbi tempor vestibulum sem, eget dapibus justo auctor et. Sed eget faucibus leo. Nulla fermentum, magna id sodales ornare, ipsum ante posuere elit, eget consequat nibh tellus at diam. Nulla scelerisque libero turpis, ac lobortis enim laoreet hendrerit. Quisque consectetur vestibulum tellus, vitae dignissim elit. Integer sodales felis vel volutpat fermentum. Aenean efficitur ligula enim. Duis congue fermentum augue, id aliquam odio malesuada eget. Vestibulum vitae sapien ex. Suspendisse massa tortor, fermentum nec luctus nec, aliquam in lacus. Curabitur fermentum cursus leo id viverra. Aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sit amet placerat arcu. Vivamus quis lacus justo. Phasellus rutrum nunc non lorem imperdiet, vel rutrum nulla malesuada.
@@ -131,7 +131,7 @@ binocles:
             Nam vestibulum tempus turpis, sit amet sagittis ex pretium ut. Vestibulum sit amet mauris at metus pulvinar accumsan id sed felis. Quisque nec ullamcorper quam, in rutrum libero. Sed enim libero, molestie vitae blandit non, tincidunt id leo. Duis vel luctus urna. Vestibulum aliquam eleifend aliquam. Vestibulum sed nisl non eros mollis pretium.
           generalcomment: |-
            
-        - title: the biggest
+        - title: The Biggest
           content: |-
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor nulla at dui scelerisque porta. Sed eu nisl tempus, facilisis velit vitae, semper velit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In id leo ullamcorper, maximus lectus et, euismod lacus. Praesent tristique a mi sit amet venenatis. Duis vitae ante quis dui imperdiet ullamcorper. Aenean vel convallis neque, eget viverra purus. Suspendisse quis aliquet orci.
             Sed fringilla eget ante a facilisis. Donec sit amet egestas arcu. Cras congue facilisis ante, vel ultricies quam blandit eu. Mauris quis ullamcorper tellus. Duis et ipsum et risus finibus hendrerit eget id justo. Vestibulum imperdiet elit vel diam pulvinar, sit amet lobortis nisi bibendum. Nunc varius, urna ut viverra dapibus, mauris ipsum pharetra risus, ac congue ipsum tortor quis turpis. Nam in justo nec odio convallis lacinia sit amet nec nibh. Fusce gravida leo sed commodo pulvinar. Quisque vel ultrices arcu. Cras rhoncus, lacus vel cursus imperdiet, metus orci pellentesque nisi, a ultrices turpis lacus cursus libero.

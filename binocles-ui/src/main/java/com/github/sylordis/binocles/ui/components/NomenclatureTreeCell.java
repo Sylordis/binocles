@@ -19,6 +19,7 @@ public class NomenclatureTreeCell extends TreeCell<NomenclatureItem> {
 		super.updateItem(item, empty);
 		if (item == null || empty) {
 			setText("");
+			setGraphic(null);
 		} else {
 			Image img = AppIcons.getImageForType(item.getClass());
 			if (img != null)

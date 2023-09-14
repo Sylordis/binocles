@@ -16,6 +16,7 @@ import com.github.sylordis.binocles.model.exceptions.ImporterException;
 import com.github.sylordis.binocles.model.exceptions.UniqueNameException;
 import com.github.sylordis.binocles.model.io.FileImporter;
 import com.github.sylordis.binocles.model.io.IOFactory;
+import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.review.NomenclatureItem;
 import com.github.sylordis.binocles.model.review.ReviewableContent;
@@ -51,6 +52,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -118,7 +120,7 @@ public class BinoclesController implements Initializable {
 	private Button toolbarCreateChapter;
 
 	@FXML
-	private Text textZoneChapterContent;
+	private FlowPane textZoneChapterContent;
 	@FXML
 	private Text textZoneChapterTitle;
 	@FXML
@@ -160,12 +162,11 @@ public class BinoclesController implements Initializable {
 			                TreeItem<ReviewableContent> oldValue, TreeItem<ReviewableContent> newValue) {
 				        setDisplayZoneContent(newValue);
 			        }
-
 		        });
-		textZoneChapterContent.setText("Please select/create a chapter in the review tree.");
+		textZoneChapterContent.getChildren().add(new Text("Please select/create a chapter in the review tree."));
 		// Setup other components
 		textZoneChapterTitle.wrappingWidthProperty().bind(textZoneScrollPane.widthProperty());
-		textZoneChapterContent.wrappingWidthProperty().bind(textZoneScrollPane.widthProperty());
+		textZoneChapterContent.prefWrapLengthProperty().bind(textZoneScrollPane.widthProperty());
 		// TODO not working properly because not accounting the scrollbar. How does one get the viewport
 		// width property?
 	}
@@ -262,24 +263,28 @@ public class BinoclesController implements Initializable {
 		Node node = (Node) event.getSource();
 		Stage stage = (Stage) node.getScene().getWindow();
 		File file = fileChooser.showOpenDialog(stage);
-		FileImporter<BinoclesModel> importer = new IOFactory().getFileImporter(file);
-		if (null == importer) {
-			Message msg = new StringFormattedMessage("Cannot import file '{}', file type is not managed.", file);
-			logger.error(msg);
-			showErrorAlert(msg.toString());
-		} else {
-			try {
-				// Read file
-				BinoclesModel importedModel = importer.load(file);
-				// Replace model
-				this.model = importedModel;
-				// TODO (Later) Add to model: conflict management (same IDs?)
-				rebuildTrees();
-				// TODO Set disable statuses
-			} catch (IOException e) {
-				logger.atError().withThrowable(e).log("Could not read the selected file.");
-			} catch (ImporterException e) {
-				logger.atError().withThrowable(e).log("Could not import the selected file.");
+		// Null file means dialog was cancelled
+		if (null != file) {
+			FileImporter<BinoclesModel> importer = new IOFactory().getFileImporter(file);
+			// No importer found
+			if (null == importer) {
+				Message msg = new StringFormattedMessage("Cannot open file '{}', file type is not managed.", file);
+				logger.error(msg);
+				showErrorAlert(msg.toString());
+			} else {
+				try {
+					// Read file
+					BinoclesModel importedModel = importer.load(file);
+					// Replace model
+					this.model = importedModel;
+					// TODO (Later) Add to model: conflict management (same IDs?)
+					rebuildTrees();
+					// TODO Set disable statuses
+				} catch (IOException e) {
+					logger.atError().withThrowable(e).log("Could not read the selected file.");
+				} catch (ImporterException e) {
+					logger.atError().withThrowable(e).log("Could not import the selected file.");
+				}
 			}
 		}
 	}
@@ -290,17 +295,18 @@ public class BinoclesController implements Initializable {
 	 * @param value current selected value
 	 */
 	public void setDisplayZoneContent(TreeItem<ReviewableContent> value) {
+		textZoneChapterContent.getChildren().clear();
 		if (Chapter.class.equals(value.getValue().getClass())) {
 			Chapter chapter = (Chapter) value.getValue();
 			textZoneChapterTitle.setText(chapter.getTitle());
-			textZoneChapterContent.setText(chapter.getText());
+			textZoneChapterContent.getChildren().add(new Text(chapter.getText()));
 		} else if (Book.class.equals(value.getValue().getClass())) {
 			Book book = (Book) value.getValue();
 			textZoneChapterTitle.setText(book.getTitle());
-			textZoneChapterContent.setText("");
+			textZoneChapterContent.getChildren().add(new Text(""));
 		} else {
 			textZoneChapterTitle.setText("");
-			textZoneChapterContent.setText("Please select/create a chapter in the review tree.");
+			textZoneChapterContent.getChildren().add(new Text("Please select/create a chapter in the review tree."));
 		}
 	}
 
@@ -323,12 +329,12 @@ public class BinoclesController implements Initializable {
 	private void showErrorAlert(String text) {
 		showErrorAlert("Error", text);
 	}
-	
+
 	/**
 	 * Shows a small error alert dialog.
 	 * 
 	 * @param title Title of the alert.
-	 * @param text Message of the alert.
+	 * @param text  Message of the alert.
 	 */
 	private void showErrorAlert(String title, String text) {
 		Alert alert = new Alert(AlertType.ERROR);
@@ -340,6 +346,7 @@ public class BinoclesController implements Initializable {
 
 	/**
 	 * Rebuilds the trees according to model.
+	 * 
 	 * @see BinoclesController#rebuildBooksTree()
 	 * @see #rebuildNomenclaturesTree()
 	 */
@@ -347,7 +354,7 @@ public class BinoclesController implements Initializable {
 		rebuildBooksTree();
 		rebuildNomenclaturesTree();
 	}
-	
+
 	/**
 	 * Rebuilds the book tree according to model.
 	 */
@@ -375,7 +382,10 @@ public class BinoclesController implements Initializable {
 		for (Nomenclature nomenclature : model.getNomenclatures()) {
 			TreeItem<NomenclatureItem> nomenclatureNode = new TreeItem<>(nomenclature);
 			nomenclatureTree.getRoot().getChildren().add(nomenclatureNode);
+			for (CommentType commentType : nomenclature.getTypes()) {
+				nomenclatureNode.getChildren().add(new TreeItem<NomenclatureItem>(commentType));
+			}
 		}
 	}
-	
+
 }

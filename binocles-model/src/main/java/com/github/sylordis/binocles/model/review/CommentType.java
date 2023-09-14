@@ -70,6 +70,11 @@ public class CommentType implements Serializable, NomenclatureItem, Identifiable
 	}
 
 	@Override
+	public String toString() {
+		return name;
+	}
+
+	@Override
 	public String getId() {
 		return Identifiable.formatId(this.name);
 	}

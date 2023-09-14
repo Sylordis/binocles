@@ -71,7 +71,13 @@ public class Book extends ReviewableContent {
 
 	@Override
 	public String toString() {
-		return title + " <" + (null != nomenclature ? nomenclature : "none") + ">";
+		StringBuilder rame = new StringBuilder();
+		rame.append(title);
+		if (hasChapters()) {
+			rame.append(" [").append(this.chapters.size()).append("]");
+		}
+		rame.append(" <").append(null != nomenclature ? nomenclature : "none").append(">");
+		return rame.toString();
 	}
 
 	@Override
@@ -117,6 +123,14 @@ public class Book extends ReviewableContent {
 		return chapters;
 	}
 
+	/**
+	 * Checks if this books has chapters.
+	 * @return true if this book has at least one chapter.
+	 */
+	public boolean hasChapters() {
+		return !this.chapters.isEmpty();
+	}
+	
 	/**
 	 * @param chapters the chapters to set
 	 */
