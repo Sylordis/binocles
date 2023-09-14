@@ -64,7 +64,7 @@ import javafx.stage.Stage;
 public class BinoclesController implements Initializable {
 
 	@FXML
-	private TreeView<ReviewableContent> reviewTree;
+	private TreeView<ReviewableContent> bookTree;
 	@FXML
 	private TreeView<NomenclatureItem> nomenclatureTree;
 
@@ -141,8 +141,8 @@ public class BinoclesController implements Initializable {
 		model = new BinoclesModel();
 		// Initialise the tree for reviews
 		TreeItem<ReviewableContent> reviewsTreeRoot = new TreeItem<>(new ReviewableContentTreeRoot());
-		reviewTree.setRoot(reviewsTreeRoot);
-		reviewTree.setCellFactory(p -> {
+		bookTree.setRoot(reviewsTreeRoot);
+		bookTree.setCellFactory(p -> {
 			return new ReviewTreeCell();
 		});
 		// Initialise the tree for nomenclatures
@@ -152,7 +152,7 @@ public class BinoclesController implements Initializable {
 			return new NomenclatureTreeCell();
 		});
 		// Set trees change listener
-		reviewTree.getSelectionModel().selectedItemProperty()
+		bookTree.getSelectionModel().selectedItemProperty()
 		        .addListener(new ChangeListener<TreeItem<ReviewableContent>>() {
 
 			        @Override
@@ -188,10 +188,10 @@ public class BinoclesController implements Initializable {
 				model.addBook(book);
 				TreeItem<ReviewableContent> bookItem = new TreeItem<>(book);
 				bookItem.setExpanded(true);
-				reviewTree.getRoot().getChildren().add(bookItem);
-				reviewTree.getRoot().getChildren()
+				bookTree.getRoot().getChildren().add(bookItem);
+				bookTree.getRoot().getChildren()
 				        .sort((s1, s2) -> new IdentifiableComparator().compare(s1.getValue(), s2.getValue()));
-				reviewTree.getSelectionModel().select(bookItem);
+				bookTree.getSelectionModel().select(bookItem);
 				// Affect UI
 				menuReviewChapterCreate.setDisable(false);
 				toolbarCreateChapter.setDisable(false);
@@ -204,7 +204,7 @@ public class BinoclesController implements Initializable {
 	@FXML
 	public void createChapterAction(ActionEvent event) {
 		// Get currently selected item
-		TreeItem<ReviewableContent> treeSelected = reviewTree.getSelectionModel().getSelectedItem();
+		TreeItem<ReviewableContent> treeSelected = bookTree.getSelectionModel().getSelectedItem();
 		if (null != treeSelected) {
 			// Get current book
 			TreeItem<ReviewableContent> currentTreeBookParent = Book.class.equals(treeSelected.getValue().getClass())
@@ -220,11 +220,11 @@ public class BinoclesController implements Initializable {
 				Chapter chapter = new Chapter(answer.get().title(), answer.get().content());
 				currentBook.addChapter(chapter);
 				TreeItem<ReviewableContent> chapterTreeItem = new TreeItem<>(chapter);
-				TreeItem<ReviewableContent> currentBookParent = TreeViewUtils.getTreeViewItem(reviewTree.getRoot(),
+				TreeItem<ReviewableContent> currentBookParent = TreeViewUtils.getTreeViewItem(bookTree.getRoot(),
 				        bookParent);
 				currentBookParent.getChildren().add(chapterTreeItem);
 				currentBookParent.setExpanded(true);
-				reviewTree.getSelectionModel().select(chapterTreeItem);
+				bookTree.getSelectionModel().select(chapterTreeItem);
 			}
 		}
 	}
@@ -257,8 +257,7 @@ public class BinoclesController implements Initializable {
 	@FXML
 	public void openFileAction(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Open a file");
-		fileChooser.getExtensionFilters().addAll(BinoclesConfiguration.getInstance().getFileFilters());
+		fileChooser.getExtensionFilters().addAll(BinoclesConfiguration.getInstance().getFileFilters(true));
 		// Open file chooser
 		Node node = (Node) event.getSource();
 		Stage stage = (Stage) node.getScene().getWindow();
@@ -270,13 +269,13 @@ public class BinoclesController implements Initializable {
 			showErrorAlert(msg.toString());
 		} else {
 			try {
+				// Read file
 				BinoclesModel importedModel = importer.load(file);
-				// TODO Read file according to type
-				// TODO Replace model
+				// Replace model
+				this.model = importedModel;
 				// TODO (Later) Add to model: conflict management (same IDs?)
-				// TODO Refresh interface
-				// - Re-populate trees
-				// - Set disable statuses
+				rebuildTrees();
+				// TODO Set disable statuses
 			} catch (IOException e) {
 				logger.atError().withThrowable(e).log("Could not read the selected file.");
 			} catch (ImporterException e) {
@@ -321,9 +320,62 @@ public class BinoclesController implements Initializable {
 	 * 
 	 * @param string Message of the alert.
 	 */
-	private void showErrorAlert(String string) {
-		// TODO Auto-generated method stub
-
+	private void showErrorAlert(String text) {
+		showErrorAlert("Error", text);
+	}
+	
+	/**
+	 * Shows a small error alert dialog.
+	 * 
+	 * @param title Title of the alert.
+	 * @param text Message of the alert.
+	 */
+	private void showErrorAlert(String title, String text) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(text);
+		alert.showAndWait();
 	}
 
+	/**
+	 * Rebuilds the trees according to model.
+	 * @see BinoclesController#rebuildBooksTree()
+	 * @see #rebuildNomenclaturesTree()
+	 */
+	public void rebuildTrees() {
+		rebuildBooksTree();
+		rebuildNomenclaturesTree();
+	}
+	
+	/**
+	 * Rebuilds the book tree according to model.
+	 */
+	public void rebuildBooksTree() {
+		// Remove all existing books
+		bookTree.getRoot().getChildren().clear();
+		// Add all books
+		for (Book book : model.getBooks()) {
+			TreeItem<ReviewableContent> bookNode = new TreeItem<>(book);
+			bookTree.getRoot().getChildren().add(bookNode);
+			// Add chapters to book
+			for (Chapter chapter : book.getChapters()) {
+				bookNode.getChildren().add(new TreeItem<ReviewableContent>(chapter));
+			}
+		}
+	}
+
+	/**
+	 * Rebuilds the nomenclature tree according to model.
+	 */
+	public void rebuildNomenclaturesTree() {
+		// Remove all existing nomenclatures
+		nomenclatureTree.getRoot().getChildren().clear();
+		// Add all nomenclatures
+		for (Nomenclature nomenclature : model.getNomenclatures()) {
+			TreeItem<NomenclatureItem> nomenclatureNode = new TreeItem<>(nomenclature);
+			nomenclatureTree.getRoot().getChildren().add(nomenclatureNode);
+		}
+	}
+	
 }

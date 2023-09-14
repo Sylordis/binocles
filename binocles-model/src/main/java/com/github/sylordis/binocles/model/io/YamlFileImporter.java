@@ -4,9 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -98,10 +101,11 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			book.setSynopsis(synopsis);
 			book.setDescription(description);
 			book.setGeneralComment(generalComment);
+			logger.debug("Created book {}", book.getTitle());
 			// Metadata
 			if (data.containsKey("metadata")) {
 				Map<String, String> metadata = MapUtils.convertMap(YAMLUtils.get("metadata", data), Map.Entry::getKey,
-				        e -> (String) e.getValue());
+				        this::convertValueType);
 				book.setMetadata(metadata);
 			}
 			// Chapters
@@ -112,6 +116,24 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			result.add(book);
 		}
 		return result;
+	}
+
+	/**
+	 * Converts the value of an entry to a string.
+	 * @param e
+	 * @return
+	 */
+	public String convertValueType(Entry<String, Object> e) {
+		Class<?> valueType = e.getValue().getClass();
+		String returnValue = null;
+		if (valueType.equals(Date.class)) {
+			returnValue = new SimpleDateFormat("yyyy-MM-dd").format((Date) e.getValue());
+		} else if (Number.class.isAssignableFrom(valueType)) {
+			// TODO
+		} else {
+			returnValue = (String) e.getValue();
+		}
+		return returnValue;
 	}
 
 	/**
@@ -126,17 +148,17 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 		for (Object o : list) {
 			Map<String, Object> data = YAMLUtils.toNode(o);
 			String title = YAMLUtils.strValue("title", data);
-			Chapter chapter = new Chapter(title);
 			// Normal fields
 			String content = YAMLUtils.strValue("content", data);
 			String generalComment = YAMLUtils.strValue("generalcomment", data);
-			chapter.setText(content);
+			Chapter chapter = new Chapter(title, content);
 			chapter.setGeneralComment(generalComment);
 			// Comments
 			if (YAMLUtils.checkChildType(data, "comments", YAMLType.LIST)) {
 				List<Comment> comments = loadCommentsFromYAML(YAMLUtils.list("comments", data), book);
 				chapter.setComments(comments);
 			}
+			logger.debug("Imported new chapter {}", chapter.getTitle());
 			result.add(chapter);
 		}
 		return result;
@@ -170,7 +192,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			// fields
 			if (data.containsKey("fields")) {
 				Map<String, String> fields = MapUtils.convertMap(YAMLUtils.get("fields", data), Map.Entry::getKey,
-				        e -> (String) e.getValue());
+				        e -> convertValueType(e));
 				comment.setFields(fields);
 			}
 		}
@@ -193,13 +215,13 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			// Set fields
 			if (data.containsKey("fields")) {
 				Map<String, String> fields = MapUtils.convertMap(YAMLUtils.get("fields", data), Map.Entry::getKey,
-				        e -> (String) e.getValue());
+				        e -> convertValueType(e));
 				type.setFields(fields);
 			}
 			// Set styles
 			if (data.containsKey("styles")) {
 				Map<String, String> styles = MapUtils.convertMap(YAMLUtils.get("styles", data), Map.Entry::getKey,
-				        e -> (String) e.getValue());
+				        e -> convertValueType(e));
 				type.editStyles(styles);
 			}
 			result.add(type);
@@ -219,6 +241,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			Map<String, Object> data = YAMLUtils.toNode(o);
 			String name = YAMLUtils.strValue("name", data);
 			Nomenclature nom = new Nomenclature(name);
+			logger.debug("Created nomenclature {}", nom.getName());
 			if (YAMLUtils.checkChildType(data, "types", YAMLType.LIST)) {
 				List<CommentType> types = loadCommentTypesFromYAML(YAMLUtils.list("types", data));
 				nom.setTypes(types);

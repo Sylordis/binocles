@@ -114,6 +114,14 @@ public class BinoclesModel {
 	}
 
 	/**
+	 * Checks if this model has books.
+	 * @return
+	 */
+	public boolean hasBooks() {
+		return !books.isEmpty();
+	}
+	
+	/**
 	 * Checks if the model has a nomenclature which can be identified as the provided one.
 	 * 
 	 * @param nomenclature
@@ -123,6 +131,14 @@ public class BinoclesModel {
 		return nomenclature != null && nomenclatures.stream().anyMatch(n -> n.is(nomenclature));
 	}
 
+	/**
+	 * Checks if this model has nomenclatures.
+	 * @return
+	 */
+	public boolean hasNomenclatures() {
+		return !nomenclatures.isEmpty();
+	}
+	
 	/**
 	 * @return the nomenclatures
 	 */

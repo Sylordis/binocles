@@ -28,12 +28,12 @@ public class Chapter extends ReviewableContent {
 	}
 
 	/**
-	 * Creates a new chapter without a title.
+	 * Creates a new chapter without content.
 	 * 
-	 * @param text Content of the chapter.
+	 * @param title Title of the chapter.
 	 */
-	public Chapter(String text) {
-		this("", text);
+	public Chapter(String title) {
+		this(title, "");
 	}
 
 	/**

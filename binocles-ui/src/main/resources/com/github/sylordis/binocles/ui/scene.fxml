@@ -68,7 +68,7 @@
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="N" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator></MenuItem>
-            <MenuItem fx:id="menuFileOpen" mnemonicParsing="false" text="Open…">
+            <MenuItem fx:id="menuFileOpen" mnemonicParsing="false" onAction="#openFileAction" text="Open…">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="O" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
@@ -223,7 +223,7 @@
     </MenuBar>
       <HBox id="toolbar" alignment="CENTER_LEFT" maxHeight="30.0" minHeight="30.0" prefHeight="30.0">
          <children>
-            <Button fx:id="toolbarOpen" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" text="Open" textAlignment="CENTER">
+            <Button fx:id="toolbarOpen" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#openFileAction" text="Open" textAlignment="CENTER">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                      <image>
@@ -333,7 +333,7 @@
                   <content>
                     <AnchorPane>
                            <children>
-                              <TreeView id="tree-reviews" fx:id="reviewTree" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <TreeView id="tree-reviews" fx:id="bookTree" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <contextMenu>
                                     <ContextMenu>
                                       <items>

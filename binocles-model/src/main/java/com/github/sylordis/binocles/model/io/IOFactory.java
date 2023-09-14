@@ -38,8 +38,10 @@ public class IOFactory {
 		FileImporter<BinoclesModel> importer = null;
 		String ext = null;
 		try {
-			ext = file.getName().substring(file.getName().indexOf(".")).toLowerCase();
+			int extPos = file.getName().indexOf(".");
+			ext = file.getName().substring(extPos >= 0 ? (extPos + 1) : extPos).toLowerCase();
 			Class<? extends FileImporter<BinoclesModel>> type = importers.get(ext);
+			logger.debug("Extension={} Importer type={}", ext, type);
 			importer = type.getDeclaredConstructor().newInstance();
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 		        | NoSuchMethodException | SecurityException e) {

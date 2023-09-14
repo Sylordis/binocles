@@ -1,5 +1,6 @@
 package com.github.sylordis.binocles.ui.settings;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javafx.stage.FileChooser;
@@ -46,9 +47,26 @@ public class BinoclesConfiguration {
 		displaySize = DisplaySize.NORMAL;
 	}
 
+	/**
+	 * Gets the file filters for the software without a wild one.
+	 * @return
+	 */
 	public List<FileChooser.ExtensionFilter> getFileFilters() {
-		return List.of(new FileChooser.ExtensionFilter("Binocles format", "*.bino"),
-		        new FileChooser.ExtensionFilter("YAML file", "*.yaml"));
+		return getFileFilters(false);
+	}
+	
+	/**
+	 * Gets the file filters for the software.
+	 * @param addWild Adds a wild option for all extensions.
+	 * @return
+	 */
+	public List<FileChooser.ExtensionFilter> getFileFilters(boolean addWild) {
+		List<FileChooser.ExtensionFilter> filters = new ArrayList<>();
+		if (addWild)
+			filters.add(new FileChooser.ExtensionFilter("All files", "*.*"));
+		filters.addAll(List.of(new FileChooser.ExtensionFilter("Binocles format", "*.bino"),
+		        new FileChooser.ExtensionFilter("YAML file", "*.yaml")));
+		return filters;
 	}
 
 	/**
