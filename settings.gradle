@@ -12,3 +12,7 @@ plugins {
 
 rootProject.name = 'binocles'
 include('binocles-model', 'binocles-ui', 'binocles-utils')
+/*allprojects {
+	group = 'com.example'
+	version = '1.0.0-SNAPSHOT'
+}*/

@@ -10,10 +10,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.StringFormattedMessage;
+import org.fxmisc.flowless.VirtualizedScrollPane;
+import org.fxmisc.richtext.StyleClassedTextArea;
 
 import com.github.sylordis.binocles.model.BinoclesModel;
+import com.github.sylordis.binocles.model.exceptions.ExporterException;
 import com.github.sylordis.binocles.model.exceptions.ImporterException;
 import com.github.sylordis.binocles.model.exceptions.UniqueNameException;
+import com.github.sylordis.binocles.model.io.FileExporter;
 import com.github.sylordis.binocles.model.io.FileImporter;
 import com.github.sylordis.binocles.model.io.IOFactory;
 import com.github.sylordis.binocles.model.review.CommentType;
@@ -48,11 +52,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -69,6 +73,9 @@ public class BinoclesController implements Initializable {
 	private TreeView<ReviewableContent> bookTree;
 	@FXML
 	private TreeView<NomenclatureItem> nomenclatureTree;
+
+	@FXML
+	private MenuBar menuBar;
 
 	@FXML
 	private MenuItem menuFileNew;
@@ -120,11 +127,22 @@ public class BinoclesController implements Initializable {
 	private Button toolbarCreateChapter;
 
 	@FXML
-	private FlowPane textZoneChapterContent;
+	private VBox textZoneVBox;
 	@FXML
 	private Text textZoneChapterTitle;
 	@FXML
-	private ScrollPane textZoneScrollPane;
+	private Text textZoneMessages;
+	/**
+	 * Text zone for chapter content.
+	 */
+	private StyleClassedTextArea textZoneChapterContent;
+	/**
+	 * Scroll pane for chapter content.
+	 */
+	private VirtualizedScrollPane<StyleClassedTextArea> textZoneChapterContentScrollPane;
+
+	@FXML
+	private VBox commentZoneVBox;
 
 	/**
 	 * Class logger.
@@ -163,14 +181,28 @@ public class BinoclesController implements Initializable {
 				        setDisplayZoneContent(newValue);
 			        }
 		        });
-		textZoneChapterContent.getChildren().add(new Text("Please select/create a chapter in the review tree."));
-		// Setup other components
-		textZoneChapterTitle.wrappingWidthProperty().bind(textZoneScrollPane.widthProperty());
-		textZoneChapterContent.prefWrapLengthProperty().bind(textZoneScrollPane.widthProperty());
-		// TODO not working properly because not accounting the scrollbar. How does one get the viewport
-		// width property?
+		// Text zone messages
+		textZoneMessages.setVisible(true);
+		textZoneMessages.setText("Please select/create a chapter in the review tree.");
+		// Text zone chapter content
+		textZoneChapterContent = new StyleClassedTextArea();
+		textZoneChapterContent.setEditable(false);
+		textZoneChapterContent.setStyle(null);
+		textZoneChapterContent.setWrapText(true);
+		textZoneChapterContent.setVisible(false);
+		textZoneChapterContent.replaceText("");
+		// Text zone chapter content scroll pane
+		textZoneChapterContentScrollPane = new VirtualizedScrollPane<>(textZoneChapterContent);
+		textZoneVBox.getChildren().add(textZoneChapterContentScrollPane);
+		textZoneChapterContentScrollPane.setPickOnBounds(true);
+		textZoneChapterContent.prefHeightProperty().bind(textZoneVBox.heightProperty());
 	}
 
+	/**
+	 * Creates a new book by opening a {@link CreateBookDialog}.
+	 * 
+	 * @param event
+	 */
 	@FXML
 	public void createBookAction(ActionEvent event) {
 		CreateBookDialog dialog = new CreateBookDialog(model);
@@ -193,41 +225,46 @@ public class BinoclesController implements Initializable {
 				bookTree.getRoot().getChildren()
 				        .sort((s1, s2) -> new IdentifiableComparator().compare(s1.getValue(), s2.getValue()));
 				bookTree.getSelectionModel().select(bookItem);
-				// Affect UI
-				menuReviewChapterCreate.setDisable(false);
-				toolbarCreateChapter.setDisable(false);
 			} catch (UniqueNameException e) {
 				logger.error(e);
 			}
+			setButtonsStatus();
 		}
 	}
 
+	/**
+	 * Creates a new chapter in a book.
+	 * 
+	 * @param event
+	 */
 	@FXML
 	public void createChapterAction(ActionEvent event) {
 		// Get currently selected item
 		TreeItem<ReviewableContent> treeSelected = bookTree.getSelectionModel().getSelectedItem();
+		Book currentBook = null;
 		if (null != treeSelected) {
 			// Get current book
 			TreeItem<ReviewableContent> currentTreeBookParent = Book.class.equals(treeSelected.getValue().getClass())
 			        ? treeSelected
 			        : treeSelected.getParent();
-			Book currentBook = (Book) currentTreeBookParent.getValue();
-			// Create dialog
-			CreateChapterDialog dialog = new CreateChapterDialog(model, currentBook);
-			Optional<CreateChapterAnswer> answer = dialog.display();
-			if (answer.isPresent()) {
-				Book bookParent = answer.get().parent();
-				logger.info("Created chapter '{}' in '{}'", answer.get().title(), bookParent.getTitle());
-				Chapter chapter = new Chapter(answer.get().title(), answer.get().content());
-				currentBook.addChapter(chapter);
-				TreeItem<ReviewableContent> chapterTreeItem = new TreeItem<>(chapter);
-				TreeItem<ReviewableContent> currentBookParent = TreeViewUtils.getTreeViewItem(bookTree.getRoot(),
-				        bookParent);
-				currentBookParent.getChildren().add(chapterTreeItem);
-				currentBookParent.setExpanded(true);
-				bookTree.getSelectionModel().select(chapterTreeItem);
-			}
+			currentBook = (Book) currentTreeBookParent.getValue();
 		}
+		// Create dialog
+		CreateChapterDialog dialog = new CreateChapterDialog(model, currentBook);
+		Optional<CreateChapterAnswer> answer = dialog.display();
+		if (answer.isPresent()) {
+			Book bookParent = answer.get().parent();
+			logger.info("Created chapter '{}' in '{}'", answer.get().title(), bookParent.getTitle());
+			Chapter chapter = new Chapter(answer.get().title(), answer.get().content());
+			bookParent.addChapter(chapter);
+			TreeItem<ReviewableContent> chapterTreeItem = new TreeItem<>(chapter);
+			TreeItem<ReviewableContent> currentBookParent = TreeViewUtils.getTreeViewItem(bookTree.getRoot(),
+			        bookParent);
+			currentBookParent.getChildren().add(chapterTreeItem);
+			currentBookParent.setExpanded(true);
+			bookTree.getSelectionModel().select(chapterTreeItem);
+		}
+		setButtonsStatus();
 	}
 
 	@FXML
@@ -246,6 +283,51 @@ public class BinoclesController implements Initializable {
 	}
 
 	@FXML
+	public void exportRenderAction(ActionEvent event) {
+		// TODO
+		showNotImplementedAlert();
+	}
+	
+	@FXML
+	public void exportStructuralAction(ActionEvent event) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.getExtensionFilters().addAll(BinoclesConfiguration.getInstance().getFileFilters(true));
+		fileChooser.setTitle("Export file");
+		// Open file saver
+		Stage stage = getStageFromSourceOrMenuBar(event);
+		File file = fileChooser.showSaveDialog(stage);
+		if (null != file) {
+			FileExporter exporter = new IOFactory().getFileExporter(file);
+			if (null != exporter) {
+				try {
+					exporter.export(this.model, file);
+				} catch (IOException e) {
+					logger.atError().withThrowable(e).log("Could not write to the selected file.");
+				} catch (ExporterException e) {
+					logger.atError().withThrowable(e).log("Could not export the selected file.");
+				}
+			}
+		}
+	}
+
+	/**
+	 * Gets current stage from the event source or from the menu bar.
+	 * 
+	 * @param event
+	 * @return
+	 */
+	public Stage getStageFromSourceOrMenuBar(ActionEvent event) {
+		Stage stage = null;
+		try {
+			Node node = (Node) event.getSource();
+			stage = (Stage) node.getScene().getWindow();
+		} catch (ClassCastException e) {
+			stage = (Stage) menuBar.getScene().getWindow();
+		}
+		return stage;
+	}
+
+	@FXML
 	public void openAboutAction(ActionEvent event) {
 		new AboutDialog().display();
 	}
@@ -260,8 +342,7 @@ public class BinoclesController implements Initializable {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters().addAll(BinoclesConfiguration.getInstance().getFileFilters(true));
 		// Open file chooser
-		Node node = (Node) event.getSource();
-		Stage stage = (Stage) node.getScene().getWindow();
+		Stage stage = getStageFromSourceOrMenuBar(event);
 		File file = fileChooser.showOpenDialog(stage);
 		// Null file means dialog was cancelled
 		if (null != file) {
@@ -287,6 +368,15 @@ public class BinoclesController implements Initializable {
 				}
 			}
 		}
+		setButtonsStatus();
+	}
+
+	public void setButtonsStatus() {
+		// Affect UI
+		if (model.hasBooks()) {
+			menuReviewChapterCreate.setDisable(false);
+			toolbarCreateChapter.setDisable(false);
+		}
 	}
 
 	/**
@@ -295,18 +385,28 @@ public class BinoclesController implements Initializable {
 	 * @param value current selected value
 	 */
 	public void setDisplayZoneContent(TreeItem<ReviewableContent> value) {
-		textZoneChapterContent.getChildren().clear();
+		textZoneChapterTitle.setText("");
+		textZoneMessages.setText("");
+		textZoneChapterContent.clear();
 		if (Chapter.class.equals(value.getValue().getClass())) {
 			Chapter chapter = (Chapter) value.getValue();
 			textZoneChapterTitle.setText(chapter.getTitle());
-			textZoneChapterContent.getChildren().add(new Text(chapter.getText()));
+			textZoneMessages.setVisible(false);
+			textZoneMessages.setText("");
+			textZoneChapterContent.setVisible(true);
+			textZoneChapterContent.replaceText(chapter.getText());
 		} else if (Book.class.equals(value.getValue().getClass())) {
 			Book book = (Book) value.getValue();
 			textZoneChapterTitle.setText(book.getTitle());
-			textZoneChapterContent.getChildren().add(new Text(""));
+			textZoneChapterContent.clear();
+			textZoneMessages.setVisible(true);
+			textZoneMessages.setText("Please select/create a chapter in the review tree to display its content.");
+			textZoneChapterContent.setVisible(false);
 		} else {
 			textZoneChapterTitle.setText("");
-			textZoneChapterContent.getChildren().add(new Text("Please select/create a chapter in the review tree."));
+			textZoneMessages.setVisible(true);
+			textZoneMessages.setText("Please select an item the review tree.");
+			textZoneChapterContent.setVisible(false);
 		}
 	}
 

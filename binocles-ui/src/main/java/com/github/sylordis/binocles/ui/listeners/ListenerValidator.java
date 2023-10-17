@@ -23,7 +23,7 @@ import javafx.beans.value.ObservableValue;
  * 
  * @author sylordis
  *
- * @param <T>
+ * @param <T> type of the value handled by this validator
  */
 public class ListenerValidator<T> implements ChangeListener<T> {
 

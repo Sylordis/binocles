@@ -88,7 +88,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 	 * @param nomenclatures
 	 * @return
 	 */
-	private List<Book> loadBooksFromYAML(List<Object> list) {
+	public List<Book> loadBooksFromYAML(List<Object> list) {
 		List<Book> result = new ArrayList<>();
 		for (Object o : list) {
 			Map<String, Object> data = YAMLUtils.toNode(o);
@@ -97,7 +97,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			// Normal fields
 			String synopsis = YAMLUtils.strValue("synopsis", data);
 			String description = YAMLUtils.strValue("description", data);
-			String generalComment = YAMLUtils.strValue("generalcomment", data);
+			String generalComment = YAMLUtils.strValue("globalcomment", data);
 			book.setSynopsis(synopsis);
 			book.setDescription(description);
 			book.setGeneralComment(generalComment);
@@ -143,7 +143,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 	 * @param nomenclatures
 	 * @return
 	 */
-	private List<Chapter> loadChaptersFromYAML(List<Object> list, Book book) {
+	public List<Chapter> loadChaptersFromYAML(List<Object> list, Book book) {
 		List<Chapter> result = new ArrayList<>();
 		for (Object o : list) {
 			Map<String, Object> data = YAMLUtils.toNode(o);
@@ -171,7 +171,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 	 * @param nomenclatures
 	 * @return
 	 */
-	private List<Comment> loadCommentsFromYAML(List<Object> list, Book book) {
+	public List<Comment> loadCommentsFromYAML(List<Object> list, Book book) {
 		List<Comment> result = new ArrayList<>();
 		for (Object o : list) {
 			Map<String, Object> data = YAMLUtils.toNode(o);
@@ -205,7 +205,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 	 * @param list
 	 * @return
 	 */
-	private List<CommentType> loadCommentTypesFromYAML(List<Object> list) {
+	public List<CommentType> loadCommentTypesFromYAML(List<Object> list) {
 		List<CommentType> result = new ArrayList<>();
 		for (Object o : list) {
 			Map<String, Object> data = YAMLUtils.toNode(o);
@@ -236,7 +236,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 	 * @param list
 	 * @return
 	 */
-	private List<Nomenclature> loadNomenclaturesFromYAML(List<Object> list) {
+	public List<Nomenclature> loadNomenclaturesFromYAML(List<Object> list) {
 		List<Nomenclature> result = new ArrayList<>();
 		for (Object o : list) {
 			Map<String, Object> data = YAMLUtils.toNode(o);

@@ -40,7 +40,7 @@ synopsis: |-
     <book synopsis/long string>
 description: |-
     <book description/long string>
-generalcomment: |-
+globalcomment: |-
     <book general comment/long string>
 metadata:
     author: <author/string>
@@ -58,7 +58,7 @@ chapters:
 title: <chapter title/string>
 content: |-
     <chapter content/long string>
-generalcomment: |-
+globalcomment: |-
     <chapter general comment/long string>
 comments:
     - [comment 1/comment type]

@@ -30,7 +30,7 @@ binocles:
           content: |-
             The American Scholar is the venerable but lively quarterly magazine of public affairs, literature, science, history, and culture published by the Phi Beta Kappa Society since 1932. In recent years the magazine has won four National Magazine Awards, the industry’s highest honor, and many of its essays and articles have been selected for the yearly Best American anthologies. In 2006, The American Scholar began to publish fiction by such writers as Alice Munro, Ann Beattie, Steven Millhauser, Dennis McFarland, Louis Begley, and David Leavitt. Essays, articles, criticism, and poetry have been mainstays of the magazine for 75 years. Inspired by Ralph Waldo Emerson’s famous speech, “The American Scholar,” delivered to the Phi Beta Kappa Society at Harvard College in 1837, the magazine aspires to Emerson’s ideals of independent thinking, self-knowledge, and a commitment to the affairs of the world as well as to books, history, and science.
             For over two and a quarter centuries, the Society has embraced the principles of freedom of inquiry and liberty of thought and expression. Laptops have replaced quill pens, but these ideas, symbolized on Phi Beta Kappa's distinctive gold key, still lay the foundations of personal freedom, scientific inquiry, liberty of conscience and creative endeavor. Phi Beta Kappa celebrates and advocates excellence in the liberal arts and sciences. Its campus chapters invite for induction the most outstanding arts and sciences students at America’s leading colleges and universities. The Society sponsors activities to advance these studies — the humanities, the social sciences, and the natural sciences — in higher education and in society at large.
-          generalcomment: |-
+          globalcomment: |-
             
           comments: []
         - title: chapter 2
@@ -39,7 +39,7 @@ binocles:
             Allen Ginsberg's Howl (1956), William S. Burroughs' Naked Lunch (1959), and Jack Kerouac's On the Road (1957) are among the best known examples of Beat literature.[4] Both Howl and Naked Lunch were the focus of obscenity trials that ultimately helped to liberalize publishing in the United States.[5][6] The members of the Beat Generation developed a reputation as new bohemian hedonists, who celebrated non-conformity and spontaneous creativity.
             The core group of Beat Generation authors—Herbert Huncke, Ginsberg, Burroughs, Lucien Carr, and Kerouac—met in 1944 in and around the Columbia University campus in New York City. Later, in the mid-1950s, the central figures, with the exception of Burroughs and Carr, ended up together in San Francisco, where they met and became friends of figures associated with the San Francisco Renaissance.
             In the 1950s, a Beatnik subculture formed around the literary movement, although this was often viewed critically by major authors of the Beat movement. In the 1960s, elements of the expanding Beat movement were incorporated into the hippie and larger counterculture movements. Neal Cassady, as the driver for Ken Kesey's bus Furthur, was the primary bridge between these two generations. Ginsberg's work also became an integral element of early 1960s hippie culture, in which he actively participated. The hippie culture was practiced primarily by older members of the following generation.
-          generalcomment: |-
+          globalcomment: |-
             
           comments: [] 
     - title: "Memoirs of a Geisha"
@@ -50,7 +50,7 @@ binocles:
       synopsis: |-
         A literary sensation and runaway bestseller, this brilliant novel presents with seamless authenticity and exquisite lyricism the true confessions of one of Japan's most celebrated geisha.
         In "Memoirs of a Geisha," we enter a world where appearances are paramount; where a girl's virginity is auctioned to the highest bidder; where women are trained to beguile the most powerful men; and where love is scorned as illusion. It is a unique and triumphant work of fiction - at once romantic, erotic, suspenseful - and completely unforgettable.
-      generalcomment: |-
+      globalcomment: |-
         Memoirs of a Geisha is an American novel, and as such the attempt at West does East, especially on the complex and delicate subject of the geisha, is compelling, interesting, but also heavy-handed and ultimately ineffective (even more so in the case of the film). It is a wonderful introduction to geisha, Japanese culture, and the East for the uninitiated Western reader, and I can see why the book is popular, but I found it disappointing. For the reader already familiar with the culture, western influences are all too clear and the book comes off as a bit clunky and imperfect. I also had some problems with the general perception of the characters by readers versus the way the characters were actually portrayed in the book--Memoirs is far from the good-willed fairy tale that people assume it is. By all means, read it, but leave it open for critique and remember that a more authentic representation of eastern culture, especially in the details, will come from the east itself.
         A lot of my critique stems from the fact that this movie has attained such wide-spread fame and been made into a movie, to be sure. I feel like it is being perpetuated as something it is not. Even the introduction to the book (a faux translator's note) perpetuates the myth that Memoirs is an accurate, beautiful, in-depth reflection of the life of a geisha, when in truth it is no more that historical fiction and is written by an outsider. Golden has done his research and is well-educated on his subjects, and I have no problem with people reading from, taking interest in, and even learning from this book; I do, however, think it is important that readers don't conflate the American novel with Japanese reality. They aren't the same thing, no matter how much research Golden did, and if we take the book as an accurate representation we're actually underestimating and undervaluing geisha, Japan, and Japanese culture.
         Because Golden attempts to write from within the geisha culture, as a Japanese woman, he must do more than report the "facts" of that life--he must also pretend to be a part of it. Pretend he does, acting out a role as if he has studied inflection, script, and motivation. He certainly knows what makes writing "Japanese" but his attempt to mimic it is not entirely successful. The emphasis on elements, the independent sentences, the visual details are too prevalent and too obvious, as if Golden is trying to call our attention to them and thus to the Japanese style of the text. He does manage to draw attention, but to me, at least, what I came away with was the sense that Golden was an American trying really hard to sound Japanese--that is, the effect betrayed the attempt and the obvious attempt ruined the sincerity of the novel, for me. I felt like I was being smacked over the head with beauty! wood! water! kimono! haiku! and I felt insulted and disappointed.
@@ -114,13 +114,13 @@ binocles:
         source: https://www.lipsum.com
       synopsis: |-
         This is an impressive collection of lipsum.
-      generalcomment: |-
+      globalcomment: |-
         
       chapters:
         - title: The Smallest
           content: |-
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque molestie tortor quis lobortis sollicitudin. Proin et tincidunt diam, at faucibus ex. Cras auctor ante lorem, sit amet tempor odio porttitor cursus. Proin posuere leo eget enim laoreet, et maximus justo tempus. Cras elit diam, commodo vitae ipsum vitae, sollicitudin consectetur leo. Nullam sed massa et elit ullamcorper congue eu eu dui. Fusce nisi turpis, pulvinar in aliquet ac, pharetra vel nisi. Fusce consequat vehicula orci, et vehicula lorem ornare sit amet. Donec nec sem ut sapien placerat vestibulum. Donec sagittis lobortis libero nec iaculis.
-          generalcomment: |-
+          globalcomment: |-
           
         - title: The Medium
           content: |-
@@ -129,7 +129,7 @@ binocles:
             Pellentesque gravida massa ultrices elit viverra condimentum. Quisque in quam massa. Pellentesque condimentum enim eget euismod faucibus. Donec faucibus velit diam, quis vulputate ex mattis non. Fusce ullamcorper dictum porttitor. Nunc a nisl in nulla viverra consectetur. Nulla dignissim dolor libero, id suscipit quam porttitor ut. Nullam maximus tempus dignissim.
             Proin aliquam consequat metus, sed pretium lacus varius vitae. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce pulvinar magna id est euismod scelerisque. Maecenas pulvinar urna non nisi posuere, ut porta lacus feugiat. Sed accumsan cursus tellus, ac pharetra tellus ornare at. Ut viverra finibus interdum. In hac habitasse platea dictumst. Donec in luctus massa. Etiam vel odio mauris. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Morbi ultrices gravida turpis, sed varius libero cursus eu. Donec sed commodo diam, sit amet porta elit. Suspendisse potenti.
             Nam vestibulum tempus turpis, sit amet sagittis ex pretium ut. Vestibulum sit amet mauris at metus pulvinar accumsan id sed felis. Quisque nec ullamcorper quam, in rutrum libero. Sed enim libero, molestie vitae blandit non, tincidunt id leo. Duis vel luctus urna. Vestibulum aliquam eleifend aliquam. Vestibulum sed nisl non eros mollis pretium.
-          generalcomment: |-
+          globalcomment: |-
            
         - title: The Biggest
           content: |-
@@ -153,7 +153,7 @@ binocles:
             Donec tempus eu dui nec sagittis. Phasellus vel nisl elementum, laoreet odio eget, faucibus turpis. Nulla bibendum risus sed eros interdum cursus. Aliquam elit libero, congue ac augue vulputate, consequat imperdiet arcu. Nam placerat venenatis dui, ac vestibulum erat euismod id. Vestibulum id augue sollicitudin, vulputate sapien non, dapibus leo. Nunc molestie nibh lacus, quis aliquam enim maximus non. In hac habitasse platea dictumst. Donec accumsan odio eget tellus consequat, sit amet aliquet tortor porttitor. Aenean id sagittis diam. Fusce nec condimentum velit, et viverra nibh.
             Pellentesque orci leo, vehicula ac magna at, semper fringilla enim. Cras dapibus ultrices leo ac efficitur. Phasellus dignissim nibh hendrerit velit porta, eu posuere mauris dictum. Nullam aliquam, urna sit amet lacinia interdum, enim quam pretium erat, vitae feugiat turpis mauris placerat velit. Sed in risus ultricies, eleifend nisl sit amet, sodales justo. Sed et erat quis nunc tristique cursus non ac dolor. Duis vitae lobortis nunc, a sodales urna. Praesent non magna pretium, auctor urna quis, fringilla urna. Phasellus ipsum tellus, iaculis a metus nec, pellentesque finibus nibh. Vivamus ac purus a ipsum pulvinar maximus dignissim at ante. Duis eget fermentum lectus. Maecenas ut nunc et ligula ullamcorper mattis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Phasellus commodo nunc nisi, molestie iaculis turpis vehicula vel. Sed enim eros, luctus vitae facilisis ut, interdum non mauris. Aenean rhoncus purus vel tincidunt hendrerit.
             Nunc sodales sollicitudin molestie. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In aliquet leo at lectus elementum feugiat. Morbi nec erat dapibus enim lobortis pellentesque et id neque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas eget ultrices tellus, vitae molestie nibh. Pellentesque euismod sollicitudin ligula, ut hendrerit felis vulputate nec. In sed lorem feugiat, laoreet purus vitae, eleifend sapien. Nullam urna tortor, rutrum nec faucibus et, lobortis a odio. Quisque congue dictum mi in cursus. Praesent eget quam arcu. Vivamus tincidunt non nisl in dignissim. Vestibulum eu nisl et leo malesuada venenatis. Aenean sagittis lectus non malesuada eleifend. Morbi elementum ac purus vitae molestie.
-          generalcomment: |-
+          globalcomment: |-
              
     - title: "Weyward"
       nomenclature: 
@@ -162,7 +162,7 @@ binocles:
         1619: Altha is awaiting trial for the murder of a local farmer who was stampeded to death by his herd. As a girl, Altha’s mother taught her their magic, a kind not rooted in spell casting but in a deep knowledge of the natural world. But unusual women have always been deemed dangerous, and as the evidence for witchcraft is set out against Altha, she knows it will take all of her powers to maintain her freedom.
         1942: As World War II rages, Violet is trapped in her family's grand, crumbling estate. Straitjacketed by societal convention, she longs for the robust education her brother receives––and for her mother, long deceased, who was rumored to have gone mad before her death. The only traces Violet has of her are a locket bearing the initial W and the word weyward scratched into the baseboard of her bedroom.
         Weaving together the stories of three extraordinary women across five centuries, Emilia Hart's Weyward is an enthralling novel of female resilience and the transformative power of the natural world.
-      generalcomment: |-
+      globalcomment: |-
           
       chapters: []
 
