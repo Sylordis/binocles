@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -39,6 +40,10 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 	 * Class logger.
 	 */
 	private final Logger logger = LogManager.getLogger();
+	/**
+	 * Constant for storing the nomenclature id temporarily until proper linking.
+	 */
+	public final static String NOMENCLATURE_BINOCLES_KEY = "_binocles_nomenclature";
 
 	/**
 	 * Imports a given YAML file to create all required entries. This method returns a populated model,
@@ -73,6 +78,16 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			// TODO check comments consistency:
 			// - range compared to chapter range
 			// - fields existence & values
+			// Link nomenclatures to books
+			logger.info("Linking nomenclatures to books");
+			for (Book book : model.getBooks()) {
+				if (book.getMetadata().containsKey(NOMENCLATURE_BINOCLES_KEY)) {
+					String id = book.getMetadata().get(NOMENCLATURE_BINOCLES_KEY);
+					book.setNomenclature(model.getNomenclature(id));
+					logger.info("{} linked with {}", book, book.getNomenclature());
+					book.getMetadata().remove(NOMENCLATURE_BINOCLES_KEY);
+				}
+			}
 		} else {
 			String message = "YAML import error: no proper root 'binocles' can be found";
 			logger.error(message);
@@ -102,10 +117,15 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			book.setDescription(description);
 			book.setGeneralComment(generalComment);
 			logger.debug("Created book {}", book.getTitle());
+			Map<String, String> metadata = new HashMap<>();
+			// Nomenclature, store in metadata for later
+			if (data.containsKey("nomenclature") && YAMLUtils.strValue("nomenclature", data) != null) {
+				metadata.put(NOMENCLATURE_BINOCLES_KEY, YAMLUtils.strValue("nomenclature", data));
+			}
 			// Metadata
 			if (data.containsKey("metadata")) {
-				Map<String, String> metadata = MapUtils.convertMap(YAMLUtils.get("metadata", data), Map.Entry::getKey,
-				        this::convertValueType);
+				metadata.putAll(MapUtils.convertMap(YAMLUtils.get("metadata", data), Map.Entry::getKey,
+				        this::convertValueType));
 				book.setMetadata(metadata);
 			}
 			// Chapters

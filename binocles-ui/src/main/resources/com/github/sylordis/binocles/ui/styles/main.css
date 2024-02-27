@@ -13,6 +13,16 @@ GridPane.form {
 	-fx-padding: 0;
 }
 
+.separator.adaptative.horizontal {
+	-fx-width: auto; 
+}
+.styled-text-area .content {
+    -fx-padding: 5px;
+}
+.styled-text-area .navigator {
+    -fx-padding: 5px;
+}
+
 .text-danger {
 	-fx-fill: #dc3545;
 }

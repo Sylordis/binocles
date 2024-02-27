@@ -36,8 +36,8 @@ public class Book extends ReviewableContent {
 	 */
 	private String description;
 	/**
-	 * Any other metadata concerning the book (author, source, publication year, ...). This map is never
-	 * null.
+	 * Any other metadata concerning the book (author, source, publication year, ...). This map should
+	 * never be null.
 	 */
 	private final Map<String, String> metadata;
 	/**
@@ -125,12 +125,13 @@ public class Book extends ReviewableContent {
 
 	/**
 	 * Checks if this books has chapters.
+	 * 
 	 * @return true if this book has at least one chapter.
 	 */
 	public boolean hasChapters() {
 		return !this.chapters.isEmpty();
 	}
-	
+
 	/**
 	 * @param chapters the chapters to set
 	 */

@@ -260,9 +260,12 @@ class CommentTest {
 	@ParameterizedTest
 	@CsvSource({ "0,0", "2950,2800", "5042,1676", "2347,5313" })
 	void testSetAdaptativeBoundaries(int index1, int index2) {
+		System.out.println(index1 + "," + index2);
 		this.comment.setAdaptativeBoundaries(index1, index2);
-		assertEquals(Math.min(index1, index2), this.comment.getStartIndex());
-		assertEquals(Math.max(index1, index2), this.comment.getEndIndex());
+		int min = Math.min(index1, index2);
+		int max = Math.max(index1, index2);
+		assertEquals(min, this.comment.getStartIndex());
+		assertEquals(max, this.comment.getEndIndex());
 		assertTrue(this.comment.getStartIndex() <= this.comment.getEndIndex());
 	}
 

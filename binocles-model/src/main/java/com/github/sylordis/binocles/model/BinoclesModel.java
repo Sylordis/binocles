@@ -83,8 +83,8 @@ public class BinoclesModel {
 	}
 
 	/**
-	 * Replaces all books. Providing a null object does not nullify the current collection but
-	 * will just empty it.
+	 * Replaces all books. Providing a null object does not nullify the current collection but will just
+	 * empty it.
 	 * 
 	 * @param books
 	 */
@@ -93,6 +93,7 @@ public class BinoclesModel {
 		if (null != books)
 			this.books.addAll(books);
 	}
+
 	/**
 	 * Checks if the model has a book which can be identified as the provided one.
 	 * 
@@ -115,12 +116,13 @@ public class BinoclesModel {
 
 	/**
 	 * Checks if this model has books.
+	 * 
 	 * @return
 	 */
 	public boolean hasBooks() {
 		return !books.isEmpty();
 	}
-	
+
 	/**
 	 * Checks if the model has a nomenclature which can be identified as the provided one.
 	 * 
@@ -133,17 +135,35 @@ public class BinoclesModel {
 
 	/**
 	 * Checks if this model has nomenclatures.
+	 * 
 	 * @return
 	 */
 	public boolean hasNomenclatures() {
 		return !nomenclatures.isEmpty();
 	}
-	
+
 	/**
 	 * @return the nomenclatures
 	 */
 	public Set<Nomenclature> getNomenclatures() {
 		return nomenclatures;
+	}
+
+	/**
+	 * Gets a nomenclature from its ID if it exists.
+	 * 
+	 * @param id ID of the nomenclature
+	 * @return a nomenclature or null
+	 */
+	public Nomenclature getNomenclature(String id) {
+		Nomenclature result = null;
+		for (Nomenclature nomenclature : nomenclatures) {
+			if (nomenclature.is(id)) {
+				result = nomenclature;
+				break;
+			}
+		}
+		return result;
 	}
 
 	/**

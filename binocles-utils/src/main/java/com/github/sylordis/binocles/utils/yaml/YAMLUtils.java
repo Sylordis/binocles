@@ -70,7 +70,7 @@ public final class YAMLUtils {
 	 *
 	 * @param key  key to extract
 	 * @param yaml YAML to extract the key's value from
-	 * @return the value of the key as a String or null if the requested key is not present
+	 * @return the value of the key as a String or null if the requested key is not present or empty
 	 * @throws ClassCastException if the key's value is not a single value
 	 */
 	public static String strValue(String key, Map<String, Object> yaml) {

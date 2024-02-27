@@ -27,7 +27,7 @@ public final class MapUtils {
 	 * 
 	 * @param <K>    Type of the keys
 	 * @param <V>    Type of the values
-	 * @param map    base map instance for a particular type
+	 * @param map    base map instance for a particular type, if map is null, creates a new {@link HashMap}.
 	 * @param keys   Keys to add to the map
 	 * @param values Values to link to the keys
 	 * @return the map filled with entries

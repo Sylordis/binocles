@@ -155,14 +155,13 @@ public class Comment implements Comparable<Comment>, Serializable {
 	 * Sets start and end indexes according to provided indexes. Lowest one will be the start, Highest
 	 * one will be the end.
 	 *
-	 * @param index1
-	 * @param index2
-	 * @throws IllegalArgumentException if any of the provided index is negative or if both are equal.
+	 * @param index1 First index to set
+	 * @param index2 Second index to set
+	 * @throws IllegalArgumentException if any of the provided index is negative.
 	 */
 	public void setAdaptativeBoundaries(int index1, int index2) {
 		Preconditions.checkArgument(index1 >= 0 && index2 >= 0,
-		        "The start and end indexes of a comment should be a positive integer.");
-		Preconditions.checkArgument(index1 == index2, "Both indexes cannot be equal.");
+		        "The start and end indexes of a comment should be positive integers.");
 		this.startIndex = Math.min(index1, index2);
 		this.endIndex = Math.max(index1, index2);
 	}

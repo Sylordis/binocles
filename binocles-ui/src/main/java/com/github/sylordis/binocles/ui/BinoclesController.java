@@ -125,6 +125,10 @@ public class BinoclesController implements Initializable {
 	private Button toolbarCreateBook;
 	@FXML
 	private Button toolbarCreateChapter;
+	@FXML
+	private Button toolbarCreateNomenclature;
+	@FXML
+	private Button toolbarCreateCommentType;
 
 	@FXML
 	private VBox textZoneVBox;
@@ -143,7 +147,10 @@ public class BinoclesController implements Initializable {
 
 	@FXML
 	private VBox commentZoneVBox;
-
+	@FXML
+	private Text commentZoneTitle;
+	@FXML
+	private VBox commentZoneVBoxInner;
 	/**
 	 * Class logger.
 	 */
@@ -268,6 +275,18 @@ public class BinoclesController implements Initializable {
 	}
 
 	@FXML
+	public void createNomenclatureAction(ActionEvent event) {
+		// TODO
+		showNotImplementedAlert();
+	}
+
+	@FXML
+	public void createCommentTypeAction(ActionEvent event) {
+		// TODO
+		showNotImplementedAlert();
+	}
+
+	@FXML
 	public void deleteElementsAction(ActionEvent event) {
 		// TODO Get all selected elements in the tree, open confirmation dialog.
 		showNotImplementedAlert();
@@ -287,7 +306,7 @@ public class BinoclesController implements Initializable {
 		// TODO
 		showNotImplementedAlert();
 	}
-	
+
 	@FXML
 	public void exportStructuralAction(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
