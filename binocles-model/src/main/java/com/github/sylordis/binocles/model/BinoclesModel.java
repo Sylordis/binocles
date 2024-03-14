@@ -1,6 +1,7 @@
 package com.github.sylordis.binocles.model;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -9,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.github.sylordis.binocles.model.exceptions.UniqueNameException;
+import com.github.sylordis.binocles.model.review.DefaultNomenclature;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.utils.Identifiable;
@@ -42,6 +44,7 @@ public class BinoclesModel {
 	public BinoclesModel() {
 		this.books = new TreeSet<>(Comparator.comparing(Book::getId));
 		this.nomenclatures = new TreeSet<>(Comparator.comparing(Nomenclature::getId));
+		nomenclatures.add(new DefaultNomenclature());
 	}
 
 	/**
@@ -134,6 +137,16 @@ public class BinoclesModel {
 	}
 
 	/**
+	 * Checks if the model has a nomenclature which can be identified as the provided one.
+	 * 
+	 * @param nomenclature
+	 * @return true if the nomenclature is not null and is the same as an existing one.
+	 */
+	public boolean hasNomenclature(String id) {
+		return nomenclatures.stream().anyMatch(n -> n.is(id));
+	}
+
+	/**
 	 * Checks if this model has nomenclatures.
 	 * 
 	 * @return
@@ -143,10 +156,36 @@ public class BinoclesModel {
 	}
 
 	/**
+	 * Checks if this model has nomenclatures except the default one.
+	 * 
+	 * @return
+	 */
+	public boolean hasCustomNomenclatures() {
+		return nomenclatures.size() > 1;
+	}
+
+	/**
 	 * @return the nomenclatures
 	 */
 	public Set<Nomenclature> getNomenclatures() {
 		return nomenclatures;
+	}
+
+	/**
+	 * Returns a non modifiable set of nomenclatures with a choice to exclude the default nomenclature.
+	 * @param includeDefault if set to true, will include the default nomenclature
+	 * @return the nomenclatures
+	 */
+	public Set<Nomenclature> getNomenclatures(boolean includeDefault) {
+		Set<Nomenclature> nomenclatures = null;
+		if (includeDefault) {
+			nomenclatures = this.nomenclatures;
+		} else {
+			nomenclatures = new TreeSet<>(Comparator.comparing(Nomenclature::getId));
+			nomenclatures.addAll(this.nomenclatures);
+			nomenclatures.removeIf(n -> n.isDefaultNomenclature());
+		}
+		return Collections.unmodifiableSet(nomenclatures);
 	}
 
 	/**
@@ -167,14 +206,28 @@ public class BinoclesModel {
 	}
 
 	/**
-	 * Replaces all nomenclatures. Providing a null object does not nullify the current collection but
+	 * Gets the default nomenclature.
+	 * 
+	 * @see DefaultNomenclature
+	 * @return
+	 */
+	public Nomenclature getDefaultNomenclature() {
+		return getNomenclature(DefaultNomenclature.NAME);
+	}
+
+	/**
+	 * Replaces all nomenclatures except the default. Providing a null object does not nullify the current collection but
 	 * will just empty it.
 	 * 
 	 * @param nomenclatures
 	 */
-	public void setNomenclatures(Collection<? extends Nomenclature> nomenclatures) {
+	public void setNomenclatures(Collection<? extends Nomenclature> nomenclatures) throws UniqueNameException {
 		this.nomenclatures.clear();
-		if (null != nomenclatures)
-			this.nomenclatures.addAll(nomenclatures);
+		this.nomenclatures.add(new DefaultNomenclature());
+		if (null != nomenclatures) {
+			for (Nomenclature nomenclature : nomenclatures) {
+				addNomenclature(nomenclature);
+			}
+		}
 	}
 }

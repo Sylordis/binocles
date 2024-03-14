@@ -8,7 +8,7 @@ import com.github.sylordis.binocles.model.review.ReviewableContent;
  * @author sylordis
  *
  */
-public final class ReviewableContentTreeRoot extends ReviewableContent {
+public final class BookTreeRoot extends ReviewableContent {
 
 	@Override
 	public String toString() {

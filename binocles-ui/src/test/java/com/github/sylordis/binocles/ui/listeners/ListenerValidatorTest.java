@@ -31,7 +31,7 @@ class ListenerValidatorTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		validator = new ListenerValidator<String>();
+		validator = new ListenerValidator<String>() {};
 	}
 
 	@Test
@@ -92,7 +92,7 @@ class ListenerValidatorTest {
 		final String andThenMessage = "Job done";
 		final BiFunction<String, String, Boolean> conditionChanged = (o, n) -> !o.equals(n);
 		final BiFunction<String, String, Boolean> conditionEmpty = (o, n) -> !n.isBlank();
-		validator.error(errors[0], conditionChanged).error(errors[1], conditionEmpty).onInvalid(b -> data[0]--)
+		validator.validIf(errors[0], conditionChanged).validIf(errors[1], conditionEmpty).onInvalid(b -> data[0]--)
 		        .onValid(b -> data[0]++).feed(s -> dataString[0] = s).feedDefault(idle).andThen(() -> dataString[1] = andThenMessage);
 		validator.changed(mock(ObservableValue.class), "", "abcd");
 		assertEquals(1, data[0]);
@@ -107,7 +107,7 @@ class ListenerValidatorTest {
 		int[] data = { 0 };
 		final String error = "Value didn't change";
 		final BiFunction<String, String, Boolean> conditionChanged = (o, n) -> !o.equals(n);
-		validator.error(error, conditionChanged).onInvalid(b -> data[0]--).onValid(b -> data[0]++);
+		validator.validIf(error, conditionChanged).onInvalid(b -> data[0]--).onValid(b -> data[0]++);
 		validator.changed(mock(ObservableValue.class), "a", "a");
 		assertEquals(-1, data[0]);
 		assertEquals(List.of(error), validator.getErrorMessages());
@@ -120,7 +120,7 @@ class ListenerValidatorTest {
 		final String[] errors = { "Value did change", "Value is empty" };
 		final BiFunction<String, String, Boolean> conditionChanged = (o, n) -> o.equals(n);
 		final BiFunction<String, String, Boolean> conditionEmpty = (o, n) -> !n.isBlank();
-		validator.error(errors[0], conditionChanged).error(errors[1], conditionEmpty).onInvalid(b -> data[0]--)
+		validator.validIf(errors[0], conditionChanged).validIf(errors[1], conditionEmpty).onInvalid(b -> data[0]--)
 		        .onValid(b -> data[0]++);
 		validator.changed(mock(ObservableValue.class), "a", "");
 		assertEquals(-1, data[0]);
@@ -132,7 +132,7 @@ class ListenerValidatorTest {
 		final String error = "This will never work";
 		final BiFunction<String, String, Boolean> condition = (s1, s2) -> false;
 		Map<String, BiFunction<String, String, Boolean>> expected = Map.of(error, condition);
-		validator.error(error, condition);
+		validator.validIf(error, condition);
 		assertEquals(expected, validator.getValidityConditions());
 	}
 
@@ -143,7 +143,7 @@ class ListenerValidatorTest {
 		final BiFunction<String, String, Boolean> condition1 = (s1, s2) -> false;
 		final BiFunction<String, String, Boolean> condition2 = (s1, s2) -> true;
 		Map<String, BiFunction<String, String, Boolean>> expected = Map.of(error1, condition1, error2, condition2);
-		validator.error(error1, condition1).error(error2, condition2);
+		validator.validIf(error1, condition1).validIf(error2, condition2);
 		assertEquals(expected, validator.getValidityConditions());
 	}
 
@@ -374,7 +374,7 @@ class ListenerValidatorTest {
 		final List<String> errors = List.of("a1", "b1", "c1");
 		final String expected = "a1\nb1\nc1";
 		validator.setFeedbackConsumer(s -> result[0] = s);
-		validator.setFeedbackBehaviour(FeedbackBehaviour.AGGREGATE);
+		validator.setFeedbackBehaviour(FeedbackBehaviour.AGGREGATE_NEWLINE);
 		validator.setErrorMessages(errors);
 		validator.triggerFeedback();
 		assertEquals(expected, result[0]);
@@ -386,7 +386,7 @@ class ListenerValidatorTest {
 		final List<String> errors = List.of("aggregateMe!");
 		final String expected = "aggregateMe!";
 		validator.setFeedbackConsumer(s -> result[0] = s);
-		validator.setFeedbackBehaviour(FeedbackBehaviour.AGGREGATE);
+		validator.setFeedbackBehaviour(FeedbackBehaviour.AGGREGATE_NEWLINE);
 		validator.setErrorMessages(errors);
 		validator.triggerFeedback();
 		assertEquals(expected, result[0]);

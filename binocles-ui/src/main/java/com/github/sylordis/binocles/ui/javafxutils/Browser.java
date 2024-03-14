@@ -17,11 +17,10 @@ public class Browser extends Application {
 	public void open(String url) { 
 		getHostServices().showDocument(url);
 	}
-	
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
-
 	}
 
 }

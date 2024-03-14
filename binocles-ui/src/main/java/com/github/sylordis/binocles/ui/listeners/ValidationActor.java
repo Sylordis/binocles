@@ -9,11 +9,8 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-
 /**
- * A ListenerValidator checks the input provided and validates it with a list of conditions that can
+ * A validation actor holds the input provided and validates it with a list of conditions that can
  * trigger error messages. The validator can be setup in one line by using the one-liner chained
  * methods.<br/><br/>
  * 
@@ -25,7 +22,7 @@ import javafx.beans.value.ObservableValue;
  *
  * @param <T> type of the value handled by this validator
  */
-public class ListenerValidator<T> implements ChangeListener<T> {
+public abstract class ValidationActor<T> {
 
 	/**
 	 * List of conditions to fulfil for the field to be valid.
@@ -108,35 +105,9 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	/**
 	 * Constructs a new empty validator.
 	 */
-	public ListenerValidator() {
+	public ValidationActor() {
 		this.validityConditions = new HashMap<>();
 		this.errorMessages = new ArrayList<>();
-	}
-
-	@Override
-	public void changed(ObservableValue<? extends T> observable, T oldValue, T newValue) {
-		boolean valid = true;
-		// Prepare error message collection
-		this.getErrorMessages().clear();
-		// Go through all conditions
-		var conditions = getValidityConditions().entrySet();
-		for (var condition : conditions) {
-			// True if no error is spotted
-			boolean conditionValid = condition.getValue().apply(oldValue, newValue);
-			// Set the global validity (true as long as no false is encountered)
-			valid = valid && conditionValid;
-			// Propagate error message
-			if (!conditionValid)
-				this.getErrorMessages().add(condition.getKey());
-		}
-		// Act on final result
-		if (valid) {
-			triggerWhenValid(valid);
-		} else {
-			triggerWhenInvalid(valid);
-		}
-		triggerFeedback();
-		triggerPostAction();
 	}
 
 	/**
@@ -326,7 +297,7 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	 * @return itself for chain configuration
 	 * @see #addValiditionCondition(String, BiFunction)
 	 */
-	public ListenerValidator<T> validIf(String errorText, BiFunction<T, T, Boolean> validator) {
+	public ValidationActor<T> validIf(String errorText, BiFunction<T, T, Boolean> validator) {
 		addValiditionCondition(errorText, validator);
 		return this;
 	}
@@ -338,7 +309,7 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	 * @return itself for chain configuration
 	 * @see #setActionWhenValid(Consumer)
 	 */
-	public ListenerValidator<T> onValid(Consumer<Boolean> action) {
+	public ValidationActor<T> onValid(Consumer<Boolean> action) {
 		setActionWhenValid(action);
 		return this;
 	}
@@ -350,7 +321,7 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	 * @return itself for chain configuration
 	 * @see #setActionWhenInvalid(Consumer)
 	 */
-	public ListenerValidator<T> onInvalid(Consumer<Boolean> action) {
+	public ValidationActor<T> onInvalid(Consumer<Boolean> action) {
 		setActionWhenInvalid(action);
 		return this;
 	}
@@ -364,7 +335,7 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	 * @see #setActionWhenInvalid(Consumer)
 	 * @see #setActionWhenValid(Consumer)
 	 */
-	public ListenerValidator<T> onEither(Consumer<Boolean> action) {
+	public ValidationActor<T> onEither(Consumer<Boolean> action) {
 		setActionWhenInvalid(action);
 		setActionWhenValid(action);
 		return this;
@@ -377,7 +348,7 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	 * @return itself for chain configuration
 	 * @see #setFeedbackConsumer(Consumer)
 	 */
-	public ListenerValidator<T> feed(Consumer<String> feedback) {
+	public ValidationActor<T> feed(Consumer<String> feedback) {
 		setFeedbackConsumer(feedback);
 		return this;
 	}
@@ -390,7 +361,7 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	 * @return itself for chain configuration
 	 * @see FeedbackBehaviour
 	 */
-	public ListenerValidator<T> feed(Consumer<String> feedback, Function<List<String>, String> behaviour) {
+	public ValidationActor<T> feed(Consumer<String> feedback, Function<List<String>, String> behaviour) {
 		setFeedbackConsumer(feedback);
 		setFeedbackBehaviour(behaviour);
 		return this;
@@ -403,7 +374,7 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	 * @return itself for chain configuration
 	 * @see #setPostAction(Runnable)
 	 */
-	public ListenerValidator<T> andThen(Runnable post) {
+	public ValidationActor<T> andThen(Runnable post) {
 		setPostAction(post);
 		return this;
 	}
@@ -416,7 +387,7 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	 * @return
 	 * @see #setFeedbackDefault(String)
 	 */
-	public ListenerValidator<T> feedDefault(String idle) {
+	public ValidationActor<T> feedDefault(String idle) {
 		setFeedbackDefault(idle);
 		return this;
 	}

@@ -12,7 +12,7 @@ import javafx.scene.image.Image;
  * @author sylordis
  *
  */
-public class ReviewTreeCell extends TreeCell<ReviewableContent> {
+public class BookTreeCell extends TreeCell<ReviewableContent> {
 
 	@Override
 	protected void updateItem(ReviewableContent item, boolean empty) {

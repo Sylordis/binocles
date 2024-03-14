@@ -1,7 +1,3 @@
-.icon {
-	-fx-pref-height: 16;
-	-fx-pref-width: 16;
-}
 
 GridPane.form {
 	-fx-border-insets: 20 150 10 10;
@@ -13,9 +9,25 @@ GridPane.form {
 	-fx-padding: 0;
 }
 
-.separator.adaptative.horizontal {
-	-fx-width: auto; 
+.buttonicon {
+	-fx-background-color: transparent;
+	-fx-margin-left: 2;
+	-fx-margin-right: 2;
+	-fx-padding: 3;
+	-fx-pref-height: 16;
+	-fx-pref-width: 16;
 }
+.form-dialog {
+	-fx-padding: 10px;
+}
+.form-dialog .label {
+	-fx-font-weight: bold;
+}
+.icon {
+	-fx-pref-height: 16;
+	-fx-pref-width: 16;
+}
+
 .styled-text-area .content {
     -fx-padding: 5px;
 }
@@ -39,10 +51,20 @@ GridPane.form {
 	-fx-fill: #ffc107;
 }
 
+.text-note {
+	-fx-font-style: italic;
+}
+
 .titled-pane {
 	-fx-margin: 0;
 	-fx-background-insets: 0;
 	-fx-padding: 0;
+}
+.button-toolbar {
+	
+}
+.button-toolbar .button:hover {
+	-fx-background-color: #AAA;
 }
 .tree-view {
 	-fx-margin: 0;
@@ -50,12 +72,6 @@ GridPane.form {
 	-fx-padding: 0;
 }
 
-#about-dialog {
-	-fx-padding: 10px;
-}
-#about-dialog .label {
-	-fx-font-weight: bold;
-}
 #toolbar .button {
 	-fx-background-color: transparent;
 	-fx-padding: 3;

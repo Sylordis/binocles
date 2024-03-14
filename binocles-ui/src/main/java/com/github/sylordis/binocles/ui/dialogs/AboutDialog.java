@@ -20,7 +20,7 @@ import javafx.stage.Stage;
  * @author sylordis
  *
  */
-public class AboutDialog {
+public class AboutDialog implements Displayable<Void> {
 
 	/**
 	 * Main alert pane.
@@ -59,6 +59,8 @@ public class AboutDialog {
 		gridPane.addRow(3, new Label("License"));
 		TextArea licenseField = new TextArea(BinoclesConstants.LICENSE_SHORT);
 		licenseField.setEditable(false);
+		licenseField.setFocusTraversable(false);
+		licenseField.getStyleClass().add("no-focus-colors");
 		gridPane.addRow(4, licenseField);
 		GridPane.setColumnSpan(licenseField, GridPane.REMAINING);
 	}
@@ -66,10 +68,11 @@ public class AboutDialog {
 	/**
 	 * Builds the pane and displays it.
 	 */
-	public void display() {
+	public Void display() {
 		alert.getDialogPane().getStylesheets().add(getClass().getResource("../styles/main.css").toExternalForm());
 		alert.setTitle("About " + BinoclesConstants.SOFTWARE_NAME);
 		alert.getDialogPane().setId("about-dialog");
+		alert.getDialogPane().getStyleClass().add("form-dialog");
 		Stage dialogStage = (Stage) alert.getDialogPane().getScene().getWindow();
 		dialogStage.getIcons().add(AppIcons.ICON_HELP);
 
@@ -80,5 +83,6 @@ public class AboutDialog {
 
 		alert.getDialogPane().setContent(gridPane);
 		alert.showAndWait();
+		return null;
 	}
 }

@@ -153,7 +153,7 @@ public class CommentType implements Serializable, NomenclatureItem, Identifiable
 	public void setFields(Map<String, String> fields) {
 		this.fields.clear();
 		if (fields != null)
-			this.fields.putAll(fields);
+			this.fields.forEach(this::setField);
 	}
 
 	/**

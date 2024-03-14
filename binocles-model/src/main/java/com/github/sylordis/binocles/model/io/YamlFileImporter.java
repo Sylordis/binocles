@@ -18,6 +18,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import com.github.sylordis.binocles.model.BinoclesModel;
 import com.github.sylordis.binocles.model.exceptions.ImporterException;
+import com.github.sylordis.binocles.model.exceptions.UniqueNameException;
 import com.github.sylordis.binocles.model.review.Comment;
 import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.Nomenclature;
@@ -67,7 +68,12 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			if (YAMLUtils.checkChildType(root, "nomenclatures", YAMLType.LIST)) {
 				List<Nomenclature> nomenclatures = loadNomenclaturesFromYAML(YAMLUtils.list("nomenclatures", root));
 				logger.info("Imported {} nomenclatures", nomenclatures.size());
-				model.setNomenclatures(nomenclatures);
+				try {
+					model.setNomenclatures(nomenclatures);
+				} catch (UniqueNameException e) {
+					// TODO To not interrupt the import but resolve import conflicts at the end
+					throw new ImporterException(e);
+				}
 			}
 			// Get books
 			if (YAMLUtils.checkChildType(root, "library", YAMLType.LIST)) {
@@ -86,6 +92,8 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 					book.setNomenclature(model.getNomenclature(id));
 					logger.info("{} linked with {}", book, book.getNomenclature());
 					book.getMetadata().remove(NOMENCLATURE_BINOCLES_KEY);
+				} else {
+					book.setNomenclature(model.getDefaultNomenclature());
 				}
 			}
 		} else {
@@ -177,6 +185,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			if (YAMLUtils.checkChildType(data, "comments", YAMLType.LIST)) {
 				List<Comment> comments = loadCommentsFromYAML(YAMLUtils.list("comments", data), book);
 				chapter.setComments(comments);
+				logger.info("{} comments loaded", comments.size());
 			}
 			logger.debug("Imported new chapter {}", chapter.getTitle());
 			result.add(chapter);
@@ -197,8 +206,8 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			Map<String, Object> data = YAMLUtils.toNode(o);
 			// Range
 			Map<String, Object> rangeData = YAMLUtils.get("range", data);
-			int rangeStart = Integer.parseInt((String) rangeData.get("start"));
-			int rangeEnd = Integer.parseInt((String) rangeData.get("end"));
+			int rangeStart = (int) rangeData.get("start");
+			int rangeEnd = (int) rangeData.get("end");
 			// Type
 			String commentTypeName = Identifiable.formatId(YAMLUtils.strValue("type", data));
 			Nomenclature nomenclature = book.getNomenclature();

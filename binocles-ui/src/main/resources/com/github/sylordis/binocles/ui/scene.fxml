@@ -54,6 +54,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
@@ -254,7 +255,7 @@
                <tooltip>
                   <Tooltip text="Save as..." />
                </tooltip></Button>
-            <Button fx:id="toolbarExportStruct" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" text="Export (Struct)">
+            <Button fx:id="toolbarExportStruct" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" text="Export (Structural)">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                      <image>
@@ -337,7 +338,17 @@
                   <content>
                     <AnchorPane>
                            <children>
-                              <TreeView id="tree-nomenclatures" fx:id="nomenclatureTree" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <TreeView id="tree-nomenclatures" fx:id="nomenclaturesTree" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+	                              <contextMenu>
+	                                    <ContextMenu>
+	                                      <items>
+	                                        <MenuItem fx:id="nomenclaturesTreeMenuNew" disable="true" mnemonicParsing="false" text="New" />
+	                                        <MenuItem fx:id="nomenclaturesTreeMenuEdit" disable="true" mnemonicParsing="false" text="Edit" />
+	                                        <MenuItem fx:id="nomenclaturesTreeMenuDelete" disable="true" mnemonicParsing="false" text="Delete" />
+	                                      </items>
+	                                    </ContextMenu>
+                                 </contextMenu>
+                              </TreeView>
                            </children>
                         </AnchorPane>
                   </content>
@@ -346,12 +357,13 @@
                   <content>
                     <AnchorPane>
                            <children>
-                              <TreeView id="tree-reviews" fx:id="bookTree" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <TreeView id="tree-reviews" fx:id="booksTree" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <contextMenu>
                                     <ContextMenu>
                                       <items>
-                                        <MenuItem fx:id="reviewTreeMenuEdit" disable="true" mnemonicParsing="false" text="Edit" />
-                                        <MenuItem fx:id="reviewTreeMenuDelete" disable="true" mnemonicParsing="false" text="Delete" />
+                                        <MenuItem fx:id="booksTreeMenuNew" disable="true" mnemonicParsing="false" text="New" />
+                                        <MenuItem fx:id="booksTreeMenuEdit" disable="true" mnemonicParsing="false" text="Edit" />
+                                        <MenuItem fx:id="booksTreeMenuDelete" disable="true" mnemonicParsing="false" text="Delete" />
                                       </items>
                                     </ContextMenu>
                                  </contextMenu>
@@ -367,27 +379,41 @@
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </opaqueInsets>
                <children>
-                  <HBox prefHeight="35.0" prefWidth="200.0">
+                  <HBox prefHeight="35.0" prefWidth="200.0" styleClass="button-toolbar">
                      <children>
-                        <Text id="chapter-title" fx:id="textZoneChapterTitle" strokeType="OUTSIDE" strokeWidth="0.0">
+                        <Text id="chapter-title" fx:id="textZoneBookTitle" strokeType="OUTSIDE" strokeWidth="0.0">
                            <font>
                               <Font size="20.0" />
                            </font>
                         </Text>
-                        <Separator orientation="VERTICAL" prefHeight="35.0" prefWidth="321.0">
-                           <styleClass>
-                              <String fx:value="adaptative" />
-                              <String fx:value="horizontal" />
-                           </styleClass>
-                        </Separator>
-                        <Button mnemonicParsing="false" text="Button" />
-                        <Button mnemonicParsing="false" text="Button" />
+                        <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="toolbarTextCreateComment" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" onAction="#createCommentAction" styleClass="buttonicon" text="New Comment" visible="false">
+                           <graphic>
+                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                                 <image>
+                                    <Image url="@img/comment.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Add a new comment" />
+                           </tooltip>
+                        </Button>
                      </children>
                   </HBox>
+                  <Text id="chapter-title" fx:id="textZoneChapterTitle" strokeType="OUTSIDE" strokeWidth="0.0">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
                   <Text fx:id="textZoneMessages" strokeType="OUTSIDE" strokeWidth="0.0" visible="false">
                      <VBox.margin>
                         <Insets />
-                     </VBox.margin></Text>
+                     </VBox.margin>
+                     <styleClass>
+                        <String fx:value="text-muted" />
+                        <String fx:value="text-note" />
+                     </styleClass></Text>
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -395,9 +421,9 @@
             </VBox>
             <VBox fx:id="commentZoneVBox">
                <children>
-                  <Text fx:id="commentZoneTitle" strokeType="OUTSIDE" strokeWidth="0.0">
+                  <Text fx:id="commentZoneTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments" visible="false">
                      <font>
-                        <Font size="20.0" />
+                        <Font size="16.0" />
                      </font></Text>
                   <ScrollPane focusTraversable="false" prefHeight="494.0" prefWidth="221.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <content>
@@ -405,6 +431,9 @@
                      </content>
                   </ScrollPane>
                </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" />
+               </padding>
             </VBox>
       </items>
     </SplitPane>

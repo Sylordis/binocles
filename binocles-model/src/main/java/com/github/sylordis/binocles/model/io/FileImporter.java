@@ -10,7 +10,7 @@ import com.github.sylordis.binocles.model.exceptions.ImporterException;
  * 
  * @author sylordis
  *
- * @param <T>
+ * @param <T> type of the created object resulting of import process 
  */
 public interface FileImporter<T> {
 

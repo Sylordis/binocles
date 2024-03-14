@@ -7,9 +7,10 @@ import org.apache.logging.log4j.Logger;
 
 import com.github.sylordis.binocles.model.BinoclesModel;
 import com.github.sylordis.binocles.model.text.Book;
+import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.ui.AppIcons;
-import com.github.sylordis.binocles.ui.answers.CreateChapterAnswer;
 import com.github.sylordis.binocles.ui.components.CustomListCell;
+import com.github.sylordis.binocles.ui.doa.ChapterPropertiesAnswer;
 import com.github.sylordis.binocles.ui.listeners.ListenerValidator;
 
 import javafx.application.Platform;
@@ -23,12 +24,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
 /**
- * Dialog to create a new chapter.
+ * Dialog to create a new or edit a chapter.
  * 
  * @author sylordis
  *
  */
-public class CreateChapterDialog extends CustomDialog<CreateChapterAnswer> {
+public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterPropertiesAnswer> {
 
 	/**
 	 * Book to which add the chapter.
@@ -86,7 +87,7 @@ public class CreateChapterDialog extends CustomDialog<CreateChapterAnswer> {
 	 * 
 	 * @param model
 	 */
-	public CreateChapterDialog(BinoclesModel model, Book book) {
+	public ChapterDetailsDialog(BinoclesModel model, Book book) {
 		super("Adding a new chapter", model);
 		this.book = book;
 		setIcon(AppIcons.ICON_CHAPTER);
@@ -118,28 +119,35 @@ public class CreateChapterDialog extends CustomDialog<CreateChapterAnswer> {
 		GridPane.setColumnSpan(fieldChapterContent, GridPane.REMAINING);
 		// Set up listeners
 		ListenerValidator<Book> bookParentUIValidator = new ListenerValidator<Book>()
-		        .error("You have to pick a book to add this chapter to.", (o, n) -> null != n)
+		        .validIf("You have to pick a book to add this chapter to.", (o, n) -> null != n)
 		        .feed(this::setBookParentFeedback).onEither(b -> {
-			        setBookParentError(b);
 			        this.book = fieldBookParent.getSelectionModel().getSelectedItem();
+			        setBookParentValidity(b);
 			        logger.debug("Book parent changed, new={}", fieldBookParent.getSelectionModel().getSelectedItem());
 		        }).andThen(this::postActions);
 		ListenerValidator<String> chapterNameUIValidator = new ListenerValidator<String>()
-		        .error("Chapter name cannot be blank or empty.", (o, n) -> !n.isBlank())
-		        .error("Chapter with the same name already exists in the book (case insensitive).",
+		        .validIf("Chapter name cannot be blank or empty.", (o, n) -> !n.isBlank())
+		        .validIf("Chapter with the same name already exists in the book (case insensitive).",
 		                (o, n) -> this.book == null || !book.hasChapter(n))
-		        .feed(this::setChapterNameFeedback).onEither(this::setChapterNameError).andThen(this::postActions);
+		        .feed(this::setChapterNameFeedback).onEither(this::setChapterNameValid).andThen(this::postActions);
 		ListenerValidator<String> chapterContentUIValidator = new ListenerValidator<String>()
-		        .error("Chapter content cannot be blank or empty.", (o, n) -> !n.isBlank())
-		        .feed(this::setChapterContentFeedback).onEither(this::setChapterContentError)
+		        .validIf("Chapter content cannot be blank or empty.", (o, n) -> !n.isBlank())
+		        .feed(this::setChapterContentFeedback).onEither(this::setChapterContentValid)
 		        .andThen(this::postActions);
 		fieldBookParent.selectionModelProperty().addListener((opt, o, n) -> logger
 		        .debug("Book parent changed, old={}, new={}", n.getSelectedItem(), o.getSelectedItem()));
 		fieldBookParent.valueProperty().addListener(bookParentUIValidator);
 		fieldChapterName.textProperty().addListener(chapterNameUIValidator);
 		fieldChapterContent.textProperty().addListener(chapterContentUIValidator);
+		// Feedback setup
+		addFeedbackCollector(() -> bookParentFeedback);
+		addFeedbackCollector(() -> chapterNameFeedback);
+		addFeedbackCollector(() -> chapterContentFeedback);
+		addFormValidator(() -> bookParentValid);
+		addFormValidator(() -> chapterContentValid);
+		addFormValidator(() -> chapterNameValid);
 		// Set up components status
-		checkConfirmButtonDisabled();
+		setConfirmButtonDisable(true);
 		fieldBookParent.setButtonCell(new CustomListCell<Book>(b -> b.getTitle()));
 		fieldBookParent.setCellFactory(p -> {
 			return new CustomListCell<>(b -> b.getTitle());
@@ -149,6 +157,8 @@ public class CreateChapterDialog extends CustomDialog<CreateChapterAnswer> {
 		} else {
 			bookParentUIValidator.changed(null, null, null);
 		}
+		chapterNameUIValidator.changed(null, null, fieldChapterName.getText());
+		chapterContentUIValidator.changed(null, null, fieldChapterContent.getText());
 		// Focus on book name field
 		Platform.runLater(() -> fieldChapterName.requestFocus());
 	}
@@ -157,45 +167,26 @@ public class CreateChapterDialog extends CustomDialog<CreateChapterAnswer> {
 	 * Action to run post validation step.
 	 */
 	public void postActions() {
-		checkConfirmButtonDisabled();
-		combineFeedbacks(bookParentFeedback, chapterNameFeedback, chapterContentFeedback);
-	}
-
-	/**
-	 * Sets the disabling of the confirm button according to error status of all fields..
-	 */
-	public void checkConfirmButtonDisabled() {
-		setConfirmButtonDisable(!(this.bookParentValid && this.chapterContentValid && this.chapterNameValid));
+		setConfirmButtonDisabledOnValidity();
+		combineAndProcessFeedback(formFeedback::setText);
 	}
 
 	@Override
-	public CreateChapterAnswer convertResult(ButtonType button) {
-		CreateChapterAnswer answer = null;
+	public ChapterPropertiesAnswer convertResult(ButtonType button) {
+		ChapterPropertiesAnswer answer = null;
 		if (button.equals(getConfirmButton())) {
-			answer = new CreateChapterAnswer(fieldChapterName.getText().trim(), fieldChapterContent.getText(),
-			        fieldBookParent.getSelectionModel().getSelectedItem());
+			Chapter chapter = new Chapter(fieldChapterName.getText().trim(), fieldChapterContent.getText());
+			Book parentBook = fieldBookParent.getSelectionModel().getSelectedItem();
+			answer = new ChapterPropertiesAnswer(parentBook, chapter);
 		}
 		return answer;
 	}
 
 	/**
-	 * Combines feedback from fields into one and sets the feedback field's content.
+	 * @param valid the bookParentValid to set
 	 */
-	private void combineFeedbacks(String... strings) {
-		StringBuilder collect = new StringBuilder();
-		for (String s : strings) {
-			if (!collect.isEmpty())
-				collect.append("\n");
-			collect.append(s);
-		}
-		formFeedback.setText(collect.toString());
-	}
-
-	/**
-	 * @param error the bookParentValid to set
-	 */
-	public void setBookParentError(boolean error) {
-		this.bookParentValid = error;
+	public void setBookParentValidity(boolean valid) {
+		this.bookParentValid = valid;
 	}
 
 	/**
@@ -206,10 +197,10 @@ public class CreateChapterDialog extends CustomDialog<CreateChapterAnswer> {
 	}
 
 	/**
-	 * @param error the chapterContentValid to set
+	 * @param valid the chapterContentValid to set
 	 */
-	public void setChapterContentError(boolean error) {
-		this.chapterContentValid = error;
+	public void setChapterContentValid(boolean valid) {
+		this.chapterContentValid = valid;
 	}
 
 	/**
@@ -220,10 +211,10 @@ public class CreateChapterDialog extends CustomDialog<CreateChapterAnswer> {
 	}
 
 	/**
-	 * @param error the chapterNameValid to set
+	 * @param valid the chapterNameValid to set
 	 */
-	public void setChapterNameError(boolean error) {
-		this.chapterNameValid = error;
+	public void setChapterNameValid(boolean valid) {
+		this.chapterNameValid = valid;
 	}
 
 	/**

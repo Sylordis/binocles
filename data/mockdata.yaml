@@ -1,20 +1,24 @@
 binocles:
   version: 0.1-ALPHA
   nomenclatures:
-    - name: "Default"
+    - name: "My Nomenclature"
       types:
         - name: typography
           description: Typo in the text
           fields:
-            value: correction value
-            reason: reason of the typography
+            value: Correction value
+            reason: Reason of the typography
+        - name: comment
+          description: Global comment
+          fields:
+            text: Text of the comment
     - name: "High colour"
       types:
     - name: "Empty"
       types:
   library:
     - title: "The First Days"
-      nomenclature: default
+      nomenclature: my nomenclature
       metadata:
         author: Rhiannon Frater
         source: https://www.goodreads.com/book/show/9648068-the-first-days
@@ -99,6 +103,14 @@ binocles:
               The typical first stage of a maiko's training. Shikomi wear kimono, though they do not wear the elaborate outfit, hairstyle and makeup of fully-fledged maiko.
             Tōde (lit. 'distant outings')
               Geisha engagements not held in licensed restaurants, teahouses, or a geisha's own hanamachi.[7] 
+          comments:
+            - range:
+                start: 0
+                end: 287
+              type: comment
+              fields:
+                text: "That's a lot of different words for one singular idea!"
+              
         - title: History
           content: |-
             In the early stages of Japanese history, saburuko (serving girls) were mostly wandering girls whose families had been displaced by war.[12] Some of these saburuko girls offered sexual services for money while others with a better education made a living by entertaining at high-class social gatherings.[13][14]

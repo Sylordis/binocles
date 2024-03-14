@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.github.sylordis.binocles.model.review.CommentType;
+import com.github.sylordis.binocles.model.review.DefaultCommentType;
+import com.github.sylordis.binocles.model.review.DefaultNomenclature;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.model.text.Chapter;
@@ -61,8 +63,8 @@ public final class AppIcons {
 	// Initialise icon map for Cell renderers (Tree & List)
 	static {
 		MapUtils.create(ICON_DICTIONARY,
-		        new Class<?>[] { Book.class, Chapter.class, Nomenclature.class, CommentType.class },
-		        new Image[] { ICON_BOOK, ICON_CHAPTER, ICON_NOMENCLATURE, ICON_COMMENT_TYPE });
+		        new Class<?>[] { Book.class, Chapter.class, Nomenclature.class, DefaultNomenclature.class, CommentType.class, DefaultCommentType.class },
+		        new Image[] { ICON_BOOK, 	 ICON_CHAPTER,  ICON_NOMENCLATURE,  ICON_NOMENCLATURE, 		   ICON_COMMENT_TYPE, ICON_COMMENT_TYPE });
 	}
 
 	/**

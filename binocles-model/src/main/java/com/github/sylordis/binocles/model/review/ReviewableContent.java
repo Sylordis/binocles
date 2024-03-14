@@ -50,6 +50,22 @@ public abstract class ReviewableContent implements Identifiable {
 	}
 
 	/**
+	 * Checks if the global comment exists and is not blank.
+	 * @return
+	 */
+	public boolean hasGlobalComment() {
+		return generalComment != null && !generalComment.isBlank();
+	}
+	
+	/**
+	 * Checks if this content has comments other than the global comment.
+	 * @return
+	 */
+	public boolean hasComments() {
+		return !comments.isEmpty();
+	}
+	
+	/**
 	 * Gets the comments on the content.
 	 * 
 	 * @return

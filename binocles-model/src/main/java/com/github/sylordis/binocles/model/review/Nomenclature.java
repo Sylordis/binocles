@@ -52,7 +52,7 @@ public class Nomenclature implements NomenclatureItem, Identifiable {
 	public String getId() {
 		return Identifiable.formatId(name);
 	}
-	
+
 	@Override
 	public String toString() {
 		return name;
@@ -76,6 +76,28 @@ public class Nomenclature implements NomenclatureItem, Identifiable {
 		this.name = name;
 	}
 
+	/**
+	 * Checks that the nomenclature has a given comment type, matching on ID.
+	 * 
+	 * @param n
+	 * @see Identifiable#is(String)
+	 * @return
+	 */
+	public boolean hasCommentType(CommentType type) {
+		return this.types.stream().anyMatch(c -> c.is(type));
+	}
+
+	/**
+	 * Checks that the nomenclature has a given comment type, matching on ID.
+	 * 
+	 * @param n
+	 * @see Identifiable#is(String)
+	 * @return
+	 */
+	public boolean hasCommentType(String id) {
+		return this.types.stream().anyMatch(c -> c.is(id));
+	}
+	
 	/**
 	 * @return the types
 	 */
@@ -103,6 +125,16 @@ public class Nomenclature implements NomenclatureItem, Identifiable {
 			types.remove(type);
 			types.add(index, type);
 		}
+	}
+
+	/**
+	 * Checks if this nomenclature is the default one. This should return false for all nomenclature
+	 * except for the default one.
+	 * 
+	 * @return
+	 */
+	public boolean isDefaultNomenclature() {
+		return false;
 	}
 
 }

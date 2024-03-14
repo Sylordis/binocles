@@ -1,5 +1,8 @@
 package com.github.sylordis.binocles.model.exceptions;
 
+/**
+ * Exceptions raised when an error occurs during an import process.
+ */
 public class ImporterException extends Exception {
 
 	/**

@@ -37,7 +37,8 @@ public class Chapter extends ReviewableContent {
 	}
 
 	/**
-	 * Creates a new chapter with a title and a 
+	 * Creates a new chapter with a title and a
+	 * 
 	 * @param title
 	 * @param text
 	 */
@@ -51,10 +52,15 @@ public class Chapter extends ReviewableContent {
 	public String getId() {
 		return Identifiable.formatId(title);
 	}
-	
+
 	@Override
 	public String toString() {
-		return title;
+		StringBuilder rame = new StringBuilder();
+		rame.append(title);
+		if (this.hasComments()) {
+			rame.append(" [").append(this.getComments().size()).append("]");
+		}
+		return rame.toString();
 	}
 
 	/**

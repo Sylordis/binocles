@@ -12,13 +12,22 @@ public class BinoclesApp extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		Parent root = FXMLLoader.load(this.getClass().getResource("scene.fxml"));
-
+//		FXMLLoader loader = new FXMLLoader(this.getClass().getResource("scene.fxml"));
+		Parent root = FXMLLoader.load(this.getClass().getResource("scene.fxml"));;
+		
 		Scene scene = new Scene(root);
 
 		primaryStage.getIcons().add(AppIcons.ICON_SOFTWARE);
 		primaryStage.setTitle(BinoclesConstants.SOFTWARE_NAME);
 		primaryStage.setScene(scene);
+
+		// Parameters processing, take last argument if exist and load it
+//		Parameters params = getParameters();		
+//		List<String> parameters = params.getRaw();
+//		if (!parameters.isEmpty()) {
+//			String file = parameters.getLast();
+//			((BinoclesController) loader.getController()).openFile(new File(file));
+//		}
 
 		primaryStage.show();
 	}
