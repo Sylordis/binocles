@@ -23,6 +23,12 @@ class IdentifiableTest {
 	void tearDown() throws Exception {
 	}
 
+	@Test
+	void testId() {
+		final String id = "FooMan";
+		assertNotNull(id, new IdentifiableImpl(id).id());
+	}
+	
 	/**
 	 * We're not testing here for equality as getId() can be implemented however people want.
 	 */
@@ -87,6 +93,11 @@ class IdentifiableTest {
 		assertEquals(expected, Identifiable.formatId(in));
 	}
 
+	@Test
+	void testFormatId_Null() {
+		assertEquals(Identifiable.EMPTY_ID, Identifiable.formatId(null));
+	}
+	
 	/**
 	 * Private class for testing.
 	 * 

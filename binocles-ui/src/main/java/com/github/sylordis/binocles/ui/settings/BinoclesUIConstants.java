@@ -6,7 +6,7 @@ package com.github.sylordis.binocles.ui.settings;
  * @author sylordis
  *
  */
-public final class BinoclesConstants {
+public final class BinoclesUIConstants {
 
 	/**
 	 * Software name.

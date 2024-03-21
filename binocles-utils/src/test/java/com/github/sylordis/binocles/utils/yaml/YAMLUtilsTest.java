@@ -1,5 +1,6 @@
 package com.github.sylordis.binocles.utils.yaml;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -188,6 +189,7 @@ class YAMLUtilsTest {
 	 * Test for {@link YAMLUtils#list(String, java.util.Map)} when passing a null value as key.
 	 */
 	@Test
+	@Tag("null")
 	void testListKeyNull() {
 		Map<String, Object> yaml = new HashMap<>();
 		assertNull(YAMLUtils.list(null, yaml), "Null should be returned (null)");
@@ -242,4 +244,58 @@ class YAMLUtilsTest {
 		assertNull(YAMLUtils.strValue(null, yaml), "Null should be returned (null)");
 	}
 
+	/**
+	 * Test for {@link YAMLUtils#toNode(Object)}.
+	 */
+	@Test
+	void testToNode() {
+		Map<String,Integer> map = Map.of("a", 1, "b", 2);
+		assertEquals(map, YAMLUtils.toNode(map));
+	}
+
+	/**
+	 * Test for {@link YAMLUtils#toNode(Object)} when passing a null value as key.
+	 */
+	@Test
+	@Tag("Null")
+	void testToNode_Null() {
+		assertNull(YAMLUtils.toNode(null));
+	}
+
+	/**
+	 * Test for {@link YAMLUtils#toNode(Object)} passing an item that cannot be converted to Node.
+	 */
+	@Test
+	void testToNode_ConversionError() {
+		String value = "This will end up badly";
+		assertThrows(ClassCastException.class, () -> YAMLUtils.toNode(value));
+	}
+
+	/**
+	 * Test for {@link YAMLUtils#toList(Object)}.
+	 */
+	@Test
+	void testToList() {
+		List<String> list = List.of("some", "one", "I", "used", "to", "know");
+		assertEquals(list, YAMLUtils.toList(list));
+	}
+
+	/**
+	 * Test for {@link YAMLUtils#toList(Object)} when passing a null value as key.
+	 */
+	@Test
+	@Tag("Null")
+	void testToList_Null() {
+		assertNull(YAMLUtils.toList(null));
+	}
+
+	/**
+	 * Test for {@link YAMLUtils#toList(Object)} passing an item that cannot be converted to List.
+	 */
+	@Test
+	void testToList_ConversionError() {
+		String value = "This will also end up badly";
+		assertThrows(ClassCastException.class, () -> YAMLUtils.toList(value));
+	}
+	
 }

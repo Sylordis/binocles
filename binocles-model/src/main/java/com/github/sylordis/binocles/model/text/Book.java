@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.review.ReviewableContent;
 import com.github.sylordis.binocles.utils.Identifiable;
+import com.google.common.base.Preconditions;
 
 /**
  * Represents a book that can contain several chapters. Books will be the base entity that is
@@ -32,10 +33,6 @@ public class Book extends ReviewableContent {
 	 */
 	private String synopsis;
 	/**
-	 * Book description, whatever the author wants to put there.
-	 */
-	private String description;
-	/**
 	 * Any other metadata concerning the book (author, source, publication year, ...). This map should
 	 * never be null.
 	 */
@@ -48,24 +45,43 @@ public class Book extends ReviewableContent {
 	/**
 	 * Creates a new Book with a title.
 	 * 
-	 * @param title
+	 * @param title Title of the book, cannot be null or blank
+	 * @see #Book(String, String, String)
+	 * @throws NullPointerException     when title is null
+	 * @throws IllegalArgumentException when title is blank
 	 */
 	public Book(String title) {
-		this(title, "", "");
+		this(title, null, null);
 	}
 
 	/**
-	 * @param title
-	 * @param chapters
-	 * @param synopsis
-	 * @param description
+	 * Creates a new Book with a title and a synopsis.
+	 * 
+	 * @param title    Title of the book, cannot be null or blank
+	 * @param synopsis Synopsis of the book, empty string if null is provided
+	 * @see #Book(String, String, String)
+	 * @throws NullPointerException     when title is null
+	 * @throws IllegalArgumentException when title is blank
+	 */
+	public Book(String title, String synopsis) {
+		this(title, synopsis, null);
+	}
+
+	/**
+	 * Creates a new book with a title, synopsis and description.
+	 * 
+	 * @param title       Title of the book, cannot be null or blank
+	 * @param synopsis    Synopsis of the book, empty string if null is provided
+	 * @throws NullPointerException     when title is null
+	 * @throws IllegalArgumentException when title is blank
 	 */
 	public Book(String title, String synopsis, String description) {
 		super();
+		Preconditions.checkNotNull(title, "Book title should not be null");
+		Preconditions.checkArgument(!title.isBlank(), "Book title should not be blank");
 		this.title = title;
 		this.chapters = new ArrayList<>();
-		this.synopsis = synopsis;
-		this.description = description;
+		this.synopsis = null == synopsis ? "" : synopsis;
 		this.metadata = new TreeMap<>();
 	}
 
@@ -109,8 +125,10 @@ public class Book extends ReviewableContent {
 	}
 
 	/**
+	 * Adds a new chapter to the list of chapters.
 	 * 
 	 * @param chapter
+	 * @see List#add(Object)
 	 */
 	public void addChapter(Chapter chapter) {
 		this.chapters.add(chapter);
@@ -151,20 +169,6 @@ public class Book extends ReviewableContent {
 	 */
 	public void setSynopsis(String synopsis) {
 		this.synopsis = synopsis;
-	}
-
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
-
-	/**
-	 * @param description the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	/**

@@ -27,10 +27,20 @@ public enum YAMLType {
 
 	private final Class<?> javaType;
 
+	/**
+	 * Constructor for type.
+	 * 
+	 * @param javaType
+	 */
 	YAMLType(Class<?> javaType) {
 		this.javaType = javaType;
 	}
 
+	/**
+	 * Gets the type associated to the item.
+	 * 
+	 * @return
+	 */
 	public Class<?> getJavaType() {
 		return javaType;
 	}

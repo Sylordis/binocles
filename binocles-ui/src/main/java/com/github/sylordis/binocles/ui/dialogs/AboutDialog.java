@@ -1,8 +1,9 @@
 package com.github.sylordis.binocles.ui.dialogs;
 
+import com.github.sylordis.binocles.model.BinoclesConfiguration;
 import com.github.sylordis.binocles.ui.AppIcons;
 import com.github.sylordis.binocles.ui.javafxutils.Browser;
-import com.github.sylordis.binocles.ui.settings.BinoclesConstants;
+import com.github.sylordis.binocles.ui.settings.BinoclesUIConstants;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -46,18 +47,18 @@ public class AboutDialog implements Displayable<Void> {
 
 		// Set grid
 		// Description
-		Text descriptionField = new Text(BinoclesConstants.SOFTWARE_NAME
+		Text descriptionField = new Text(BinoclesUIConstants.SOFTWARE_NAME
 		        + " is a software for beta-reading. Commenting and reviewing made easy!");
 		gridPane.addRow(0, AppIcons.createImageView(AppIcons.ICON_SOFTWARE, 64, 64), descriptionField);
 		// Version
-		gridPane.addRow(1, new Label("Version"), new Text("0.1-Alpha"));
+		gridPane.addRow(1, new Label("Version"), new Text(BinoclesConfiguration.VERSION));
 		// Official website
-		Hyperlink officialWebsiteLink = new Hyperlink(BinoclesConstants.WEBSITE_LINK);
-		officialWebsiteLink.setOnAction(e -> new Browser().open(BinoclesConstants.WEBSITE_LINK));
+		Hyperlink officialWebsiteLink = new Hyperlink(BinoclesUIConstants.WEBSITE_LINK);
+		officialWebsiteLink.setOnAction(e -> new Browser().open(BinoclesUIConstants.WEBSITE_LINK));
 		gridPane.addRow(2, new Label("Official website"), officialWebsiteLink);
 		// License
 		gridPane.addRow(3, new Label("License"));
-		TextArea licenseField = new TextArea(BinoclesConstants.LICENSE_SHORT);
+		TextArea licenseField = new TextArea(BinoclesUIConstants.LICENSE_SHORT);
 		licenseField.setEditable(false);
 		licenseField.setFocusTraversable(false);
 		licenseField.getStyleClass().add("no-focus-colors");
@@ -70,7 +71,7 @@ public class AboutDialog implements Displayable<Void> {
 	 */
 	public Void display() {
 		alert.getDialogPane().getStylesheets().add(getClass().getResource("../styles/main.css").toExternalForm());
-		alert.setTitle("About " + BinoclesConstants.SOFTWARE_NAME);
+		alert.setTitle("About " + BinoclesUIConstants.SOFTWARE_NAME);
 		alert.getDialogPane().setId("about-dialog");
 		alert.getDialogPane().getStyleClass().add("form-dialog");
 		Stage dialogStage = (Stage) alert.getDialogPane().getScene().getWindow();

@@ -77,7 +77,9 @@ class NomenclatureTest {
 
 	@Test
 	void testNomenclatureStringListOfCommentType_TypesNull() {
-		assertThrows(NullPointerException.class, () -> new Nomenclature(NAME, null));
+		cfg = new Nomenclature(NAME, null);
+		assertNotNull(cfg);
+		assertNotNull(cfg.getTypes());
 	}
 
 	@Test

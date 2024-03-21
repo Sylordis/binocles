@@ -1,8 +1,5 @@
 package com.github.sylordis.binocles.ui.dialogs;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.github.sylordis.binocles.model.BinoclesModel;
 import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.Nomenclature;
@@ -13,14 +10,10 @@ import com.github.sylordis.binocles.ui.doa.CommentTypePropertiesAnswer;
 import com.github.sylordis.binocles.ui.listeners.ListenerValidator;
 
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -28,9 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -94,6 +85,8 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 	 */
 	private Text formFeedback;
 
+	// Form validity controls and feedback
+
 	private boolean nomenclatureChoiceValid = false;
 	private String nomenclatureChoiceFeedback = "";
 	private boolean nameValid = false;
@@ -101,11 +94,6 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 	private boolean fieldNameValid = false;
 	private boolean fieldsValid = false;
 	private String fieldsFeedback = "";
-
-	/**
-	 * Class logger.
-	 */
-	private final Logger logger = LogManager.getLogger();
 
 	/**
 	 * Creates a new book creation dialog.
@@ -258,13 +246,18 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 		Platform.runLater(() -> fieldName.requestFocus());
 	}
 
+	/**
+	 * Adds a new field in the table view, resetting the text fields and the button. If an existing
+	 * field has the same name, it will only update its description.
+	 */
 	public void addNewField() {
 		String name = fieldMetaFieldsControlsName.getText();
+		String description = fieldMetaFieldsControlsDescription.getText();
 		CommentTypeField field = getField(name);
 		if (null == field) {
-			fieldMetaFieldsData.add(new CommentTypeField(name, fieldMetaFieldsControlsDescription.getText()));
+			fieldMetaFieldsData.add(new CommentTypeField(name, description));
 		} else {
-			field.setDescription(fieldMetaFieldsControlsDescription.getText());
+			field.setDescription(description);
 			fieldMetafields.refresh();
 		}
 		fieldMetaFieldsControlsName.setText("");
@@ -272,6 +265,12 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 		fieldMetaFieldsControlsAdd.setDisable(true);
 	}
 
+	/**
+	 * Gets a comment type field from the list based on the name.
+	 * 
+	 * @param name
+	 * @return the comment type field with the given name or null if it doesn't exist
+	 */
 	public CommentTypeField getField(String name) {
 		CommentTypeField answer = null;
 		for (CommentTypeField field : fieldMetaFieldsData) {

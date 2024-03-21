@@ -10,6 +10,7 @@ import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.junit.jupiter.api.Test;
 
@@ -84,6 +85,26 @@ class MapUtilsTest {
 	@Test
 	public void testCreate_SameLength() {
 		Map<Integer, String> map = MapUtils.create(Arrays.copyOf(KEYS, VALUES.length), VALUES);
+		Map<Integer,String> expected = new HashMap<>();
+		for (int i = 0; i < Math.min(VALUES.length, KEYS.length); i++)
+			expected.put(KEYS[i], VALUES[i]);
+		assertEquals(expected, map);
+	}
+
+	@Test
+	public void testCreateMapArrayArray() {
+		Map<Integer, String> map = MapUtils.create(new TreeMap<>(), KEYS, VALUES);
+		assertNotNull(map);
+		Map<Integer,String> expected = new HashMap<>();
+		for (int i = 0; i < Math.min(VALUES.length, KEYS.length); i++)
+			expected.put(KEYS[i], VALUES[i]);
+		assertEquals(expected, map);
+	}
+
+	@Test
+	public void testCreateMapArrayArray_NullMap() {
+		Map<Integer, String> map = MapUtils.create(null, KEYS, VALUES);
+		assertNotNull(map);
 		Map<Integer,String> expected = new HashMap<>();
 		for (int i = 0; i < Math.min(VALUES.length, KEYS.length); i++)
 			expected.put(KEYS[i], VALUES[i]);

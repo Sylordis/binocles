@@ -9,7 +9,7 @@ import com.github.sylordis.binocles.model.review.DefaultNomenclature;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.model.text.Chapter;
-import com.github.sylordis.binocles.ui.settings.BinoclesConfiguration;
+import com.github.sylordis.binocles.ui.settings.BinoclesUIConfiguration;
 import com.github.sylordis.binocles.utils.MapUtils;
 
 import javafx.scene.image.Image;
@@ -68,15 +68,15 @@ public final class AppIcons {
 	}
 
 	/**
-	 * Creates an image view based on the current display size of the {@link BinoclesConfiguration}.
+	 * Creates an image view based on the current display size of the {@link BinoclesUIConfiguration}.
 	 * 
 	 * @param image Image to wrap into a view
 	 * @return
-	 * @see BinoclesConfiguration#getDisplaySize
+	 * @see BinoclesUIConfiguration#getDisplaySize
 	 */
 	public static final ImageView createImageViewFromConfig(Image image) {
-		return createImageView(image, BinoclesConfiguration.getInstance().getDisplaySize().getIconMaxSize(),
-		        BinoclesConfiguration.getInstance().getDisplaySize().getIconMaxSize());
+		return createImageView(image, BinoclesUIConfiguration.getInstance().getDisplaySize().getIconMaxSize(),
+		        BinoclesUIConfiguration.getInstance().getDisplaySize().getIconMaxSize());
 	}
 
 	/**

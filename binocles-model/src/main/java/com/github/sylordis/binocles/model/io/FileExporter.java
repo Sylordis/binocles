@@ -16,7 +16,7 @@ import com.github.sylordis.binocles.model.exceptions.ExporterException;
 public interface FileExporter {
 
 	/**
-	 * Loads a file to act on the software.
+	 * Exports the provided model to a given file.
 	 * 
 	 * @param file File to import
 	 * @return an object, can be null if the import is not correctly done or fails

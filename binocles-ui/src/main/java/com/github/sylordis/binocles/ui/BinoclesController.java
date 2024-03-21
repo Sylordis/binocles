@@ -16,11 +16,11 @@ import org.fxmisc.richtext.StyleClassedTextArea;
 import com.github.sylordis.binocles.model.BinoclesModel;
 import com.github.sylordis.binocles.model.exceptions.ExporterException;
 import com.github.sylordis.binocles.model.exceptions.ImporterException;
-import com.github.sylordis.binocles.model.exceptions.UniqueNameException;
 import com.github.sylordis.binocles.model.io.FileExporter;
 import com.github.sylordis.binocles.model.io.FileImporter;
 import com.github.sylordis.binocles.model.io.IOFactory;
 import com.github.sylordis.binocles.model.review.CommentType;
+import com.github.sylordis.binocles.model.review.DefaultNomenclature;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.review.NomenclatureItem;
 import com.github.sylordis.binocles.model.review.ReviewableContent;
@@ -39,8 +39,9 @@ import com.github.sylordis.binocles.ui.doa.ChapterPropertiesAnswer;
 import com.github.sylordis.binocles.ui.doa.CommentTypePropertiesAnswer;
 import com.github.sylordis.binocles.ui.javafxutils.Browser;
 import com.github.sylordis.binocles.ui.javafxutils.TreeViewUtils;
-import com.github.sylordis.binocles.ui.settings.BinoclesConfiguration;
-import com.github.sylordis.binocles.ui.settings.BinoclesConstants;
+import com.github.sylordis.binocles.ui.settings.BinoclesUIConfiguration;
+import com.github.sylordis.binocles.ui.settings.BinoclesUIConstants;
+import com.github.sylordis.binocles.utils.exceptions.UniqueIDException;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -179,6 +180,11 @@ public class BinoclesController implements Initializable {
 		logger.trace("Controller initialisation");
 		// Initialise model
 		model = new BinoclesModel();
+		try {
+			model.addNomenclature(new DefaultNomenclature());
+		} catch (UniqueIDException e) {
+			// First nomenclature added, cannot have exception
+		}
 		// Initialise the tree for text items
 		TreeItem<ReviewableContent> textTreeRoot = new TreeItem<>(new BookTreeRoot());
 		booksTree.setRoot(textTreeRoot);
@@ -230,7 +236,7 @@ public class BinoclesController implements Initializable {
 				// Add new book to model and front-end
 				model.addBook(answer.get());
 				rebuildBooksTree();
-			} catch (UniqueNameException e) {
+			} catch (UniqueIDException e) {
 				logger.error(e);
 			}
 			setButtonsStatus();
@@ -289,7 +295,7 @@ public class BinoclesController implements Initializable {
 				// Add new book to model and front-end
 				model.addNomenclature(nomenclature);
 				rebuildNomenclaturesTree();
-			} catch (UniqueNameException e) {
+			} catch (UniqueIDException e) {
 				logger.error(e);
 			}
 			setButtonsStatus();
@@ -377,7 +383,7 @@ public class BinoclesController implements Initializable {
 	@FXML
 	public void exportStructuralAction(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters().addAll(BinoclesConfiguration.getInstance().getFileFilters(true));
+		fileChooser.getExtensionFilters().addAll(BinoclesUIConfiguration.getInstance().getFileFilters(true));
 		fileChooser.setTitle("Export file");
 		// Open file saver
 		Stage stage = getStageFromSourceOrMenuBar(event);
@@ -423,13 +429,13 @@ public class BinoclesController implements Initializable {
 
 	@FXML
 	public void openDocumentationAction(ActionEvent event) {
-		new Browser().open(BinoclesConstants.DOCUMENTATION_LINK);
+		new Browser().open(BinoclesUIConstants.DOCUMENTATION_LINK);
 	}
 
 	@FXML
 	public void openFileAction(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters().addAll(BinoclesConfiguration.getInstance().getFileFilters(true));
+		fileChooser.getExtensionFilters().addAll(BinoclesUIConfiguration.getInstance().getFileFilters(true));
 		// Open file chooser
 		Stage stage = getStageFromSourceOrMenuBar(event);
 		File file = fileChooser.showOpenDialog(stage);
@@ -459,6 +465,13 @@ public class BinoclesController implements Initializable {
 				BinoclesModel importedModel = importer.load(file);
 				// Replace model
 				this.model = importedModel;
+				try {
+					model.addNomenclature(new DefaultNomenclature());
+				} catch (UniqueIDException e) {
+					logger.atError().withThrowable(e).log("Error during import.");
+					showErrorAlert(
+					        "Nomenclature with name 'Default' already exists in the imported file. Import was successful but Default Nomenclature was replaced.");
+				}
 				// TODO (Later) Add to model: conflict management (same IDs?)
 				rebuildTrees();
 				setButtonsStatus();

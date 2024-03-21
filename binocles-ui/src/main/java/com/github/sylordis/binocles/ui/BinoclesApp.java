@@ -1,6 +1,6 @@
 package com.github.sylordis.binocles.ui;
 
-import com.github.sylordis.binocles.ui.settings.BinoclesConstants;
+import com.github.sylordis.binocles.ui.settings.BinoclesUIConstants;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -18,7 +18,7 @@ public class BinoclesApp extends Application {
 		Scene scene = new Scene(root);
 
 		primaryStage.getIcons().add(AppIcons.ICON_SOFTWARE);
-		primaryStage.setTitle(BinoclesConstants.SOFTWARE_NAME);
+		primaryStage.setTitle(BinoclesUIConstants.SOFTWARE_NAME);
 		primaryStage.setScene(scene);
 
 		// Parameters processing, take last argument if exist and load it

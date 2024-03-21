@@ -3,6 +3,7 @@ package com.github.sylordis.binocles.model.review;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.github.sylordis.binocles.utils.Identifiable;
@@ -66,7 +67,7 @@ public class CommentType implements Serializable, NomenclatureItem, Identifiable
 		this.name = name;
 		this.description = description == null ? "" : description;
 		this.styles = new HashMap<>();
-		this.fields = new HashMap<>();
+		this.fields = new LinkedHashMap<>();
 	}
 
 	@Override
@@ -153,7 +154,7 @@ public class CommentType implements Serializable, NomenclatureItem, Identifiable
 	public void setFields(Map<String, String> fields) {
 		this.fields.clear();
 		if (fields != null)
-			this.fields.forEach(this::setField);
+			fields.forEach(this::setField);
 	}
 
 	/**
@@ -219,4 +220,14 @@ public class CommentType implements Serializable, NomenclatureItem, Identifiable
 		MapUtils.putOrRemoveIfNull(this.styles, key, value);
 	}
 
+	/**
+	 * Sets styles for this comment type, replacing any previous one set.
+	 * @param styles
+	 */
+	public void setStyles(Map<String,String> styles) {
+		this.styles.clear();
+		if (null != styles)
+			this.styles.putAll(styles);
+	}
+	
 }

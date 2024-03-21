@@ -27,25 +27,28 @@ public class Nomenclature implements NomenclatureItem, Identifiable {
 	 * Creates a new Legend configuration without any types.
 	 *
 	 * @param name name of the configuration
+	 * @see #Nomenclature(String, List)
 	 */
 	public Nomenclature(String name) {
-		this(name, new ArrayList<CommentType>());
+		this(name, null);
 	}
 
 	/**
 	 * Creates a new Legend configuration with an already existing list of types.
 	 *
 	 * @param name  name of the configuration
-	 * @param types List of types
-	 * @throws NullPointerException     if either name or types is null
+	 * @param types List of types, creates a default list if null provided
+	 * @throws NullPointerException     if name is null
 	 * @throws IllegalArgumentException if name is blank
 	 */
 	public Nomenclature(String name, List<CommentType> types) {
-		Preconditions.checkNotNull(name, "Legend configuration name should not be null");
-		Preconditions.checkArgument(!name.isBlank(), "Legend configuration name should not be blank");
-		Preconditions.checkNotNull(types, "Legend configuration types list should not be null");
+		Preconditions.checkNotNull(name, "Nomenclature name should not be null");
+		Preconditions.checkArgument(!name.isBlank(), "Nomenclature name should not be blank");
 		this.name = name;
-		this.types = types;
+		if (types == null)
+			this.types = new ArrayList<CommentType>();
+		else
+			this.types = types;
 	}
 
 	@Override
@@ -97,7 +100,7 @@ public class Nomenclature implements NomenclatureItem, Identifiable {
 	public boolean hasCommentType(String id) {
 		return this.types.stream().anyMatch(c -> c.is(id));
 	}
-	
+
 	/**
 	 * @return the types
 	 */
@@ -128,8 +131,8 @@ public class Nomenclature implements NomenclatureItem, Identifiable {
 	}
 
 	/**
-	 * Checks if this nomenclature is the default one. This should return false for all nomenclature
-	 * except for the default one.
+	 * Indicates if this nomenclature is the default one. This should return false for all nomenclature
+	 * except for the default one. Having several default nomenclatures is not recommended.
 	 * 
 	 * @return
 	 */

@@ -1,4 +1,4 @@
-package com.github.sylordis.binocles.model.exceptions;
+package com.github.sylordis.binocles.utils.exceptions;
 
 /**
  * Exception generated when trying to insert a new entity which possess a name which already exists
@@ -7,14 +7,14 @@ package com.github.sylordis.binocles.model.exceptions;
  * @author sylordis
  *
  */
-public class UniqueNameException extends Exception {
+public class UniqueIDException extends Exception {
 
 	/**
 	 * @param type Type of the content
 	 * @param name Unique name which is violated
 	 */
-	public UniqueNameException(Class<?> type, String name) {
-		super("Error while creating " + type.getSimpleName() + ": name should be unique, where '" + name
+	public UniqueIDException(Class<?> type, String name) {
+		super("Error while creating " + type.getSimpleName() + ": id should be unique, where '" + name
 		        + "' already exists.");
 	}
 

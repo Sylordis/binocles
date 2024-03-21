@@ -6,13 +6,13 @@ import java.util.List;
 import javafx.stage.FileChooser;
 
 /**
- * Main configuration class.
+ * Main configuration class for the UI.
  * 
  * @author sylordis
  *
  */
-public class BinoclesConfiguration {
-
+public class BinoclesUIConfiguration {
+	
 	/**
 	 * Display size.
 	 */
@@ -28,7 +28,7 @@ public class BinoclesConfiguration {
 		/**
 		 * The singleton instance.
 		 */
-		private static final BinoclesConfiguration instance = new BinoclesConfiguration();
+		private static final BinoclesUIConfiguration instance = new BinoclesUIConfiguration();
 	}
 
 	/**
@@ -36,14 +36,14 @@ public class BinoclesConfiguration {
 	 * 
 	 * @return
 	 */
-	public static BinoclesConfiguration getInstance() {
+	public static BinoclesUIConfiguration getInstance() {
 		return BinocleConfigurationHolder.instance;
 	}
 
 	/**
 	 * Creates a new instance.
 	 */
-	private BinoclesConfiguration() {
+	private BinoclesUIConfiguration() {
 		displaySize = DisplaySize.NORMAL;
 	}
 

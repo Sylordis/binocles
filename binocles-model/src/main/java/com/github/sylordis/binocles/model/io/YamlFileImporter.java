@@ -18,7 +18,6 @@ import org.yaml.snakeyaml.Yaml;
 
 import com.github.sylordis.binocles.model.BinoclesModel;
 import com.github.sylordis.binocles.model.exceptions.ImporterException;
-import com.github.sylordis.binocles.model.exceptions.UniqueNameException;
 import com.github.sylordis.binocles.model.review.Comment;
 import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.Nomenclature;
@@ -26,6 +25,7 @@ import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.utils.Identifiable;
 import com.github.sylordis.binocles.utils.MapUtils;
+import com.github.sylordis.binocles.utils.exceptions.UniqueIDException;
 import com.github.sylordis.binocles.utils.yaml.YAMLType;
 import com.github.sylordis.binocles.utils.yaml.YAMLUtils;
 
@@ -69,8 +69,8 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 				List<Nomenclature> nomenclatures = loadNomenclaturesFromYAML(YAMLUtils.list("nomenclatures", root));
 				logger.info("Imported {} nomenclatures", nomenclatures.size());
 				try {
-					model.setNomenclatures(nomenclatures);
-				} catch (UniqueNameException e) {
+					model.setNomenclaturesUnique(nomenclatures);
+				} catch (UniqueIDException e) {
 					// TODO To not interrupt the import but resolve import conflicts at the end
 					throw new ImporterException(e);
 				}
@@ -119,10 +119,8 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			Book book = new Book(title);
 			// Normal fields
 			String synopsis = YAMLUtils.strValue("synopsis", data);
-			String description = YAMLUtils.strValue("description", data);
 			String generalComment = YAMLUtils.strValue("globalcomment", data);
 			book.setSynopsis(synopsis);
-			book.setDescription(description);
 			book.setGeneralComment(generalComment);
 			logger.debug("Created book {}", book.getTitle());
 			Map<String, String> metadata = new HashMap<>();
