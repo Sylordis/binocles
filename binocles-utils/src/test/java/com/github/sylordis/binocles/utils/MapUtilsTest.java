@@ -1,5 +1,6 @@
 package com.github.sylordis.binocles.utils;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -9,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.lang.reflect.Constructor;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -109,6 +111,71 @@ class MapUtilsTest {
 		for (int i = 0; i < Math.min(VALUES.length, KEYS.length); i++)
 			expected.put(KEYS[i], VALUES[i]);
 		assertEquals(expected, map);
+	}
+
+	@Test
+	public void testCreateVariableMapArray() {
+		final String[] keys = { "ak", "bk", "ck" };
+		final String[] values = { "av", "bv", "cv" };
+		Map<String,String> map = MapUtils.createVariable(new LinkedHashMap<>(), keys[0], values[0], keys[1], values[1], keys[2], values[2]);
+		assertNotNull(map);
+		Map<String,String> expected = new LinkedHashMap<>();
+		for (int i = 0; i < keys.length; i++) {
+			expected.put(keys[i], values[i]);
+		}
+		assertEquals(expected, map);
+	}
+
+	@Test
+	public void testCreateVariableMapArray_OddEntries() {
+		final String[] keys = { "ak", "bk", "ck" };
+		final String[] values = { "av", "bv" };
+		Map<String,String> map = MapUtils.createVariable(new LinkedHashMap<>(), keys[0], values[0], keys[1], values[1], keys[2]);
+		assertNotNull(map);
+		Map<String,String> expected = new LinkedHashMap<>();
+		for (int i = 0; i < keys.length; i++) {
+			expected.put(keys[i], values.length <= i ? null : values[i]);
+		}
+		assertEquals(expected, map);
+	}
+
+	@Test
+	public void testCreateVariableMapArray_NullEntries() {
+		Map<String,String> map = MapUtils.createVariable(new TreeMap<>(), (String[]) null);
+		assertNotNull(map);
+		assertTrue(map.isEmpty());
+	}
+	
+	@Test
+	public void testCreateVariableMapArray_NullMap() {
+		final String[] keys = { "ak" };
+		final String[] values = { "av" };
+		Map<String,String> map = MapUtils.createVariable(null, keys[0], values[0]);
+		assertNotNull(map);
+		assertEquals(HashMap.class, map.getClass());
+		Map<String,String> expected = new LinkedHashMap<>();
+		expected.put(keys[0], values[0]);
+		assertEquals(expected, map);
+	}
+
+	@Test
+	public void testCreateVariableArray() {
+		final String[] keys = { "ak" };
+		final String[] values = { "av" };
+		Map<String,String> map = MapUtils.createVariable(keys[0], values[0]);
+		assertNotNull(map);
+		assertEquals(HashMap.class, map.getClass());
+		Map<String,String> expected = new HashMap<>();
+		expected.put(keys[0], values[0]);
+		assertEquals(expected, map);
+	}
+
+	@Test
+	public void testCreateVariableArray_NullEntries() {
+		Map<String,String> map = MapUtils.createVariable((String[]) null);
+		assertAll( () -> assertNotNull(map),
+				() -> assertEquals(HashMap.class, map.getClass()),
+				() -> assertTrue(map.isEmpty()));
 	}
 
 	@Test

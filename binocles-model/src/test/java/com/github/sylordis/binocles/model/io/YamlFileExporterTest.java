@@ -6,10 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertLinesMatch;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +32,7 @@ import com.github.sylordis.binocles.model.exceptions.ExporterException;
 import com.github.sylordis.binocles.model.review.Comment;
 import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.Nomenclature;
+import com.github.sylordis.binocles.model.testing.utils.TestFileUtils;
 import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.utils.MapUtils;
@@ -62,12 +64,49 @@ class YamlFileExporterTest {
 	/**
 	 * Test method for
 	 * {@link com.github.sylordis.binocles.model.io.YamlFileExporter#export(com.github.sylordis.binocles.model.BinoclesModel, java.io.File)}.
+	 * 
+	 * @throws URISyntaxException
+	 * @throws IOException
+	 * @throws FileNotFoundException
+	 * @throws ExporterException
 	 */
 	@Test
 	@Tag("output")
 	@Tag("functional")
-	void testExport() {
-		fail("Not yet implemented");
+	@Tag("files")
+	void testExport(TestInfo testInfo)
+	        throws URISyntaxException, FileNotFoundException, IOException, ExporterException {
+		final String basename = TestFileUtils.fileBasenameForTest(YamlFileExporterTest.class, testInfo);
+		File expectedTemp = File.createTempFile(basename + "-expected_temp.yaml", null, tempDir);
+		File expected = File.createTempFile(basename + "-expected.yaml", null, tempDir);
+		File result = File.createTempFile(basename + "-result.yaml", null, tempDir);
+		TestFileUtils.fillFileWithSamples(YamlFileExporterTest.class, expectedTemp, "samples" + File.separator + basename + ".yaml");
+		TestFileUtils.sed(expectedTemp, expected, Map.of("<version>", BinoclesConfiguration.getInstance().getVersion()));
+		expectedTemp.delete();
+		BinoclesModel model = new BinoclesModel();
+		Nomenclature nom1 = new Nomenclature("My Nomenclature");
+		Nomenclature nom2 = new Nomenclature("High colour");
+		Nomenclature nom3 = new Nomenclature("Empty");
+		CommentType type11 = new CommentType("typography", "Typo in the text");
+		CommentType type12 = new CommentType("comment", "Typical comment");
+		type11.setFields(MapUtils.createVariable(new LinkedHashMap<>(), "value", "Correction value", "reason", "Reason of the typography"));
+		type12.setFields(Map.of("text", "Text of the comment"));
+		nom1.setTypes(List.of(type11, type12));
+		model.setNomenclatures(List.of(nom1, nom2, nom3));
+		Book book1 = new Book("The First Book");
+		Book book2 = new Book("Another book");
+		model.setBooks(List.of(book1, book2));
+		book1.setNomenclature(nom3);
+		book1.setSynopsis("This is the first book ever");
+		Chapter chapter11 = new Chapter("The First Chapter",
+		        "Lorem ipsum dolor sit amet, consectetur adipiscing elit.");
+		Chapter chapter12 = new Chapter("The Second Chapter");
+		book1.setChapters(List.of(chapter11, chapter12));
+		book2.setNomenclature(nom1);
+		book2.setSynopsis("This is the second book");
+		exporter.export(model, result);
+		assertTrue(Files.exists(result.toPath()));
+		assertLinesMatch(Files.readAllLines(expected.toPath()), Files.readAllLines(result.toPath()));
 	}
 
 	/**
@@ -78,11 +117,15 @@ class YamlFileExporterTest {
 	 * @throws ExporterException
 	 */
 	@Test
+	@Tag("output")
+	@Tag("functional")
+	@Tag("files")
 	void testExport_Empty(TestInfo testInfo) throws ExporterException, IOException {
 		File result = new File(tempDir, testInfo.getTestMethod().get().getName() + ".yaml");
 		exporter.export(new BinoclesModel(), result);
-		List<String> lines = Arrays.asList("binocles:", "  version: " + BinoclesConfiguration.VERSION,
-		        "  nomenclatures: []", "  library: []");
+		List<String> lines = Arrays.asList("binocles:",
+		        "  version: " + BinoclesConfiguration.getInstance().getVersion(), "  nomenclatures: []",
+		        "  library: []");
 		assertAll(() -> assertTrue(Files.exists(result.toPath())),
 		        () -> assertLinesMatch(lines, Files.readAllLines(result.toPath())));
 	}
@@ -551,4 +594,5 @@ class YamlFileExporterTest {
 		return MapUtils.create(new LinkedHashMap<String, Object>(), new String[] { "name", "types" },
 		        new Object[] { name, commentTypes });
 	}
+
 }

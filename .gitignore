@@ -1,6 +1,11 @@
 # Created by https://www.toptal.com/developers/gitignore/api/eclipse,visualstudiocode,gradle
 # Edit at https://www.toptal.com/developers/gitignore?templates=eclipse,visualstudiocode,gradle
 
+### Project specific ###
+*/binocles.properties
+
+
+
 ### Eclipse ###
 .metadata
 bin/

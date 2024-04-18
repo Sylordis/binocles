@@ -27,7 +27,8 @@ public final class MapUtils {
 	 * 
 	 * @param <K>    Type of the keys
 	 * @param <V>    Type of the values
-	 * @param map    base map instance for a particular type, if map is null, creates a new {@link HashMap}.
+	 * @param map    base map instance for a particular type, if map is null, creates a new
+	 *               {@link HashMap}.
 	 * @param keys   Keys to add to the map
 	 * @param values Values to link to the keys
 	 * @return the map filled with entries
@@ -57,6 +58,43 @@ public final class MapUtils {
 	 */
 	public static <K, V> Map<K, V> create(K[] keys, V[] values) {
 		return create(new HashMap<>(), keys, values);
+	}
+
+	/**
+	 * Creates a map from a variable number of entries, alternating them between keys and values (i =>
+	 * keys, i+1 => values). Any missing last value will be considered null.
+	 * 
+	 * @param <T>     Type of the entries (keys and values)
+	 * @param map     base map instance for a particular type, if map is null, creates a new
+	 *                {@link HashMap}
+	 * @param entries all entries to be put in the map with alternating keys and values
+	 * @return a new {@link HashMap} with the associated entries
+	 */
+	@SafeVarargs
+	public static <T> Map<T, T> createVariable(T... entries) {
+		return createVariable(new HashMap<>(), entries);
+	}
+
+	/**
+	 * Creates a map from a variable number of entries, alternating them between keys and values (i =>
+	 * keys, i+1 => values). Any missing last value will be considered null.
+	 * 
+	 * @param <T>     Type of the entries (keys and values)
+	 * @param map     base map instance for a particular type, if map is null, creates a new
+	 *                {@link HashMap}
+	 * @param entries all entries to be put in the map with alternating keys and values
+	 * @return
+	 */
+	@SafeVarargs
+	public static <T> Map<T, T> createVariable(Map<T, T> map, T... entries) {
+		if (null == map)
+			map = new HashMap<>();
+		if (null != entries && entries.length > 0) {
+			for (int i = 0; i < entries.length; i += 2) {
+				map.put(entries[i], entries.length > i + 1 ? entries[i + 1] : null);
+			}
+		}
+		return map;
 	}
 
 	/**

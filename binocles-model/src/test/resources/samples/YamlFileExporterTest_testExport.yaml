@@ -1,0 +1,41 @@
+binocles:
+  version: <version>
+  nomenclatures:
+  - name: My Nomenclature
+    types:
+    - name: typography
+      description: Typo in the text
+      fields:
+        value: Correction value
+        reason: Reason of the typography
+      styles: {}
+    - name: comment
+      description: Typical comment
+      fields:
+        text: Text of the comment
+      styles: {}
+  - name: High colour
+    types: []
+  - name: Empty
+    types: []
+  library:
+  - title: The First Book
+    nomenclature: empty
+    metadata: {}
+    synopsis: This is the first book ever
+    globalcomment: ''
+    chapters:
+    - title: The First Chapter
+      content: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      globalcomment: ''
+      comments: []
+    - title: The Second Chapter
+      content: ''
+      globalcomment: ''
+      comments: []
+  - title: Another book
+    nomenclature: my nomenclature
+    metadata: {}
+    synopsis: This is the second book
+    globalcomment: ''
+    chapters: []

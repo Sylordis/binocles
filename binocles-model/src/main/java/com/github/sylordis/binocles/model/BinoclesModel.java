@@ -204,18 +204,17 @@ public class BinoclesModel {
 	}
 
 	/**
-	 * Returns a set of nomenclatures with a choice to exclude the default nomenclature.
+	 * Returns a set of nomenclatures with a choice to exclude all default nomenclatures.
 	 * 
-	 * @param includeDefault if set to true, will include the default nomenclature
+	 * @param includeDefault if set to true, will include default nomenclatures
 	 * @return the nomenclatures
 	 */
-	public List<Nomenclature> getNomenclatures(boolean includeDefault) {
+	public List<Nomenclature> getNomenclatures(boolean excludeDefaults) {
 		List<Nomenclature> nomenclatures = null;
-		if (includeDefault) {
+		if (!excludeDefaults) {
 			nomenclatures = this.nomenclatures;
 		} else {
-			nomenclatures = new ArrayList<>();
-			nomenclatures.addAll(this.nomenclatures);
+			nomenclatures = new ArrayList<>(this.nomenclatures);
 			nomenclatures.removeIf(n -> n.isDefaultNomenclature());
 		}
 		return nomenclatures;

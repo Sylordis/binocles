@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
+import com.github.sylordis.binocles.model.BinoclesConfiguration;
 import com.github.sylordis.binocles.model.BinoclesModel;
 import com.github.sylordis.binocles.model.exceptions.ExporterException;
 import com.github.sylordis.binocles.model.review.Comment;
@@ -58,14 +58,16 @@ public class YamlFileExporter implements FileExporter {
 
 	/**
 	 * Creates the header and add it to the provided node.
+	 * 
 	 * @param root
 	 */
 	public void exportHeader(Map<String, Object> root) {
-		root.put("version", "0.1.0-SNAPSHOT"); // TODO load version number
+		root.put("version", BinoclesConfiguration.getInstance().getVersion());
 	}
 
 	/**
 	 * Adds all books to the exported list.
+	 * 
 	 * @param root
 	 * @param books
 	 * @see #exportChapters(List, List)
@@ -94,6 +96,7 @@ public class YamlFileExporter implements FileExporter {
 
 	/**
 	 * Adds all chapters to the exported list.
+	 * 
 	 * @param root
 	 * @param chapters
 	 * @see #exportComments(List, List)
@@ -117,6 +120,7 @@ public class YamlFileExporter implements FileExporter {
 
 	/**
 	 * Adds all comments to the exported list.
+	 * 
 	 * @param root
 	 * @param comments
 	 */
@@ -138,6 +142,7 @@ public class YamlFileExporter implements FileExporter {
 
 	/**
 	 * Adds all nomenclatures to the exported list.
+	 * 
 	 * @param root
 	 * @param nomenclatures
 	 * @see #exportCommentTypes(List, List)
@@ -156,6 +161,7 @@ public class YamlFileExporter implements FileExporter {
 
 	/**
 	 * Adds all comment types to the exported list.
+	 * 
 	 * @param root
 	 * @param commentTypes
 	 */
@@ -163,17 +169,13 @@ public class YamlFileExporter implements FileExporter {
 		logger.debug("Exporting comment types");
 		for (CommentType type : commentTypes) {
 			// Keeps the insertion order
-			Map<String,Object> typeMap = new LinkedHashMap<>();
+			Map<String, Object> typeMap = new LinkedHashMap<>();
 			typeMap.put("name", type.getName());
 			typeMap.put("description", type.getDescription());
 			// Fields
-			Map<String,Object> fieldsMap = new HashMap<>();
-			fieldsMap.putAll(type.getFields());
-			typeMap.put("fields", fieldsMap);
+			typeMap.put("fields", type.getFields());
 			// Styles
-			Map<String,Object> stylesMap = new HashMap<>();
-			stylesMap.putAll(type.getStyles());
-			typeMap.put("styles", stylesMap);
+			typeMap.put("styles", type.getStyles());
 			root.add(typeMap);
 		}
 	}

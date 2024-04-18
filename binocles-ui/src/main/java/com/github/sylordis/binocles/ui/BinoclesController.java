@@ -589,6 +589,7 @@ public class BinoclesController implements Initializable {
 	public void rebuildBooksTree() {
 		// Remove all existing books
 		booksTree.getRoot().getChildren().clear();
+		// TODO Order according to settings
 		// Add all books
 		for (Book book : model.getBooks()) {
 			TreeItem<ReviewableContent> bookNode = new TreeItem<>(book);
@@ -606,6 +607,7 @@ public class BinoclesController implements Initializable {
 	public void rebuildNomenclaturesTree() {
 		// Remove all existing nomenclatures
 		nomenclaturesTree.getRoot().getChildren().clear();
+		// TODO Order according to settings
 		// Add all nomenclatures
 		for (Nomenclature nomenclature : model.getNomenclatures()) {
 			if (!nomenclature.isDefaultNomenclature()) {

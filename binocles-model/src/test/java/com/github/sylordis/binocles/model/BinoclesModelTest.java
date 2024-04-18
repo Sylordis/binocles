@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterEach;
@@ -22,7 +20,6 @@ import org.junit.jupiter.api.Test;
 
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.text.Book;
-import com.github.sylordis.binocles.utils.comparators.IdentifiableComparator;
 import com.github.sylordis.binocles.utils.exceptions.UniqueIDException;
 
 /**
@@ -115,7 +112,8 @@ class BinoclesModelTest {
 
 	/**
 	 * Test method for {@link BinoclesModel#getBook(String)}.
-	 * @throws UniqueIDException 
+	 * 
+	 * @throws UniqueIDException
 	 */
 	@Test
 	void testGetBook() throws UniqueIDException {
@@ -165,7 +163,7 @@ class BinoclesModelTest {
 	void testSetBooks() {
 		List<Book> books = new ArrayList<>(List.of(new Book("Foo"), new Book("Bar")));
 		model.setBooks(books);
-		Set<Book> expected = new TreeSet<>(new IdentifiableComparator());
+		List<Book> expected = new ArrayList<>();
 		expected.addAll(books);
 		assertEquals(expected, model.getBooks());
 	}
@@ -192,7 +190,7 @@ class BinoclesModelTest {
 		Collection<Book> books2 = new ArrayList<>(List.of(new Book("Hello"), new Book("World")));
 		model.setBooks(books);
 		model.setBooks(books2);
-		Set<Book> expected = new TreeSet<>(new IdentifiableComparator());
+		List<Book> expected = new ArrayList<>();
 		expected.addAll(books2);
 		assertEquals(expected, model.getBooks());
 	}
@@ -207,7 +205,7 @@ class BinoclesModelTest {
 	void testSetBooksUnique() throws UniqueIDException {
 		Collection<Book> books = List.of(new Book("Foo"), new Book("Bar"));
 		model.setBooksUnique(books);
-		Set<Book> expected = new TreeSet<>(new IdentifiableComparator());
+		List<Book> expected = new ArrayList<>();
 		expected.addAll(books);
 		assertEquals(expected, model.getBooks());
 	}
@@ -238,7 +236,7 @@ class BinoclesModelTest {
 		Collection<Book> books2 = List.of(new Book("Hello"), new Book("World"));
 		model.setBooksUnique(books);
 		model.setBooksUnique(books2);
-		Set<Book> expected = new TreeSet<>(new IdentifiableComparator());
+		List<Book> expected = new ArrayList<>();
 		expected.addAll(books2);
 		assertEquals(expected, model.getBooks());
 	}
@@ -484,7 +482,7 @@ class BinoclesModelTest {
 		final Nomenclature nom2 = new Nomenclature("swiggity");
 		Collection<Nomenclature> nomz = List.of(nom1, nom2);
 		model.setNomenclatures(nomz);
-		Set<Nomenclature> expected = new TreeSet<>(new IdentifiableComparator());
+		List<Nomenclature> expected = new ArrayList<>();
 		expected.addAll(nomz);
 		assertEquals(expected, model.getNomenclatures(true));
 	}
@@ -505,11 +503,14 @@ class BinoclesModelTest {
 
 	/**
 	 * Test method for
-	 * {@link com.github.sylordis.binocles.model.BinoclesModel#getNomenclatures(java.util.function.Predicate)}.
+	 * {@link com.github.sylordis.binocles.model.BinoclesModel#getNomenclatures(java.util.function.Predicate)}
+	 * when no nomenclatures are present.
 	 */
 	@Test
 	void testGetNomenclaturesPredicateNomenclature_Empty() {
-		// TODO
+		Collection<Nomenclature> extract = model.getNomenclatures(n -> true);
+		assertNotNull(extract);
+		assertTrue(extract.isEmpty());
 	}
 
 	/**
@@ -519,7 +520,7 @@ class BinoclesModelTest {
 	 * @throws UniqueIDException
 	 */
 	@Test
-	void testGetNomenclaturesBoolean_WithDefault() throws UniqueIDException {
+	void testGetNomenclaturesBoolean_WithoutDefault() throws UniqueIDException {
 		Nomenclature nomD = new Nomenclature("Poppy") {
 
 			@Override
@@ -532,8 +533,8 @@ class BinoclesModelTest {
 		final Nomenclature nom2 = new Nomenclature("swiggity");
 		List<Nomenclature> nomz = List.of(nomD, nom1, nom2);
 		model.setNomenclatures(nomz);
-		Set<Nomenclature> expected = new TreeSet<>(new IdentifiableComparator());
-		expected.addAll(nomz);
+		List<Nomenclature> expected = new ArrayList<>();
+		expected.addAll(List.of(nom1, nom2));
 		assertEquals(expected, model.getNomenclatures(true));
 	}
 
@@ -544,7 +545,7 @@ class BinoclesModelTest {
 	 * @throws UniqueIDException
 	 */
 	@Test
-	void testGetNomenclaturesBoolean() throws UniqueIDException {
+	void testGetNomenclaturesBoolean_NoExclude() throws UniqueIDException {
 		Nomenclature nomD = new Nomenclature("Poppy") {
 
 			@Override
@@ -557,9 +558,8 @@ class BinoclesModelTest {
 		final Nomenclature nom2 = new Nomenclature("swiggity");
 		List<Nomenclature> nomz = List.of(nomD, nom1, nom2);
 		model.setNomenclatures(nomz);
-		Set<Nomenclature> expected = new TreeSet<>(new IdentifiableComparator());
-		expected.add(nom1);
-		expected.add(nom2);
+		List<Nomenclature> expected = new ArrayList<>();
+		expected.addAll(nomz);
 		assertEquals(expected, model.getNomenclatures(false));
 	}
 
@@ -646,8 +646,7 @@ class BinoclesModelTest {
 		Collection<Nomenclature> nomz = List.of(new Nomenclature("A"), new Nomenclature("B"), new Nomenclature("C"),
 		        nomD1, nomD2);
 		model.setNomenclatures(nomz);
-		// Set should be alphabetically ordered, so first one will be the alphabetical one
-		assertEquals(nomD2, model.getDefaultNomenclature());
+		assertEquals(nomD1, model.getDefaultNomenclature());
 	}
 
 	/**
@@ -658,7 +657,7 @@ class BinoclesModelTest {
 	void testSetNomenclatures() {
 		final Collection<Nomenclature> nomz = toNomenclatures("My", "little", "nomenclature");
 		model.setNomenclatures(nomz);
-		Set<Nomenclature> expected = new TreeSet<>(new IdentifiableComparator());
+		List<Nomenclature> expected = new ArrayList<>();
 		expected.addAll(nomz);
 		assertEquals(expected, model.getNomenclatures());
 	}
@@ -694,7 +693,7 @@ class BinoclesModelTest {
 		final Collection<Nomenclature> replacement = toNomenclatures("D", "A", "F");
 		model.setNomenclatures(nomz);
 		model.setNomenclatures(replacement);
-		Set<Nomenclature> expected = new TreeSet<>(new IdentifiableComparator());
+		List<Nomenclature> expected = new ArrayList<>();
 		expected.addAll(replacement);
 		assertEquals(expected, model.getNomenclatures());
 	}
@@ -707,7 +706,7 @@ class BinoclesModelTest {
 	void testSetNomenclaturesUnique() throws UniqueIDException {
 		final Collection<Nomenclature> nomz = toNomenclatures("Commenting", "is", "magic");
 		model.setNomenclaturesUnique(nomz);
-		Set<Nomenclature> expected = new TreeSet<>(new IdentifiableComparator());
+		List<Nomenclature> expected = new ArrayList<>();
 		expected.addAll(nomz);
 		assertEquals(expected, model.getNomenclatures());
 	}
@@ -745,7 +744,7 @@ class BinoclesModelTest {
 		final Collection<Nomenclature> replacement = toNomenclatures("D", "A", "F");
 		model.setNomenclaturesUnique(nomz);
 		model.setNomenclaturesUnique(replacement);
-		Set<Nomenclature> expected = new TreeSet<>(new IdentifiableComparator());
+		List<Nomenclature> expected = new ArrayList<>();
 		expected.addAll(replacement);
 		assertEquals(expected, model.getNomenclatures());
 	}

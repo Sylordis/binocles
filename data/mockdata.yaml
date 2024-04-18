@@ -1,5 +1,5 @@
 binocles:
-  version: 0.1-ALPHA
+  version: 0.1-SNAPSHOT
   nomenclatures:
     - name: "My Nomenclature"
       types:
@@ -9,13 +9,13 @@ binocles:
             value: Correction value
             reason: Reason of the typography
         - name: comment
-          description: Global comment
+          description: Typical comment
           fields:
             text: Text of the comment
     - name: "High colour"
-      types:
+      types: []
     - name: "Empty"
-      types:
+      types: []
   library:
     - title: "The First Days"
       nomenclature: my nomenclature
@@ -166,7 +166,7 @@ binocles:
             Pellentesque orci leo, vehicula ac magna at, semper fringilla enim. Cras dapibus ultrices leo ac efficitur. Phasellus dignissim nibh hendrerit velit porta, eu posuere mauris dictum. Nullam aliquam, urna sit amet lacinia interdum, enim quam pretium erat, vitae feugiat turpis mauris placerat velit. Sed in risus ultricies, eleifend nisl sit amet, sodales justo. Sed et erat quis nunc tristique cursus non ac dolor. Duis vitae lobortis nunc, a sodales urna. Praesent non magna pretium, auctor urna quis, fringilla urna. Phasellus ipsum tellus, iaculis a metus nec, pellentesque finibus nibh. Vivamus ac purus a ipsum pulvinar maximus dignissim at ante. Duis eget fermentum lectus. Maecenas ut nunc et ligula ullamcorper mattis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Phasellus commodo nunc nisi, molestie iaculis turpis vehicula vel. Sed enim eros, luctus vitae facilisis ut, interdum non mauris. Aenean rhoncus purus vel tincidunt hendrerit.
             Nunc sodales sollicitudin molestie. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In aliquet leo at lectus elementum feugiat. Morbi nec erat dapibus enim lobortis pellentesque et id neque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas eget ultrices tellus, vitae molestie nibh. Pellentesque euismod sollicitudin ligula, ut hendrerit felis vulputate nec. In sed lorem feugiat, laoreet purus vitae, eleifend sapien. Nullam urna tortor, rutrum nec faucibus et, lobortis a odio. Quisque congue dictum mi in cursus. Praesent eget quam arcu. Vivamus tincidunt non nisl in dignissim. Vestibulum eu nisl et leo malesuada venenatis. Aenean sagittis lectus non malesuada eleifend. Morbi elementum ac purus vitae molestie.
           globalcomment: |-
-             
+           
     - title: "Weyward"
       nomenclature: 
       synopsis: |-

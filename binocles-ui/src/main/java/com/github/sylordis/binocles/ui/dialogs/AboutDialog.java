@@ -51,7 +51,7 @@ public class AboutDialog implements Displayable<Void> {
 		        + " is a software for beta-reading. Commenting and reviewing made easy!");
 		gridPane.addRow(0, AppIcons.createImageView(AppIcons.ICON_SOFTWARE, 64, 64), descriptionField);
 		// Version
-		gridPane.addRow(1, new Label("Version"), new Text(BinoclesConfiguration.VERSION));
+		gridPane.addRow(1, new Label("Version"), new Text(BinoclesConfiguration.getInstance().getVersion()));
 		// Official website
 		Hyperlink officialWebsiteLink = new Hyperlink(BinoclesUIConstants.WEBSITE_LINK);
 		officialWebsiteLink.setOnAction(e -> new Browser().open(BinoclesUIConstants.WEBSITE_LINK));
