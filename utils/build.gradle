@@ -1,0 +1,13 @@
+/*
+ * Build.gradle file for the binocles-utils component.
+ */
+
+plugins {
+    id 'com.github.sylordis.binocles.java-library-conventions'
+}
+
+eclipse {
+	project {
+		name = 'binocles-utils'
+	}
+}

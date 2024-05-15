@@ -11,4 +11,4 @@ plugins {
 }
 
 rootProject.name = 'binocles'
-include('binocles-model', 'binocles-ui', 'binocles-utils')
+include('model', 'ui', 'utils')

@@ -1,0 +1,44 @@
+/*
+ * Build.gradle file for the binocles-ui component.
+ */
+plugins {
+    id 'com.github.sylordis.binocles.java-application-conventions'
+  	id 'org.openjfx.javafxplugin' version '0.0.14'
+  	id 'org.beryx.jlink' version '2.26.0'
+}
+
+eclipse {
+	project {
+		name = 'binocles-ui'
+	}
+}
+
+dependencies {
+    implementation 'org.apache.commons:commons-text'
+    implementation project(':model')
+    implementation project(':utils')
+    implementation 'org.fxmisc.richtext:richtextfx:0.11.1'
+}
+
+application {
+    // Define the main class for the application.
+    mainClass = 'com.github.sylordis.binocles.ui.BinoclesApp'
+}
+
+javafx {
+    version = "21"
+    modules = [ 'javafx.base', 'javafx.controls', 'javafx.fxml', 'javafx.graphics' ]
+}
+
+jlink {
+    options = ['--strip-debug', '--compress', '2', '--no-header-files', '--no-man-pages']
+    launcher {
+        name = 'binocles'
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'com.github.sylordis.binocles.ui.BinoclesApp'
+    }
+}
