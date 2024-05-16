@@ -21,6 +21,11 @@ import com.google.common.base.Preconditions;
 public class Book extends ReviewableContent {
 
 	/**
+	 * Default title for chapters.
+	 */
+	public static final String CHAPTER_DEFAULT_TITLE = "Chapter ";
+
+	/**
 	 * Title of the book.
 	 */
 	private String title;
@@ -32,6 +37,10 @@ public class Book extends ReviewableContent {
 	 * Book synopsis.
 	 */
 	private String synopsis;
+	/**
+	 * Book description.
+	 */
+	private String description;
 	/**
 	 * Any other metadata concerning the book (author, source, publication year, ...). This map should
 	 * never be null.
@@ -70,8 +79,8 @@ public class Book extends ReviewableContent {
 	/**
 	 * Creates a new book with a title, synopsis and description.
 	 * 
-	 * @param title       Title of the book, cannot be null or blank
-	 * @param synopsis    Synopsis of the book, empty string if null is provided
+	 * @param title    Title of the book, cannot be null or blank
+	 * @param synopsis Synopsis of the book, empty string if null is provided
 	 * @throws NullPointerException     when title is null
 	 * @throws IllegalArgumentException when title is blank
 	 */
@@ -82,6 +91,7 @@ public class Book extends ReviewableContent {
 		this.title = title;
 		this.chapters = new ArrayList<>();
 		this.synopsis = null == synopsis ? "" : synopsis;
+		this.setDescription(null == description ? "" : description);
 		this.metadata = new TreeMap<>();
 	}
 
@@ -110,17 +120,23 @@ public class Book extends ReviewableContent {
 
 	/**
 	 * @param title the title to set
+	 * @throws NullPointerException     if the title is null
+	 * @throws IllegalArgumentException if the title is blank
 	 */
 	public void setTitle(String title) {
+		Preconditions.checkNotNull(title, "Book title should not be null");
+		Preconditions.checkArgument(!title.isBlank(), "Book title should not be blank");
 		this.title = title;
 	}
 
 	/**
 	 * Creates a new empty chapter. The title will be created automatically based on the amount of
 	 * already existing chapters.
+	 * 
+	 * @see #CHAPTER_DEFAULT_TITLE
 	 */
 	public void createChapter() {
-		Chapter chapter = new Chapter("Chapter " + this.chapters.size());
+		Chapter chapter = new Chapter(CHAPTER_DEFAULT_TITLE + (this.chapters.size() + 1));
 		this.chapters.add(chapter);
 	}
 
@@ -151,10 +167,14 @@ public class Book extends ReviewableContent {
 	}
 
 	/**
+	 * Replaces all current chapters with provided ones. Empties the list if provided null.
+	 * 
 	 * @param chapters the chapters to set
 	 */
 	public void setChapters(List<Chapter> chapters) {
-		this.chapters = chapters;
+		this.chapters.clear();
+		if (chapters != null)
+			this.chapters.addAll(chapters);
 	}
 
 	/**
@@ -168,7 +188,10 @@ public class Book extends ReviewableContent {
 	 * @param synopsis the synopsis to set
 	 */
 	public void setSynopsis(String synopsis) {
-		this.synopsis = synopsis;
+		if (synopsis == null)
+			this.synopsis = "";
+		else
+			this.synopsis = synopsis;
 	}
 
 	/**
@@ -222,6 +245,23 @@ public class Book extends ReviewableContent {
 	 */
 	public Map<String, String> getMetadata() {
 		return metadata;
+	}
+
+	/**
+	 * @return the description
+	 */
+	public String getDescription() {
+		return description;
+	}
+
+	/**
+	 * @param description the description to set
+	 */
+	public void setDescription(String description) {
+		if (description == null)
+			this.description = "";
+		else
+			this.description = description;
 	}
 
 }

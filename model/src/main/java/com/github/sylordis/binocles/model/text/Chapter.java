@@ -71,10 +71,13 @@ public class Chapter extends ReviewableContent {
 	}
 
 	/**
-	 * @param title the title to set
+	 * @param title the title to set, empty string if null
 	 */
 	public void setTitle(String title) {
-		this.title = title;
+		if (title == null)
+			this.title = "";
+		else
+			this.title = title;
 	}
 
 	/**
@@ -85,10 +88,13 @@ public class Chapter extends ReviewableContent {
 	}
 
 	/**
-	 * @param text the text to set
+	 * @param text the text to set, empty string if null
 	 */
 	public void setText(String text) {
-		this.text = text;
+		if (text == null)
+			this.text = "";
+		else
+			this.text = text;
 	}
 
 }

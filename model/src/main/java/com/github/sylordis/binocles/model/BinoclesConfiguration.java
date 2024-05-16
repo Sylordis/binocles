@@ -78,7 +78,7 @@ public class BinoclesConfiguration {
 		} catch (IOException | URISyntaxException e) {
 			logger.info("Couldn't load internal settings file.");
 		} catch (NullPointerException e) {
-			logger.error("uhoh");
+			logger.error(e);
 		}
 	}
 
