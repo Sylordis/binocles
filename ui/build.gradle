@@ -3,8 +3,8 @@
  */
 plugins {
     id 'com.github.sylordis.binocles.java-application-conventions'
-  	id 'org.openjfx.javafxplugin' version '0.0.14'
-  	id 'org.beryx.jlink' version '2.26.0'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
+    id 'org.beryx.jlink' version '3.0.1'
 }
 
 eclipse {
