@@ -326,6 +326,9 @@ public class BinoclesController implements Initializable {
 			CommentType type = answer.get().commentType();
 			nomenclature.getTypes().add(type);
 			logger.info("Created comment type '{}', added to '{}'", type.getName(), nomenclature.getName());
+			logger.debug("  fields: {}", type.getFields().keySet());
+			logger.debug("  styles:");
+			type.getStyles().forEach((k,v) -> logger.debug("    {}: {}", k, v));
 			TreeItem<NomenclatureItem> commentTypeTreeItem = new TreeItem<>(type);
 			TreeItem<NomenclatureItem> currentBookParent = TreeViewUtils.getTreeViewItem(nomenclaturesTree.getRoot(),
 			        nomenclature);

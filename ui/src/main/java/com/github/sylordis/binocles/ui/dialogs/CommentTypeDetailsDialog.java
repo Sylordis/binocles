@@ -5,6 +5,7 @@ import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.ui.AppIcons;
 import com.github.sylordis.binocles.ui.components.CustomListCell;
+import com.github.sylordis.binocles.ui.components.StyleEditor;
 import com.github.sylordis.binocles.ui.doa.CommentTypeField;
 import com.github.sylordis.binocles.ui.doa.CommentTypePropertiesAnswer;
 import com.github.sylordis.binocles.ui.listeners.ListenerValidator;
@@ -76,10 +77,9 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 	 * Text field to specify the field's description.
 	 */
 	private TextField fieldMetaFieldsControlsDescription;
-	/**
-	 * TODO Field allowing to set the style of the comments based on that type.
-	 */
-	private Text fieldStyle;
+	
+	private StyleEditor fieldStyle;
+	
 	/**
 	 * User feedback.
 	 */
@@ -112,7 +112,7 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 	public void build() {
 		// Nomenclature field
 		Label labelNomenclature = new Label("Nomenclature:");
-		fieldNomenclatureChoice = new ComboBox<>(FXCollections.observableArrayList(getModel().getNomenclatures(false)));
+		fieldNomenclatureChoice = new ComboBox<>(FXCollections.observableArrayList(getModel().getNomenclatures(true)));
 		// Comment type name field
 		Label labelCommentTypeName = new Label("Name:");
 		fieldName = new TextField();
@@ -125,6 +125,7 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 		// Metafields field
 		fieldMetaFieldsData = FXCollections.observableArrayList();
 		fieldMetaFieldsData.add(new CommentTypeField("text", "Body text of the comment"));
+		fieldsValid = true; // if metafields are not empty, then it is valid by default
 		fieldMetafields = new TableView<>(fieldMetaFieldsData);
 		fieldMetafields.setPlaceholder(new Label("No fields set"));
 		TableColumn<CommentTypeField, String> tableFieldNameColumn = new TableColumn<>("Name");
@@ -151,8 +152,7 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 		        fieldMetaFieldsControlsDescription, fieldMetaFieldsControlsAdd);
 		// Style field
 		Label labelCommentTypeStyle = new Label("Comment style:");
-		fieldStyle = new Text("Placeholder for styles");
-		// TODO Setup a read-only text zone with formatting
+		fieldStyle = new StyleEditor();
 		// Set dialog components
 		getGridPane().addRow(0, formFeedback);
 		GridPane.setColumnSpan(formFeedback, GridPane.REMAINING);
@@ -213,7 +213,6 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 		        .onEither(b -> fieldNameValid = b)
 		        .andThen(() -> fieldMetaFieldsControlsAdd.setDisable(!fieldNameValid));
 		fieldMetaFieldsControlsName.textProperty().addListener(fieldNameUIValidator);
-		// TODO validator on tableview to have at least one field
 		// Set feedback collectors & form validators
 		addFeedbackCollector(() -> nameFeedback);
 		addFeedbackCollector(() -> nomenclatureChoiceFeedback);
@@ -238,8 +237,6 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 		fieldMetafields.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		fieldMetafields.setFixedCellSize(25);
 		fieldMetafields.setPrefHeight(5 * fieldMetafields.getFixedCellSize() + 30);
-//		fieldMetafields.prefHeightProperty()
-//		.bind(Bindings.size(fieldMetaFieldsData).multiply(fieldMetafields.getFixedCellSize()).add(30));
 		fieldMetaFieldsControlsAdd.setDisable(true);
 		fieldMetaFieldsControlsDelete.setDisable(true);
 		// Focus on book name field
@@ -289,10 +286,8 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 			// Create fields map from fields list
 			Nomenclature nomenclature = fieldNomenclatureChoice.getSelectionModel().getSelectedItem();
 			CommentType commentType = new CommentType(fieldName.getText().trim(), fieldDescription.getText().trim());
-			for (CommentTypeField field : fieldMetaFieldsData) {
-				commentType.setField(field.getName(), field.getDescription());
-			}
-			// TODO Create style map from style field
+			fieldMetaFieldsData.forEach(f -> commentType.setField(f.getName(), f.getDescription()));
+			fieldStyle.getCSSStyles().forEach((p,v) -> commentType.setStyle(p.toString(), v));
 			answer = new CommentTypePropertiesAnswer(nomenclature, commentType);
 		}
 		return answer;

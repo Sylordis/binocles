@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<fx:root maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="78.0" prefWidth="410.0" type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+  <HBox prefHeight="27.0" prefWidth="600.0" spacing="5.0">
+     <children>
+        <ToggleButton fx:id="controlButtonBold" mnemonicParsing="false" onAction="#updateTextStyle" text="B">
+           <font>
+              <Font name="Serif Bold" size="14.0" />
+           </font>
+           <tooltip>
+              <Tooltip text="Bold" />
+           </tooltip>
+        </ToggleButton>
+        <ToggleButton fx:id="controlButtonItalic" mnemonicParsing="false" onAction="#updateTextStyle" text="I">
+           <font>
+              <Font name="Serif Bold Italic" size="14.0" />
+           </font>
+           <tooltip>
+              <Tooltip text="Italic" />
+           </tooltip>
+        </ToggleButton>
+        <ToggleButton fx:id="controlButtonUnderline" mnemonicParsing="false" onAction="#updateTextStyle" text="U" underline="true">
+           <tooltip>
+              <Tooltip text="Underline" />
+           </tooltip>
+           <font>
+              <Font name="Serif Regular" size="14.0" />
+           </font>
+        </ToggleButton>
+        <ToggleButton fx:id="controlButtonStrikethrough" mnemonicParsing="false" onAction="#updateTextStyle" text="T">
+           <tooltip>
+              <Tooltip text="Strikethrough" />
+           </tooltip>
+           <font>
+              <Font name="Serif Regular" size="14.0" />
+           </font>
+        </ToggleButton>
+        <ToggleButton fx:id="controlButtonColorPickerForeground" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#updateTextStyle" prefHeight="29.0" prefWidth="76.0" text="A">
+           <font>
+              <Font name="Serif Regular" size="14.0" />
+           </font>
+           <tooltip>
+              <Tooltip text="Toggle foreground colour" />
+           </tooltip>
+           <graphic>
+              <ColorPicker fx:id="controlColorPickerForeground" accessibleText="Foreground" onAction="#updateTextStyle" prefHeight="25.0" prefWidth="46.0" promptText="Foreground" style="-fx-background-color: transparent;">
+                 <value>
+                    <Color />
+                 </value>
+                 <tooltip>
+                    <Tooltip text="Foreground colour" />
+                 </tooltip>
+              </ColorPicker>
+           </graphic>
+        </ToggleButton>
+        <ToggleButton fx:id="controlButtonColorPickerBackground" contentDisplay="RIGHT" graphicTextGap="0.0" mnemonicParsing="false" onAction="#updateTextStyle" prefHeight="29.0" prefWidth="72.0" text="A">
+           <font>
+              <Font name="Serif Regular" size="14.0" />
+           </font>
+           <tooltip>
+              <Tooltip text="Toogle Background colour" />
+           </tooltip>
+           <graphic>
+              <ColorPicker fx:id="controlColorPickerBackground" onAction="#updateTextStyle" prefHeight="25.0" prefWidth="43.0" promptText="Background" style="-fx-background-color: transparent;">
+                 <tooltip>
+                    <Tooltip text="Select Background colour" />
+                 </tooltip>
+              </ColorPicker>
+           </graphic>
+        </ToggleButton>
+     </children>
+     <opaqueInsets>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+     </opaqueInsets>
+     <padding>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+     </padding>
+  </HBox>
+  <TextFlow fx:id="fieldTextFlow" prefHeight="62.0" prefWidth="600.0" style="-fx-background-color: white;">
+     <children>
+        <Text fx:id="fieldText" strokeType="OUTSIDE" strokeWidth="0.0" text="The quick brown fox jumps over the lazy dog.">
+           <font>
+              <Font size="14.0" />
+           </font>
+        </Text>
+     </children>
+     <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+     </padding></TextFlow>
+</fx:root>

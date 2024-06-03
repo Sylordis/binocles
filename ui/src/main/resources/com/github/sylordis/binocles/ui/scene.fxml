@@ -330,7 +330,7 @@
             <Insets left="5.0" right="5.0" />
          </VBox.margin>
       </HBox>
-    <SplitPane dividerPositions="0.25, 0.75" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <SplitPane dividerPositions="0.2, 0.8" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <items>
             <SplitPane dividerPositions="0.3" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
               <items>

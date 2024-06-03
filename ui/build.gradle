@@ -27,7 +27,7 @@ application {
 
 javafx {
     version = "21"
-    modules = [ 'javafx.base', 'javafx.controls', 'javafx.fxml', 'javafx.graphics' ]
+    modules = [ 'javafx.base', 'javafx.controls', 'javafx.fxml' ]
 }
 
 jlink {
