@@ -55,12 +55,7 @@ public class Chapter extends ReviewableContent {
 
 	@Override
 	public String toString() {
-		StringBuilder rame = new StringBuilder();
-		rame.append(title);
-		if (this.hasComments()) {
-			rame.append(" [").append(this.getComments().size()).append("]");
-		}
-		return rame.toString();
+		return title;
 	}
 
 	/**

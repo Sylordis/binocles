@@ -107,14 +107,18 @@ public class BinoclesController implements Initializable {
 	private MenuItem menuHelpAbout;
 
 	@FXML
-	private MenuItem nomenclaturesTreeMenuNew;
+	private MenuItem nomenclaturesTreeMenuNewNomenclature;
+	@FXML
+	private MenuItem nomenclaturesTreeMenuNewCommentType;
 	@FXML
 	private MenuItem nomenclaturesTreeMenuEdit;
 	@FXML
 	private MenuItem nomenclaturesTreeMenuDelete;
 
 	@FXML
-	private MenuItem booksTreeMenuNew;
+	private MenuItem booksTreeMenuNewBook;
+	@FXML
+	private MenuItem booksTreeMenuNewChapter;
 	@FXML
 	private MenuItem booksTreeMenuEdit;
 	@FXML
@@ -201,6 +205,8 @@ public class BinoclesController implements Initializable {
 		rebuildNomenclaturesTree();
 		// Set trees change listener
 		booksTree.getSelectionModel().selectedItemProperty().addListener((s, o, n) -> setDisplayZoneContent(n));
+		booksTree.getSelectionModel().selectedItemProperty().addListener((s,o,n) -> setTextElementsContextMenuStatus());
+		nomenclaturesTree.getSelectionModel().selectedItemProperty().addListener((s,o,n) -> setReviewElementsContextMenuStatus());
 		// Text zone messages
 		textZoneMessages.setVisible(true);
 		textZoneMessages.setText("Please select/create a chapter in the review tree.");
@@ -303,12 +309,6 @@ public class BinoclesController implements Initializable {
 	}
 
 	@FXML
-	public void editNomenclatureAction(ActionEvent event) {
-		// TODO
-		showNotImplementedAlert();
-	}
-
-	@FXML
 	public void createCommentTypeAction(ActionEvent event) {
 		// Get currently selected item
 		TreeItem<NomenclatureItem> treeSelected = nomenclaturesTree.getSelectionModel().getSelectedItem();
@@ -328,7 +328,7 @@ public class BinoclesController implements Initializable {
 			logger.info("Created comment type '{}', added to '{}'", type.getName(), nomenclature.getName());
 			logger.debug("  fields: {}", type.getFields().keySet());
 			logger.debug("  styles:");
-			type.getStyles().forEach((k,v) -> logger.debug("    {}: {}", k, v));
+			type.getStyles().forEach((k, v) -> logger.debug("    {}: {}", k, v));
 			TreeItem<NomenclatureItem> commentTypeTreeItem = new TreeItem<>(type);
 			TreeItem<NomenclatureItem> currentBookParent = TreeViewUtils.getTreeViewItem(nomenclaturesTree.getRoot(),
 			        nomenclature);
@@ -352,8 +352,12 @@ public class BinoclesController implements Initializable {
 	 */
 	@FXML
 	public void deleteTextElementsAction(ActionEvent event) {
-		// TODO Get all selected elements in the tree, open confirmation dialog.
-		showNotImplementedAlert();
+		TreeItem<ReviewableContent> treeSelected = booksTree.getSelectionModel().getSelectedItem();
+		if (null != treeSelected) {
+			// TODO Open confirmation alert
+		} else {
+			showErrorAlert("No element in the book tree is selected.");
+		}
 	}
 
 	/**
@@ -365,6 +369,18 @@ public class BinoclesController implements Initializable {
 	@FXML
 	public void deleteReviewElementsAction(ActionEvent event) {
 		// TODO Get all selected elements in the tree, open confirmation dialog.
+		showNotImplementedAlert();
+	}
+
+	@FXML
+	public void editReviewElementAction(ActionEvent event) {
+		// TODO Open dialog and then modify element.
+		showNotImplementedAlert();
+	}
+
+	@FXML
+	public void editTextElementAction(ActionEvent event) {
+		// TODO Open dialog and then modify element.
 		showNotImplementedAlert();
 	}
 
@@ -496,6 +512,24 @@ public class BinoclesController implements Initializable {
 		toolbarCreateChapter.setDisable(!model.hasBooks());
 		menuReviewCommentTypeCreate.setDisable(!model.hasCustomNomenclatures());
 		toolbarCreateCommentType.setDisable(!model.hasCustomNomenclatures());
+		booksTreeMenuNewChapter.setDisable(!model.hasBooks());
+		nomenclaturesTreeMenuNewCommentType.setDisable(!model.hasCustomNomenclatures());
+	}
+
+	/**
+	 * Sets the review configuration tree's context menu items status according to current selection.
+	 */
+	public void setReviewElementsContextMenuStatus() {
+		nomenclaturesTreeMenuDelete.setDisable(nomenclaturesTree.getSelectionModel().isEmpty());
+		nomenclaturesTreeMenuEdit.setDisable(nomenclaturesTree.getSelectionModel().isEmpty());
+	}
+
+	/**
+	 * Sets the text elements tree's context menu items status according to current selection.
+	 */
+	public void setTextElementsContextMenuStatus() {
+		booksTreeMenuDelete.setDisable(booksTree.getSelectionModel().isEmpty());
+		booksTreeMenuEdit.setDisable(booksTree.getSelectionModel().isEmpty());
 	}
 
 	/**
@@ -507,7 +541,7 @@ public class BinoclesController implements Initializable {
 		textZoneChapterTitle.setText("");
 		textZoneMessages.setText("");
 		textZoneChapterContent.clear();
-		if (Chapter.class.equals(value.getValue().getClass())) {
+		if (value != null && Chapter.class.equals(value.getValue().getClass())) {
 			Book book = (Book) value.getParent().getValue();
 			textZoneBookTitle.setText(book.getTitle());
 			Chapter chapter = (Chapter) value.getValue();
@@ -519,7 +553,7 @@ public class BinoclesController implements Initializable {
 			textZoneChapterContent.replaceText(chapter.getText());
 			commentZoneVBox.setVisible(true);
 			toolbarTextCreateComment.setVisible(true);
-		} else if (Book.class.equals(value.getValue().getClass())) {
+		} else if (value != null && Book.class.equals(value.getValue().getClass())) {
 			Book book = (Book) value.getValue();
 			textZoneBookTitle.setText(book.getTitle());
 			textZoneChapterTitle.setVisible(false);

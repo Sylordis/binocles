@@ -1,5 +1,7 @@
 package com.github.sylordis.binocles.ui.components;
 
+import java.util.List;
+
 import com.github.sylordis.binocles.model.review.ReviewableContent;
 
 /**
@@ -23,4 +25,5 @@ public final class BookTreeRoot extends ReviewableContent {
 	public String getTitle() {
 		return getId();
 	}
+
 }

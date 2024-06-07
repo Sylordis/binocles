@@ -60,7 +60,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="600.0" prefWidth="900.0" stylesheets="@styles/main.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.sylordis.binocles.ui.BinoclesController">
+<VBox prefHeight="600.0" prefWidth="900.0" stylesheets="@styles/main.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.sylordis.binocles.ui.BinoclesController">
   <children>
     <MenuBar fx:id="menuBar" VBox.vgrow="NEVER">
       <menus>
@@ -342,9 +342,14 @@
 	                              <contextMenu>
 	                                    <ContextMenu>
 	                                      <items>
-	                                        <MenuItem fx:id="nomenclaturesTreeMenuNew" disable="true" mnemonicParsing="false" text="New" />
-	                                        <MenuItem fx:id="nomenclaturesTreeMenuEdit" disable="true" mnemonicParsing="false" text="Edit" />
-	                                        <MenuItem fx:id="nomenclaturesTreeMenuDelete" disable="true" mnemonicParsing="false" text="Delete" />
+                                          <Menu mnemonicParsing="false" text="New">
+                                             <items>
+      	                                        <MenuItem fx:id="nomenclaturesTreeMenuNewNomenclature" mnemonicParsing="false" onAction="#createNomenclatureAction" text="New Nomenclature" />
+      	                                        <MenuItem fx:id="nomenclaturesTreeMenuNewCommentType" disable="true" mnemonicParsing="false" onAction="#createCommentTypeAction" text="New Comment Type" />
+                                             </items>
+                                          </Menu>
+	                                        <MenuItem fx:id="nomenclaturesTreeMenuEdit" disable="true" mnemonicParsing="false" onAction="#editReviewElementAction" text="Edit" />
+	                                        <MenuItem fx:id="nomenclaturesTreeMenuDelete" disable="true" mnemonicParsing="false" onAction="#deleteReviewElementsAction" text="Delete" />
 	                                      </items>
 	                                    </ContextMenu>
                                  </contextMenu>
@@ -361,9 +366,14 @@
                                  <contextMenu>
                                     <ContextMenu>
                                       <items>
-                                        <MenuItem fx:id="booksTreeMenuNew" disable="true" mnemonicParsing="false" text="New" />
-                                        <MenuItem fx:id="booksTreeMenuEdit" disable="true" mnemonicParsing="false" text="Edit" />
-                                        <MenuItem fx:id="booksTreeMenuDelete" disable="true" mnemonicParsing="false" text="Delete" />
+                                          <Menu mnemonicParsing="false" text="New">
+                                            <items>
+		                                        <MenuItem fx:id="booksTreeMenuNewBook" mnemonicParsing="false" onAction="#createBookAction" text="New Book" />
+		                                        <MenuItem fx:id="booksTreeMenuNewChapter" disable="true" mnemonicParsing="false" onAction="#createChapterAction" text="New Chapter" />
+                                            </items>
+                                          </Menu>
+                                        <MenuItem fx:id="booksTreeMenuEdit" disable="true" mnemonicParsing="false" onAction="#editTextElementAction" text="Edit" />
+                                        <MenuItem fx:id="booksTreeMenuDelete" disable="true" mnemonicParsing="false" onAction="#deleteTextElementsAction" text="Delete" />
                                       </items>
                                     </ContextMenu>
                                  </contextMenu>

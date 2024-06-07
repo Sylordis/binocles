@@ -97,13 +97,7 @@ public class Book extends ReviewableContent {
 
 	@Override
 	public String toString() {
-		StringBuilder rame = new StringBuilder();
-		rame.append(title);
-		if (hasChapters()) {
-			rame.append(" [").append(this.chapters.size()).append("]");
-		}
-		rame.append(" <").append(null != nomenclature ? nomenclature : "none").append(">");
-		return rame.toString();
+		return "Book [title=" + title + ", #chapters=" + chapters.size() + ", nomenclature=" + nomenclature + "]";
 	}
 
 	@Override
@@ -262,6 +256,16 @@ public class Book extends ReviewableContent {
 			this.description = "";
 		else
 			this.description = description;
+	}
+
+	@Override
+	public boolean hasChildren() {
+		return hasChapters();
+	}
+
+	@Override
+	public List<? extends ReviewableContent> getChildren() {
+		return getChapters();
 	}
 
 }

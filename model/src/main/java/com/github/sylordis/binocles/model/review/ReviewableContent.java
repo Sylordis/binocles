@@ -8,8 +8,8 @@ import java.util.Set;
 import com.github.sylordis.binocles.utils.Identifiable;
 
 /**
- * Reviewable content is a class to be inherited for all content that can hold comments.
- * It will provide the class the capacity to receive a general comment and to set comments.
+ * Reviewable content is a class to be inherited for all content that can hold comments. It will
+ * provide the class the capacity to receive a general comment and to set comments.
  * 
  * @author sylordis
  *
@@ -36,10 +36,11 @@ public abstract class ReviewableContent implements Identifiable {
 
 	/**
 	 * Gets the title of the content.
+	 * 
 	 * @return
 	 */
 	public abstract String getTitle();
-	
+
 	/**
 	 * Gets the global comment on the content.
 	 * 
@@ -51,20 +52,22 @@ public abstract class ReviewableContent implements Identifiable {
 
 	/**
 	 * Checks if the global comment exists and is not blank.
+	 * 
 	 * @return
 	 */
 	public boolean hasGlobalComment() {
 		return generalComment != null && !generalComment.isBlank();
 	}
-	
+
 	/**
 	 * Checks if this content has comments other than the global comment.
+	 * 
 	 * @return
 	 */
 	public boolean hasComments() {
 		return !comments.isEmpty();
 	}
-	
+
 	/**
 	 * Gets the comments on the content.
 	 * 
@@ -96,9 +99,10 @@ public abstract class ReviewableContent implements Identifiable {
 	public boolean removeComment(Comment comment) {
 		return this.comments.remove(comment);
 	}
-	
+
 	/**
 	 * Replaces the current list of comments. Null objects will be ignored.
+	 * 
 	 * @param comments
 	 */
 	public void setComments(List<Comment> comments) {
@@ -135,6 +139,25 @@ public abstract class ReviewableContent implements Identifiable {
 		this.comments.clear();
 		if (comments != null)
 			this.comments.addAll(comments);
+	}
+
+	/**
+	 * Checks if this instance has children. If this returns true, then the method
+	 * {@link #getChildren()} should return a non empty list. If this item is not supposed to have
+	 * children, this method should return false.
+	 * 
+	 * @return true if this object can have children and has some, false otherwise.
+	 */
+	public boolean hasChildren() {
+		return false;
+	}
+
+	/**
+	 * Gets the list of children of this object, or null if it's not suppose to have some.
+	 * @return list of children or null if it's not supposed to have any.
+	 */
+	public List<? extends ReviewableContent> getChildren() {
+		return null;
 	}
 
 }

@@ -8,11 +8,6 @@ import javafx.scene.paint.Color;
 public final class ColorUtils {
 
 	/**
-	 * The separator string for values.
-	 */
-	public static final String SEPARATOR = ",";
-
-	/**
 	 * Transforms a colour into an rgba string value separated by commas, destined to be transformed
 	 * back into a {@link Color} with {@link Color#web(String)}. This method is null safe.
 	 * 

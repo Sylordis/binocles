@@ -8,13 +8,15 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Main class of the UI.
+ */
 public class BinoclesApp extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-//		FXMLLoader loader = new FXMLLoader(this.getClass().getResource("scene.fxml"));
-		Parent root = FXMLLoader.load(this.getClass().getResource("scene.fxml"));;
-		
+		Parent root = FXMLLoader.load(this.getClass().getResource("scene.fxml"));
+
 		Scene scene = new Scene(root);
 
 		primaryStage.getIcons().add(AppIcons.ICON_SOFTWARE);
@@ -31,7 +33,7 @@ public class BinoclesApp extends Application {
 
 		primaryStage.show();
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
