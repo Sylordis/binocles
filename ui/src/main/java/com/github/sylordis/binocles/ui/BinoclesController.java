@@ -19,9 +19,10 @@ import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.DefaultNomenclature;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.review.NomenclatureItem;
-import com.github.sylordis.binocles.model.review.ReviewableContent;
 import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.model.text.Chapter;
+import com.github.sylordis.binocles.model.text.ReviewableContent;
+import com.github.sylordis.binocles.ui.alerts.TextElementDeletionConfirmationAlert;
 import com.github.sylordis.binocles.ui.components.BookTreeCell;
 import com.github.sylordis.binocles.ui.components.BookTreeRoot;
 import com.github.sylordis.binocles.ui.components.NomenclatureTreeCell;
@@ -354,7 +355,18 @@ public class BinoclesController implements Initializable {
 	public void deleteTextElementsAction(ActionEvent event) {
 		TreeItem<ReviewableContent> treeSelected = booksTree.getSelectionModel().getSelectedItem();
 		if (null != treeSelected) {
-			// TODO Open confirmation alert
+			TextElementDeletionConfirmationAlert alert = new TextElementDeletionConfirmationAlert();
+			alert.setTreeRoot(treeSelected.getValue());
+			Optional<ButtonType> answer = alert.showAndWait();
+			if (answer.isPresent() && answer.get().equals(ButtonType.OK)) {
+				logger.info("Deleting {}", treeSelected.getValue());
+				if (treeSelected.getValue() instanceof Book) {
+					model.getBooks().remove(treeSelected.getValue());
+				} else if (treeSelected.getValue() instanceof Chapter) {
+					treeSelected.getParent().getValue().getChildren().remove(treeSelected.getValue());
+				}
+				rebuildBooksTree();
+			}
 		} else {
 			showErrorAlert("No element in the book tree is selected.");
 		}

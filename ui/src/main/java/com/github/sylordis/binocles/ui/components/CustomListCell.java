@@ -13,10 +13,14 @@ import javafx.scene.control.ListCell;
 public class CustomListCell<T> extends ListCell<T> {
 
 	/**
-	 * Provider fo
+	 * Provider for the text.
 	 */
 	private Function<T,String> textProvider;
 	
+	/**
+	 * Creates a new custom list cell.
+	 * @param textProvider
+	 */
 	public CustomListCell(Function<T,String> textProvider) {
 		this.textProvider = textProvider;
 	}

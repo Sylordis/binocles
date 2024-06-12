@@ -1,6 +1,5 @@
 package com.github.sylordis.binocles.model.text;
 
-import com.github.sylordis.binocles.model.review.ReviewableContent;
 import com.github.sylordis.binocles.utils.Identifiable;
 
 /**
@@ -90,6 +89,15 @@ public class Chapter extends ReviewableContent {
 			this.text = "";
 		else
 			this.text = text;
+	}
+
+	/**
+	 * Gets the number of comments, including the global comment if not blank.
+	 * 
+	 * @return
+	 */
+	public int getCommentsCount() {
+		return getComments().size() + (getGlobalComment().isBlank() ? 0 : 1);
 	}
 
 }

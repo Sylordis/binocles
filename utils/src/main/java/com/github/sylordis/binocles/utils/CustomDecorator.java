@@ -7,7 +7,8 @@ import java.util.function.Function;
 
 /**
  * Base class for custom Decorators which are build around a list of String suppliers to output the
- * desired information. Each supplier content will be separated by a specified separator or {@link #SEPARATOR_DEFAULT}.
+ * desired information. Each supplier content will be separated by a specified separator or
+ * {@link #SEPARATOR_DEFAULT}.
  */
 public class CustomDecorator<T> {
 
@@ -17,7 +18,7 @@ public class CustomDecorator<T> {
 	public static final String SEPARATOR_DEFAULT = " ";
 
 	/**
-	 * List of String suppliers. This should never be null.
+	 * List of String suppliers to be called in order. This should never be null.
 	 */
 	protected final List<Function<T, String>> suppliers;
 	/**
@@ -38,7 +39,7 @@ public class CustomDecorator<T> {
 	 * Creates a new custom decorator with a specified separator.
 	 */
 	public CustomDecorator(String separator) {
-		suppliers = new ArrayList<>();
+		this.suppliers = new ArrayList<>();
 		this.separator = separator;
 	}
 
@@ -108,5 +109,4 @@ public class CustomDecorator<T> {
 		else
 			this.separator = separator;
 	}
-
 }

@@ -1,5 +1,7 @@
 package com.github.sylordis.binocles.model.decorators;
 
+import java.util.function.Function;
+
 import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.utils.CustomDecorator;
 
@@ -9,16 +11,21 @@ import com.github.sylordis.binocles.utils.CustomDecorator;
 public class BookDecorator extends CustomDecorator<Book> {
 
 	public static final String CHAPTERS_PREFIX = "[";
-	public static final String CHAPTERS_SUFFIX = "[";
+	public static final String CHAPTERS_SUFFIX = "]";
 	public static final String NOMENCLATURE_PREFIX = "<";
 	public static final String NOMENCLATURE_SUFFIX = ">";
+	public static final String NO_NOMENCLATURE = "none";
+	public static final String CHAPTER_WORD_SINGULAR = "chapter";
+	public static final String CHAPTER_WORD_PLURAL = "chapters";
+	public static final String COMMENT_WORD_SINGULAR = "comments";
+	public static final String COMMENT_WORD_PLURAL = "comment";
 
 	/**
 	 * Adds the title of the book.
 	 * 
 	 * @return itself
 	 */
-	public BookDecorator title() {
+	public BookDecorator thenTitle() {
 		this.and(b -> b.getTitle());
 		return this;
 	}
@@ -30,8 +37,8 @@ public class BookDecorator extends CustomDecorator<Book> {
 	 * @see #NOMENCLATURE_PREFIX
 	 * @see #NOMENCLATURE_SUFFIX
 	 */
-	public BookDecorator nomenclature() {
-		return this.nomenclature(NOMENCLATURE_PREFIX, NOMENCLATURE_SUFFIX);
+	public BookDecorator thenNomenclature() {
+		return this.thenNomenclature(NOMENCLATURE_PREFIX, NOMENCLATURE_SUFFIX);
 	}
 
 	/**
@@ -41,8 +48,8 @@ public class BookDecorator extends CustomDecorator<Book> {
 	 * @param prefix
 	 * @return itself
 	 */
-	public BookDecorator nomenclature(String suffix, String prefix) {
-		this.and(b -> (null != b.getNomenclature() ? b.getNomenclature().getName() : "none"), prefix, suffix);
+	public BookDecorator thenNomenclature(String prefix, String suffix) {
+		this.and(b -> (null != b.getNomenclature() ? b.getNomenclature().getName() : NO_NOMENCLATURE), prefix, suffix);
 		return this;
 	}
 
@@ -53,19 +60,59 @@ public class BookDecorator extends CustomDecorator<Book> {
 	 * @see #CHAPTERS_PREFIX
 	 * @see #CHAPTERS_SUFFIX
 	 */
-	public BookDecorator chapters() {
-		return this.chapters(CHAPTERS_PREFIX, CHAPTERS_SUFFIX);
+	public BookDecorator thenChapterCountWithText() {
+		return this.thenChapterCount(CHAPTERS_PREFIX, CHAPTERS_SUFFIX, true);
 	}
 
 	/**
 	 * Adds the number of chapters.
 	 * 
-	 * @param prefix
-	 * @param suffix
+	 * @param prefix prefix to add before the string
+	 * @param suffix suffix to add after the string
+	 * @param text   display a text "chapter"
 	 * @return itself
 	 */
-	public BookDecorator chapters(String prefix, String suffix) {
-		this.and(b -> Integer.toString(b.getChapters().size()), prefix, suffix);
+	public BookDecorator thenChapterCount(String prefix, String suffix, boolean text) {
+		Function<Book, String> decorator = b -> {
+			StringBuilder builder = new StringBuilder();
+			builder.append(b.getChapters().size());
+			if (text) {
+				builder.append(" ");
+				builder.append(b.getChapters().size() > 1 ? CHAPTER_WORD_PLURAL : CHAPTER_WORD_SINGULAR);
+			}
+			return builder.toString();
+		};
+		this.and(decorator, prefix, suffix);
+		return this;
+	}
+
+	/**
+	 * Adds the total number of comments on this book, e.g. the number of comments on all chapters and
+	 * global comments.
+	 * 
+	 * @return
+	 */
+	public BookDecorator thenCommentsCountWithText() {
+		return this.thenCommentsCount(CHAPTERS_PREFIX, CHAPTERS_SUFFIX, true);
+	}
+	
+	/**
+	 * Adds the total number of comments on this book, e.g. the number of comments on all chapters and
+	 * global comments.
+	 * 
+	 * @return
+	 */
+	public BookDecorator thenCommentsCount(String prefix, String suffix, boolean text) {
+		Function<Book, String> decorator = b -> {
+			StringBuilder builder = new StringBuilder();
+			builder.append(b.getCommentsCount());
+			if (text) {
+				builder.append(" ");
+				builder.append(b.getCommentsCount() > 1 ? COMMENT_WORD_PLURAL : COMMENT_WORD_SINGULAR);
+			}
+			return builder.toString();
+		};
+		this.and(decorator, prefix, suffix);
 		return this;
 	}
 }

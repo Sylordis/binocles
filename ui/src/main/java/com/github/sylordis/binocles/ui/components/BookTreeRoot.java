@@ -1,8 +1,6 @@
 package com.github.sylordis.binocles.ui.components;
 
-import java.util.List;
-
-import com.github.sylordis.binocles.model.review.ReviewableContent;
+import com.github.sylordis.binocles.model.text.ReviewableContent;
 
 /**
  * Class used for the tree root of the reviews.

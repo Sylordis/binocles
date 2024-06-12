@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.github.sylordis.binocles.model.review.Nomenclature;
-import com.github.sylordis.binocles.model.review.ReviewableContent;
 import com.github.sylordis.binocles.utils.Identifiable;
 import com.google.common.base.Preconditions;
 
@@ -268,4 +267,8 @@ public class Book extends ReviewableContent {
 		return getChapters();
 	}
 
+	public int getCommentsCount() {
+		return getChapters().stream().mapToInt(c -> c.getCommentsCount()).sum() + (getGlobalComment().isBlank() ? 0 : 1);
+	}
+	
 }

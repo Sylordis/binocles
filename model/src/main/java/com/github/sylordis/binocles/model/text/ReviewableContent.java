@@ -1,10 +1,11 @@
-package com.github.sylordis.binocles.model.review;
+package com.github.sylordis.binocles.model.text;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import com.github.sylordis.binocles.model.review.Comment;
 import com.github.sylordis.binocles.utils.Identifiable;
 
 /**
@@ -126,7 +127,10 @@ public abstract class ReviewableContent implements Identifiable {
 	 * @param generalComment the globalComment to set
 	 */
 	public void setGeneralComment(String generalComment) {
-		this.generalComment = generalComment;
+		if (generalComment == null)
+			this.generalComment = "";
+		else
+			this.generalComment = generalComment;
 	}
 
 	/**
@@ -154,6 +158,7 @@ public abstract class ReviewableContent implements Identifiable {
 
 	/**
 	 * Gets the list of children of this object, or null if it's not suppose to have some.
+	 * 
 	 * @return list of children or null if it's not supposed to have any.
 	 */
 	public List<? extends ReviewableContent> getChildren() {
