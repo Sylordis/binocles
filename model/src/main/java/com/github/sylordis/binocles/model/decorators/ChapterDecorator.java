@@ -16,7 +16,7 @@ public class ChapterDecorator extends CustomDecorator<Chapter> {
 	 * @return itself
 	 */
 	public ChapterDecorator thenTitle() {
-		this.and(b -> b.getTitle());
+		this.then(b -> b.getTitle());
 		return this;
 	}
 
@@ -81,7 +81,7 @@ public class ChapterDecorator extends CustomDecorator<Chapter> {
 				builder.append("s");
 			return builder.toString();
 		};
-		this.and(decorator, prefix, suffix);
+		this.then(decorator, prefix, suffix);
 		return this;
 	}
 

@@ -1,5 +1,8 @@
-package com.github.sylordis.binocles.ui.doa;
+package com.github.sylordis.binocles.model.review;
 
+/**
+ * Meta fields for comment types.
+ */
 public class CommentTypeField {
 
 	/**
@@ -10,6 +13,10 @@ public class CommentTypeField {
 	 * Description of the field.
 	 */
 	private String description;
+	/**
+	 * Whether this field is supposed to hold a long text.
+	 */
+	private Boolean isLongText;
 
 	/**
 	 * @param name
@@ -48,4 +55,21 @@ public class CommentTypeField {
 		this.description = description;
 	}
 
+	/**
+	 * Sets the fact that this type represents a long text or not.
+	 * 
+	 * @param isLongText
+	 */
+	public void setIsLongText(boolean isLongText) {
+		this.isLongText = isLongText;
+	}
+
+	/**
+	 * Whether this field is a long text or not.
+	 * 
+	 * @return
+	 */
+	public boolean isLongText() {
+		return isLongText;
+	}
 }

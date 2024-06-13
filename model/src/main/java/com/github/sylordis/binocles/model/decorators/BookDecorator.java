@@ -26,7 +26,7 @@ public class BookDecorator extends CustomDecorator<Book> {
 	 * @return itself
 	 */
 	public BookDecorator thenTitle() {
-		this.and(b -> b.getTitle());
+		this.then(b -> b.getTitle());
 		return this;
 	}
 
@@ -49,7 +49,7 @@ public class BookDecorator extends CustomDecorator<Book> {
 	 * @return itself
 	 */
 	public BookDecorator thenNomenclature(String prefix, String suffix) {
-		this.and(b -> (null != b.getNomenclature() ? b.getNomenclature().getName() : NO_NOMENCLATURE), prefix, suffix);
+		this.then(b -> (null != b.getNomenclature() ? b.getNomenclature().getName() : NO_NOMENCLATURE), prefix, suffix);
 		return this;
 	}
 
@@ -82,7 +82,7 @@ public class BookDecorator extends CustomDecorator<Book> {
 			}
 			return builder.toString();
 		};
-		this.and(decorator, prefix, suffix);
+		this.then(decorator, prefix, suffix);
 		return this;
 	}
 
@@ -112,7 +112,7 @@ public class BookDecorator extends CustomDecorator<Book> {
 			}
 			return builder.toString();
 		};
-		this.and(decorator, prefix, suffix);
+		this.then(decorator, prefix, suffix);
 		return this;
 	}
 }

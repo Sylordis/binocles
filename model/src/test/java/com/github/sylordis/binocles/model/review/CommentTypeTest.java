@@ -233,13 +233,6 @@ class CommentTypeTest {
 	}
 
 	@Test
-	void testGetFields() {
-		assertNotNull(type.getFields());
-		assertTrue(type.getFields().isEmpty());
-		assertThrows(UnsupportedOperationException.class, () -> type.getFields().put("hello", "world"));
-	}
-
-	@Test
 	void testSetFields() {
 		Map<String, String> fields = Map.of("a", "", "b", "", "c", "");
 		type.setFields(fields);

@@ -14,6 +14,10 @@ import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.StyleClassedTextArea;
 
 import com.github.sylordis.binocles.model.BinoclesModel;
+import com.github.sylordis.binocles.model.decorators.BookDecorator;
+import com.github.sylordis.binocles.model.decorators.ChapterDecorator;
+import com.github.sylordis.binocles.model.decorators.CommentTypeDecorator;
+import com.github.sylordis.binocles.model.decorators.NomenclatureDecorator;
 import com.github.sylordis.binocles.model.io.BinoclesIOFactory;
 import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.DefaultNomenclature;
@@ -23,16 +27,17 @@ import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.model.text.ReviewableContent;
 import com.github.sylordis.binocles.ui.alerts.TextElementDeletionConfirmationAlert;
-import com.github.sylordis.binocles.ui.components.BookTreeCell;
 import com.github.sylordis.binocles.ui.components.BookTreeRoot;
-import com.github.sylordis.binocles.ui.components.NomenclatureTreeCell;
+import com.github.sylordis.binocles.ui.components.CustomTreeCell;
 import com.github.sylordis.binocles.ui.components.NomenclatureTreeRoot;
 import com.github.sylordis.binocles.ui.dialogs.AboutDialog;
 import com.github.sylordis.binocles.ui.dialogs.BookDetailsDialog;
 import com.github.sylordis.binocles.ui.dialogs.ChapterDetailsDialog;
+import com.github.sylordis.binocles.ui.dialogs.CommentDetailsDialog;
 import com.github.sylordis.binocles.ui.dialogs.CommentTypeDetailsDialog;
 import com.github.sylordis.binocles.ui.dialogs.NomenclatureDetailsDialog;
 import com.github.sylordis.binocles.ui.doa.ChapterPropertiesAnswer;
+import com.github.sylordis.binocles.ui.doa.CommentDetailsAnswer;
 import com.github.sylordis.binocles.ui.doa.CommentTypePropertiesAnswer;
 import com.github.sylordis.binocles.ui.javafxutils.Browser;
 import com.github.sylordis.binocles.ui.javafxutils.TreeViewUtils;
@@ -194,20 +199,26 @@ public class BinoclesController implements Initializable {
 		TreeItem<ReviewableContent> textTreeRoot = new TreeItem<>(new BookTreeRoot());
 		booksTree.setRoot(textTreeRoot);
 		booksTree.setCellFactory(p -> {
-			return new BookTreeCell();
+			return new CustomTreeCell<ReviewableContent>()
+			        .decorate(Book.class, new BookDecorator().thenTitle().thenNomenclature())
+			        .decorate(Chapter.class, new ChapterDecorator().thenTitle().thenCommentsCount());
 		});
 		rebuildBooksTree();
 		// Initialise the tree for nomenclatures
 		TreeItem<NomenclatureItem> nomenclaturesTreeRoot = new TreeItem<>(new NomenclatureTreeRoot());
 		nomenclaturesTree.setRoot(nomenclaturesTreeRoot);
 		nomenclaturesTree.setCellFactory(p -> {
-			return new NomenclatureTreeCell();
+			return new CustomTreeCell<NomenclatureItem>()
+			        .decorate(Nomenclature.class, new NomenclatureDecorator().thenName())
+			        .decorate(CommentType.class, new CommentTypeDecorator().thenName());
 		});
 		rebuildNomenclaturesTree();
 		// Set trees change listener
 		booksTree.getSelectionModel().selectedItemProperty().addListener((s, o, n) -> setDisplayZoneContent(n));
-		booksTree.getSelectionModel().selectedItemProperty().addListener((s,o,n) -> setTextElementsContextMenuStatus());
-		nomenclaturesTree.getSelectionModel().selectedItemProperty().addListener((s,o,n) -> setReviewElementsContextMenuStatus());
+		booksTree.getSelectionModel().selectedItemProperty()
+		        .addListener((s, o, n) -> setTextElementsContextMenuStatus());
+		nomenclaturesTree.getSelectionModel().selectedItemProperty()
+		        .addListener((s, o, n) -> setReviewElementsContextMenuStatus());
 		// Text zone messages
 		textZoneMessages.setVisible(true);
 		textZoneMessages.setText("Please select/create a chapter in the review tree.");
@@ -341,8 +352,15 @@ public class BinoclesController implements Initializable {
 
 	@FXML
 	public void createCommentAction(ActionEvent event) {
-		// TODO
-		showNotImplementedAlert();
+		Chapter chapter = (Chapter) booksTree.getSelectionModel().getSelectedItem().getValue();
+		Book book = (Book) booksTree.getSelectionModel().getSelectedItem().getParent().getValue();
+		CommentDetailsDialog dialog = new CommentDetailsDialog(model, book, chapter,
+		        textZoneChapterContent.getSelection().getStart(), textZoneChapterContent.getSelection().getEnd());
+		Optional<CommentDetailsAnswer> answer = dialog.display();
+		if (answer.isPresent()) {
+			// TODO Create a new comment
+			// TODO Add the comment to the comments VBox at the correct place (order by start index)
+		}
 	}
 
 	/**
@@ -420,6 +438,7 @@ public class BinoclesController implements Initializable {
 		Stage stage = getStageFromSourceOrMenuBar(event);
 		File file = fileChooser.showSaveDialog(stage);
 		if (null != file) {
+			// TODO Choose what to export
 			try {
 				FileExporter<BinoclesModel> exporter = new BinoclesIOFactory().getFileExporter(file);
 				if (null != exporter) {
@@ -545,6 +564,19 @@ public class BinoclesController implements Initializable {
 	}
 
 	/**
+	 * 
+	 */
+	private void resetDisplayZoneContent() {
+		textZoneBookTitle.setText("");
+		textZoneChapterTitle.setText("");
+		textZoneMessages.setVisible(true);
+		textZoneMessages.setText("Please select an item the review tree.");
+		textZoneChapterContent.setVisible(false);
+		commentZoneVBox.setVisible(false);
+		toolbarTextCreateComment.setVisible(false);
+	}
+
+	/**
 	 * Sets the chapter content's value according to what is selected.
 	 * 
 	 * @param value current selected value
@@ -554,37 +586,53 @@ public class BinoclesController implements Initializable {
 		textZoneMessages.setText("");
 		textZoneChapterContent.clear();
 		if (value != null && Chapter.class.equals(value.getValue().getClass())) {
-			Book book = (Book) value.getParent().getValue();
-			textZoneBookTitle.setText(book.getTitle());
-			Chapter chapter = (Chapter) value.getValue();
-			textZoneChapterTitle.setVisible(true);
-			textZoneChapterTitle.setText(chapter.getTitle());
-			textZoneMessages.setVisible(false);
-			textZoneMessages.setText("");
-			textZoneChapterContent.setVisible(true);
-			textZoneChapterContent.replaceText(chapter.getText());
-			commentZoneVBox.setVisible(true);
-			toolbarTextCreateComment.setVisible(true);
+			setDisplayZoneContentFromChapter(value);
 		} else if (value != null && Book.class.equals(value.getValue().getClass())) {
-			Book book = (Book) value.getValue();
-			textZoneBookTitle.setText(book.getTitle());
-			textZoneChapterTitle.setVisible(false);
-			textZoneChapterTitle.setText("");
-			textZoneChapterContent.clear();
-			textZoneMessages.setVisible(true);
-			textZoneMessages.setText("Please select/create a chapter in the review tree to display its content.");
-			textZoneChapterContent.setVisible(false);
-			commentZoneVBox.setVisible(false);
-			toolbarTextCreateComment.setVisible(false);
+			setDisplayZoneContentFromBook(value);
 		} else {
-			textZoneBookTitle.setText("");
-			textZoneChapterTitle.setText("");
-			textZoneMessages.setVisible(true);
-			textZoneMessages.setText("Please select an item the review tree.");
-			textZoneChapterContent.setVisible(false);
-			commentZoneVBox.setVisible(false);
-			toolbarTextCreateComment.setVisible(false);
+			resetDisplayZoneContent();
 		}
+	}
+
+	/**
+	 * @param value
+	 */
+	private void setDisplayZoneContentFromBook(TreeItem<ReviewableContent> value) {
+		Book book = (Book) value.getValue();
+		textZoneBookTitle.setText(book.getTitle());
+		textZoneChapterTitle.setVisible(false);
+		textZoneChapterTitle.setText("");
+		textZoneChapterContent.clear();
+		textZoneMessages.setVisible(true);
+		textZoneMessages.setText("Please select/create a chapter in the review tree to display its content.");
+		textZoneChapterContent.setVisible(false);
+		commentZoneVBox.setVisible(false);
+		toolbarTextCreateComment.setVisible(false);
+		setDisplayCommentZoneContent(book);
+	}
+
+	/**
+	 * Set all text zones values according to chapter.
+	 * 
+	 * @param value
+	 */
+	private void setDisplayZoneContentFromChapter(TreeItem<ReviewableContent> value) {
+		Book book = (Book) value.getParent().getValue();
+		textZoneBookTitle.setText(book.getTitle());
+		Chapter chapter = (Chapter) value.getValue();
+		textZoneChapterTitle.setVisible(true);
+		textZoneChapterTitle.setText(chapter.getTitle());
+		textZoneMessages.setVisible(false);
+		textZoneMessages.setText("");
+		textZoneChapterContent.setVisible(true);
+		textZoneChapterContent.replaceText(chapter.getText());
+		commentZoneVBox.setVisible(true);
+		toolbarTextCreateComment.setVisible(true);
+		setDisplayCommentZoneContent(chapter);
+	}
+
+	private void setDisplayCommentZoneContent(ReviewableContent content) {
+		// TODO
 	}
 
 	/**

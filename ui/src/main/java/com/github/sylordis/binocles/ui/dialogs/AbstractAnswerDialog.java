@@ -15,6 +15,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -71,6 +72,11 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	 * true.
 	 */
 	private List<Supplier<Boolean>> formValidators;
+
+	/**
+	 * User feedback, only set if {@link #addFormFeedback(int)} is called.
+	 */
+	protected Text formFeedback;
 
 	/**
 	 * Creates a new custom dialog.
@@ -133,6 +139,24 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	 * @see #getGridPane()
 	 */
 	protected abstract void build();
+
+	/**
+	 * Instantiates and adds the form feedback field on row 0.
+	 * @see #addFormFeedback(int)
+	 */
+	public void addFormFeedback() {
+		addFormFeedback(0);
+	}
+
+	/**
+	 * Adds the form feedback field at the specified row.
+	 */
+	public void addFormFeedback(int row) {
+		formFeedback = new Text("");
+		formFeedback.getStyleClass().add("text-danger");
+		getGridPane().addRow(0, formFeedback);
+		GridPane.setColumnSpan(formFeedback, GridPane.REMAINING);
+	}
 
 	/**
 	 * Checks all validators set in this dialog and returns a final answer.
@@ -319,10 +343,19 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	/**
 	 * Sets the confirmation button disabled property according to the form validity. If the form is
 	 * valid, the button will be enabled, it will be disabled otherwise.
+	 * 
 	 * @see #checkFormValidity()
 	 * @see #setConfirmButtonDisable(boolean)
 	 */
 	public void setConfirmButtonDisabledOnValidity() {
 		setConfirmButtonDisable(!checkFormValidity());
 	}
+
+	/**
+	 * @return the formFeedback
+	 */
+	public Text getFormFeedback() {
+		return formFeedback;
+	}
+
 }

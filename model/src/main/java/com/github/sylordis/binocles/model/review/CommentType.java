@@ -35,12 +35,12 @@ public class CommentType implements Serializable, NomenclatureItem, Identifiable
 	 * Style to apply to all comments with this item, with an association property name => value.
 	 * Property name cannot be blank or null. Default used is CSS.
 	 */
-	private Map<String,String> styles;
+	private Map<String, String> styles;
 	/**
 	 * All fields a comment of this type should have, with an association name => description. Field
 	 * name cannot be empty or null.
 	 */
-	private Map<String,String> fields;
+	private Map<String, CommentTypeField> fields;
 
 	/**
 	 * Creates an empty new legend configuration type without description. All maps are instantiated to
@@ -79,7 +79,7 @@ public class CommentType implements Serializable, NomenclatureItem, Identifiable
 	public String getId() {
 		return Identifiable.formatId(this.name);
 	}
-	
+
 	/**
 	 * @return the name
 	 */
@@ -121,7 +121,7 @@ public class CommentType implements Serializable, NomenclatureItem, Identifiable
 	/**
 	 * @return the fields as an unmodifiable view
 	 */
-	public Map<String, String> getFields() {
+	public Map<String, CommentTypeField> getFields() {
 		return Collections.unmodifiableMap(fields);
 	}
 
@@ -166,6 +166,23 @@ public class CommentType implements Serializable, NomenclatureItem, Identifiable
 
 	/**
 	 *
+	 * Sets a specific field if not null. If the description is null, removes the entry instead.
+	 *
+	 * @param field
+	 * @throws NullPointerException if field is null
+	 */
+	public void setField(CommentTypeField field) {
+		Preconditions.checkNotNull(field, "Comment type field cannot be null");
+		if (fields.containsKey(field.getName())) {
+			if (field.getDescription() == null)
+				fields.remove(field.getName());
+			else
+				fields.put(field.getName(), field);
+		}
+	}
+
+	/**
+	 *
 	 * Sets a specific field if the key is not null and not blank. If the value is null, removes the
 	 * entry instead.
 	 *
@@ -177,7 +194,12 @@ public class CommentType implements Serializable, NomenclatureItem, Identifiable
 	public void setField(String name, String description) {
 		Preconditions.checkNotNull(name, "Legend configuration type field name cannot be set to null");
 		Preconditions.checkArgument(!name.isBlank(), "Legend configuration type field name cannot be blank");
-		MapUtils.putOrRemoveIfNull(this.fields, name, description);
+		if (fields.containsKey(name)) {
+			if (description == null)
+				fields.remove(name);
+			else
+				fields.put(name, new CommentTypeField(name, description));
+		}
 	}
 
 	/**
@@ -222,12 +244,13 @@ public class CommentType implements Serializable, NomenclatureItem, Identifiable
 
 	/**
 	 * Sets styles for this comment type, replacing any previous one set.
+	 * 
 	 * @param styles
 	 */
-	public void setStyles(Map<String,String> styles) {
+	public void setStyles(Map<String, String> styles) {
 		this.styles.clear();
 		if (null != styles)
 			this.styles.putAll(styles);
 	}
-	
+
 }

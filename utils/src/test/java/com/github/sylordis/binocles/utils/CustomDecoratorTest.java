@@ -50,21 +50,21 @@ class CustomDecoratorTest {
 
 	/**
 	 * Test method for
-	 * {@link com.github.sylordis.binocles.utils.CustomDecorator#and(java.util.function.Function, java.lang.String, java.lang.String)}.
+	 * {@link com.github.sylordis.binocles.utils.CustomDecorator#then(java.util.function.Function, java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	void testAndFunctionOfTStringStringString() {
-		final String result = decorator.and(t -> "testy", "[", "]").print(new Object());
+		final String result = decorator.then(t -> "testy", "[", "]").print(new Object());
 		assertEquals("[testy]", result);
 	}
 
 	/**
 	 * Test method for
-	 * {@link com.github.sylordis.binocles.utils.CustomDecorator#and(java.util.function.Function, java.lang.String, java.lang.String)}.
+	 * {@link com.github.sylordis.binocles.utils.CustomDecorator#then(java.util.function.Function, java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	void testAndFunctionOfTStringStringString_Multiple() {
-		final String result = decorator.and(t -> "testy", "[", "]").and(t -> "solar", "*", "%")
+		final String result = decorator.then(t -> "testy", "[", "]").then(t -> "solar", "*", "%")
 		        .print(new Object());
 		assertEquals("[testy] *solar%", result);
 	}
@@ -76,7 +76,7 @@ class CustomDecoratorTest {
 	@Test
 	void testAndFunctionOfTStringArray() {
 		final String part1 = "not so simple decorator";
-		final String result = decorator.and(t -> t.getClass().getSimpleName(), t -> part1).print(new Object());
+		final String result = decorator.then(t -> t.getClass().getSimpleName(), t -> part1).print(new Object());
 		final String expected = Object.class.getSimpleName() + CustomDecorator.SEPARATOR_DEFAULT + part1;
 		assertEquals(expected, result);
 	}
@@ -99,7 +99,7 @@ class CustomDecoratorTest {
 		final String separator = "/";
 		decorator.setSeparator(separator);
 		final String[] parts = { "new separator", "and another" };
-		final String result = decorator.and(t -> parts[0], t -> parts[1]).print(new Object());
+		final String result = decorator.then(t -> parts[0], t -> parts[1]).print(new Object());
 		final String expected = String.join(separator, parts);
 		assertEquals(expected, result);
 	}

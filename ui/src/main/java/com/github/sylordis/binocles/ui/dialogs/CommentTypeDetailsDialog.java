@@ -2,11 +2,11 @@ package com.github.sylordis.binocles.ui.dialogs;
 
 import com.github.sylordis.binocles.model.BinoclesModel;
 import com.github.sylordis.binocles.model.review.CommentType;
+import com.github.sylordis.binocles.model.review.CommentTypeField;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.ui.AppIcons;
 import com.github.sylordis.binocles.ui.components.CustomListCell;
 import com.github.sylordis.binocles.ui.components.StyleEditor;
-import com.github.sylordis.binocles.ui.doa.CommentTypeField;
 import com.github.sylordis.binocles.ui.doa.CommentTypePropertiesAnswer;
 import com.github.sylordis.binocles.ui.listeners.ListenerValidator;
 
@@ -77,9 +77,11 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 	 * Text field to specify the field's description.
 	 */
 	private TextField fieldMetaFieldsControlsDescription;
-	
+	/**
+	 * Style editor for the comments of this type.
+	 */
 	private StyleEditor fieldStyle;
-	
+
 	/**
 	 * User feedback.
 	 */
@@ -223,7 +225,7 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 		// Set up components status
 		fieldNomenclatureChoice.setButtonCell(new CustomListCell<Nomenclature>(n -> n.getName()));
 		fieldNomenclatureChoice.setCellFactory(p -> {
-			return new CustomListCell<>(n -> n.getName());
+			return new CustomListCell<Nomenclature>(n -> n.getName());
 		});
 		if (this.nomenclature != null) {
 			fieldNomenclatureChoice.getSelectionModel().select(this.nomenclature);
@@ -287,7 +289,7 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 			Nomenclature nomenclature = fieldNomenclatureChoice.getSelectionModel().getSelectedItem();
 			CommentType commentType = new CommentType(fieldName.getText().trim(), fieldDescription.getText().trim());
 			fieldMetaFieldsData.forEach(f -> commentType.setField(f.getName(), f.getDescription()));
-			fieldStyle.getCSSStyles().forEach((p,v) -> commentType.setStyle(p.toString(), v));
+			fieldStyle.getCSSStyles().forEach((p, v) -> commentType.setStyle(p.toString(), v));
 			answer = new CommentTypePropertiesAnswer(nomenclature, commentType);
 		}
 		return answer;

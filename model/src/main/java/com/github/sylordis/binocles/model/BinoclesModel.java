@@ -206,7 +206,7 @@ public class BinoclesModel {
 	/**
 	 * Returns a set of nomenclatures with a choice to exclude all default nomenclatures.
 	 * 
-	 * @param includeDefault if set to true, will include default nomenclatures
+	 * @param excludeDefaults if set to true, will include default nomenclatures
 	 * @return the nomenclatures
 	 */
 	public List<Nomenclature> getNomenclatures(boolean excludeDefaults) {

@@ -4,6 +4,7 @@ import com.github.sylordis.binocles.model.BinoclesModel;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.ui.AppIcons;
+import com.github.sylordis.binocles.ui.components.CustomListCell;
 import com.github.sylordis.binocles.ui.listeners.ListenerValidator;
 
 import javafx.application.Platform;
@@ -72,6 +73,10 @@ public class BookDetailsDialog extends AbstractAnswerDialog<Book> {
 		// Set up components status
 		getDialog().getDialogPane().lookupButton(getConfirmButton()).setDisable(true);
 		bookNameUIValidator.changed(null, null, fieldBookName.getText());
+		fieldNomenclatureChoice.setButtonCell(new CustomListCell<Nomenclature>(b -> b.getName()));
+		fieldNomenclatureChoice.setCellFactory(p -> {
+			return new CustomListCell<>(b -> b.getName());
+		});
 		// Focus on book name field
 		Platform.runLater(() -> fieldBookName.requestFocus());
 	}

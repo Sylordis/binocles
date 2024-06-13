@@ -5,7 +5,8 @@ import com.github.sylordis.binocles.model.decorators.ChapterDecorator;
 import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.model.text.ReviewableContent;
-import com.github.sylordis.binocles.ui.components.BookTreeCell;
+import com.github.sylordis.binocles.ui.components.CustomTreeCell;
+import com.github.sylordis.binocles.ui.doa.TreeCellTextSupplierIdentifier.CellExpansion;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -27,14 +28,6 @@ public class TextElementDeletionConfirmationAlert extends Alert {
 	 * Content tree to display what is about to be deleted.
 	 */
 	private TreeView<ReviewableContent> tree;
-	/**
-	 * Decorator for books.
-	 */
-	private BookDecorator bookDecorator = new BookDecorator().thenTitle().thenChapterCountWithText();
-	/**
-	 * Decorator for chapters.
-	 */
-	private ChapterDecorator chapterDecorator = new ChapterDecorator().thenTitle().thenCommentsCountWithText();
 
 	/**
 	 * Creates a new text element deletion confirmation alert.
@@ -51,8 +44,14 @@ public class TextElementDeletionConfirmationAlert extends Alert {
 	private void build() {
 		label = new Label("This is what you'll be deleting:");
 		tree = new TreeView<ReviewableContent>();
+		ChapterDecorator chapterDecorator = new ChapterDecorator().thenTitle().thenCommentsCountWithText();
 		tree.setCellFactory(p -> {
-			return new BookTreeCell(this::decorate);
+			return new CustomTreeCell<ReviewableContent>()
+			        .decorate(Book.class, CellExpansion.COLLAPSED,
+			                new BookDecorator().thenTitle().thenChapterCountWithText())
+			        .decorate(Book.class, CellExpansion.EXPANDED,
+			                new BookDecorator().thenTitle())
+			        .decorate(Chapter.class, chapterDecorator);
 		});
 
 		tree.setMaxWidth(Double.MAX_VALUE);
@@ -89,20 +88,4 @@ public class TextElementDeletionConfirmationAlert extends Alert {
 		}
 	}
 
-	/**
-	 * Method to output strings of the trees' cells.
-	 * 
-	 * @param content
-	 * @return
-	 */
-	private String decorate(ReviewableContent content) {
-		String result;
-		if (content instanceof Book)
-			result = bookDecorator.print((Book) content);
-		else if (content instanceof Chapter)
-			result = chapterDecorator.print((Chapter) content);
-		else
-			result = content.getTitle();
-		return result;
-	}
 }

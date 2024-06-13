@@ -10,7 +10,7 @@ import java.util.function.Function;
  * desired information. Each supplier content will be separated by a specified separator or
  * {@link #SEPARATOR_DEFAULT}.
  */
-public class CustomDecorator<T> {
+public class CustomDecorator<T> implements Function<T,String> {
 
 	/**
 	 * Default separator for custom decorators, a whitespace.
@@ -51,7 +51,7 @@ public class CustomDecorator<T> {
 	 * @param prefix
 	 * @return itself
 	 */
-	public CustomDecorator<T> and(Function<T, String> decorator, String prefix, String suffix) {
+	public CustomDecorator<T> then(Function<T, String> decorator, String prefix, String suffix) {
 		this.suppliers.add(t -> prefix + decorator.apply(t) + suffix);
 		return this;
 	}
@@ -63,7 +63,7 @@ public class CustomDecorator<T> {
 	 * @return itself
 	 */
 	@SafeVarargs
-	public final CustomDecorator<T> and(Function<T, String>... entries) {
+	public final CustomDecorator<T> then(Function<T, String>... entries) {
 		this.suppliers.addAll(Arrays.asList(entries));
 		return this;
 	}
@@ -108,5 +108,10 @@ public class CustomDecorator<T> {
 			this.separator = SEPARATOR_DEFAULT;
 		else
 			this.separator = separator;
+	}
+
+	@Override
+	public String apply(T t) {
+		return print(t);
 	}
 }

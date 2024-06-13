@@ -24,47 +24,67 @@ import javafx.scene.image.ImageView;
 public final class AppIcons {
 
 	private static final Map<Class<?>, Image> ICON_DICTIONARY = new HashMap<>();
+	private static final String BASE_ICON_PATH = "img/";
 
 	/**
 	 * Icon for the software.
 	 */
-	public static final Image ICON_SOFTWARE = new Image(AppIcons.class.getResourceAsStream("img/binocles.png"));
+	public static final Image ICON_SOFTWARE = new Image(
+	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "binocles.png"));
 
 	/**
 	 * Icon for {@link Book}.
 	 */
-	public static final Image ICON_BOOK = new Image(AppIcons.class.getResourceAsStream("img/book.png"));
+	public static final Image ICON_BOOK = new Image(AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "book.png"));
 
 	/**
 	 * Icon for {@link Chapter}.
 	 */
-	public static final Image ICON_CHAPTER = new Image(AppIcons.class.getResourceAsStream("img/chapter.png"));
+	public static final Image ICON_CHAPTER = new Image(
+	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "chapter.png"));
 	/**
 	 * Icon for {@link Chapter} creation.
 	 */
 	public static final Image ICON_CHAPTER_CREATE = new Image(
-	        AppIcons.class.getResourceAsStream("img/chapter_create.png"));
+	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "chapter_create.png"));
 
 	/**
 	 * Icon for {@link CommentType}.
 	 */
-	public static final Image ICON_COMMENT_TYPE = new Image(AppIcons.class.getResourceAsStream("img/comment_type.png"));
+	public static final Image ICON_COMMENT_TYPE = new Image(
+	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "comment_type.png"));
+
+	/**
+	 * Icon for comments.
+	 */
+	public static final Image ICON_COMMENT = new Image(
+	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "comment.png"));
 
 	/**
 	 * Icon for help.
 	 */
-	public static final Image ICON_HELP = new Image(AppIcons.class.getResourceAsStream("img/help.png"));
+	public static final Image ICON_HELP = new Image(AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "help.png"));
 
 	/**
 	 * Icon for {@link Nomenclature}/Nomenclature.
 	 */
-	public static final Image ICON_NOMENCLATURE = new Image(AppIcons.class.getResourceAsStream("img/nomenclature.png"));
+	public static final Image ICON_NOMENCLATURE = new Image(
+	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "nomenclature.png"));
 
 	// Initialise icon map for Cell renderers (Tree & List)
 	static {
-		MapUtils.create(ICON_DICTIONARY,
-		        new Class<?>[] { Book.class, Chapter.class, Nomenclature.class, DefaultNomenclature.class, CommentType.class, DefaultCommentType.class },
-		        new Image[] { ICON_BOOK, 	 ICON_CHAPTER,  ICON_NOMENCLATURE,  ICON_NOMENCLATURE, 		   ICON_COMMENT_TYPE, ICON_COMMENT_TYPE });
+		MapUtils.create(ICON_DICTIONARY, new Class<?>[] { Book.class, //
+		        Chapter.class, //
+		        Nomenclature.class, //
+		        DefaultNomenclature.class, //
+		        CommentType.class, //
+		        DefaultCommentType.class },
+		        new Image[] { ICON_BOOK, //
+		                ICON_CHAPTER, //
+		                ICON_NOMENCLATURE, //
+		                ICON_NOMENCLATURE, //
+		                ICON_COMMENT_TYPE, //
+		                ICON_COMMENT_TYPE });
 	}
 
 	/**
