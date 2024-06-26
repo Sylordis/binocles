@@ -1,6 +1,7 @@
 package com.github.sylordis.binocles.model.review;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -158,6 +159,17 @@ public class CommentType implements Serializable, NomenclatureItem, Identifiable
 	}
 
 	/**
+	 * Replaces previous fields settings.
+	 *
+	 * @param fields new fields
+	 */
+	public void setFields(Collection<CommentTypeField> fields) {
+		this.fields.clear();
+		if (fields != null)
+			fields.forEach(this::setField);
+	}
+
+	/**
 	 * Resets all registered fields.
 	 */
 	public void resetFields() {
@@ -169,22 +181,21 @@ public class CommentType implements Serializable, NomenclatureItem, Identifiable
 	 * Sets a specific field if not null. If the description is null, removes the entry instead.
 	 *
 	 * @param field
-	 * @throws NullPointerException if field is null
+	 * @throws NullPointerException if field or its name are null
 	 */
 	public void setField(CommentTypeField field) {
 		Preconditions.checkNotNull(field, "Comment type field cannot be null");
-		if (fields.containsKey(field.getName())) {
-			if (field.getDescription() == null)
-				fields.remove(field.getName());
-			else
-				fields.put(field.getName(), field);
-		}
+		Preconditions.checkNotNull(field.getName(), "Comment type field name cannot be null");
+		if (field.getDescription() != null) {
+			fields.put(field.getName(), field);
+		} else
+			fields.remove(field.getName());
 	}
 
 	/**
 	 *
-	 * Sets a specific field if the key is not null and not blank. If the value is null, removes the
-	 * entry instead.
+	 * Sets a specific field if the key is not null and not blank. If the description is null, removes
+	 * the entry instead.
 	 *
 	 * @param name
 	 * @param description
@@ -192,14 +203,27 @@ public class CommentType implements Serializable, NomenclatureItem, Identifiable
 	 * @throws IllegalArgumentException if name is empty
 	 */
 	public void setField(String name, String description) {
-		Preconditions.checkNotNull(name, "Legend configuration type field name cannot be set to null");
-		Preconditions.checkArgument(!name.isBlank(), "Legend configuration type field name cannot be blank");
-		if (fields.containsKey(name)) {
-			if (description == null)
-				fields.remove(name);
-			else
-				fields.put(name, new CommentTypeField(name, description));
-		}
+		setField(name, description, false);
+	}
+
+	/**
+	 *
+	 * Sets a specific field if the key is not null and not blank. If the description is null, removes
+	 * the entry instead.
+	 *
+	 * @param name
+	 * @param description
+	 * @param isLong
+	 * @throws NullPointerException     if name is null
+	 * @throws IllegalArgumentException if name is empty
+	 */
+	public void setField(String name, String description, boolean isLong) {
+		Preconditions.checkNotNull(name, "Comment type field name cannot be set to null");
+		Preconditions.checkArgument(!name.isBlank(), "Comment type field name cannot be blank");
+		if (description != null) {
+			fields.put(name, new CommentTypeField(name, description, isLong));
+		} else
+			fields.remove(name);
 	}
 
 	/**

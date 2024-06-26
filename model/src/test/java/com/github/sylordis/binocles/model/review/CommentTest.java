@@ -41,36 +41,36 @@ class CommentTest {
 	}
 
 	@Test
-	void testCommentLegendConfigurationTypeIntInt() {
+	void testCommentCommentTypeIntInt() {
 		assertNotNull(this.comment);
 	}
 
 	@Test
-	void testCommentLegendConfigurationTypeIntInt_NullType() {
+	void testCommentCommentTypeIntInt_NullType() {
 		this.comment = new Comment(null, this.START_INDEX, this.END_INDEX);
 		assertNotNull(this.comment);
 		assertNull(this.comment.getType());
 	}
 
 	@Test
-	void testCommentLegendConfigurationTypeIntInt_NegativeStart() {
+	void testCommentCommentTypeIntInt_NegativeStart() {
 		assertThrows(IllegalArgumentException.class, () -> new Comment(this.type, -4, 10));
 	}
 
 	@Test
-	void testCommentLegendConfigurationTypeIntInt_LowerEndThanStart() {
+	void testCommentCommentTypeIntInt_LowerEndThanStart() {
 		assertThrows(IllegalArgumentException.class, () -> new Comment(this.type, 15, 8));
 	}
 
 	@Test
-	void testCommentLegendConfigurationTypeIntInt_CommentSizeZero() {
+	void testCommentCommentTypeIntInt_CommentSizeZero() {
 		this.comment = new Comment(this.type, this.START_INDEX, this.START_INDEX);
 		assertNotNull(this.comment);
 		assertEquals(this.comment.getStartIndex(), this.comment.getEndIndex());
 	}
 
 	@Test
-	void testCommentLegendConfigurationTypeIntIntMapOfStringString() {
+	void testCommentCommentTypeIntIntMapOfStringString() {
 		Map<String, String> fields = Map.of("field1", "value1", "field2", "value2");
 		this.comment = new Comment(this.type, this.START_INDEX, this.END_INDEX, fields);
 		assertNotNull(this.comment);
@@ -82,7 +82,7 @@ class CommentTest {
 	}
 
 	@Test
-	void testCommentLegendConfigurationTypeIntIntMapOfStringString_NullType() {
+	void testCommentCommentTypeIntIntMapOfStringString_NullType() {
 		Map<String, String> fields = Map.of("field1", "value1", "field2", "value2");
 		this.comment = new Comment(null, this.START_INDEX, this.END_INDEX, fields);
 		assertNotNull(this.comment);
@@ -94,7 +94,7 @@ class CommentTest {
 	}
 
 	@Test
-	void testCommentLegendConfigurationTypeIntIntMapOfStringString_EmptyFields() {
+	void testCommentCommentTypeIntIntMapOfStringString_EmptyFields() {
 		final HashMap<String, String> fields = new HashMap<>();
 		this.comment = new Comment(this.type, this.START_INDEX, this.END_INDEX, fields);
 		assertNotNull(this.comment);
@@ -106,7 +106,7 @@ class CommentTest {
 	}
 
 	@Test
-	void testCommentLegendConfigurationTypeIntIntMapOfStringString_NullFields() {
+	void testCommentCommentTypeIntIntMapOfStringString_NullFields() {
 		this.comment = new Comment(this.type, this.START_INDEX, this.END_INDEX, null);
 		assertNotNull(this.comment);
 		assertEquals(this.type, this.comment.getType());
@@ -117,12 +117,12 @@ class CommentTest {
 	}
 
 	@Test
-	void testCommentLegendConfigurationTypeIntIntMapOfStringString_NegativeStart() {
+	void testCommentCommentTypeIntIntMapOfStringString_NegativeStart() {
 		assertThrows(IllegalArgumentException.class, () -> new Comment(this.type, -205, 10000, new HashMap<>()));
 	}
 
 	@Test
-	void testCommentLegendConfigurationTypeIntIntMapOfStringString_LowerEndThanStart() {
+	void testCommentCommentTypeIntIntMapOfStringString_LowerEndThanStart() {
 		assertThrows(IllegalArgumentException.class, () -> new Comment(this.type, 10001, 10000, new HashMap<>()));
 	}
 
@@ -147,6 +147,30 @@ class CommentTest {
 	void testCompareTo_Greater(int start1, int start2) {
 		Comment c1 = new Comment(this.type, start1, Integer.MAX_VALUE);
 		Comment c2 = new Comment(this.type, start2, Integer.MAX_VALUE);
+		assertEquals(1, c1.compareTo(c2));
+	}
+
+	@ParameterizedTest
+	@CsvSource({ "0,1,2", "0,500,1000", "500,2000,4000", "43127,3127449,3127450" })
+	void testCompareTo_EndLower(int start, int end1, int end2) {
+		Comment c1 = new Comment(this.type, start, end1);
+		Comment c2 = new Comment(this.type, start, end2);
+		assertEquals(-1, c1.compareTo(c2));
+	}
+
+	@ParameterizedTest
+	@CsvSource({ "0,0", "654,654", "98798,98798" })
+	void testCompareTo_StartAndEndEquals(int start, int end) {
+		Comment c1 = new Comment(this.type, start, end);
+		Comment c2 = new Comment(this.type, start, end);
+		assertEquals(0, c1.compareTo(c2));
+	}
+
+	@ParameterizedTest
+	@CsvSource({ "0,2,1", "0,500,250", "500,2000,1999", "43127,3127451,3127450" })
+	void testCompareTo_EndGreater(int start, int end1, int end2) {
+		Comment c1 = new Comment(this.type, start, end1);
+		Comment c2 = new Comment(this.type, start, end2);
 		assertEquals(1, c1.compareTo(c2));
 	}
 

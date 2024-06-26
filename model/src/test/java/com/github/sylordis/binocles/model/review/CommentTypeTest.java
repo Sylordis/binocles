@@ -236,7 +236,8 @@ class CommentTypeTest {
 	void testSetFields() {
 		Map<String, String> fields = Map.of("a", "", "b", "", "c", "");
 		type.setFields(fields);
-		assertEquals(fields, type.getFields());
+		assertEquals(Map.of("a", new CommentTypeField("a", ""), "b", new CommentTypeField("b", ""), "c",
+		        new CommentTypeField("c", "")), type.getFields());
 	}
 
 	@Test
@@ -244,12 +245,14 @@ class CommentTypeTest {
 		type.setFields(Map.of("a", "", "b", "", "c", ""));
 		Map<String, String> fields = Map.of("red", "FF0000", "black", "000000", "green", "00FF00");
 		type.setFields(fields);
-		assertEquals(fields, type.getFields());
+		assertEquals(Map.of("red", new CommentTypeField("red", "FF0000"), "black",
+		        new CommentTypeField("black", "000000"), "green", new CommentTypeField("green", "00FF00")),
+		        type.getFields());
 	}
 
 	@Test
 	void testSetFields_Null() {
-		type.setFields(null);
+		type.setFields((Map<String, String>) null);
 		assertNotNull(type.getFields());
 		assertTrue(type.getFields().isEmpty());
 	}
@@ -257,7 +260,7 @@ class CommentTypeTest {
 	@Test
 	void testSetFields_NullStillResets() {
 		type.setFields(Map.of("a", "", "b", "", "c", ""));
-		type.setFields(null);
+		type.setFields((Map<String, String>) null);
 		assertNotNull(type.getFields());
 		assertTrue(type.getFields().isEmpty());
 	}
@@ -266,7 +269,7 @@ class CommentTypeTest {
 	@CsvSource({ "hello,world" })
 	void testSetField(String name, String value) {
 		type.setField(name, value);
-		Map<String, String> expected = Map.of(name, value);
+		Map<String, CommentTypeField> expected = Map.of(name, new CommentTypeField(name, value));
 		assertEquals(expected, type.getFields());
 	}
 
@@ -275,7 +278,7 @@ class CommentTypeTest {
 	void testSetField_Replace(String name, String description) {
 		type.setField(name, description);
 		type.setField(name, "apocalypse");
-		Map<String, String> expected = Map.of(name, "apocalypse");
+		Map<String, CommentTypeField> expected = Map.of(name, new CommentTypeField(name, "apocalypse"));
 		assertEquals(expected, type.getFields());
 	}
 
@@ -291,7 +294,7 @@ class CommentTypeTest {
 	@NullSource
 	void testSetField_NothingToRemove(String description) {
 		type.setField("hello", description);
-		Map<String, String> expected = new HashMap<>();
+		Map<String, CommentTypeField> expected = Map.of();
 		assertEquals(expected, type.getFields());
 	}
 
@@ -311,7 +314,7 @@ class CommentTypeTest {
 	@EmptySource
 	void testSetField_DescriptionBlank(String description) {
 		type.setField("hello", description);
-		Map<String, String> expected = Map.of("hello", description);
+		Map<String, CommentTypeField> expected = Map.of("hello", new CommentTypeField("hello", description));
 		assertEquals(expected, type.getFields());
 	}
 
@@ -319,7 +322,9 @@ class CommentTypeTest {
 	void testEditFields() {
 		final Map<String, String> fields = Map.of("color", "red", "font-weight", "bold");
 		type.editFields(fields);
-		assertEquals(fields, type.getFields());
+		final Map<String, CommentTypeField> expected = Map.of("color", new CommentTypeField("color", "red"),
+		        "font-weight", new CommentTypeField("font-weight", "bold"));
+		assertEquals(expected, type.getFields());
 	}
 
 	@Test
@@ -340,7 +345,7 @@ class CommentTypeTest {
 		final Map<String, String> fields2 = new HashMap<>(Map.of("x", "This is different", "y", ""));
 		fields2.put("y", null);
 		type.editFields(fields2);
-		final Map<String, String> expected = Map.of("x", "This is different");
+		final Map<String, CommentTypeField> expected = Map.of("x", new CommentTypeField("x", "This is different"));
 		assertEquals(expected, type.getFields());
 	}
 
@@ -348,7 +353,8 @@ class CommentTypeTest {
 	void testEditFields_OneValueEmpty() {
 		final Map<String, String> fields = Map.of("color", "red", "font-weight", "");
 		type.editFields(fields);
-		assertEquals(fields, type.getFields());
+		assertEquals(Map.of("color", new CommentTypeField("color", "red"), "font-weight",
+		        new CommentTypeField("font-weight", "")), type.getFields());
 	}
 
 	@Test

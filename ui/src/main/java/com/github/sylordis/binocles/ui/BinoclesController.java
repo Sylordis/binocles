@@ -19,6 +19,7 @@ import com.github.sylordis.binocles.model.decorators.ChapterDecorator;
 import com.github.sylordis.binocles.model.decorators.CommentTypeDecorator;
 import com.github.sylordis.binocles.model.decorators.NomenclatureDecorator;
 import com.github.sylordis.binocles.model.io.BinoclesIOFactory;
+import com.github.sylordis.binocles.model.review.Comment;
 import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.DefaultNomenclature;
 import com.github.sylordis.binocles.model.review.Nomenclature;
@@ -28,6 +29,8 @@ import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.model.text.ReviewableContent;
 import com.github.sylordis.binocles.ui.alerts.TextElementDeletionConfirmationAlert;
 import com.github.sylordis.binocles.ui.components.BookTreeRoot;
+import com.github.sylordis.binocles.ui.components.CommentBox;
+import com.github.sylordis.binocles.ui.components.CommentBoxComparator;
 import com.github.sylordis.binocles.ui.components.CustomTreeCell;
 import com.github.sylordis.binocles.ui.components.NomenclatureTreeRoot;
 import com.github.sylordis.binocles.ui.dialogs.AboutDialog;
@@ -37,7 +40,6 @@ import com.github.sylordis.binocles.ui.dialogs.CommentDetailsDialog;
 import com.github.sylordis.binocles.ui.dialogs.CommentTypeDetailsDialog;
 import com.github.sylordis.binocles.ui.dialogs.NomenclatureDetailsDialog;
 import com.github.sylordis.binocles.ui.doa.ChapterPropertiesAnswer;
-import com.github.sylordis.binocles.ui.doa.CommentDetailsAnswer;
 import com.github.sylordis.binocles.ui.doa.CommentTypePropertiesAnswer;
 import com.github.sylordis.binocles.ui.javafxutils.Browser;
 import com.github.sylordis.binocles.ui.javafxutils.TreeViewUtils;
@@ -50,6 +52,7 @@ import com.github.sylordis.binocles.utils.io.FileExporter;
 import com.github.sylordis.binocles.utils.io.FileImporter;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -179,6 +182,8 @@ public class BinoclesController implements Initializable {
 	 * Class logger.
 	 */
 	private final Logger logger = LogManager.getLogger();
+
+	private CommentBoxComparator commentBoxComparator = new CommentBoxComparator();
 
 	/**
 	 * Current model managed by the controller.
@@ -354,12 +359,18 @@ public class BinoclesController implements Initializable {
 	public void createCommentAction(ActionEvent event) {
 		Chapter chapter = (Chapter) booksTree.getSelectionModel().getSelectedItem().getValue();
 		Book book = (Book) booksTree.getSelectionModel().getSelectedItem().getParent().getValue();
-		CommentDetailsDialog dialog = new CommentDetailsDialog(model, book, chapter,
-		        textZoneChapterContent.getSelection().getStart(), textZoneChapterContent.getSelection().getEnd());
-		Optional<CommentDetailsAnswer> answer = dialog.display();
+		int start = textZoneChapterContent.getSelection().getStart();
+		int end = textZoneChapterContent.getSelection().getEnd();
+		CommentDetailsDialog dialog = new CommentDetailsDialog(model, book, chapter, start, end);
+		Optional<Comment> answer = dialog.display();
 		if (answer.isPresent()) {
-			// TODO Create a new comment
-			// TODO Add the comment to the comments VBox at the correct place (order by start index)
+			chapter.addComment(answer.get());
+			logger.info("New comment on {}: {}", chapter, answer.get());
+			CommentBox cbox = new CommentBox(answer.get());
+			commentZoneVBoxInner.getChildren().add(cbox);
+			FXCollections.sort(commentZoneVBoxInner.getChildren(), commentBoxComparator);
+			rebuildBooksTree();
+			logger.debug("Comments: {}", commentZoneVBoxInner.getChildren().size());
 		}
 	}
 
@@ -377,13 +388,15 @@ public class BinoclesController implements Initializable {
 			alert.setTreeRoot(treeSelected.getValue());
 			Optional<ButtonType> answer = alert.showAndWait();
 			if (answer.isPresent() && answer.get().equals(ButtonType.OK)) {
-				logger.info("Deleting {}", treeSelected.getValue());
+				logger.info("Deleting '{}'", treeSelected.getValue());
+				// Remove in model
 				if (treeSelected.getValue() instanceof Book) {
 					model.getBooks().remove(treeSelected.getValue());
 				} else if (treeSelected.getValue() instanceof Chapter) {
 					treeSelected.getParent().getValue().getChildren().remove(treeSelected.getValue());
 				}
-				rebuildBooksTree();
+				// Remove in tree
+				treeSelected.getParent().getChildren().remove(treeSelected);
 			}
 		} else {
 			showErrorAlert("No element in the book tree is selected.");
@@ -684,6 +697,7 @@ public class BinoclesController implements Initializable {
 	 * Rebuilds the book tree according to model.
 	 */
 	public void rebuildBooksTree() {
+		// TODO Get all books that are expanded and expand them again after rebuilding
 		// Remove all existing books
 		booksTree.getRoot().getChildren().clear();
 		// TODO Order according to settings

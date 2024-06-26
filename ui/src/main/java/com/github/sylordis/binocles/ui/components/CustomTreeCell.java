@@ -38,6 +38,7 @@ public class CustomTreeCell<T> extends TreeCell<T> {
 	 * @param supplier
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public CustomTreeCell<T> decorate(Class<? extends T> type, Function<? extends T, String> supplier) {
 		this.textSuppliers.put(new TreeCellTextSupplierIdentifier<T>(type, CellExpansion.ANY),
 		        (Function<T, String>) supplier);
@@ -53,6 +54,7 @@ public class CustomTreeCell<T> extends TreeCell<T> {
 	 * @param supplier
 	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public CustomTreeCell<T> decorate(Class<? extends T> type, CellExpansion expansionType,
 	        Function<? extends T, String> supplier) {
 		this.textSuppliers.put(new TreeCellTextSupplierIdentifier<T>(type, expansionType),

@@ -5,7 +5,38 @@ import javafx.scene.paint.Color;
 /**
  * Util tools for managing colours.
  */
-public final class ColorUtils {
+public final class StyleUtils {
+
+	/**
+	 * Converts a CSS Property into its JavaFX CSS declaration for styling. They are mainly the same,
+	 * but prefixed with <code>-fx-</code> and some properties are changed. This method takes care of
+	 * that.
+	 * 
+	 * @param entry
+	 * @return
+	 */
+	public static String convertCSStoFXCSS(String entry) {
+		String result = entry;
+		if (entry.equals("color"))
+			result = "fill";
+		result = "-fx-" + result;
+		return result;
+	}
+
+	/**
+	 * Converts a CSS Property into its JavaFX CSS style declaration for styling. They are mainly the
+	 * same, but prefixed with <code>-fx-</code> and some properties are changed. This method takes care
+	 * of that.<br/>
+	 * 
+	 * The result should be <pre>-fx-&lt;entry&gt;: &lt;value&gt;;</pre>.
+	 * 
+	 * @param property
+	 * @param value
+	 * @return the full css style declaration
+	 */
+	public static String convertCSStoFXstyle(String property, String value) {
+		return convertCSStoFXCSS(property) + ": " + value + ";";
+	}
 
 	/**
 	 * Transforms a colour into an rgba string value separated by commas, destined to be transformed
@@ -51,7 +82,7 @@ public final class ColorUtils {
 	/**
 	 * Private constructor to prevent instantiation.
 	 */
-	private ColorUtils() {
+	private StyleUtils() {
 		// Nothing to see here
 	}
 

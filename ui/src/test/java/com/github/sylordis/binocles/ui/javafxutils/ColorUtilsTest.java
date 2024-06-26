@@ -16,12 +16,12 @@ class ColorUtilsTest {
 	@ParameterizedTest
 	@MethodSource("provideColorTestValues")
 	void testToHexString(Color color, String expected) {
-		assertEquals(expected, ColorUtils.toHexString(color));
+		assertEquals(expected, StyleUtils.toHexString(color));
 	}
 	
 	@Test
 	void testToHexString_Null() {
-		assertEquals("", ColorUtils.toHexString(null));
+		assertEquals("", StyleUtils.toHexString(null));
 	}
 
 	private static Stream<Arguments> provideColorTestValues() {

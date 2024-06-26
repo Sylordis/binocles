@@ -14,19 +14,21 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
 
 /**
  * Dialog to create a new or edit a book.
@@ -78,14 +80,13 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 	 */
 	private TextField fieldMetaFieldsControlsDescription;
 	/**
+	 * Checkbox field to specify if the field is a long one.
+	 */
+	private CheckBox fieldMetaFieldsControlsIsLong;
+	/**
 	 * Style editor for the comments of this type.
 	 */
 	private StyleEditor fieldStyle;
-
-	/**
-	 * User feedback.
-	 */
-	private Text formFeedback;
 
 	// Form validity controls and feedback
 
@@ -113,29 +114,34 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 	@Override
 	public void build() {
 		// Nomenclature field
-		Label labelNomenclature = new Label("Nomenclature:");
+		Label labelNomenclature = new Label("Nomenclature");
 		fieldNomenclatureChoice = new ComboBox<>(FXCollections.observableArrayList(getModel().getNomenclatures(true)));
 		// Comment type name field
-		Label labelCommentTypeName = new Label("Name:");
+		Label labelCommentTypeName = new Label("Name");
 		fieldName = new TextField();
 		// Comment type name description
-		Label labelCommentTypeDescription = new Label("Description (optional):");
+		Label labelCommentTypeDescription = new Label("Description (optional)");
 		fieldDescription = new TextField();
-		// Feedback field
-		formFeedback = new Text("");
-		formFeedback.getStyleClass().add("text-danger");
 		// Metafields field
 		fieldMetaFieldsData = FXCollections.observableArrayList();
 		fieldMetaFieldsData.add(new CommentTypeField("text", "Body text of the comment"));
-		fieldsValid = true; // if metafields are not empty, then it is valid by default
+		fieldsValid = !fieldMetaFieldsData.isEmpty(); // if metafields are not empty, then it is valid by default
 		fieldMetafields = new TableView<>(fieldMetaFieldsData);
 		fieldMetafields.setPlaceholder(new Label("No fields set"));
 		TableColumn<CommentTypeField, String> tableFieldNameColumn = new TableColumn<>("Name");
 		tableFieldNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+//		tableFieldNameColumn.setCellFactory(c -> EditCell.createStringEditCell());
 		TableColumn<CommentTypeField, String> tableFieldDescriptionColumn = new TableColumn<>("Description");
 		tableFieldDescriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+//		tableFieldDescriptionColumn.setCellFactory(c -> EditCell.createStringEditCell());
+		TableColumn<CommentTypeField, String> tableFieldIsLongColumn = new TableColumn<>("Long?");
+		tableFieldIsLongColumn.setCellValueFactory(new PropertyValueFactory<>("isLongText"));
+//		tableFieldIsLongColumn.setCellFactory(CheckBoxTableCell
+//		        .forTableColumn(i -> new SimpleBooleanProperty(fieldMetaFieldsData.get(i).getIsLongText()), false));
 		fieldMetafields.getColumns().add(tableFieldNameColumn);
 		fieldMetafields.getColumns().add(tableFieldDescriptionColumn);
+		fieldMetafields.getColumns().add(tableFieldIsLongColumn);
+//		fieldMetafields.setEditable(true);
 		Label labelCommentTypeFields = new Label("Fields:");
 		// Metafields field top controls
 		HBox fieldCommentTypeFieldsControlsTop = new HBox();
@@ -147,17 +153,17 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 		fieldMetaFieldsControlsName.promptTextProperty().set("Field name");
 		fieldMetaFieldsControlsDescription = new TextField();
 		fieldMetaFieldsControlsDescription.promptTextProperty().set("Field description");
+		fieldMetaFieldsControlsIsLong = new CheckBox("Long?");
 		HBox fieldCommentTypeFieldsControlsBottom = new HBox();
 		fieldMetaFieldsControlsAdd = new Button("Add");
 		fieldCommentTypeFieldsControlsBottom.alignmentProperty().set(Pos.CENTER_RIGHT);
 		fieldCommentTypeFieldsControlsBottom.getChildren().addAll(fieldMetaFieldsControlsName,
-		        fieldMetaFieldsControlsDescription, fieldMetaFieldsControlsAdd);
+		        fieldMetaFieldsControlsDescription, fieldMetaFieldsControlsIsLong, new Separator(Orientation.VERTICAL), fieldMetaFieldsControlsAdd);
 		// Style field
 		Label labelCommentTypeStyle = new Label("Comment style:");
 		fieldStyle = new StyleEditor();
 		// Set dialog components
-		getGridPane().addRow(0, formFeedback);
-		GridPane.setColumnSpan(formFeedback, GridPane.REMAINING);
+		addFormFeedback();
 		getGridPane().addRow(1, labelNomenclature, fieldNomenclatureChoice);
 		getGridPane().addRow(2, labelCommentTypeName, fieldName);
 		getGridPane().addRow(3, labelCommentTypeDescription, fieldDescription);
@@ -175,14 +181,14 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 		        .validIf(
 		                "Comment type with the same name already exists (case insensitive) in the selected nomenclature.",
 		                (o, n) -> this.nomenclature == null || !this.nomenclature.hasCommentType(n))
-		        .feed(s -> nameFeedback = s).onEither(b -> nameValid = b).andThen(this::postActions);
+		        .feed(s -> nameFeedback = s).onEither(b -> nameValid = b).andThen(this::updateFormStatus);
 		fieldName.textProperty().addListener(commentTypeNameUIValidator);
 		ListenerValidator<Nomenclature> nomenclatureParentUIValidator = new ListenerValidator<Nomenclature>()
 		        .validIf("You have to pick a nomenclature to add this comment type to.", (o, n) -> null != n)
 		        .feed(s -> nomenclatureChoiceFeedback = s).onEither(b -> {
 			        nomenclatureChoiceValid = b;
 			        this.nomenclature = fieldNomenclatureChoice.getSelectionModel().getSelectedItem();
-		        }).andThen(this::postActions);
+		        }).andThen(this::updateFormStatus);
 		fieldMetafields.getSelectionModel().getSelectedItems().addListener(new ListChangeListener<CommentTypeField>() {
 
 			@Override
@@ -192,11 +198,18 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 			}
 		});
 		fieldNomenclatureChoice.valueProperty().addListener(nomenclatureParentUIValidator);
+		fieldMetaFieldsControlsName.textProperty().addListener((o, c, n) -> {
+			if (fieldMetaFieldsData.stream().anyMatch(t -> t.getName().equals(n))) {
+				fieldMetaFieldsControlsAdd.setText("Edit");
+			} else {
+				fieldMetaFieldsControlsAdd.setText("Add");
+			}
+		});
 		fieldMetaFieldsControlsAdd.setOnAction(e -> {
 			addNewField();
 			fieldsFeedback = "";
 			fieldsValid = true;
-			postActions();
+			updateFormStatus();
 		});
 		fieldMetaFieldsControlsDelete.setOnAction(e -> {
 			fieldMetaFieldsData.removeAll(fieldMetafields.getSelectionModel().getSelectedItems());
@@ -207,7 +220,7 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 				fieldsFeedback = "";
 				fieldsValid = true;
 			}
-			postActions();
+			updateFormStatus();
 			fieldMetafields.refresh();
 		});
 		ListenerValidator<String> fieldNameUIValidator = new ListenerValidator<String>()
@@ -252,15 +265,18 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 	public void addNewField() {
 		String name = fieldMetaFieldsControlsName.getText();
 		String description = fieldMetaFieldsControlsDescription.getText();
+		boolean isLong = fieldMetaFieldsControlsIsLong.isSelected();
 		CommentTypeField field = getField(name);
 		if (null == field) {
-			fieldMetaFieldsData.add(new CommentTypeField(name, description));
+			fieldMetaFieldsData.add(new CommentTypeField(name, description, isLong));
 		} else {
 			field.setDescription(description);
+			field.setIsLongText(isLong);
 			fieldMetafields.refresh();
 		}
 		fieldMetaFieldsControlsName.setText("");
 		fieldMetaFieldsControlsDescription.setText("");
+		fieldMetaFieldsControlsIsLong.setSelected(false);
 		fieldMetaFieldsControlsAdd.setDisable(true);
 	}
 
@@ -288,20 +304,11 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 			// Create fields map from fields list
 			Nomenclature nomenclature = fieldNomenclatureChoice.getSelectionModel().getSelectedItem();
 			CommentType commentType = new CommentType(fieldName.getText().trim(), fieldDescription.getText().trim());
-			fieldMetaFieldsData.forEach(f -> commentType.setField(f.getName(), f.getDescription()));
+			commentType.setFields(fieldMetaFieldsData);
 			fieldStyle.getCSSStyles().forEach((p, v) -> commentType.setStyle(p.toString(), v));
 			answer = new CommentTypePropertiesAnswer(nomenclature, commentType);
 		}
 		return answer;
-	}
-
-	/**
-	 * Action to run post validation step.
-	 */
-	public void postActions() {
-		setConfirmButtonDisabledOnValidity();
-		combineAndProcessFeedback(formFeedback::setText);
-		sizeToScene();
 	}
 
 }

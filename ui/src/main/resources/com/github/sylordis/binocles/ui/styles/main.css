@@ -19,9 +19,15 @@ GridPane.form {
 }
 .form-dialog {
 	-fx-padding: 10px;
+	-fx-hgap: 10px;
+}
+.form-dialog .separator {
+	-fx-margin: 5px 0 5px 0;
+	-fx-padding: 5px 0 5px 0;
 }
 .form-dialog .label {
 	-fx-font-weight: bold;
+	-fx-padding-right: 5px;
 }
 .icon {
 	-fx-pref-height: 16;

@@ -1,6 +1,7 @@
 package com.github.sylordis.binocles.ui.dialogs;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -76,7 +77,7 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	/**
 	 * User feedback, only set if {@link #addFormFeedback(int)} is called.
 	 */
-	protected Text formFeedback;
+	private Text formFeedback;
 
 	/**
 	 * Creates a new custom dialog.
@@ -115,7 +116,7 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 		}
 		// Set grid
 		gridPane = new GridPane();
-		gridPane.getStyleClass().add("form");
+		gridPane.getStyleClass().add("form-dialog");
 
 		build();
 
@@ -142,6 +143,7 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 
 	/**
 	 * Instantiates and adds the form feedback field on row 0.
+	 * 
 	 * @see #addFormFeedback(int)
 	 */
 	public void addFormFeedback() {
@@ -149,12 +151,12 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	}
 
 	/**
-	 * Adds the form feedback field at the specified row.
+	 * Instantiates and adds the form feedback field at the specified row.
 	 */
 	public void addFormFeedback(int row) {
 		formFeedback = new Text("");
 		formFeedback.getStyleClass().add("text-danger");
-		getGridPane().addRow(0, formFeedback);
+		getGridPane().addRow(row, formFeedback);
 		GridPane.setColumnSpan(formFeedback, GridPane.REMAINING);
 	}
 
@@ -192,6 +194,20 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 			collect.append(s.get());
 		}
 		consumer.accept(collect.toString());
+	}
+
+	/**
+	 * Default method to update the form status, triggering an update of the status of the confirm
+	 * button and processes all feedback from the feedback collectors to set the feedback field. Check
+	 * the "see also" to see which methods are called.
+	 * 
+	 * @see #setConfirmButtonDisabledOnValidity()
+	 * @see #combineAndProcessFeedback(Consumer)
+	 */
+	public void updateFormStatus() {
+		setConfirmButtonDisabledOnValidity();
+		combineAndProcessFeedback(formFeedback::setText);
+		sizeToScene();
 	}
 
 	/**
@@ -308,6 +324,15 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	}
 
 	/**
+	 * Adds multiple feedback collectors.
+	 * 
+	 * @param collectors
+	 */
+	public void addFeedbackCollectors(Collection<? extends Supplier<String>> collectors) {
+		feedbackCollectors.addAll(collectors);
+	}
+
+	/**
 	 * @return the formValidators
 	 */
 	public List<Supplier<Boolean>> getFormValidators() {
@@ -331,6 +356,15 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	}
 
 	/**
+	 * Adds multiple validators for this dialog.
+	 * 
+	 * @param validators
+	 */
+	public void addFormValidators(Collection<? extends Supplier<Boolean>> validators) {
+		formValidators.addAll(validators);
+	}
+
+	/**
 	 * Sets the disabled status of the confirm button.
 	 * 
 	 * @param disable true to disable, false to enable
@@ -349,6 +383,13 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	 */
 	public void setConfirmButtonDisabledOnValidity() {
 		setConfirmButtonDisable(!checkFormValidity());
+	}
+
+	/**
+	 * @return the formFeedback
+	 */
+	public void setFeedback(String feedback) {
+		formFeedback.setText(feedback);
 	}
 
 	/**

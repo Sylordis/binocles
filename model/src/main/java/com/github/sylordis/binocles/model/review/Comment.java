@@ -74,7 +74,10 @@ public class Comment implements Comparable<Comment>, Serializable {
 
 	@Override
 	public int compareTo(Comment o) {
-		return Integer.compare(this.startIndex, o.startIndex);
+		int ret = Integer.compare(this.startIndex, o.startIndex);
+		if (ret == 0)
+			ret = Integer.compare(this.endIndex, o.endIndex);
+		return ret;
 	}
 
 	/**
@@ -233,6 +236,12 @@ public class Comment implements Comparable<Comment>, Serializable {
 	 */
 	public void clearFields() {
 		this.fields.clear();
+	}
+
+	@Override
+	public String toString() {
+		return "Comment["+startIndex+","+endIndex+"] [type=" + type + ", " + fields
+		        + "]";
 	}
 
 }

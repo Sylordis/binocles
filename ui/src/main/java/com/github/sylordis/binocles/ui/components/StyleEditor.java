@@ -10,7 +10,7 @@ import java.util.Set;
 
 import javax.swing.text.html.CSS;
 
-import com.github.sylordis.binocles.ui.javafxutils.ColorUtils;
+import com.github.sylordis.binocles.ui.javafxutils.StyleUtils;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -124,9 +124,9 @@ public class StyleEditor extends VBox implements Initializable {
 			css.put(CSS.Attribute.TEXT_DECORATION, String.join(" ", values));
 		}
 		if (controlButtonColorPickerForeground.isSelected())
-			css.put(CSS.Attribute.COLOR, ColorUtils.toHexString(controlColorPickerForeground.getValue()));
+			css.put(CSS.Attribute.COLOR, StyleUtils.toHexString(controlColorPickerForeground.getValue()));
 		if (controlButtonColorPickerBackground.isSelected())
-			css.put(CSS.Attribute.BACKGROUND_COLOR, ColorUtils.toHexString(controlColorPickerBackground.getValue()));
+			css.put(CSS.Attribute.BACKGROUND_COLOR, StyleUtils.toHexString(controlColorPickerBackground.getValue()));
 		return css;
 	}
 

@@ -74,14 +74,15 @@ class YamlFileExporterTest {
 	@Tag("output")
 	@Tag("functional")
 	@Tag("files")
-	void testExport(TestInfo testInfo)
-	        throws URISyntaxException, FileNotFoundException, IOException, ExportException {
+	void testExport(TestInfo testInfo) throws URISyntaxException, FileNotFoundException, IOException, ExportException {
 		final String basename = TestFileUtils.fileBasenameForTest(YamlFileExporterTest.class, testInfo);
 		File expectedTemp = File.createTempFile(basename + "-expected_temp.yaml", null, tempDir);
 		File expected = File.createTempFile(basename + "-expected.yaml", null, tempDir);
 		File result = File.createTempFile(basename + "-result.yaml", null, tempDir);
-		TestFileUtils.fillFileWithSamples(YamlFileExporterTest.class, expectedTemp, "samples" + File.separator + basename + ".yaml");
-		TestFileUtils.sed(expectedTemp, expected, Map.of("<version>", BinoclesConfiguration.getInstance().getVersion()));
+		TestFileUtils.fillFileWithSamples(YamlFileExporterTest.class, expectedTemp,
+		        "samples" + File.separator + basename + ".yaml");
+		TestFileUtils.sed(expectedTemp, expected,
+		        Map.of("<version>", BinoclesConfiguration.getInstance().getVersion()));
 		expectedTemp.delete();
 		BinoclesModel model = new BinoclesModel();
 		Nomenclature nom1 = new Nomenclature("My Nomenclature");
@@ -89,7 +90,8 @@ class YamlFileExporterTest {
 		Nomenclature nom3 = new Nomenclature("Empty");
 		CommentType type11 = new CommentType("typography", "Typo in the text");
 		CommentType type12 = new CommentType("comment", "Typical comment");
-		type11.setFields(MapUtils.createVariable(new LinkedHashMap<>(), "value", "Correction value", "reason", "Reason of the typography"));
+		type11.setFields(MapUtils.createVariable(new LinkedHashMap<>(), "value", "Correction value", "reason",
+		        "Reason of the typography"));
 		type12.setFields(Map.of("text", "Text of the comment"));
 		nom1.setTypes(List.of(type11, type12));
 		model.setNomenclatures(List.of(nom1, nom2, nom3));

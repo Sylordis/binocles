@@ -4,9 +4,21 @@ import javafx.scene.control.TreeItem;
 
 public record TreeCellTextSupplierIdentifier<T>(Class<? extends T> type, CellExpansion state) {
 
+	/**
+	 * Enum to denote of a current node's expansion state.
+	 */
 	public enum CellExpansion {
+		/**
+		 * A collapsed tree cell.
+		 */
 		COLLAPSED,
+		/**
+		 * An expanded tree cell.
+		 */
 		EXPANDED,
+		/**
+		 * A cell in any of its expansion state.
+		 */
 		ANY
 	}
 
@@ -17,7 +29,7 @@ public record TreeCellTextSupplierIdentifier<T>(Class<? extends T> type, CellExp
 	 * @return
 	 */
 	public boolean matchExactExpansionState(TreeItem<?> item) {
-		return (state == CellExpansion.COLLAPSED && !item.isExpanded())
-		        || (state == CellExpansion.EXPANDED && item.isExpanded());
+		return item != null && ((state == CellExpansion.COLLAPSED && !item.isExpanded())
+		        || (state == CellExpansion.EXPANDED && item.isExpanded()));
 	}
 }

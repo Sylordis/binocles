@@ -13,8 +13,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 
 /**
  * Dialog to create a new or edit a book.
@@ -32,10 +30,6 @@ public class BookDetailsDialog extends AbstractAnswerDialog<Book> {
 	 * Combo box for the nomenclature.
 	 */
 	private ComboBox<Nomenclature> fieldNomenclatureChoice;
-	/**
-	 * User feedback.
-	 */
-	private Text formFeedback;
 	
 	/**
 	 * Creates a new book creation dialog.
@@ -51,24 +45,20 @@ public class BookDetailsDialog extends AbstractAnswerDialog<Book> {
 	@Override
 	public void build() {
 		// Book name fields
-		Label labelBookName = new Label("Book name:");
+		Label labelBookName = new Label("Book name");
 		fieldBookName = new TextField();
 		// Nomenclature fields
-		Label labelNomenclature = new Label("Nomenclature (optional):");
+		Label labelNomenclature = new Label("Nomenclature (optional)");
 		fieldNomenclatureChoice = new ComboBox<>(FXCollections.observableArrayList(getModel().getNomenclatures()));
-		// Other fields
-		formFeedback = new Text("");
-		formFeedback.getStyleClass().add("text-danger");
 		// Set dialog content
-		getGridPane().addRow(0, formFeedback);
-		GridPane.setColumnSpan(formFeedback, GridPane.REMAINING);
+		addFormFeedback();
 		getGridPane().addRow(1, labelBookName, fieldBookName);
 		getGridPane().addRow(2, labelNomenclature, fieldNomenclatureChoice);
 		// Set up listeners
 		ListenerValidator<String> bookNameUIValidator = new ListenerValidator<String>()
 		        .validIf("Book name can't be blank or empty.", (o, n) -> !n.isBlank())
 		        .validIf("Book with the same name already exists (case insensitive)", (o, n) -> !getModel().hasBook(n))
-		        .feed(formFeedback::setText).onEither(b -> setConfirmButtonDisable(!b));
+		        .feed(this::setFeedback).onEither(b -> setConfirmButtonDisable(!b));
 		fieldBookName.textProperty().addListener(bookNameUIValidator);
 		// Set up components status
 		getDialog().getDialogPane().lookupButton(getConfirmButton()).setDisable(true);

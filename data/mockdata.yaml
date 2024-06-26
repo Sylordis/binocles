@@ -1,23 +1,30 @@
 binocles:
   version: 0.1-SNAPSHOT
   nomenclatures:
-    - name: "My Nomenclature"
+    - name: My Nomenclature
       types:
         - name: typography
           description: Typo in the text
           fields:
             value: Correction value
             reason: Reason of the typography
+          styles:
+            color: "#b20000"
+            font-style: italic
         - name: comment
           description: Typical comment
           fields:
             text: Text of the comment
-    - name: "High colour"
+          large:
+            - text
+          styles:
+            color: "#5f977b"
+    - name: High colour
       types: []
-    - name: "Empty"
+    - name: Empty
       types: []
   library:
-    - title: "The First Days"
+    - title: The First Days
       nomenclature: my nomenclature
       metadata:
         author: Rhiannon Frater
@@ -46,7 +53,7 @@ binocles:
           globalcomment: |-
             
           comments: [] 
-    - title: "Memoirs of a Geisha"
+    - title: Memoirs of a Geisha
       nomenclature: 
       metadata:
         author: Arthur Golden
@@ -119,8 +126,8 @@ binocles:
             Walled-in pleasure quarters known as yūkaku (遊廓/遊郭) were built in the 16th century,[16] with the shogunate designating prostitution illegal to practice outside of these "pleasure quarters" in 1617.[17] Within the pleasure quarters, yūjo (遊女, "[women] of pleasure") – a term used to refer to prostitutes as a whole – were classified and licensed, the upper echelons of which were referred to as oiran, a category with its own internal ranks, the highest of which being the tayū.
             Though women in the lower ranks of yūjo did not provide as much artistic entertainment as they did sexual, oiran, whilst still prostitutes, also included the traditional arts as a key aspect of their entertainment, their practice of which differed considerably from those of geisha. As oiran were considered to be low-ranking members of the nobility, the instruments they played and the songs they sang were often confined to those considered "respectable" enough for the upper classes. This typically meant that oiran sang long, traditional ballads (nagauta (lit. 'long songs')), and played instruments such as the kokyū (a type of bowed shamisen) and the koto (a 13-stringed harp).
             However, some yūjo also performed theatrical plays, dances and skits; one such person was Izumo no Okuni, whose theatrical performances on the dry riverbed of the Kamo River are considered to be the beginnings of kabuki theatre.[17] 
-    - title: "The Book of Lipsums"
-      nomenclature: 
+    - title: The Book of Lipsums
+      nomenclature: empty
       metadata:
         author: internet
         source: https://www.lipsum.com
@@ -167,7 +174,7 @@ binocles:
             Nunc sodales sollicitudin molestie. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In aliquet leo at lectus elementum feugiat. Morbi nec erat dapibus enim lobortis pellentesque et id neque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas eget ultrices tellus, vitae molestie nibh. Pellentesque euismod sollicitudin ligula, ut hendrerit felis vulputate nec. In sed lorem feugiat, laoreet purus vitae, eleifend sapien. Nullam urna tortor, rutrum nec faucibus et, lobortis a odio. Quisque congue dictum mi in cursus. Praesent eget quam arcu. Vivamus tincidunt non nisl in dignissim. Vestibulum eu nisl et leo malesuada venenatis. Aenean sagittis lectus non malesuada eleifend. Morbi elementum ac purus vitae molestie.
           globalcomment: |-
            
-    - title: "Weyward"
+    - title: Weyward
       nomenclature: 
       synopsis: |-
         2019: Under cover of darkness, Kate flees London for ramshackle Weyward Cottage, inherited from a great aunt she barely remembers. With its tumbling ivy and overgrown garden, the cottage is worlds away from the abusive partner who tormented Kate. But she begins to suspect that her great aunt had a secret. One that lurks in the bones of the cottage, hidden ever since the witch-hunts of the 17th century.

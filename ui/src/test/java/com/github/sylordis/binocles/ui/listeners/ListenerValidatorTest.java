@@ -17,11 +17,15 @@ import java.util.function.Function;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.github.sylordis.binocles.ui.listeners.ListenerValidator.FeedbackBehaviour;
 
 import javafx.beans.value.ObservableValue;
 
+@SuppressWarnings("unchecked")
+@ExtendWith(MockitoExtension.class)
 class ListenerValidatorTest {
 
 	/**

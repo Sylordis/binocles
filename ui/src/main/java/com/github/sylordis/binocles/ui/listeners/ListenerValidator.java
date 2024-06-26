@@ -8,6 +8,9 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.StringUtils;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,11 +18,12 @@ import javafx.beans.value.ObservableValue;
 /**
  * A ListenerValidator checks the input provided and validates it with a list of conditions that can
  * trigger error messages. The validator can be setup in one line by using the one-liner chained
- * methods.<br/><br/>
+ * methods.<br/>
+ * <br/>
  * 
  * One-liners: {@link #validIf(String, BiFunction)}, {@link #feed(Consumer)},
- * {@link #feed(Consumer, Function)}, {@link #feedDefault(String)}, {@link #onValid(Consumer)}, {@link #onInvalid(Consumer)},
- * {@link #onEither(Consumer)}, {@link #andThen(Runnable)}.
+ * {@link #feed(Consumer, Function)}, {@link #feedDefault(String)}, {@link #onValid(Consumer)},
+ * {@link #onInvalid(Consumer)}, {@link #onEither(Consumer)}, {@link #andThen(Runnable)}.
  * 
  * @author sylordis
  *
@@ -82,13 +86,15 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 		 * 
 		 * @see String#join(CharSequence, Iterable)
 		 */
-		public static final Function<List<String>, String> AGGREGATE_NEWLINE = s -> String.join("\n", s);
+		public static final Function<List<String>, String> AGGREGATE_NEWLINE = s -> s.stream()
+		        .filter(StringUtils::isNotBlank).collect(Collectors.joining("\n"));
 		/**
 		 * Joins all strings with a semi-column.
 		 * 
 		 * @see String#join(CharSequence, Iterable)
 		 */
-		public static final Function<List<String>, String> AGGREGATE_SEMICOLON = s -> String.join(";", s);
+		public static final Function<List<String>, String> AGGREGATE_SEMICOLON = s -> s.stream()
+		        .filter(StringUtils::isNotBlank).collect(Collectors.joining("; "));
 		/**
 		 * Default behaviour.
 		 * 
@@ -321,7 +327,7 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	/**
 	 * Adds a new condition to this validator. Multiple conditions can be added.
 	 * 
-	 * @param errorText      Error feedback to be displayed when invalid
+	 * @param errorText Error feedback to be displayed when invalid
 	 * @param validator Validity condition
 	 * @return itself for chain configuration
 	 * @see #addValiditionCondition(String, BiFunction)

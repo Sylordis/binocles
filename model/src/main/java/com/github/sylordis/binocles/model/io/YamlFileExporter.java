@@ -19,6 +19,7 @@ import com.github.sylordis.binocles.model.BinoclesConfiguration;
 import com.github.sylordis.binocles.model.BinoclesModel;
 import com.github.sylordis.binocles.model.review.Comment;
 import com.github.sylordis.binocles.model.review.CommentType;
+import com.github.sylordis.binocles.model.review.CommentTypeField;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.model.text.Chapter;
@@ -174,7 +175,15 @@ public class YamlFileExporter implements FileExporter<BinoclesModel> {
 			typeMap.put("name", type.getName());
 			typeMap.put("description", type.getDescription());
 			// Fields
-			typeMap.put("fields", type.getFields());
+			Map<String, String> fieldsMap = new LinkedHashMap<>();
+			for (Map.Entry<String, CommentTypeField> entry : type.getFields().entrySet())
+				fieldsMap.put(entry.getKey(), entry.getValue().getDescription());
+			typeMap.put("fields", fieldsMap);
+			List<CommentTypeField> largeFields = type.getFields().values().stream().filter(ct -> ct.getIsLongText())
+			        .toList();
+			if (!largeFields.isEmpty()) {
+				typeMap.put("large", largeFields.stream().map(f -> f.getName()).toList());
+			}
 			// Styles
 			typeMap.put("styles", type.getStyles());
 			root.add(typeMap);

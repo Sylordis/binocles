@@ -1,5 +1,8 @@
 package com.github.sylordis.binocles.ui;
 
+import java.io.File;
+import java.util.List;
+
 import com.github.sylordis.binocles.ui.settings.BinoclesUIConstants;
 
 import javafx.application.Application;
@@ -15,7 +18,8 @@ public class BinoclesApp extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		Parent root = FXMLLoader.load(this.getClass().getResource("scene.fxml"));
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("scene.fxml"));
+		Parent root = fxmlLoader.load();
 
 		Scene scene = new Scene(root);
 
@@ -24,12 +28,12 @@ public class BinoclesApp extends Application {
 		primaryStage.setScene(scene);
 
 		// Parameters processing, take last argument if exist and load it
-//		Parameters params = getParameters();		
-//		List<String> parameters = params.getRaw();
-//		if (!parameters.isEmpty()) {
-//			String file = parameters.getLast();
-//			((BinoclesController) loader.getController()).openFile(new File(file));
-//		}
+		Parameters params = getParameters();
+		List<String> parameters = params.getRaw();
+		if (!parameters.isEmpty()) {
+			String file = parameters.getLast();
+			((BinoclesController) fxmlLoader.getController()).openFile(new File(file));
+		}
 
 		primaryStage.show();
 	}

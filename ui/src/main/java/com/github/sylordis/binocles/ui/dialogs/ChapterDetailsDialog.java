@@ -21,7 +21,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 
 /**
  * Dialog to create a new or edit a chapter.
@@ -43,10 +42,6 @@ public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterProperties
 	 * Text area for the chapter content..
 	 */
 	private TextArea fieldChapterContent;
-	/**
-	 * User feedback.
-	 */
-	private Text formFeedback;
 	/**
 	 * Choice of book, by default set on current book.
 	 */
@@ -105,12 +100,8 @@ public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterProperties
 		// Content fields
 		Label labelChapterContent = new Label("Content of the chapter");
 		fieldChapterContent = new TextArea();
-		// Other fields
-		formFeedback = new Text("");
-		formFeedback.getStyleClass().add("text-danger");
 		// Set dialog content
-		getGridPane().addRow(0, formFeedback);
-		GridPane.setColumnSpan(formFeedback, GridPane.REMAINING);
+		addFormFeedback();
 		getGridPane().addRow(1, labelBookChoice, fieldBookParent);
 		getGridPane().addRow(2, labelChapterName, fieldChapterName);
 		getGridPane().addRow(3, labelChapterContent);
@@ -124,16 +115,16 @@ public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterProperties
 			        this.book = fieldBookParent.getSelectionModel().getSelectedItem();
 			        setBookParentValidity(b);
 			        logger.debug("Book parent changed, new={}", fieldBookParent.getSelectionModel().getSelectedItem());
-		        }).andThen(this::postActions);
+		        }).andThen(this::updateFormStatus);
 		ListenerValidator<String> chapterNameUIValidator = new ListenerValidator<String>()
 		        .validIf("Chapter name cannot be blank or empty.", (o, n) -> !n.isBlank())
 		        .validIf("Chapter with the same name already exists in the book (case insensitive).",
 		                (o, n) -> this.book == null || !book.hasChapter(n))
-		        .feed(this::setChapterNameFeedback).onEither(this::setChapterNameValid).andThen(this::postActions);
+		        .feed(this::setChapterNameFeedback).onEither(this::setChapterNameValid).andThen(this::updateFormStatus);
 		ListenerValidator<String> chapterContentUIValidator = new ListenerValidator<String>()
 		        .validIf("Chapter content cannot be blank or empty.", (o, n) -> !n.isBlank())
 		        .feed(this::setChapterContentFeedback).onEither(this::setChapterContentValid)
-		        .andThen(this::postActions);
+		        .andThen(this::updateFormStatus);
 		fieldBookParent.selectionModelProperty().addListener((opt, o, n) -> logger
 		        .debug("Book parent changed, old={}, new={}", n.getSelectedItem(), o.getSelectedItem()));
 		fieldBookParent.valueProperty().addListener(bookParentUIValidator);
@@ -161,14 +152,6 @@ public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterProperties
 		chapterContentUIValidator.changed(null, null, fieldChapterContent.getText());
 		// Focus on book name field
 		Platform.runLater(() -> fieldChapterName.requestFocus());
-	}
-
-	/**
-	 * Action to run post validation step.
-	 */
-	public void postActions() {
-		setConfirmButtonDisabledOnValidity();
-		combineAndProcessFeedback(formFeedback::setText);
 	}
 
 	@Override

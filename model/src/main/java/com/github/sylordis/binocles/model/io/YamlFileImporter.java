@@ -123,7 +123,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			String generalComment = YAMLUtils.strValue("globalcomment", data);
 			book.setSynopsis(synopsis);
 			book.setGeneralComment(generalComment);
-			logger.debug("Created book '{}'", book.getTitle());
+			logger.info("Created book '{}'", book.getTitle());
 			Map<String, String> metadata = new HashMap<>();
 			// Nomenclature, store in metadata for later
 			if (data.containsKey("nomenclature") && YAMLUtils.strValue("nomenclature", data) != null) {
@@ -184,9 +184,9 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			if (YAMLUtils.checkChildType(data, "comments", YAMLType.LIST)) {
 				List<Comment> comments = loadCommentsFromYAML(YAMLUtils.list("comments", data), book);
 				chapter.setComments(comments);
-				logger.info("{} comments loaded", comments.size());
+				logger.debug("{} comments loaded", comments.size());
 			}
-			logger.debug("Imported new chapter '{}'", chapter.getTitle());
+			logger.info("Imported chapter '{}'", chapter.getTitle());
 			result.add(chapter);
 		}
 		return result;
@@ -242,18 +242,26 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			CommentType type = new CommentType(name, description);
 			// Set fields
 			if (data.containsKey("fields")) {
+				logger.debug("Loading fields");
 				Map<String, String> fields = MapUtils.convertMap(YAMLUtils.get("fields", data), Map.Entry::getKey,
 				        e -> convertValueType(e));
+				logger.debug("Fields found: {}", fields);
 				type.setFields(fields);
+			}
+			if (data.containsKey("large")) {
+				logger.debug("Loading large fields");
+				YAMLUtils.list("large", data).forEach(l -> type.getFields().get(l.toString()).setIsLongText(true));
 			}
 			// Set styles
 			if (data.containsKey("styles")) {
+				logger.debug("Loading style");
 				Map<String, String> styles = MapUtils.convertMap(YAMLUtils.get("styles", data), Map.Entry::getKey,
 				        e -> convertValueType(e));
+				logger.debug("Style found: {}", styles);
 				type.editStyles(styles);
 			}
 			result.add(type);
-			logger.debug("Imported comment type '{}'", type.getName());
+			logger.debug("Imported comment type '{}' with fields {}", type.getName(), type.getFields().keySet());
 		}
 		return result;
 	}
@@ -270,7 +278,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			Map<String, Object> data = YAMLUtils.toNode(o);
 			String name = YAMLUtils.strValue("name", data);
 			Nomenclature nom = new Nomenclature(name);
-			logger.debug("Created nomenclature '{}'", nom.getName());
+			logger.info("Created nomenclature '{}'", nom.getName());
 			if (YAMLUtils.checkChildType(data, "types", YAMLType.LIST)) {
 				List<CommentType> types = loadCommentTypesFromYAML(YAMLUtils.list("types", data));
 				nom.setTypes(types);

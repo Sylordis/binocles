@@ -8,8 +8,6 @@ import javafx.application.Platform;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 
 /**
  * Dialog to create a new or edit a nomenclature.
@@ -23,10 +21,6 @@ public class NomenclatureDetailsDialog extends AbstractAnswerDialog<String> {
 	 * Text field for the book name.
 	 */
 	private TextField fieldNomenclatureTitle;
-	/**
-	 * User feedback.
-	 */
-	private Text formFeedback;
 
 	/**
 	 * Creates a new book creation dialog.
@@ -42,21 +36,17 @@ public class NomenclatureDetailsDialog extends AbstractAnswerDialog<String> {
 	@Override
 	public void build() {
 		// Title fields
-		Label labelTitle = new Label("Title:");
+		Label labelTitle = new Label("Title");
 		fieldNomenclatureTitle = new TextField();
-		// Other fields
-		formFeedback = new Text("");
-		formFeedback.getStyleClass().add("text-danger");
 		// Set dialog content
-		getGridPane().addRow(0, formFeedback);
-		GridPane.setColumnSpan(formFeedback, GridPane.REMAINING);
+		addFormFeedback();
 		getGridPane().addRow(1, labelTitle, fieldNomenclatureTitle);
 		// Set up listeners
 		ListenerValidator<String> nomenclatureNameUIValidator = new ListenerValidator<String>()
 		        .validIf("Nomenclature name can't be blank or empty.", (o, n) -> !n.isBlank())
 		        .validIf("Nomenclature with the same name already exists (case insensitive)",
 		                (o, n) -> !getModel().hasNomenclature(n))
-		        .feed(formFeedback::setText).onEither(b -> setConfirmButtonDisable(!b))
+		        .feed(this::setFeedback).onEither(b -> setConfirmButtonDisable(!b))
 		        .andThen(this::sizeToScene);
 		fieldNomenclatureTitle.textProperty().addListener(nomenclatureNameUIValidator);
 		// Set up components status

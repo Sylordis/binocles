@@ -1,5 +1,7 @@
 package com.github.sylordis.binocles.model.review;
 
+import java.util.Objects;
+
 /**
  * Meta fields for comment types.
  */
@@ -19,12 +21,38 @@ public class CommentTypeField {
 	private Boolean isLongText;
 
 	/**
+	 * Creates a short text comment type field.
+	 * 
 	 * @param name
 	 * @param description
 	 */
 	public CommentTypeField(String name, String description) {
+		this(name, description, false);
+	}
+
+	/**
+	 * Creates a comment type field.
+	 * 
+	 * @param name
+	 * @param description
+	 */
+	public CommentTypeField(String name, String description, boolean isLongText) {
 		this.name = name;
 		this.description = description;
+		this.isLongText = isLongText;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CommentTypeField other = (CommentTypeField) obj;
+		return Objects.equals(description, other.description) && Objects.equals(isLongText, other.isLongText)
+		        && Objects.equals(name, other.name);
 	}
 
 	/**
@@ -69,7 +97,13 @@ public class CommentTypeField {
 	 * 
 	 * @return
 	 */
-	public boolean isLongText() {
+	public boolean getIsLongText() {
 		return isLongText;
 	}
+
+	@Override
+	public String toString() {
+		return "CommentTypeField [name=" + name + ", description=" + description + ", isLongText=" + isLongText + "]";
+	}
+
 }
