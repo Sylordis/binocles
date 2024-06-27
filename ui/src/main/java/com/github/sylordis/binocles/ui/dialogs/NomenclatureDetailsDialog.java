@@ -2,7 +2,7 @@ package com.github.sylordis.binocles.ui.dialogs;
 
 import com.github.sylordis.binocles.model.BinoclesModel;
 import com.github.sylordis.binocles.ui.AppIcons;
-import com.github.sylordis.binocles.ui.listeners.ListenerValidator;
+import com.github.sylordis.binocles.ui.functional.ListenerValidator;
 
 import javafx.application.Platform;
 import javafx.scene.control.ButtonType;

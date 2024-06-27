@@ -17,6 +17,24 @@ GridPane.form {
 	-fx-pref-height: 16;
 	-fx-pref-width: 16;
 }
+.binocles-pane {}
+.binocles-pane .main-title {
+	-fx-font-size: 16px;
+	-fx-padding-bottom: 0;
+	-fx-padding-left: 5px;
+	-fx-padding-right: 5px;
+	-fx-padding-top: 5px;
+}
+.binocles-pane .sub-title {
+	-fx-font-size: 12px;
+	-fx-padding-bottom: 10px;
+	-fx-padding-left: 5px;
+	-fx-padding-right: 5px;
+	-fx-padding-top: 5px;
+}
+.chapter-pane .splitpane {
+	-fx-border: none;
+}
 .form-dialog {
 	-fx-padding: 10px;
 	-fx-hgap: 10px;

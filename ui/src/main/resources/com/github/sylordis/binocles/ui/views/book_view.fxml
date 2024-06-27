@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<fx:root stylesheets="@../styles/main.css" type="AnchorPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+	<styleClass>
+      <String fx:value="binocles-pane" />
+      <String fx:value="book-pane" />
+  </styleClass>
+   <children>
+        <VBox fx:id="bookZoneVBox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+              <Text fx:id="bookTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="main-title" text="Book title">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Text>
+              <ScrollPane fx:id="bookZoneScroll" focusTraversable="false" hbarPolicy="NEVER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <content>
+                  <GridPane fx:id="bookGrid" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Synopsis" GridPane.valignment="TOP" />
+                        <Label text="Description" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                        <Label text="Metadata" GridPane.rowIndex="2" GridPane.valignment="BOTTOM" />
+                        <TableView fx:id="bookMetadataTable" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" GridPane.columnSpan="2147483647" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="Field" />
+                            <TableColumn prefWidth="75.0" text="Value" />
+                          </columns>
+                        </TableView>
+                        <TextFlow fx:id="bookSynopsisField" minWidth="200.0" prefHeight="30.0" prefWidth="250.0" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                        <TextFlow fx:id="bookDescriptionField" minWidth="200.0" prefHeight="200.0" prefWidth="200.0" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                     </children>
+                  </GridPane>
+               </content>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+              </ScrollPane>
+         </children>
+      </VBox>
+   </children>
+</fx:root>

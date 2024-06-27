@@ -1,4 +1,4 @@
-package com.github.sylordis.binocles.ui.listeners;
+package com.github.sylordis.binocles.ui.functional;
 
 import java.util.ArrayList;
 import java.util.Collection;

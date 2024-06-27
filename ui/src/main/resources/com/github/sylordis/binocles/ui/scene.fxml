@@ -32,7 +32,6 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
@@ -41,10 +40,10 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.control.TreeView?>
@@ -54,11 +53,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <VBox prefHeight="600.0" prefWidth="900.0" stylesheets="@styles/main.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.sylordis.binocles.ui.BinoclesController">
   <children>
@@ -325,12 +322,25 @@
                   <Tooltip text="Create a new comment type" />
                </tooltip>
             </Button>
+            <Separator maxHeight="16.0" orientation="VERTICAL" prefHeight="16.0" />
+            <Button fx:id="toolbarCreateComment" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" onAction="#createCommentAction" text="New Comment">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                     <image>
+                        <Image url="@img/comment.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Create a new comment" />
+               </tooltip>
+            </Button>
          </children>
          <VBox.margin>
             <Insets left="5.0" right="5.0" />
          </VBox.margin>
       </HBox>
-    <SplitPane dividerPositions="0.2, 0.8" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <SplitPane dividerPositions="0.2" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <items>
             <SplitPane dividerPositions="0.3" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
               <items>
@@ -384,67 +394,7 @@
                 </TitledPane>
               </items>
             </SplitPane>
-            <VBox fx:id="textZoneVBox">
-               <opaqueInsets>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </opaqueInsets>
-               <children>
-                  <HBox prefHeight="35.0" prefWidth="200.0" styleClass="button-toolbar">
-                     <children>
-                        <Text id="chapter-title" fx:id="textZoneBookTitle" strokeType="OUTSIDE" strokeWidth="0.0">
-                           <font>
-                              <Font size="20.0" />
-                           </font>
-                        </Text>
-                        <Region prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
-                        <Button fx:id="toolbarTextCreateComment" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" onAction="#createCommentAction" styleClass="buttonicon" text="New Comment" visible="false">
-                           <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-                                 <image>
-                                    <Image url="@img/comment.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                           <tooltip>
-                              <Tooltip text="Add a new comment" />
-                           </tooltip>
-                        </Button>
-                     </children>
-                  </HBox>
-                  <Text id="chapter-title" fx:id="textZoneChapterTitle" strokeType="OUTSIDE" strokeWidth="0.0">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-                  <Text fx:id="textZoneMessages" strokeType="OUTSIDE" strokeWidth="0.0" visible="false">
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                     <styleClass>
-                        <String fx:value="text-muted" />
-                        <String fx:value="text-note" />
-                     </styleClass></Text>
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-               </padding>
-            </VBox>
-            <VBox fx:id="commentZoneVBox">
-               <children>
-                  <Text fx:id="commentZoneTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Comments" visible="false">
-                     <font>
-                        <Font size="16.0" />
-                     </font></Text>
-                  <ScrollPane focusTraversable="false" prefHeight="494.0" prefWidth="221.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                     <content>
-                        <VBox fx:id="commentZoneVBoxInner" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                     </content>
-                  </ScrollPane>
-               </children>
-               <padding>
-                  <Insets bottom="5.0" left="5.0" right="5.0" />
-               </padding>
-            </VBox>
+            <TabPane fx:id="mainTabPane" tabClosingPolicy="ALL_TABS" />
       </items>
     </SplitPane>
     <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">

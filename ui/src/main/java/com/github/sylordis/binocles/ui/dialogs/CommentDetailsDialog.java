@@ -16,8 +16,8 @@ import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.ui.AppIcons;
 import com.github.sylordis.binocles.ui.components.CustomListCell;
+import com.github.sylordis.binocles.ui.functional.ListenerValidator;
 import com.github.sylordis.binocles.ui.javafxutils.StyleUtils;
-import com.github.sylordis.binocles.ui.listeners.ListenerValidator;
 
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;

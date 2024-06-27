@@ -27,6 +27,8 @@ public class BinoclesApp extends Application {
 		primaryStage.setTitle(BinoclesUIConstants.SOFTWARE_NAME);
 		primaryStage.setScene(scene);
 
+		primaryStage.show();
+
 		// Parameters processing, take last argument if exist and load it
 		Parameters params = getParameters();
 		List<String> parameters = params.getRaw();
@@ -35,7 +37,6 @@ public class BinoclesApp extends Application {
 			((BinoclesController) fxmlLoader.getController()).openFile(new File(file));
 		}
 
-		primaryStage.show();
 	}
 
 	public static void main(String[] args) {

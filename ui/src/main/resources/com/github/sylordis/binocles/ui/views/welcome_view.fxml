@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<fx:root stylesheets="@../styles/main.css" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <Text fx:id="chapterTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!" wrappingWidth="600.13671875" BorderPane.alignment="CENTER">
+         <styleClass>
+            <String fx:value="chapter" />
+            <String fx:value="title" />
+         </styleClass>
+         <BorderPane.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </BorderPane.margin>
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Text>
+   </top>
+</fx:root>

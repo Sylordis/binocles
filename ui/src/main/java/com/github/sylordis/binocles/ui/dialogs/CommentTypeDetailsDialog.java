@@ -8,7 +8,7 @@ import com.github.sylordis.binocles.ui.AppIcons;
 import com.github.sylordis.binocles.ui.components.CustomListCell;
 import com.github.sylordis.binocles.ui.components.StyleEditor;
 import com.github.sylordis.binocles.ui.doa.CommentTypePropertiesAnswer;
-import com.github.sylordis.binocles.ui.listeners.ListenerValidator;
+import com.github.sylordis.binocles.ui.functional.ListenerValidator;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;

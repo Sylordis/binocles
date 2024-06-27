@@ -11,7 +11,7 @@ import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.ui.AppIcons;
 import com.github.sylordis.binocles.ui.components.CustomListCell;
 import com.github.sylordis.binocles.ui.doa.ChapterPropertiesAnswer;
-import com.github.sylordis.binocles.ui.listeners.ListenerValidator;
+import com.github.sylordis.binocles.ui.functional.ListenerValidator;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;

@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.parser.ParserException;
 
 import com.github.sylordis.binocles.model.BinoclesModel;
 import com.github.sylordis.binocles.model.review.Comment;
@@ -60,47 +61,51 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 	public BinoclesModel load(File file) throws ImportException, IOException {
 		logger.info("Loading YAML file {}", file);
 		BinoclesModel model = new BinoclesModel();
-		InputStream inputStream = new FileInputStream(file);
-		Yaml yaml = new Yaml();
-		Map<String, Object> data = yaml.load(inputStream);
-		if (data.containsKey("binocles")) {
-			// Get nomenclatures
-			Map<String, Object> root = YAMLUtils.get("binocles", data);
-			if (YAMLUtils.checkChildType(root, "nomenclatures", YAMLType.LIST)) {
-				List<Nomenclature> nomenclatures = loadNomenclaturesFromYAML(YAMLUtils.list("nomenclatures", root));
-				logger.info("Imported {} nomenclatures", nomenclatures.size());
-				try {
-					model.setNomenclaturesUnique(nomenclatures);
-				} catch (UniqueIDException e) {
-					// TODO To not interrupt the import but resolve import conflicts at the end
-					throw new ImportException(e);
+		try {
+			InputStream inputStream = new FileInputStream(file);
+			Yaml yaml = new Yaml();
+			Map<String, Object> data = yaml.load(inputStream);
+			if (data.containsKey("binocles")) {
+				// Get nomenclatures
+				Map<String, Object> root = YAMLUtils.get("binocles", data);
+				if (YAMLUtils.checkChildType(root, "nomenclatures", YAMLType.LIST)) {
+					List<Nomenclature> nomenclatures = loadNomenclaturesFromYAML(YAMLUtils.list("nomenclatures", root));
+					logger.info("Imported {} nomenclatures", nomenclatures.size());
+					try {
+						model.setNomenclaturesUnique(nomenclatures);
+					} catch (UniqueIDException e) {
+						// TODO To not interrupt the import but resolve import conflicts at the end
+						throw new ImportException(e);
+					}
 				}
-			}
-			// Get books
-			if (YAMLUtils.checkChildType(root, "library", YAMLType.LIST)) {
-				List<Book> books = loadBooksFromYAML(YAMLUtils.list("library", root));
-				logger.info("Imported {} books", books.size());
-				model.setBooks(books);
-			}
-			// TODO check comments consistency:
-			// - range compared to chapter range
-			// - fields existence & values
-			// Link nomenclatures to books
-			logger.info("Linking nomenclatures to books");
-			for (Book book : model.getBooks()) {
-				if (book.getMetadata().containsKey(NOMENCLATURE_BINOCLES_KEY)) {
-					String id = book.getMetadata().get(NOMENCLATURE_BINOCLES_KEY);
-					book.setNomenclature(model.getNomenclature(id));
-					logger.info("'{}' linked with '{}'", book.getTitle(), book.getNomenclature().getName());
-					book.getMetadata().remove(NOMENCLATURE_BINOCLES_KEY);
-				} else {
-					book.setNomenclature(model.getDefaultNomenclature());
+				// Get books
+				if (YAMLUtils.checkChildType(root, "library", YAMLType.LIST)) {
+					List<Book> books = loadBooksFromYAML(YAMLUtils.list("library", root));
+					logger.info("Imported {} books", books.size());
+					model.setBooks(books);
 				}
+				// TODO check comments consistency:
+				// - range compared to chapter range
+				// - fields existence & values
+				// Link nomenclatures to books
+				logger.info("Linking nomenclatures to books");
+				for (Book book : model.getBooks()) {
+					if (book.getMetadata().containsKey(NOMENCLATURE_BINOCLES_KEY)) {
+						String id = book.getMetadata().get(NOMENCLATURE_BINOCLES_KEY);
+						book.setNomenclature(model.getNomenclature(id));
+						logger.info("'{}' linked with '{}'", book.getTitle(), book.getNomenclature().getName());
+						book.getMetadata().remove(NOMENCLATURE_BINOCLES_KEY);
+					} else {
+						book.setNomenclature(model.getDefaultNomenclature());
+					}
+				}
+			} else {
+				String message = "YAML import error: no proper root 'binocles' can be found";
+				logger.error(message);
+				throw new ImportException(message);
 			}
-		} else {
-			String message = "YAML import error: no proper root 'binocles' can be found";
-			logger.error(message);
-			throw new ImportException(message);
+		} catch (ParserException e) {
+			throw new ImportException(e);
 		}
 		return model;
 	}
@@ -147,6 +152,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 
 	/**
 	 * Converts the value of an entry to a string.
+	 * 
 	 * @param e
 	 * @return
 	 */

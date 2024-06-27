@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<fx:root type="AnchorPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+	<styleClass>
+      <String fx:value="binocles-pane" />
+      <String fx:value="chapter-pane" />
+  </styleClass>
+   <children>
+      <SplitPane dividerPositions="0.8" stylesheets="@../styles/main.css"  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+           <items>
+              <VBox fx:id="chapterZoneBox"  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" prefHeight="17.0" prefWidth="601.0">
+                 <children>
+                    <Text fx:id="chapterTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="main-title" text="Chapter title" />
+                    <Text fx:id="bookTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="sub-title" text="Book title"/>
+                    <AnchorPane fx:id="chapterContentZone" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                 </children>
+                 <padding>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                 </padding>
+              </VBox>
+              <ScrollPane fx:id="chapterCommentBoxScroll" minWidth="200.0" prefWidth="200.0"  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                 <content>
+                    <VBox fx:id="chapterCommentBox"  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
+                 </content>
+              </ScrollPane>
+           </items>
+      </SplitPane>
+   </children>
+</fx:root>

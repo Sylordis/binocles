@@ -10,8 +10,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.message.Message;
 import org.apache.logging.log4j.message.StringFormattedMessage;
-import org.fxmisc.flowless.VirtualizedScrollPane;
-import org.fxmisc.richtext.StyleClassedTextArea;
 
 import com.github.sylordis.binocles.model.BinoclesModel;
 import com.github.sylordis.binocles.model.decorators.BookDecorator;
@@ -19,7 +17,6 @@ import com.github.sylordis.binocles.model.decorators.ChapterDecorator;
 import com.github.sylordis.binocles.model.decorators.CommentTypeDecorator;
 import com.github.sylordis.binocles.model.decorators.NomenclatureDecorator;
 import com.github.sylordis.binocles.model.io.BinoclesIOFactory;
-import com.github.sylordis.binocles.model.review.Comment;
 import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.DefaultNomenclature;
 import com.github.sylordis.binocles.model.review.Nomenclature;
@@ -29,22 +26,24 @@ import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.model.text.ReviewableContent;
 import com.github.sylordis.binocles.ui.alerts.TextElementDeletionConfirmationAlert;
 import com.github.sylordis.binocles.ui.components.BookTreeRoot;
-import com.github.sylordis.binocles.ui.components.CommentBox;
-import com.github.sylordis.binocles.ui.components.CommentBoxComparator;
 import com.github.sylordis.binocles.ui.components.CustomTreeCell;
 import com.github.sylordis.binocles.ui.components.NomenclatureTreeRoot;
 import com.github.sylordis.binocles.ui.dialogs.AboutDialog;
 import com.github.sylordis.binocles.ui.dialogs.BookDetailsDialog;
 import com.github.sylordis.binocles.ui.dialogs.ChapterDetailsDialog;
-import com.github.sylordis.binocles.ui.dialogs.CommentDetailsDialog;
 import com.github.sylordis.binocles.ui.dialogs.CommentTypeDetailsDialog;
 import com.github.sylordis.binocles.ui.dialogs.NomenclatureDetailsDialog;
 import com.github.sylordis.binocles.ui.doa.ChapterPropertiesAnswer;
 import com.github.sylordis.binocles.ui.doa.CommentTypePropertiesAnswer;
+import com.github.sylordis.binocles.ui.functional.TreeDoubleClickEventHandler;
 import com.github.sylordis.binocles.ui.javafxutils.Browser;
 import com.github.sylordis.binocles.ui.javafxutils.TreeViewUtils;
 import com.github.sylordis.binocles.ui.settings.BinoclesUIConfiguration;
 import com.github.sylordis.binocles.ui.settings.BinoclesUIConstants;
+import com.github.sylordis.binocles.ui.views.BinoclesTabPane;
+import com.github.sylordis.binocles.ui.views.BookView;
+import com.github.sylordis.binocles.ui.views.ChapterView;
+import com.github.sylordis.binocles.ui.views.WelcomeView;
 import com.github.sylordis.binocles.utils.exceptions.ExportException;
 import com.github.sylordis.binocles.utils.exceptions.ImportException;
 import com.github.sylordis.binocles.utils.exceptions.UniqueIDException;
@@ -52,7 +51,6 @@ import com.github.sylordis.binocles.utils.io.FileExporter;
 import com.github.sylordis.binocles.utils.io.FileImporter;
 
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -61,12 +59,18 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabDragPolicy;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+import javafx.scene.image.Image;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -151,39 +155,18 @@ public class BinoclesController implements Initializable {
 	private Button toolbarCreateNomenclature;
 	@FXML
 	private Button toolbarCreateCommentType;
+	@FXML
+	private Button toolbarCreateComment;
 
 	@FXML
-	private Button toolbarTextCreateComment;
+	private TabPane mainTabPane;
 
-	@FXML
-	private VBox textZoneVBox;
-	@FXML
-	private Text textZoneBookTitle;
-	@FXML
-	private Text textZoneChapterTitle;
-	@FXML
-	private Text textZoneMessages;
-	/**
-	 * Text zone for chapter content.
-	 */
-	private StyleClassedTextArea textZoneChapterContent;
-	/**
-	 * Scroll pane for chapter content.
-	 */
-	private VirtualizedScrollPane<StyleClassedTextArea> textZoneChapterContentScrollPane;
+	private BinoclesTabPane tempTab = null;
 
-	@FXML
-	private VBox commentZoneVBox;
-	@FXML
-	private Text commentZoneTitle;
-	@FXML
-	private VBox commentZoneVBoxInner;
 	/**
 	 * Class logger.
 	 */
 	private final Logger logger = LogManager.getLogger();
-
-	private CommentBoxComparator commentBoxComparator = new CommentBoxComparator();
 
 	/**
 	 * Current model managed by the controller.
@@ -219,28 +202,17 @@ public class BinoclesController implements Initializable {
 		});
 		rebuildNomenclaturesTree();
 		// Set trees change listener
-		booksTree.getSelectionModel().selectedItemProperty().addListener((s, o, n) -> setDisplayZoneContent(n));
+		booksTree.setOnMouseClicked(new TreeDoubleClickEventHandler(booksTree, this::openTabItemAction));
 		booksTree.getSelectionModel().selectedItemProperty()
 		        .addListener((s, o, n) -> setTextElementsContextMenuStatus());
+		nomenclaturesTree
+		        .setOnMouseClicked(new TreeDoubleClickEventHandler(nomenclaturesTree, this::openTabItemAction));
 		nomenclaturesTree.getSelectionModel().selectedItemProperty()
 		        .addListener((s, o, n) -> setReviewElementsContextMenuStatus());
-		// Text zone messages
-		textZoneMessages.setVisible(true);
-		textZoneMessages.setText("Please select/create a chapter in the review tree.");
-		// Text zone chapter content
-		textZoneChapterContent = new StyleClassedTextArea();
-		textZoneChapterContent.setEditable(false);
-		textZoneChapterContent.setStyle(null);
-		textZoneChapterContent.setWrapText(true);
-		textZoneChapterContent.setVisible(false);
-		textZoneChapterContent.replaceText("");
-		textZoneChapterContent.selectionProperty()
-		        .addListener((s, o, n) -> toolbarTextCreateComment.setDisable(n == null || n.getLength() == 0));
-		// Text zone chapter content scroll pane
-		textZoneChapterContentScrollPane = new VirtualizedScrollPane<>(textZoneChapterContent);
-		textZoneVBox.getChildren().add(textZoneChapterContentScrollPane);
-		textZoneChapterContentScrollPane.setPickOnBounds(true);
-		textZoneChapterContent.prefHeightProperty().bind(textZoneVBox.heightProperty());
+		// Other states configuration
+		mainTabPane.setTabDragPolicy(TabDragPolicy.REORDER);
+		// Add welcome tab if necessary
+		mainTabPane.getTabs().add(new Tab("Welcome", new WelcomeView()));
 		logger.trace("Controller initialisation finished");
 	}
 
@@ -301,7 +273,6 @@ public class BinoclesController implements Initializable {
 			        bookParent);
 			currentBookParent.getChildren().add(chapterTreeItem);
 			currentBookParent.setExpanded(true);
-			booksTree.getSelectionModel().select(chapterTreeItem);
 		}
 		setButtonsStatus();
 	}
@@ -357,21 +328,23 @@ public class BinoclesController implements Initializable {
 
 	@FXML
 	public void createCommentAction(ActionEvent event) {
-		Chapter chapter = (Chapter) booksTree.getSelectionModel().getSelectedItem().getValue();
-		Book book = (Book) booksTree.getSelectionModel().getSelectedItem().getParent().getValue();
-		int start = textZoneChapterContent.getSelection().getStart();
-		int end = textZoneChapterContent.getSelection().getEnd();
-		CommentDetailsDialog dialog = new CommentDetailsDialog(model, book, chapter, start, end);
-		Optional<Comment> answer = dialog.display();
-		if (answer.isPresent()) {
-			chapter.addComment(answer.get());
-			logger.info("New comment on {}: {}", chapter, answer.get());
-			CommentBox cbox = new CommentBox(answer.get());
-			commentZoneVBoxInner.getChildren().add(cbox);
-			FXCollections.sort(commentZoneVBoxInner.getChildren(), commentBoxComparator);
-			rebuildBooksTree();
-			logger.debug("Comments: {}", commentZoneVBoxInner.getChildren().size());
-		}
+//		TreeItem<ReviewableContent> item = booksTree.getSelectionModel().getSelectedItem();
+//		Chapter chapter = (Chapter) item.getValue();
+//		Book book = (Book) booksTree.getSelectionModel().getSelectedItem().getParent().getValue();
+//		int start = textZoneChapterContent.getSelection().getStart();
+//		int end = textZoneChapterContent.getSelection().getEnd();
+//		CommentDetailsDialog dialog = new CommentDetailsDialog(model, book, chapter, start, end);
+//		Optional<Comment> answer = dialog.display();
+//		if (answer.isPresent()) {
+//			chapter.addComment(answer.get());
+//			logger.info("New comment on {}: {}", chapter, answer.get());
+//			CommentBox cbox = new CommentBox(answer.get());
+//			commentZoneVBoxInner.getChildren().add(cbox);
+//			item.setValue(chapter);
+////			booksTree.refresh();
+//			FXCollections.sort(commentZoneVBoxInner.getChildren(), commentBoxComparator);
+//			logger.debug("Comments: {}", commentZoneVBoxInner.getChildren().size());
+//		}
 	}
 
 	/**
@@ -490,6 +463,55 @@ public class BinoclesController implements Initializable {
 		new AboutDialog().display();
 	}
 
+	/**
+	 * Opens a new tab from the books tree.
+	 * 
+	 * @param event
+	 */
+	public void openTabItemAction(TreeItem<?> item) {
+		// Check if tab with same item already open
+		Optional<Tab> needle = mainTabPane.getTabs().stream()
+		        .filter(t -> ((BinoclesTabPane) t.getContent()).getItem() != null
+		                && ((BinoclesTabPane) t.getContent()).getItem().equals(item.getValue()))
+		        .findFirst();
+		if (needle.isPresent()) {
+			logger.debug("Double click: present");
+			// If so just switch to it
+			mainTabPane.getSelectionModel().select(needle.get());
+		} else {
+			createNewTab(item.getValue());
+		}
+	}
+
+	/**
+	 * Creates a new tab in the tabbed pane.
+	 * 
+	 * @param object
+	 */
+	private void createNewTab(Object object) {
+		if (object instanceof ReviewableContent) {
+			Node node = null;
+			ReviewableContent content = (ReviewableContent) object;
+			if (object instanceof Chapter) {
+				node = new ChapterView((Chapter) content);
+			} else if (object instanceof Book) {
+				node = new BookView((Book) content);
+			}
+			if (node != null) {
+				Tab tab = new Tab(content.getTitle(), node);
+				Image img = AppIcons.getImageForType(object.getClass());
+				if (img != null)
+					tab.setGraphic(AppIcons.createImageViewFromConfig(img));
+				mainTabPane.getTabs().add(tab);
+				mainTabPane.getSelectionModel().select(tab);
+			}
+		} else if (object instanceof NomenclatureItem) {
+			// TODO
+		}
+//			else
+//				showNotImplementedAlert();
+	}
+
 	@FXML
 	public void openDocumentationAction(ActionEvent event) {
 		new Browser().open(BinoclesUIConstants.DOCUMENTATION_LINK);
@@ -544,7 +566,7 @@ public class BinoclesController implements Initializable {
 			showErrorAlert("Could not read the selected file.");
 		} catch (ImportException e) {
 			logger.atError().withThrowable(e).log("Could not import the selected file.");
-			showErrorAlert("Could not import the selected file.");
+			showLongErrorAlert("Error while opening file", "Could not import the selected file.", e.getMessage());
 		}
 	}
 
@@ -574,78 +596,6 @@ public class BinoclesController implements Initializable {
 	public void setTextElementsContextMenuStatus() {
 		booksTreeMenuDelete.setDisable(booksTree.getSelectionModel().isEmpty());
 		booksTreeMenuEdit.setDisable(booksTree.getSelectionModel().isEmpty());
-	}
-
-	/**
-	 * 
-	 */
-	private void resetDisplayZoneContent() {
-		textZoneBookTitle.setText("");
-		textZoneChapterTitle.setText("");
-		textZoneMessages.setVisible(true);
-		textZoneMessages.setText("Please select an item the review tree.");
-		textZoneChapterContent.setVisible(false);
-		commentZoneVBox.setVisible(false);
-		toolbarTextCreateComment.setVisible(false);
-	}
-
-	/**
-	 * Sets the chapter content's value according to what is selected.
-	 * 
-	 * @param value current selected value
-	 */
-	public void setDisplayZoneContent(TreeItem<ReviewableContent> value) {
-		textZoneChapterTitle.setText("");
-		textZoneMessages.setText("");
-		textZoneChapterContent.clear();
-		if (value != null && Chapter.class.equals(value.getValue().getClass())) {
-			setDisplayZoneContentFromChapter(value);
-		} else if (value != null && Book.class.equals(value.getValue().getClass())) {
-			setDisplayZoneContentFromBook(value);
-		} else {
-			resetDisplayZoneContent();
-		}
-	}
-
-	/**
-	 * @param value
-	 */
-	private void setDisplayZoneContentFromBook(TreeItem<ReviewableContent> value) {
-		Book book = (Book) value.getValue();
-		textZoneBookTitle.setText(book.getTitle());
-		textZoneChapterTitle.setVisible(false);
-		textZoneChapterTitle.setText("");
-		textZoneChapterContent.clear();
-		textZoneMessages.setVisible(true);
-		textZoneMessages.setText("Please select/create a chapter in the review tree to display its content.");
-		textZoneChapterContent.setVisible(false);
-		commentZoneVBox.setVisible(false);
-		toolbarTextCreateComment.setVisible(false);
-		setDisplayCommentZoneContent(book);
-	}
-
-	/**
-	 * Set all text zones values according to chapter.
-	 * 
-	 * @param value
-	 */
-	private void setDisplayZoneContentFromChapter(TreeItem<ReviewableContent> value) {
-		Book book = (Book) value.getParent().getValue();
-		textZoneBookTitle.setText(book.getTitle());
-		Chapter chapter = (Chapter) value.getValue();
-		textZoneChapterTitle.setVisible(true);
-		textZoneChapterTitle.setText(chapter.getTitle());
-		textZoneMessages.setVisible(false);
-		textZoneMessages.setText("");
-		textZoneChapterContent.setVisible(true);
-		textZoneChapterContent.replaceText(chapter.getText());
-		commentZoneVBox.setVisible(true);
-		toolbarTextCreateComment.setVisible(true);
-		setDisplayCommentZoneContent(chapter);
-	}
-
-	private void setDisplayCommentZoneContent(ReviewableContent content) {
-		// TODO
 	}
 
 	/**
@@ -679,6 +629,38 @@ public class BinoclesController implements Initializable {
 		alert.setTitle(title);
 		alert.setHeaderText(null);
 		alert.setContentText(text);
+		alert.showAndWait();
+	}
+
+	/**
+	 * Shows a big error alert dialog.
+	 * 
+	 * @param title Title of the alert.
+	 * @param text  Message of the alert.
+	 */
+	private void showLongErrorAlert(String title, String text, String longText) {
+		Alert alert = new Alert(AlertType.ERROR);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(text);
+		Label label = new Label("The error message was:");
+		TextArea textArea = new TextArea(longText);
+		textArea.setEditable(false);
+		textArea.setWrapText(true);
+		textArea.setMaxHeight(Double.MAX_VALUE);
+		textArea.setMaxWidth(Double.MAX_VALUE);
+		textArea.setMaxWidth(Double.MAX_VALUE);
+		textArea.setMaxHeight(Double.MAX_VALUE);
+		GridPane.setVgrow(textArea, Priority.ALWAYS);
+		GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+		GridPane expContent = new GridPane();
+		expContent.setMaxWidth(Double.MAX_VALUE);
+		expContent.add(label, 0, 0);
+		expContent.add(textArea, 0, 1);
+
+		alert.getDialogPane().setExpandableContent(expContent);
+		alert.getDialogPane().setExpanded(true);
 		alert.showAndWait();
 	}
 
