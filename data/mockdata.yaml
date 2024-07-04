@@ -1,207 +1,211 @@
 binocles:
   version: 0.1-SNAPSHOT
   nomenclatures:
-    - name: My Nomenclature
-      types:
-        - name: typography
-          description: Typo in the text
-          fields:
-            value: Correction value
-            reason: Reason of the typography
-          styles:
-            color: "#b20000"
-            font-style: italic
-        - name: comment
-          description: Typical comment
-          fields:
-            text: Text of the comment
-          large:
-            - text
-          styles:
-            color: "#5f977b"
-    - name: High colour
-      types: []
-    - name: Empty
-      types: []
+  - name: My Nomenclature
+    types:
+    - name: note
+      description: Typical comment
+      fields:
+        text: Text of the comment
+      large:
+      - text
+      styles:
+        color: '#5f977b'
+    - name: typography
+      description: Typo in the text
+      fields:
+        value: Correction value
+        reason: Reason of the typography
+      styles:
+        color: '#b20000'
+        font-style: italic
+  - name: High colour
+    types: []
+  - name: Empty
+    types: []
   library:
-    - title: The First Days
-      nomenclature: my nomenclature
-      metadata:
-        author: Rhiannon Frater
-        source: https://www.goodreads.com/book/show/9648068-the-first-days
-        publication: 2008-08-14
-      synopsis: |-
-        Katie is driving to work one beautiful day when a dead man jumps into her car and tries to eat her.  That same morning, Jenni opens a bedroom door to find her husband devouring their toddler son.
-        Fate puts Jenni and Katie—total strangers—together in a pickup, fleeing the suddenly zombie-filled streets of the Texas city in which they live. Before the sun has set, they have become more than just friends and allies—they are bonded as tightly as any two people who have been to war together. 
-        During their cross-Texas odyssey to find and rescue Jenni’s oldest son, Jenni discovers the joy of watching a zombie’s head explode when she shoots its brains out. Katie learns that she’s a terrific tactician—and a pretty good shot. 
-        A chance encounter puts them on the road to an isolated, fortified town, besieged by zombies, where fewer than one hundred people cling to the shreds of civilization. 
-        It looks like the end of the world. But Katie and Jenni and many others will do whatever they have to to stay alive. Run, fight, pick each other up when they stumble, fall in love…anything is possible at the end of the world.
-      chapters:
-        - title: chapter 1
-          content: |-
-            The American Scholar is the venerable but lively quarterly magazine of public affairs, literature, science, history, and culture published by the Phi Beta Kappa Society since 1932. In recent years the magazine has won four National Magazine Awards, the industry’s highest honor, and many of its essays and articles have been selected for the yearly Best American anthologies. In 2006, The American Scholar began to publish fiction by such writers as Alice Munro, Ann Beattie, Steven Millhauser, Dennis McFarland, Louis Begley, and David Leavitt. Essays, articles, criticism, and poetry have been mainstays of the magazine for 75 years. Inspired by Ralph Waldo Emerson’s famous speech, “The American Scholar,” delivered to the Phi Beta Kappa Society at Harvard College in 1837, the magazine aspires to Emerson’s ideals of independent thinking, self-knowledge, and a commitment to the affairs of the world as well as to books, history, and science.
-            For over two and a quarter centuries, the Society has embraced the principles of freedom of inquiry and liberty of thought and expression. Laptops have replaced quill pens, but these ideas, symbolized on Phi Beta Kappa's distinctive gold key, still lay the foundations of personal freedom, scientific inquiry, liberty of conscience and creative endeavor. Phi Beta Kappa celebrates and advocates excellence in the liberal arts and sciences. Its campus chapters invite for induction the most outstanding arts and sciences students at America’s leading colleges and universities. The Society sponsors activities to advance these studies — the humanities, the social sciences, and the natural sciences — in higher education and in society at large.
-          globalcomment: |-
+  - title: The First Days
+    nomenclature: my nomenclature
+    metadata:
+      author: Rhiannon Frater
+      publication: 2008-08-14
+      source: https://www.goodreads.com/book/show/9648068-the-first-days
+    synopsis: |-
+      Katie is driving to work one beautiful day when a dead man jumps into her car and tries to eat her.  That same morning, Jenni opens a bedroom door to find her husband devouring their toddler son.
+      Fate puts Jenni and Katie—total strangers—together in a pickup, fleeing the suddenly zombie-filled streets of the Texas city in which they live. Before the sun has set, they have become more than just friends and allies—they are bonded as tightly as any two people who have been to war together. 
+      During their cross-Texas odyssey to find and rescue Jenni’s oldest son, Jenni discovers the joy of watching a zombie’s head explode when she shoots its brains out. Katie learns that she’s a terrific tactician—and a pretty good shot. 
+      A chance encounter puts them on the road to an isolated, fortified town, besieged by zombies, where fewer than one hundred people cling to the shreds of civilization. 
+      It looks like the end of the world. But Katie and Jenni and many others will do whatever they have to to stay alive. Run, fight, pick each other up when they stumble, fall in love…anything is possible at the end of the world.
+    globalcomment: ''
+    description: ''
+    chapters:
+    - title: chapter 1
+      content: |-
+        The American Scholar is the venerable but lively quarterly magazine of public affairs, literature, science, history, and culture published by the Phi Beta Kappa Society since 1932. In recent years the magazine has won four National Magazine Awards, the industry’s highest honor, and many of its essays and articles have been selected for the yearly Best American anthologies. In 2006, The American Scholar began to publish fiction by such writers as Alice Munro, Ann Beattie, Steven Millhauser, Dennis McFarland, Louis Begley, and David Leavitt. Essays, articles, criticism, and poetry have been mainstays of the magazine for 75 years. Inspired by Ralph Waldo Emerson’s famous speech, “The American Scholar,” delivered to the Phi Beta Kappa Society at Harvard College in 1837, the magazine aspires to Emerson’s ideals of independent thinking, self-knowledge, and a commitment to the affairs of the world as well as to books, history, and science.
+        For over two and a quarter centuries, the Society has embraced the principles of freedom of inquiry and liberty of thought and expression. Laptops have replaced quill pens, but these ideas, symbolized on Phi Beta Kappa's distinctive gold key, still lay the foundations of personal freedom, scientific inquiry, liberty of conscience and creative endeavor. Phi Beta Kappa celebrates and advocates excellence in the liberal arts and sciences. Its campus chapters invite for induction the most outstanding arts and sciences students at America’s leading colleges and universities. The Society sponsors activities to advance these studies — the humanities, the social sciences, and the natural sciences — in higher education and in society at large.
+      globalcomment: ''
+      comments:
+      - type: note
+        range:
+          start: 495
+          end: 511
+        fields:
+          text: Wrong name
+      - type: note
+        range:
+          start: 684
+          end: 775
+        fields:
+          text: Are you sure about this?
+      - type: typography
+        range:
+          start: 500
+          end: 520
+        fields:
+          value: Typitty type
+          reason: because
+      - type: note
+        range:
+          start: 946
+          end: 1084
+        fields:
+          text: |-
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean lobortis elementum ante nec vulputate. Vestibulum porttitor accumsan tortor, in vestibulum velit consectetur nec. Nunc pellentesque nisl iaculis laoreet facilisis. Aenean tincidunt neque ac sapien malesuada, ac vehicula nisl rhoncus.
             
-          comments:
-            - type: comment
-              range:
-                start: 495
-                end: 511
-              fields:
-                text: Wrong name
-            - type: comment
-              range:
-                start: 684
-                end: 775
-              fields:
-                text: Are you sure about this?
-            - type: typography
-              range:
-                start: 500
-                end: 520
-              fields:
-                value: Typitty type
-                reason: because
-        - title: chapter 2
-          content: |-
-            The Beat Generation was a literary subculture movement started by a group of authors whose work explored and influenced American culture and politics in the post-war era.[1] The bulk of their work was published and popularized by Silent Generationers in the 1950s, better known as Beatniks. The central elements of Beat culture are the rejection of standard narrative values, making a spiritual quest, the exploration of American and Eastern religions, the rejection of economic materialism, explicit portrayals of the human condition, experimentation with psychedelic drugs, and sexual liberation and exploration.[2][3]
-            Allen Ginsberg's Howl (1956), William S. Burroughs' Naked Lunch (1959), and Jack Kerouac's On the Road (1957) are among the best known examples of Beat literature.[4] Both Howl and Naked Lunch were the focus of obscenity trials that ultimately helped to liberalize publishing in the United States.[5][6] The members of the Beat Generation developed a reputation as new bohemian hedonists, who celebrated non-conformity and spontaneous creativity.
-            The core group of Beat Generation authors—Herbert Huncke, Ginsberg, Burroughs, Lucien Carr, and Kerouac—met in 1944 in and around the Columbia University campus in New York City. Later, in the mid-1950s, the central figures, with the exception of Burroughs and Carr, ended up together in San Francisco, where they met and became friends of figures associated with the San Francisco Renaissance.
-            In the 1950s, a Beatnik subculture formed around the literary movement, although this was often viewed critically by major authors of the Beat movement. In the 1960s, elements of the expanding Beat movement were incorporated into the hippie and larger counterculture movements. Neal Cassady, as the driver for Ken Kesey's bus Furthur, was the primary bridge between these two generations. Ginsberg's work also became an integral element of early 1960s hippie culture, in which he actively participated. The hippie culture was practiced primarily by older members of the following generation.
-          globalcomment: |-
-            
-          comments: []
-    - title: Memoirs of a Geisha
-      nomenclature: 
-      metadata:
-        author: Arthur Golden
-        publication: 1997-01-01
-      synopsis: |-
-        A literary sensation and runaway bestseller, this brilliant novel presents with seamless authenticity and exquisite lyricism the true confessions of one of Japan's most celebrated geisha.
-        In "Memoirs of a Geisha," we enter a world where appearances are paramount; where a girl's virginity is auctioned to the highest bidder; where women are trained to beguile the most powerful men; and where love is scorned as illusion. It is a unique and triumphant work of fiction - at once romantic, erotic, suspenseful - and completely unforgettable.
-      globalcomment: |-
-        Memoirs of a Geisha is an American novel, and as such the attempt at West does East, especially on the complex and delicate subject of the geisha, is compelling, interesting, but also heavy-handed and ultimately ineffective (even more so in the case of the film). It is a wonderful introduction to geisha, Japanese culture, and the East for the uninitiated Western reader, and I can see why the book is popular, but I found it disappointing. For the reader already familiar with the culture, western influences are all too clear and the book comes off as a bit clunky and imperfect. I also had some problems with the general perception of the characters by readers versus the way the characters were actually portrayed in the book--Memoirs is far from the good-willed fairy tale that people assume it is. By all means, read it, but leave it open for critique and remember that a more authentic representation of eastern culture, especially in the details, will come from the east itself.
-        A lot of my critique stems from the fact that this movie has attained such wide-spread fame and been made into a movie, to be sure. I feel like it is being perpetuated as something it is not. Even the introduction to the book (a faux translator's note) perpetuates the myth that Memoirs is an accurate, beautiful, in-depth reflection of the life of a geisha, when in truth it is no more that historical fiction and is written by an outsider. Golden has done his research and is well-educated on his subjects, and I have no problem with people reading from, taking interest in, and even learning from this book; I do, however, think it is important that readers don't conflate the American novel with Japanese reality. They aren't the same thing, no matter how much research Golden did, and if we take the book as an accurate representation we're actually underestimating and undervaluing geisha, Japan, and Japanese culture.
-        Because Golden attempts to write from within the geisha culture, as a Japanese woman, he must do more than report the "facts" of that life--he must also pretend to be a part of it. Pretend he does, acting out a role as if he has studied inflection, script, and motivation. He certainly knows what makes writing "Japanese" but his attempt to mimic it is not entirely successful. The emphasis on elements, the independent sentences, the visual details are too prevalent and too obvious, as if Golden is trying to call our attention to them and thus to the Japanese style of the text. He does manage to draw attention, but to me, at least, what I came away with was the sense that Golden was an American trying really hard to sound Japanese--that is, the effect betrayed the attempt and the obvious attempt ruined the sincerity of the novel, for me. I felt like I was being smacked over the head with beauty! wood! water! kimono! haiku! and I felt insulted and disappointed.
-        The problems that I saw in the text were certainly secondary to the purpose of the text: to entertain, to introduce Western readers to Japanese culture, and to sell books (and eventually a film). They may not be obvious to all readers and they aren't so sever that the book isn't worth reading. I just think readers need to keep in mind that what Golden writes is fiction. Historical fiction, yes, but still fiction, therefore we should look for a true representation of Japanese culture within Japanese culture itself and take Memoirs with a grain of salt.
-        I also had problems with the rushed end of the book, the belief that Sayuri is a honest, good, modest, generous person when she really acts for herself and at harm to others throughout much of the book, the perpetuation of Hatsumomo as unjustified and cruel when she has all the reason in the world, and in general the public belief that Memoirs is some sort of fairy tale when in fact it is heavy-handed, biased, and takes a biased or unrelatistic view toward situations, characters, and love. However, all of those complains are secondary, in my view, to the major complain above, and should be come obvious to the reader.
-        Memoirs goes quickly, is compelling, and makes a good read, and I don't want to sound too unreasonably harsh on it. However, I believe the book has a lot of faults that aren't widely acknowledged and I think we as readers need to keep them in mind. This is an imperfect Western book, and while it may be a fun or good book it is not Japanese, authentic, or entirely well done.
-      chapters:
-        - title: Wikipedia article
-          content: |-
-            Geisha (芸者) (/ˈɡeɪʃə/; Japanese: [ɡeːɕa]),[1][2] also known as geiko (芸子) (in Kyoto and Kanazawa) or geigi (芸妓), are a class of female Japanese performing artists and entertainers trained in traditional Japanese performing arts styles, such as dance, music and singing, as well as being proficient conversationalists and hosts. Their distinct appearance is characterised by long, trailing kimono, traditional hairstyles and oshiroi make-up. Geisha entertain at parties known as ozashiki, often for the entertainment of wealthy clientele, as well as performing on stage and at festivals.
-            Modern geisha are not prostitutes. Though the ceremony of mizuage – the loss of a maiko's virginity to a paying patron – took place historically as part of the transition from apprentice to geisha, this no longer takes place, and was abolished under the Prostitution Prevention Law of 1956. Despite some geisha also historically engaging in prostitution, this also no longer takes place, and has never been an official part of the geisha profession, with laws historically separating the two professions. The misconception that geisha are prostitutes also originated from Western conflations of Japanese courtesans (oiran), modern-day oiran reenactors, the extant tayū, and prostitutes, who historically also wore kimono.
-            The first female geisha appeared in 1751, with geisha before that time being male performers who entertained guests within the pleasure quarters; only later did the profession become mainly characterised by female workers.[3][a]
-            The arts that geisha perform are considered highly developed and, in some cases, unique throughout Japan to the world of geisha. For example, the Gion district of Kyoto is the only district wherein the kyo-mai style of Japanese traditional dance is taught. This style of dance is taught solely to the geisha within the district by the Inoue school, with the school's former head, Inoue Yachiyo, having been classified as a "Living National Treasure" by the Government of Japan, the highest artistic award attainable in the country, in 1955.[5]
-        - title: Etymology and terminology
-          content: |-
-            A number of terms are used to describe the profession and community that geisha both live and work in. Though each has its own distinct meaning and translation, some are used interchangeably to describe the geisha community on the whole, such as hanamachi and karyūkai.
-            Geiko
-              A regional term for geisha with a slightly different meaning. Geiko is a term used to describe geisha in Western Japan, including Kyoto and Kanazawa. This term directly translates as 'woman of art', and is part of the Kyoto dialect spoken by geisha in Kyoto and Western Japan.
-            Geisha (芸者)
-              lit. 'artist' or 'performing artist' or 'artisan'. A traditional female hostess, entertainer and performing artist. The word geisha consists of two kanji: gei (芸, meaning 'art') and sha (者, meaning 'person' or 'doer').
-            Gokagai (五花街, lit. 'five flower towns')
-              The five geisha districts of Kyoto: Gion Kobu and Gion Higashi, Ponto-chō, Miyagawa-chō and Kamishichiken. Kyoto previously had six hanamachi, with Shimabara, formerly a red light and geisha district, still being considered an active hanamachi in the 1970s. In the present day, Shimabara is active only as a host for tayū, who are considered to be entertainers of a similar kind to geisha, but the district is still not considered to be an active hanamachi.[6]
-            Hanamachi (花街, lit. 'flower town')
-              The district where a geisha works, is affiliated, and potentially lives. Geisha generally do not work outside of their hanamachi, though customers may call them for special occasions in other districts, or on excursions – however far away – to places outside the karyūkai.[7]
-            Han-gyoku (半玉, lit. 'half-jewel')
-              A term for apprentice geisha in some regions of Japan such as Tokyo. The term han-gyoku means 'half-jewel', referring to one of the terms for a geisha's wages, 'jewel money'.[8][9]
-            Kagai (花街, lit. 'flower towns')
-              An alternative term for the districts in which geisha live and work; interchangeable with karyūkai.
-            Karyūkai (花柳界, lit. 'flower and willow world')
-              The community or society that geisha inhabit. In the present day, this term refers solely to the world of geisha, as well as the few remaining tayū; before the decline and eventual disappearance of oiran, the term karyūkai referred to the entertainment districts (the "world") of both geisha and courtesans, with oiran acting as the "flowers", ostensibly for their beautiful and showy appearance, and geisha being the subtler "willows".[10]
-            Maiko (舞妓)
-              The most common term for an apprentice geisha, translating to 'woman of dance'.
-            Minarai (見習い, lit. 'learning by observation')
-              The second typical stage of a maiko's training, and the step that always follows that of shikomi. A minarai wears a version of a maiko's outfit, with a shorter obi, shorter kimono sleeves, and more hair accessories (kanzashi). [11]
-            Minarai-jaya
-              During the minarai period, an apprentice will receive training through one specific teahouse, referred to as the minarai-jaya.[11]
-            Mizu shōbai (水商売, lit. 'water business')
-              A euphemistic term used to describe the entertainment and red-light districts in Japan, including the worlds of kabuki actors and geisha.[9]
-            Ochaya (お茶屋, lit. 'teahouse')
-              Though geisha may entertain at their okiya, restaurants or inns, they will usually entertain guests at a teahouse.
-            Okiya (置屋)
-              A geisha lodging house. All geisha must be registered to an okiya, though not all geisha live in their okiya day-to-day. Okiya are usually run by women, many of whom are ex-geisha themselves.[9] Geisha may entertain guests within their okiya.
-            Ozashiki (お座敷)
-              A term for a geisha's engagements, which may take part or the whole of an evening. The term ozashiki combines the name for a banqueting room, zashiki (座敷), and the honorific prefix o- (お), changing the meaning to a term exclusively referring to the engagements a geisha takes.
-            Shikomi (仕込み, 'preparation' or 'training')
-              The typical first stage of a maiko's training. Shikomi wear kimono, though they do not wear the elaborate outfit, hairstyle and makeup of fully-fledged maiko.
-            Tōde (lit. 'distant outings')
-              Geisha engagements not held in licensed restaurants, teahouses, or a geisha's own hanamachi.[7] 
-          comments:
-            - range:
-                start: 0
-                end: 287
-              type: comment
-              fields:
-                text: "That's a lot of different words for one singular idea!"
-              
-        - title: History
-          content: |-
-            In the early stages of Japanese history, saburuko (serving girls) were mostly wandering girls whose families had been displaced by war.[12] Some of these saburuko girls offered sexual services for money while others with a better education made a living by entertaining at high-class social gatherings.[13][14]
-            After the imperial court moved the capital to Heian-kyō (Kyoto) in 794, aspects of now-traditional Japanese art forms and aesthetic ideals began to develop, which would later contribute to the conditions under which the geisha profession emerged.[15] Skilled female performers, such as shirabyōshi dancers, thrived under the Imperial court, creating the traditions of female dance and performance that would later lead to both the development of geisha and kabuki actors.
-            During the Heian period, ideals surrounding relationships with women, sexual or otherwise, did not emphasise fidelity, with marriage within the Heian court considered a relatively casual arrangement. Men were not constrained to be faithful to their wives, with the ideal wife instead being a modest mother who managed the affairs of the house, following Confucian customs wherein love had secondary importance to the other roles a wife fulfilled within the marriage. As such, courtesans—who provided not only sexual enjoyment, but also romantic attachment and artistic entertainment—were seen both as an outlet for men and as common companions. Though geisha would not appear until the 1800s, the role and status of courtesans as artistic and romantic entertainers were a tradition that geisha came to inherit, with the basic artforms of entertaining guests through song, dance and conversation being employed and adapted to contemporary tastes by geisha.[citation needed]
-            Walled-in pleasure quarters known as yūkaku (遊廓/遊郭) were built in the 16th century,[16] with the shogunate designating prostitution illegal to practice outside of these "pleasure quarters" in 1617.[17] Within the pleasure quarters, yūjo (遊女, "[women] of pleasure") – a term used to refer to prostitutes as a whole – were classified and licensed, the upper echelons of which were referred to as oiran, a category with its own internal ranks, the highest of which being the tayū.
-            Though women in the lower ranks of yūjo did not provide as much artistic entertainment as they did sexual, oiran, whilst still prostitutes, also included the traditional arts as a key aspect of their entertainment, their practice of which differed considerably from those of geisha. As oiran were considered to be low-ranking members of the nobility, the instruments they played and the songs they sang were often confined to those considered "respectable" enough for the upper classes. This typically meant that oiran sang long, traditional ballads (nagauta (lit. 'long songs')), and played instruments such as the kokyū (a type of bowed shamisen) and the koto (a 13-stringed harp).
-            However, some yūjo also performed theatrical plays, dances and skits; one such person was Izumo no Okuni, whose theatrical performances on the dry riverbed of the Kamo River are considered to be the beginnings of kabuki theatre.[17] 
-    - title: The Book of Lipsums
-      nomenclature: empty
-      metadata:
-        author: internet
-        source: https://www.lipsum.com
-      synopsis: |-
-        This is an impressive collection of lipsum.
-      globalcomment: |-
-        
-      chapters:
-        - title: The Smallest
-          content: |-
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque molestie tortor quis lobortis sollicitudin. Proin et tincidunt diam, at faucibus ex. Cras auctor ante lorem, sit amet tempor odio porttitor cursus. Proin posuere leo eget enim laoreet, et maximus justo tempus. Cras elit diam, commodo vitae ipsum vitae, sollicitudin consectetur leo. Nullam sed massa et elit ullamcorper congue eu eu dui. Fusce nisi turpis, pulvinar in aliquet ac, pharetra vel nisi. Fusce consequat vehicula orci, et vehicula lorem ornare sit amet. Donec nec sem ut sapien placerat vestibulum. Donec sagittis lobortis libero nec iaculis.
-          globalcomment: |-
-          
-        - title: The Medium
-          content: |-
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam mollis arcu est, convallis fermentum ipsum porta vitae. Fusce orci mauris, pharetra eget justo ac, sagittis sodales lorem. In volutpat id nibh nec laoreet. In efficitur risus quis velit faucibus, non vestibulum sapien ornare. Nunc convallis, lacus non congue porttitor, nunc mi suscipit metus, sit amet blandit metus ipsum id ipsum. Maecenas sagittis sagittis nisl dictum laoreet. Nam magna turpis, consequat sed ligula interdum, suscipit eleifend elit. Fusce laoreet purus ut nulla vehicula tempor.
-            Morbi tempor vestibulum sem, eget dapibus justo auctor et. Sed eget faucibus leo. Nulla fermentum, magna id sodales ornare, ipsum ante posuere elit, eget consequat nibh tellus at diam. Nulla scelerisque libero turpis, ac lobortis enim laoreet hendrerit. Quisque consectetur vestibulum tellus, vitae dignissim elit. Integer sodales felis vel volutpat fermentum. Aenean efficitur ligula enim. Duis congue fermentum augue, id aliquam odio malesuada eget. Vestibulum vitae sapien ex. Suspendisse massa tortor, fermentum nec luctus nec, aliquam in lacus. Curabitur fermentum cursus leo id viverra. Aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sit amet placerat arcu. Vivamus quis lacus justo. Phasellus rutrum nunc non lorem imperdiet, vel rutrum nulla malesuada.
-            Pellentesque gravida massa ultrices elit viverra condimentum. Quisque in quam massa. Pellentesque condimentum enim eget euismod faucibus. Donec faucibus velit diam, quis vulputate ex mattis non. Fusce ullamcorper dictum porttitor. Nunc a nisl in nulla viverra consectetur. Nulla dignissim dolor libero, id suscipit quam porttitor ut. Nullam maximus tempus dignissim.
-            Proin aliquam consequat metus, sed pretium lacus varius vitae. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce pulvinar magna id est euismod scelerisque. Maecenas pulvinar urna non nisi posuere, ut porta lacus feugiat. Sed accumsan cursus tellus, ac pharetra tellus ornare at. Ut viverra finibus interdum. In hac habitasse platea dictumst. Donec in luctus massa. Etiam vel odio mauris. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Morbi ultrices gravida turpis, sed varius libero cursus eu. Donec sed commodo diam, sit amet porta elit. Suspendisse potenti.
-            Nam vestibulum tempus turpis, sit amet sagittis ex pretium ut. Vestibulum sit amet mauris at metus pulvinar accumsan id sed felis. Quisque nec ullamcorper quam, in rutrum libero. Sed enim libero, molestie vitae blandit non, tincidunt id leo. Duis vel luctus urna. Vestibulum aliquam eleifend aliquam. Vestibulum sed nisl non eros mollis pretium.
-          globalcomment: |-
-           
-        - title: The Biggest
-          content: |-
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor nulla at dui scelerisque porta. Sed eu nisl tempus, facilisis velit vitae, semper velit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In id leo ullamcorper, maximus lectus et, euismod lacus. Praesent tristique a mi sit amet venenatis. Duis vitae ante quis dui imperdiet ullamcorper. Aenean vel convallis neque, eget viverra purus. Suspendisse quis aliquet orci.
-            Sed fringilla eget ante a facilisis. Donec sit amet egestas arcu. Cras congue facilisis ante, vel ultricies quam blandit eu. Mauris quis ullamcorper tellus. Duis et ipsum et risus finibus hendrerit eget id justo. Vestibulum imperdiet elit vel diam pulvinar, sit amet lobortis nisi bibendum. Nunc varius, urna ut viverra dapibus, mauris ipsum pharetra risus, ac congue ipsum tortor quis turpis. Nam in justo nec odio convallis lacinia sit amet nec nibh. Fusce gravida leo sed commodo pulvinar. Quisque vel ultrices arcu. Cras rhoncus, lacus vel cursus imperdiet, metus orci pellentesque nisi, a ultrices turpis lacus cursus libero.
-            Duis placerat sapien id urna fringilla, non ullamcorper lorem convallis. Maecenas enim nisl, bibendum a dignissim sit amet, interdum cursus turpis. Curabitur tristique metus id nisi egestas efficitur. Sed finibus convallis varius. Fusce id volutpat nisl, id commodo felis. Ut ut rhoncus mi, ut mollis nunc. Aliquam ultricies ipsum leo, id porttitor enim rhoncus ac. Suspendisse feugiat ornare lacinia. Vestibulum ut vulputate purus, vitae sollicitudin turpis. Duis eget dapibus turpis, non sollicitudin tortor. Fusce placerat scelerisque massa, quis dignissim diam feugiat vulputate. Donec eu ex a tortor consequat rhoncus. Morbi porta turpis tincidunt purus faucibus venenatis. Vestibulum tempor metus tincidunt, rutrum turpis at, convallis mauris. Donec semper luctus ornare. Suspendisse vehicula nec arcu vitae sollicitudin.
-            Maecenas ac faucibus massa, nec pharetra sem. Morbi aliquet sapien ut quam vehicula, sed elementum neque aliquet. Phasellus nisl tellus, aliquam vitae volutpat sit amet, consequat nec ipsum. Ut dapibus, erat vitae luctus interdum, eros eros faucibus purus, vel vestibulum mi augue sit amet urna. Aliquam at porta urna. Fusce commodo, urna in lobortis pulvinar, nunc diam tristique libero, id efficitur neque elit eget lectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur posuere massa sit amet commodo consequat. Donec laoreet non turpis vitae sollicitudin.
-            Duis imperdiet arcu nec tortor lobortis condimentum. Phasellus urna quam, sollicitudin ut interdum vitae, posuere et enim. Aenean nibh turpis, congue at elit ut, euismod condimentum ligula. Vestibulum euismod non leo at egestas. Phasellus efficitur egestas justo a dictum. Integer euismod tortor justo, in dictum arcu congue rutrum. Aenean suscipit, velit vel luctus ornare, justo nibh porttitor dolor, quis tincidunt tortor ante nec quam. Praesent nec rutrum ipsum. Nulla scelerisque justo nec tristique semper. Nunc metus nulla, commodo vitae nunc a, posuere hendrerit felis. Maecenas sit amet nibh aliquam, condimentum justo id, sollicitudin quam. Proin lobortis imperdiet dui, eu pretium nibh gravida ut. Donec congue blandit tristique. Duis fringilla, arcu ut pharetra iaculis, metus nisi semper nunc, vel consectetur odio diam et orci. Praesent cursus porttitor libero, ut pretium tellus lobortis non.
-            Cras ipsum leo, bibendum ut felis in, gravida maximus leo. Mauris laoreet nisi vitae diam sagittis ultrices. Quisque ipsum velit, ornare sagittis ultricies et, porta non turpis. Nam sed mollis diam, vel posuere metus. Praesent iaculis sapien nec vehicula vehicula. Praesent metus mauris, gravida a enim at, malesuada placerat sem. Proin sagittis justo magna, id porta tellus sodales vel. Suspendisse non tempus felis. Duis in tellus ac arcu dapibus sollicitudin in eu lacus. Aliquam purus elit, fringilla quis bibendum non, convallis in erat. Mauris libero tellus, suscipit non sem quis, aliquet rutrum neque. Vestibulum interdum, augue quis sagittis commodo, lacus risus egestas nibh, vitae eleifend justo ipsum et tellus. Nam hendrerit at ipsum eu vehicula.
-            Fusce sit amet convallis magna. Proin metus tortor, commodo eget magna a, dignissim ultrices est. Sed dignissim aliquam rutrum. Quisque non eros risus. Nunc id tempus libero, at tempus diam. Nullam non eros posuere ipsum elementum mattis et sed risus. Vestibulum bibendum eu sem varius sodales. Fusce in vehicula lorem, sit amet euismod ipsum. Nam id vulputate sapien. Nulla eget ipsum ut odio mollis tincidunt. Curabitur varius sagittis dignissim.
-            Vestibulum quis tortor in felis gravida sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed aliquet mattis mauris vel vehicula. Fusce id orci mollis, ullamcorper diam a, tristique libero. Nulla eget libero sit amet dui pretium placerat. Sed porttitor gravida ante et tempus. Proin vel libero purus. Vivamus suscipit quis erat maximus pharetra.
-            Cras ac finibus velit. Proin aliquam est velit, ornare ullamcorper dolor commodo vitae. Praesent commodo eget urna ultrices feugiat. Quisque id sagittis sem. Nam eget interdum eros. Praesent ut eros quis risus pretium interdum sit amet congue ante. Aenean in tincidunt est. Nam erat augue, ultricies vitae dolor id, consequat mattis ante. Sed sodales, tortor vitae sagittis vehicula, justo augue accumsan erat, vitae egestas tellus lectus sed sem. Curabitur nulla diam, suscipit in ligula et, consectetur ullamcorper leo. Nulla blandit ex ultrices, tristique diam eu, dapibus velit. Donec ut dolor ornare, gravida enim nec, porttitor dui. Pellentesque quis tortor at mi semper porttitor. In facilisis placerat nisl eget eleifend. Quisque tincidunt commodo risus sed fringilla.
-            Nullam feugiat laoreet viverra. Suspendisse ultricies felis feugiat lorem ultrices, eu feugiat enim faucibus. Integer quis ipsum mi. Curabitur nec turpis in nisl eleifend suscipit. In vel sapien sit amet mi hendrerit finibus sed sed ante. Integer id lobortis ante, in bibendum massa. Mauris gravida ultrices tellus, id dapibus mauris hendrerit sed. Cras placerat diam eros, ut ornare justo sodales vitae. Nam eget cursus diam. Aliquam vel massa et libero mattis commodo at vel ante. Etiam hendrerit varius turpis nec efficitur. Nam pellentesque augue nulla, ac scelerisque odio scelerisque quis.
-            Suspendisse ante quam, tempor malesuada nunc ac, vestibulum hendrerit metus. Nunc magna neque, faucibus at urna quis, lobortis tincidunt velit. Nulla eleifend eros eget eros pharetra, id porta diam bibendum. Nulla facilisi. Ut volutpat mi risus, sit amet commodo risus mollis at. Ut viverra diam sit amet justo dapibus, sit amet condimentum neque sodales. Donec consectetur imperdiet sagittis. Donec dui est, imperdiet aliquet leo eget, semper maximus nulla. Donec quis bibendum felis. Mauris nec molestie dui. Donec a orci finibus, placerat arcu sit amet, euismod ligula. Vivamus eros lorem, maximus eu nisl vitae, dignissim commodo felis. Sed rhoncus tellus id venenatis luctus.
-            Fusce id dui in enim tempor hendrerit. Pellentesque leo sem, imperdiet nec dolor sed, dictum consectetur lacus. Integer dui est, laoreet et leo ut, pharetra consequat mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Aliquam pharetra varius lorem eu aliquam. Sed metus felis, sollicitudin ut magna tincidunt, vehicula tempus libero. Morbi efficitur velit elit, eu maximus magna efficitur vel. Vivamus placerat, ligula dapibus rutrum auctor, augue elit suscipit turpis, in finibus ligula dui vel erat.
-            Ut eu viverra massa. Aliquam tincidunt lectus vitae augue scelerisque, eu interdum neque mollis. Vestibulum luctus nisi sapien, non rutrum mauris pretium quis. Nullam vitae mi eget erat elementum sodales. In iaculis rutrum gravida. Duis vitae dolor dignissim, posuere felis ac, pulvinar diam. Suspendisse et arcu at orci venenatis molestie. Mauris at neque euismod, viverra leo ac, vehicula mauris. Nam hendrerit, neque ac dictum molestie, lacus tortor venenatis mi, a porta arcu libero vitae lacus. Sed ornare ac ligula ac interdum. Curabitur mi felis, molestie et libero eget, faucibus vehicula sem. Morbi ut auctor est, id cursus enim. Duis eu tristique quam. Quisque venenatis, leo non tempus fermentum, justo sem posuere nisl, sed tempor nibh urna non est. Nam dictum suscipit velit bibendum tempor.
-            Donec sit amet sapien est. Maecenas at risus ornare nisi iaculis dictum ut ut metus. Sed scelerisque, ante vel rutrum tempus, quam lorem malesuada ex, eu luctus justo urna non justo. Nam vehicula eros eu felis rutrum, non hendrerit lacus congue. Maecenas hendrerit dui in sem vestibulum tincidunt. Vivamus eget facilisis metus. Maecenas pellentesque ultricies neque eu mollis. Donec lobortis vitae lorem quis dictum.
-            Suspendisse potenti. Mauris a ipsum condimentum, rutrum dui aliquam, blandit dui. Maecenas sed euismod ex. Vestibulum a nulla rhoncus dolor pretium viverra. Aliquam sit amet luctus quam. In scelerisque quam semper, aliquam augue ullamcorper, suscipit nulla. Phasellus lacinia lorem ex, vitae egestas neque congue eget. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nunc sagittis ante a porta condimentum.
-            Integer interdum maximus tortor blandit aliquam. Quisque et arcu aliquet, tempus risus eu, varius libero. Ut eu rhoncus felis. Nulla orci mi, ultrices vel nisi a, ultricies vehicula magna. Maecenas gravida ultrices nibh, vitae tincidunt tellus porttitor sit amet. Nulla massa lorem, consequat sit amet tristique sed, iaculis at velit. Phasellus vitae tortor arcu. Aenean nec placerat enim. Nunc eu scelerisque nunc, eget congue ipsum. Proin ultrices ante non luctus venenatis.
-            Integer tempus leo orci, in semper nibh porta quis. Duis ligula lorem, semper sed ultrices sit amet, maximus ut diam. Suspendisse mattis id sapien id varius. Fusce eu egestas purus. Ut ut purus porttitor, porttitor purus ut, ultrices nisl. Nullam vestibulum, diam vel dapibus laoreet, tellus ipsum mattis velit, ut dignissim felis nulla a mauris. Sed sit amet est et est cursus rutrum.
-            Donec tempus eu dui nec sagittis. Phasellus vel nisl elementum, laoreet odio eget, faucibus turpis. Nulla bibendum risus sed eros interdum cursus. Aliquam elit libero, congue ac augue vulputate, consequat imperdiet arcu. Nam placerat venenatis dui, ac vestibulum erat euismod id. Vestibulum id augue sollicitudin, vulputate sapien non, dapibus leo. Nunc molestie nibh lacus, quis aliquam enim maximus non. In hac habitasse platea dictumst. Donec accumsan odio eget tellus consequat, sit amet aliquet tortor porttitor. Aenean id sagittis diam. Fusce nec condimentum velit, et viverra nibh.
-            Pellentesque orci leo, vehicula ac magna at, semper fringilla enim. Cras dapibus ultrices leo ac efficitur. Phasellus dignissim nibh hendrerit velit porta, eu posuere mauris dictum. Nullam aliquam, urna sit amet lacinia interdum, enim quam pretium erat, vitae feugiat turpis mauris placerat velit. Sed in risus ultricies, eleifend nisl sit amet, sodales justo. Sed et erat quis nunc tristique cursus non ac dolor. Duis vitae lobortis nunc, a sodales urna. Praesent non magna pretium, auctor urna quis, fringilla urna. Phasellus ipsum tellus, iaculis a metus nec, pellentesque finibus nibh. Vivamus ac purus a ipsum pulvinar maximus dignissim at ante. Duis eget fermentum lectus. Maecenas ut nunc et ligula ullamcorper mattis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Phasellus commodo nunc nisi, molestie iaculis turpis vehicula vel. Sed enim eros, luctus vitae facilisis ut, interdum non mauris. Aenean rhoncus purus vel tincidunt hendrerit.
-            Nunc sodales sollicitudin molestie. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In aliquet leo at lectus elementum feugiat. Morbi nec erat dapibus enim lobortis pellentesque et id neque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas eget ultrices tellus, vitae molestie nibh. Pellentesque euismod sollicitudin ligula, ut hendrerit felis vulputate nec. In sed lorem feugiat, laoreet purus vitae, eleifend sapien. Nullam urna tortor, rutrum nec faucibus et, lobortis a odio. Quisque congue dictum mi in cursus. Praesent eget quam arcu. Vivamus tincidunt non nisl in dignissim. Vestibulum eu nisl et leo malesuada venenatis. Aenean sagittis lectus non malesuada eleifend. Morbi elementum ac purus vitae molestie.
-          globalcomment: |-
-           
-    - title: Weyward
-      nomenclature: 
-      synopsis: |-
-        2019: Under cover of darkness, Kate flees London for ramshackle Weyward Cottage, inherited from a great aunt she barely remembers. With its tumbling ivy and overgrown garden, the cottage is worlds away from the abusive partner who tormented Kate. But she begins to suspect that her great aunt had a secret. One that lurks in the bones of the cottage, hidden ever since the witch-hunts of the 17th century.
-        1619: Altha is awaiting trial for the murder of a local farmer who was stampeded to death by his herd. As a girl, Altha’s mother taught her their magic, a kind not rooted in spell casting but in a deep knowledge of the natural world. But unusual women have always been deemed dangerous, and as the evidence for witchcraft is set out against Altha, she knows it will take all of her powers to maintain her freedom.
-        1942: As World War II rages, Violet is trapped in her family's grand, crumbling estate. Straitjacketed by societal convention, she longs for the robust education her brother receives––and for her mother, long deceased, who was rumored to have gone mad before her death. The only traces Violet has of her are a locket bearing the initial W and the word weyward scratched into the baseboard of her bedroom.
-        Weaving together the stories of three extraordinary women across five centuries, Emilia Hart's Weyward is an enthralling novel of female resilience and the transformative power of the natural world.
-      globalcomment: |-
-          
-      chapters: []
-
-    
+            Curabitur mattis, mi eu vestibulum feugiat, mi ante fringilla nibh, quis suscipit libero mauris sed mauris. Integer consectetur imperdiet rutrum. Nullam sollicitudin accumsan magna vitae viverra. Ut vel tellus non metus congue aliquam. 
+    - title: chapter 2
+      content: |-
+        The Beat Generation was a literary subculture movement started by a group of authors whose work explored and influenced American culture and politics in the post-war era.[1] The bulk of their work was published and popularized by Silent Generationers in the 1950s, better known as Beatniks. The central elements of Beat culture are the rejection of standard narrative values, making a spiritual quest, the exploration of American and Eastern religions, the rejection of economic materialism, explicit portrayals of the human condition, experimentation with psychedelic drugs, and sexual liberation and exploration.[2][3]
+        Allen Ginsberg's Howl (1956), William S. Burroughs' Naked Lunch (1959), and Jack Kerouac's On the Road (1957) are among the best known examples of Beat literature.[4] Both Howl and Naked Lunch were the focus of obscenity trials that ultimately helped to liberalize publishing in the United States.[5][6] The members of the Beat Generation developed a reputation as new bohemian hedonists, who celebrated non-conformity and spontaneous creativity.
+        The core group of Beat Generation authors—Herbert Huncke, Ginsberg, Burroughs, Lucien Carr, and Kerouac—met in 1944 in and around the Columbia University campus in New York City. Later, in the mid-1950s, the central figures, with the exception of Burroughs and Carr, ended up together in San Francisco, where they met and became friends of figures associated with the San Francisco Renaissance.
+        In the 1950s, a Beatnik subculture formed around the literary movement, although this was often viewed critically by major authors of the Beat movement. In the 1960s, elements of the expanding Beat movement were incorporated into the hippie and larger counterculture movements. Neal Cassady, as the driver for Ken Kesey's bus Furthur, was the primary bridge between these two generations. Ginsberg's work also became an integral element of early 1960s hippie culture, in which he actively participated. The hippie culture was practiced primarily by older members of the following generation.
+      globalcomment: ''
+      comments: []
+  - title: Memoirs of a Geisha
+    nomenclature: ''
+    metadata:
+      author: Arthur Golden
+      publication: 1997-01-01
+    synopsis: |-
+      A literary sensation and runaway bestseller, this brilliant novel presents with seamless authenticity and exquisite lyricism the true confessions of one of Japan's most celebrated geisha.
+      In "Memoirs of a Geisha," we enter a world where appearances are paramount; where a girl's virginity is auctioned to the highest bidder; where women are trained to beguile the most powerful men; and where love is scorned as illusion. It is a unique and triumphant work of fiction - at once romantic, erotic, suspenseful - and completely unforgettable.
+    globalcomment: |-
+      Memoirs of a Geisha is an American novel, and as such the attempt at West does East, especially on the complex and delicate subject of the geisha, is compelling, interesting, but also heavy-handed and ultimately ineffective (even more so in the case of the film). It is a wonderful introduction to geisha, Japanese culture, and the East for the uninitiated Western reader, and I can see why the book is popular, but I found it disappointing. For the reader already familiar with the culture, western influences are all too clear and the book comes off as a bit clunky and imperfect. I also had some problems with the general perception of the characters by readers versus the way the characters were actually portrayed in the book--Memoirs is far from the good-willed fairy tale that people assume it is. By all means, read it, but leave it open for critique and remember that a more authentic representation of eastern culture, especially in the details, will come from the east itself.
+      A lot of my critique stems from the fact that this movie has attained such wide-spread fame and been made into a movie, to be sure. I feel like it is being perpetuated as something it is not. Even the introduction to the book (a faux translator's note) perpetuates the myth that Memoirs is an accurate, beautiful, in-depth reflection of the life of a geisha, when in truth it is no more that historical fiction and is written by an outsider. Golden has done his research and is well-educated on his subjects, and I have no problem with people reading from, taking interest in, and even learning from this book; I do, however, think it is important that readers don't conflate the American novel with Japanese reality. They aren't the same thing, no matter how much research Golden did, and if we take the book as an accurate representation we're actually underestimating and undervaluing geisha, Japan, and Japanese culture.
+      Because Golden attempts to write from within the geisha culture, as a Japanese woman, he must do more than report the "facts" of that life--he must also pretend to be a part of it. Pretend he does, acting out a role as if he has studied inflection, script, and motivation. He certainly knows what makes writing "Japanese" but his attempt to mimic it is not entirely successful. The emphasis on elements, the independent sentences, the visual details are too prevalent and too obvious, as if Golden is trying to call our attention to them and thus to the Japanese style of the text. He does manage to draw attention, but to me, at least, what I came away with was the sense that Golden was an American trying really hard to sound Japanese--that is, the effect betrayed the attempt and the obvious attempt ruined the sincerity of the novel, for me. I felt like I was being smacked over the head with beauty! wood! water! kimono! haiku! and I felt insulted and disappointed.
+      The problems that I saw in the text were certainly secondary to the purpose of the text: to entertain, to introduce Western readers to Japanese culture, and to sell books (and eventually a film). They may not be obvious to all readers and they aren't so sever that the book isn't worth reading. I just think readers need to keep in mind that what Golden writes is fiction. Historical fiction, yes, but still fiction, therefore we should look for a true representation of Japanese culture within Japanese culture itself and take Memoirs with a grain of salt.
+      I also had problems with the rushed end of the book, the belief that Sayuri is a honest, good, modest, generous person when she really acts for herself and at harm to others throughout much of the book, the perpetuation of Hatsumomo as unjustified and cruel when she has all the reason in the world, and in general the public belief that Memoirs is some sort of fairy tale when in fact it is heavy-handed, biased, and takes a biased or unrelatistic view toward situations, characters, and love. However, all of those complains are secondary, in my view, to the major complain above, and should be come obvious to the reader.
+      Memoirs goes quickly, is compelling, and makes a good read, and I don't want to sound too unreasonably harsh on it. However, I believe the book has a lot of faults that aren't widely acknowledged and I think we as readers need to keep them in mind. This is an imperfect Western book, and while it may be a fun or good book it is not Japanese, authentic, or entirely well done.
+    chapters:
+    - title: Wikipedia article
+      content: |-
+        Geisha (芸者) (/ˈɡeɪʃə/; Japanese: [ɡeːɕa]),[1][2] also known as geiko (芸子) (in Kyoto and Kanazawa) or geigi (芸妓), are a class of female Japanese performing artists and entertainers trained in traditional Japanese performing arts styles, such as dance, music and singing, as well as being proficient conversationalists and hosts. Their distinct appearance is characterised by long, trailing kimono, traditional hairstyles and oshiroi make-up. Geisha entertain at parties known as ozashiki, often for the entertainment of wealthy clientele, as well as performing on stage and at festivals.
+        Modern geisha are not prostitutes. Though the ceremony of mizuage – the loss of a maiko's virginity to a paying patron – took place historically as part of the transition from apprentice to geisha, this no longer takes place, and was abolished under the Prostitution Prevention Law of 1956. Despite some geisha also historically engaging in prostitution, this also no longer takes place, and has never been an official part of the geisha profession, with laws historically separating the two professions. The misconception that geisha are prostitutes also originated from Western conflations of Japanese courtesans (oiran), modern-day oiran reenactors, the extant tayū, and prostitutes, who historically also wore kimono.
+        The first female geisha appeared in 1751, with geisha before that time being male performers who entertained guests within the pleasure quarters; only later did the profession become mainly characterised by female workers.[3][a]
+        The arts that geisha perform are considered highly developed and, in some cases, unique throughout Japan to the world of geisha. For example, the Gion district of Kyoto is the only district wherein the kyo-mai style of Japanese traditional dance is taught. This style of dance is taught solely to the geisha within the district by the Inoue school, with the school's former head, Inoue Yachiyo, having been classified as a "Living National Treasure" by the Government of Japan, the highest artistic award attainable in the country, in 1955.[5]
+    - title: Etymology and terminology
+      content: |-
+        A number of terms are used to describe the profession and community that geisha both live and work in. Though each has its own distinct meaning and translation, some are used interchangeably to describe the geisha community on the whole, such as hanamachi and karyūkai.
+        Geiko
+          A regional term for geisha with a slightly different meaning. Geiko is a term used to describe geisha in Western Japan, including Kyoto and Kanazawa. This term directly translates as 'woman of art', and is part of the Kyoto dialect spoken by geisha in Kyoto and Western Japan.
+        Geisha (芸者)
+          lit. 'artist' or 'performing artist' or 'artisan'. A traditional female hostess, entertainer and performing artist. The word geisha consists of two kanji: gei (芸, meaning 'art') and sha (者, meaning 'person' or 'doer').
+        Gokagai (五花街, lit. 'five flower towns')
+          The five geisha districts of Kyoto: Gion Kobu and Gion Higashi, Ponto-chō, Miyagawa-chō and Kamishichiken. Kyoto previously had six hanamachi, with Shimabara, formerly a red light and geisha district, still being considered an active hanamachi in the 1970s. In the present day, Shimabara is active only as a host for tayū, who are considered to be entertainers of a similar kind to geisha, but the district is still not considered to be an active hanamachi.[6]
+        Hanamachi (花街, lit. 'flower town')
+          The district where a geisha works, is affiliated, and potentially lives. Geisha generally do not work outside of their hanamachi, though customers may call them for special occasions in other districts, or on excursions – however far away – to places outside the karyūkai.[7]
+        Han-gyoku (半玉, lit. 'half-jewel')
+          A term for apprentice geisha in some regions of Japan such as Tokyo. The term han-gyoku means 'half-jewel', referring to one of the terms for a geisha's wages, 'jewel money'.[8][9]
+        Kagai (花街, lit. 'flower towns')
+          An alternative term for the districts in which geisha live and work; interchangeable with karyūkai.
+        Karyūkai (花柳界, lit. 'flower and willow world')
+          The community or society that geisha inhabit. In the present day, this term refers solely to the world of geisha, as well as the few remaining tayū; before the decline and eventual disappearance of oiran, the term karyūkai referred to the entertainment districts (the "world") of both geisha and courtesans, with oiran acting as the "flowers", ostensibly for their beautiful and showy appearance, and geisha being the subtler "willows".[10]
+        Maiko (舞妓)
+          The most common term for an apprentice geisha, translating to 'woman of dance'.
+        Minarai (見習い, lit. 'learning by observation')
+          The second typical stage of a maiko's training, and the step that always follows that of shikomi. A minarai wears a version of a maiko's outfit, with a shorter obi, shorter kimono sleeves, and more hair accessories (kanzashi). [11]
+        Minarai-jaya
+          During the minarai period, an apprentice will receive training through one specific teahouse, referred to as the minarai-jaya.[11]
+        Mizu shōbai (水商売, lit. 'water business')
+          A euphemistic term used to describe the entertainment and red-light districts in Japan, including the worlds of kabuki actors and geisha.[9]
+        Ochaya (お茶屋, lit. 'teahouse')
+          Though geisha may entertain at their okiya, restaurants or inns, they will usually entertain guests at a teahouse.
+        Okiya (置屋)
+          A geisha lodging house. All geisha must be registered to an okiya, though not all geisha live in their okiya day-to-day. Okiya are usually run by women, many of whom are ex-geisha themselves.[9] Geisha may entertain guests within their okiya.
+        Ozashiki (お座敷)
+          A term for a geisha's engagements, which may take part or the whole of an evening. The term ozashiki combines the name for a banqueting room, zashiki (座敷), and the honorific prefix o- (お), changing the meaning to a term exclusively referring to the engagements a geisha takes.
+        Shikomi (仕込み, 'preparation' or 'training')
+          The typical first stage of a maiko's training. Shikomi wear kimono, though they do not wear the elaborate outfit, hairstyle and makeup of fully-fledged maiko.
+        Tōde (lit. 'distant outings')
+          Geisha engagements not held in licensed restaurants, teahouses, or a geisha's own hanamachi.[7] 
+      comments:
+      - type: ''
+        range:
+          start: 0
+          end: 287
+        fields:
+          text: "That's a lot of different words for one singular idea!"    
+    - title: History
+      content: |-
+        In the early stages of Japanese history, saburuko (serving girls) were mostly wandering girls whose families had been displaced by war.[12] Some of these saburuko girls offered sexual services for money while others with a better education made a living by entertaining at high-class social gatherings.[13][14]
+        After the imperial court moved the capital to Heian-kyō (Kyoto) in 794, aspects of now-traditional Japanese art forms and aesthetic ideals began to develop, which would later contribute to the conditions under which the geisha profession emerged.[15] Skilled female performers, such as shirabyōshi dancers, thrived under the Imperial court, creating the traditions of female dance and performance that would later lead to both the development of geisha and kabuki actors.
+        During the Heian period, ideals surrounding relationships with women, sexual or otherwise, did not emphasise fidelity, with marriage within the Heian court considered a relatively casual arrangement. Men were not constrained to be faithful to their wives, with the ideal wife instead being a modest mother who managed the affairs of the house, following Confucian customs wherein love had secondary importance to the other roles a wife fulfilled within the marriage. As such, courtesans—who provided not only sexual enjoyment, but also romantic attachment and artistic entertainment—were seen both as an outlet for men and as common companions. Though geisha would not appear until the 1800s, the role and status of courtesans as artistic and romantic entertainers were a tradition that geisha came to inherit, with the basic artforms of entertaining guests through song, dance and conversation being employed and adapted to contemporary tastes by geisha.[citation needed]
+        Walled-in pleasure quarters known as yūkaku (遊廓/遊郭) were built in the 16th century,[16] with the shogunate designating prostitution illegal to practice outside of these "pleasure quarters" in 1617.[17] Within the pleasure quarters, yūjo (遊女, "[women] of pleasure") – a term used to refer to prostitutes as a whole – were classified and licensed, the upper echelons of which were referred to as oiran, a category with its own internal ranks, the highest of which being the tayū.
+        Though women in the lower ranks of yūjo did not provide as much artistic entertainment as they did sexual, oiran, whilst still prostitutes, also included the traditional arts as a key aspect of their entertainment, their practice of which differed considerably from those of geisha. As oiran were considered to be low-ranking members of the nobility, the instruments they played and the songs they sang were often confined to those considered "respectable" enough for the upper classes. This typically meant that oiran sang long, traditional ballads (nagauta (lit. 'long songs')), and played instruments such as the kokyū (a type of bowed shamisen) and the koto (a 13-stringed harp).
+        However, some yūjo also performed theatrical plays, dances and skits; one such person was Izumo no Okuni, whose theatrical performances on the dry riverbed of the Kamo River are considered to be the beginnings of kabuki theatre.[17] 
+  - title: The Book of Lipsums
+    nomenclature: empty
+    metadata:
+      author: internet
+      source: https://www.lipsum.com
+    synopsis: |-
+      This is an impressive collection of lipsum.
+    globalcomment: ''
+    chapters:
+    - title: The Smallest
+      content: |-
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque molestie tortor quis lobortis sollicitudin. Proin et tincidunt diam, at faucibus ex. Cras auctor ante lorem, sit amet tempor odio porttitor cursus. Proin posuere leo eget enim laoreet, et maximus justo tempus. Cras elit diam, commodo vitae ipsum vitae, sollicitudin consectetur leo. Nullam sed massa et elit ullamcorper congue eu eu dui. Fusce nisi turpis, pulvinar in aliquet ac, pharetra vel nisi. Fusce consequat vehicula orci, et vehicula lorem ornare sit amet. Donec nec sem ut sapien placerat vestibulum. Donec sagittis lobortis libero nec iaculis.
+      globalcomment: ''
+      comments: []
+    - title: The Medium
+      content: |-
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam mollis arcu est, convallis fermentum ipsum porta vitae. Fusce orci mauris, pharetra eget justo ac, sagittis sodales lorem. In volutpat id nibh nec laoreet. In efficitur risus quis velit faucibus, non vestibulum sapien ornare. Nunc convallis, lacus non congue porttitor, nunc mi suscipit metus, sit amet blandit metus ipsum id ipsum. Maecenas sagittis sagittis nisl dictum laoreet. Nam magna turpis, consequat sed ligula interdum, suscipit eleifend elit. Fusce laoreet purus ut nulla vehicula tempor.
+        Morbi tempor vestibulum sem, eget dapibus justo auctor et. Sed eget faucibus leo. Nulla fermentum, magna id sodales ornare, ipsum ante posuere elit, eget consequat nibh tellus at diam. Nulla scelerisque libero turpis, ac lobortis enim laoreet hendrerit. Quisque consectetur vestibulum tellus, vitae dignissim elit. Integer sodales felis vel volutpat fermentum. Aenean efficitur ligula enim. Duis congue fermentum augue, id aliquam odio malesuada eget. Vestibulum vitae sapien ex. Suspendisse massa tortor, fermentum nec luctus nec, aliquam in lacus. Curabitur fermentum cursus leo id viverra. Aliquam erat volutpat. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sit amet placerat arcu. Vivamus quis lacus justo. Phasellus rutrum nunc non lorem imperdiet, vel rutrum nulla malesuada.
+        Pellentesque gravida massa ultrices elit viverra condimentum. Quisque in quam massa. Pellentesque condimentum enim eget euismod faucibus. Donec faucibus velit diam, quis vulputate ex mattis non. Fusce ullamcorper dictum porttitor. Nunc a nisl in nulla viverra consectetur. Nulla dignissim dolor libero, id suscipit quam porttitor ut. Nullam maximus tempus dignissim.
+        Proin aliquam consequat metus, sed pretium lacus varius vitae. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce pulvinar magna id est euismod scelerisque. Maecenas pulvinar urna non nisi posuere, ut porta lacus feugiat. Sed accumsan cursus tellus, ac pharetra tellus ornare at. Ut viverra finibus interdum. In hac habitasse platea dictumst. Donec in luctus massa. Etiam vel odio mauris. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Morbi ultrices gravida turpis, sed varius libero cursus eu. Donec sed commodo diam, sit amet porta elit. Suspendisse potenti.
+        Nam vestibulum tempus turpis, sit amet sagittis ex pretium ut. Vestibulum sit amet mauris at metus pulvinar accumsan id sed felis. Quisque nec ullamcorper quam, in rutrum libero. Sed enim libero, molestie vitae blandit non, tincidunt id leo. Duis vel luctus urna. Vestibulum aliquam eleifend aliquam. Vestibulum sed nisl non eros mollis pretium.
+      globalcomment: ''
+      comments: []
+    - title: The Biggest
+      content: |-
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor nulla at dui scelerisque porta. Sed eu nisl tempus, facilisis velit vitae, semper velit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In id leo ullamcorper, maximus lectus et, euismod lacus. Praesent tristique a mi sit amet venenatis. Duis vitae ante quis dui imperdiet ullamcorper. Aenean vel convallis neque, eget viverra purus. Suspendisse quis aliquet orci.
+        Sed fringilla eget ante a facilisis. Donec sit amet egestas arcu. Cras congue facilisis ante, vel ultricies quam blandit eu. Mauris quis ullamcorper tellus. Duis et ipsum et risus finibus hendrerit eget id justo. Vestibulum imperdiet elit vel diam pulvinar, sit amet lobortis nisi bibendum. Nunc varius, urna ut viverra dapibus, mauris ipsum pharetra risus, ac congue ipsum tortor quis turpis. Nam in justo nec odio convallis lacinia sit amet nec nibh. Fusce gravida leo sed commodo pulvinar. Quisque vel ultrices arcu. Cras rhoncus, lacus vel cursus imperdiet, metus orci pellentesque nisi, a ultrices turpis lacus cursus libero.
+        Duis placerat sapien id urna fringilla, non ullamcorper lorem convallis. Maecenas enim nisl, bibendum a dignissim sit amet, interdum cursus turpis. Curabitur tristique metus id nisi egestas efficitur. Sed finibus convallis varius. Fusce id volutpat nisl, id commodo felis. Ut ut rhoncus mi, ut mollis nunc. Aliquam ultricies ipsum leo, id porttitor enim rhoncus ac. Suspendisse feugiat ornare lacinia. Vestibulum ut vulputate purus, vitae sollicitudin turpis. Duis eget dapibus turpis, non sollicitudin tortor. Fusce placerat scelerisque massa, quis dignissim diam feugiat vulputate. Donec eu ex a tortor consequat rhoncus. Morbi porta turpis tincidunt purus faucibus venenatis. Vestibulum tempor metus tincidunt, rutrum turpis at, convallis mauris. Donec semper luctus ornare. Suspendisse vehicula nec arcu vitae sollicitudin.
+        Maecenas ac faucibus massa, nec pharetra sem. Morbi aliquet sapien ut quam vehicula, sed elementum neque aliquet. Phasellus nisl tellus, aliquam vitae volutpat sit amet, consequat nec ipsum. Ut dapibus, erat vitae luctus interdum, eros eros faucibus purus, vel vestibulum mi augue sit amet urna. Aliquam at porta urna. Fusce commodo, urna in lobortis pulvinar, nunc diam tristique libero, id efficitur neque elit eget lectus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur posuere massa sit amet commodo consequat. Donec laoreet non turpis vitae sollicitudin.
+        Duis imperdiet arcu nec tortor lobortis condimentum. Phasellus urna quam, sollicitudin ut interdum vitae, posuere et enim. Aenean nibh turpis, congue at elit ut, euismod condimentum ligula. Vestibulum euismod non leo at egestas. Phasellus efficitur egestas justo a dictum. Integer euismod tortor justo, in dictum arcu congue rutrum. Aenean suscipit, velit vel luctus ornare, justo nibh porttitor dolor, quis tincidunt tortor ante nec quam. Praesent nec rutrum ipsum. Nulla scelerisque justo nec tristique semper. Nunc metus nulla, commodo vitae nunc a, posuere hendrerit felis. Maecenas sit amet nibh aliquam, condimentum justo id, sollicitudin quam. Proin lobortis imperdiet dui, eu pretium nibh gravida ut. Donec congue blandit tristique. Duis fringilla, arcu ut pharetra iaculis, metus nisi semper nunc, vel consectetur odio diam et orci. Praesent cursus porttitor libero, ut pretium tellus lobortis non.
+        Cras ipsum leo, bibendum ut felis in, gravida maximus leo. Mauris laoreet nisi vitae diam sagittis ultrices. Quisque ipsum velit, ornare sagittis ultricies et, porta non turpis. Nam sed mollis diam, vel posuere metus. Praesent iaculis sapien nec vehicula vehicula. Praesent metus mauris, gravida a enim at, malesuada placerat sem. Proin sagittis justo magna, id porta tellus sodales vel. Suspendisse non tempus felis. Duis in tellus ac arcu dapibus sollicitudin in eu lacus. Aliquam purus elit, fringilla quis bibendum non, convallis in erat. Mauris libero tellus, suscipit non sem quis, aliquet rutrum neque. Vestibulum interdum, augue quis sagittis commodo, lacus risus egestas nibh, vitae eleifend justo ipsum et tellus. Nam hendrerit at ipsum eu vehicula.
+        Fusce sit amet convallis magna. Proin metus tortor, commodo eget magna a, dignissim ultrices est. Sed dignissim aliquam rutrum. Quisque non eros risus. Nunc id tempus libero, at tempus diam. Nullam non eros posuere ipsum elementum mattis et sed risus. Vestibulum bibendum eu sem varius sodales. Fusce in vehicula lorem, sit amet euismod ipsum. Nam id vulputate sapien. Nulla eget ipsum ut odio mollis tincidunt. Curabitur varius sagittis dignissim.
+        Vestibulum quis tortor in felis gravida sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Sed aliquet mattis mauris vel vehicula. Fusce id orci mollis, ullamcorper diam a, tristique libero. Nulla eget libero sit amet dui pretium placerat. Sed porttitor gravida ante et tempus. Proin vel libero purus. Vivamus suscipit quis erat maximus pharetra.
+        Cras ac finibus velit. Proin aliquam est velit, ornare ullamcorper dolor commodo vitae. Praesent commodo eget urna ultrices feugiat. Quisque id sagittis sem. Nam eget interdum eros. Praesent ut eros quis risus pretium interdum sit amet congue ante. Aenean in tincidunt est. Nam erat augue, ultricies vitae dolor id, consequat mattis ante. Sed sodales, tortor vitae sagittis vehicula, justo augue accumsan erat, vitae egestas tellus lectus sed sem. Curabitur nulla diam, suscipit in ligula et, consectetur ullamcorper leo. Nulla blandit ex ultrices, tristique diam eu, dapibus velit. Donec ut dolor ornare, gravida enim nec, porttitor dui. Pellentesque quis tortor at mi semper porttitor. In facilisis placerat nisl eget eleifend. Quisque tincidunt commodo risus sed fringilla.
+        Nullam feugiat laoreet viverra. Suspendisse ultricies felis feugiat lorem ultrices, eu feugiat enim faucibus. Integer quis ipsum mi. Curabitur nec turpis in nisl eleifend suscipit. In vel sapien sit amet mi hendrerit finibus sed sed ante. Integer id lobortis ante, in bibendum massa. Mauris gravida ultrices tellus, id dapibus mauris hendrerit sed. Cras placerat diam eros, ut ornare justo sodales vitae. Nam eget cursus diam. Aliquam vel massa et libero mattis commodo at vel ante. Etiam hendrerit varius turpis nec efficitur. Nam pellentesque augue nulla, ac scelerisque odio scelerisque quis.
+        Suspendisse ante quam, tempor malesuada nunc ac, vestibulum hendrerit metus. Nunc magna neque, faucibus at urna quis, lobortis tincidunt velit. Nulla eleifend eros eget eros pharetra, id porta diam bibendum. Nulla facilisi. Ut volutpat mi risus, sit amet commodo risus mollis at. Ut viverra diam sit amet justo dapibus, sit amet condimentum neque sodales. Donec consectetur imperdiet sagittis. Donec dui est, imperdiet aliquet leo eget, semper maximus nulla. Donec quis bibendum felis. Mauris nec molestie dui. Donec a orci finibus, placerat arcu sit amet, euismod ligula. Vivamus eros lorem, maximus eu nisl vitae, dignissim commodo felis. Sed rhoncus tellus id venenatis luctus.
+        Fusce id dui in enim tempor hendrerit. Pellentesque leo sem, imperdiet nec dolor sed, dictum consectetur lacus. Integer dui est, laoreet et leo ut, pharetra consequat mi. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Aliquam pharetra varius lorem eu aliquam. Sed metus felis, sollicitudin ut magna tincidunt, vehicula tempus libero. Morbi efficitur velit elit, eu maximus magna efficitur vel. Vivamus placerat, ligula dapibus rutrum auctor, augue elit suscipit turpis, in finibus ligula dui vel erat.
+        Ut eu viverra massa. Aliquam tincidunt lectus vitae augue scelerisque, eu interdum neque mollis. Vestibulum luctus nisi sapien, non rutrum mauris pretium quis. Nullam vitae mi eget erat elementum sodales. In iaculis rutrum gravida. Duis vitae dolor dignissim, posuere felis ac, pulvinar diam. Suspendisse et arcu at orci venenatis molestie. Mauris at neque euismod, viverra leo ac, vehicula mauris. Nam hendrerit, neque ac dictum molestie, lacus tortor venenatis mi, a porta arcu libero vitae lacus. Sed ornare ac ligula ac interdum. Curabitur mi felis, molestie et libero eget, faucibus vehicula sem. Morbi ut auctor est, id cursus enim. Duis eu tristique quam. Quisque venenatis, leo non tempus fermentum, justo sem posuere nisl, sed tempor nibh urna non est. Nam dictum suscipit velit bibendum tempor.
+        Donec sit amet sapien est. Maecenas at risus ornare nisi iaculis dictum ut ut metus. Sed scelerisque, ante vel rutrum tempus, quam lorem malesuada ex, eu luctus justo urna non justo. Nam vehicula eros eu felis rutrum, non hendrerit lacus congue. Maecenas hendrerit dui in sem vestibulum tincidunt. Vivamus eget facilisis metus. Maecenas pellentesque ultricies neque eu mollis. Donec lobortis vitae lorem quis dictum.
+        Suspendisse potenti. Mauris a ipsum condimentum, rutrum dui aliquam, blandit dui. Maecenas sed euismod ex. Vestibulum a nulla rhoncus dolor pretium viverra. Aliquam sit amet luctus quam. In scelerisque quam semper, aliquam augue ullamcorper, suscipit nulla. Phasellus lacinia lorem ex, vitae egestas neque congue eget. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nunc sagittis ante a porta condimentum.
+        Integer interdum maximus tortor blandit aliquam. Quisque et arcu aliquet, tempus risus eu, varius libero. Ut eu rhoncus felis. Nulla orci mi, ultrices vel nisi a, ultricies vehicula magna. Maecenas gravida ultrices nibh, vitae tincidunt tellus porttitor sit amet. Nulla massa lorem, consequat sit amet tristique sed, iaculis at velit. Phasellus vitae tortor arcu. Aenean nec placerat enim. Nunc eu scelerisque nunc, eget congue ipsum. Proin ultrices ante non luctus venenatis.
+        Integer tempus leo orci, in semper nibh porta quis. Duis ligula lorem, semper sed ultrices sit amet, maximus ut diam. Suspendisse mattis id sapien id varius. Fusce eu egestas purus. Ut ut purus porttitor, porttitor purus ut, ultrices nisl. Nullam vestibulum, diam vel dapibus laoreet, tellus ipsum mattis velit, ut dignissim felis nulla a mauris. Sed sit amet est et est cursus rutrum.
+        Donec tempus eu dui nec sagittis. Phasellus vel nisl elementum, laoreet odio eget, faucibus turpis. Nulla bibendum risus sed eros interdum cursus. Aliquam elit libero, congue ac augue vulputate, consequat imperdiet arcu. Nam placerat venenatis dui, ac vestibulum erat euismod id. Vestibulum id augue sollicitudin, vulputate sapien non, dapibus leo. Nunc molestie nibh lacus, quis aliquam enim maximus non. In hac habitasse platea dictumst. Donec accumsan odio eget tellus consequat, sit amet aliquet tortor porttitor. Aenean id sagittis diam. Fusce nec condimentum velit, et viverra nibh.
+        Pellentesque orci leo, vehicula ac magna at, semper fringilla enim. Cras dapibus ultrices leo ac efficitur. Phasellus dignissim nibh hendrerit velit porta, eu posuere mauris dictum. Nullam aliquam, urna sit amet lacinia interdum, enim quam pretium erat, vitae feugiat turpis mauris placerat velit. Sed in risus ultricies, eleifend nisl sit amet, sodales justo. Sed et erat quis nunc tristique cursus non ac dolor. Duis vitae lobortis nunc, a sodales urna. Praesent non magna pretium, auctor urna quis, fringilla urna. Phasellus ipsum tellus, iaculis a metus nec, pellentesque finibus nibh. Vivamus ac purus a ipsum pulvinar maximus dignissim at ante. Duis eget fermentum lectus. Maecenas ut nunc et ligula ullamcorper mattis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Phasellus commodo nunc nisi, molestie iaculis turpis vehicula vel. Sed enim eros, luctus vitae facilisis ut, interdum non mauris. Aenean rhoncus purus vel tincidunt hendrerit.
+        Nunc sodales sollicitudin molestie. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. In aliquet leo at lectus elementum feugiat. Morbi nec erat dapibus enim lobortis pellentesque et id neque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas eget ultrices tellus, vitae molestie nibh. Pellentesque euismod sollicitudin ligula, ut hendrerit felis vulputate nec. In sed lorem feugiat, laoreet purus vitae, eleifend sapien. Nullam urna tortor, rutrum nec faucibus et, lobortis a odio. Quisque congue dictum mi in cursus. Praesent eget quam arcu. Vivamus tincidunt non nisl in dignissim. Vestibulum eu nisl et leo malesuada venenatis. Aenean sagittis lectus non malesuada eleifend. Morbi elementum ac purus vitae molestie.
+      globalcomment: ''
+      comments: []
+  - title: Weyward
+    nomenclature: ''
+    synopsis: |-
+      2019: Under cover of darkness, Kate flees London for ramshackle Weyward Cottage, inherited from a great aunt she barely remembers. With its tumbling ivy and overgrown garden, the cottage is worlds away from the abusive partner who tormented Kate. But she begins to suspect that her great aunt had a secret. One that lurks in the bones of the cottage, hidden ever since the witch-hunts of the 17th century.
+      1619: Altha is awaiting trial for the murder of a local farmer who was stampeded to death by his herd. As a girl, Altha’s mother taught her their magic, a kind not rooted in spell casting but in a deep knowledge of the natural world. But unusual women have always been deemed dangerous, and as the evidence for witchcraft is set out against Altha, she knows it will take all of her powers to maintain her freedom.
+      1942: As World War II rages, Violet is trapped in her family's grand, crumbling estate. Straitjacketed by societal convention, she longs for the robust education her brother receives––and for her mother, long deceased, who was rumored to have gone mad before her death. The only traces Violet has of her are a locket bearing the initial W and the word weyward scratched into the baseboard of her bedroom.
+      Weaving together the stories of three extraordinary women across five centuries, Emilia Hart's Weyward is an enthralling novel of female resilience and the transformative power of the natural world.
+    globalcomment: ''
+    chapters: []

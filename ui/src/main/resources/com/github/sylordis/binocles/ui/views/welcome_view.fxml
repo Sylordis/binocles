@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.String?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
-<fx:root stylesheets="@../styles/main.css" type="javafx.scene.layout.BorderPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root styleClass="binocles-pane" type="BorderPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <top>
-      <Text fx:id="chapterTitle" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome!" wrappingWidth="600.13671875" BorderPane.alignment="CENTER">
-         <styleClass>
-            <String fx:value="chapter" />
-            <String fx:value="title" />
-         </styleClass>
-         <BorderPane.margin>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-         </BorderPane.margin>
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Text>
+     <VBox styleClass="header">
+       <children>
+            <Text fx:id="chapterTitle" styleClass="main-title" text="Welcome to Binocles!"/>
+       </children>
+     </VBox>
    </top>
+   <center>
+      <VBox styleClass="body" BorderPane.alignment="CENTER">
+         <children>
+            <TextFlow>
+               <children>
+                  <Text text="Explore the trees on the left, double click on an item to open it or use the different menus or toolbars." />
+               </children>
+            </TextFlow>
+            <Text text="Start reviewing today!"/>
+         </children>
+      </VBox>
+   </center>
 </fx:root>

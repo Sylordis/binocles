@@ -39,6 +39,8 @@ import com.github.sylordis.binocles.utils.yaml.YAMLUtils;
  */
 public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 
+	// TODO Import YAML keys in proper order
+	
 	/**
 	 * Class logger.
 	 */
@@ -47,6 +49,8 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 	 * Constant for storing the nomenclature id temporarily until proper linking.
 	 */
 	public final static String NOMENCLATURE_BINOCLES_KEY = "_binocles_nomenclature";
+
+	private BinoclesModel model;
 
 	/**
 	 * Imports a given YAML file to create all required entries. This method returns a populated model,
@@ -60,7 +64,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 	 */
 	public BinoclesModel load(File file) throws ImportException, IOException {
 		logger.info("Loading YAML file {}", file);
-		BinoclesModel model = new BinoclesModel();
+		model = new BinoclesModel();
 		try {
 			InputStream inputStream = new FileInputStream(file);
 			Yaml yaml = new Yaml();
@@ -82,23 +86,16 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 				if (YAMLUtils.checkChildType(root, "library", YAMLType.LIST)) {
 					List<Book> books = loadBooksFromYAML(YAMLUtils.list("library", root));
 					logger.info("Imported {} books", books.size());
-					model.setBooks(books);
+					try {
+						model.setBooksUnique(books);
+					} catch (UniqueIDException e) {
+						// TODO To not interrupt the import but resolve import conflicts at the end
+						throw new ImportException(e);
+					}
 				}
 				// TODO check comments consistency:
 				// - range compared to chapter range
 				// - fields existence & values
-				// Link nomenclatures to books
-				logger.info("Linking nomenclatures to books");
-				for (Book book : model.getBooks()) {
-					if (book.getMetadata().containsKey(NOMENCLATURE_BINOCLES_KEY)) {
-						String id = book.getMetadata().get(NOMENCLATURE_BINOCLES_KEY);
-						book.setNomenclature(model.getNomenclature(id));
-						logger.info("'{}' linked with '{}'", book.getTitle(), book.getNomenclature().getName());
-						book.getMetadata().remove(NOMENCLATURE_BINOCLES_KEY);
-					} else {
-						book.setNomenclature(model.getDefaultNomenclature());
-					}
-				}
 			} else {
 				String message = "YAML import error: no proper root 'binocles' can be found";
 				logger.error(message);
@@ -126,13 +123,19 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			// Normal fields
 			String synopsis = YAMLUtils.strValue("synopsis", data);
 			String generalComment = YAMLUtils.strValue("globalcomment", data);
+			String description = YAMLUtils.strValue("description", data);
 			book.setSynopsis(synopsis);
 			book.setGeneralComment(generalComment);
+			book.setDescription(description);
 			logger.info("Created book '{}'", book.getTitle());
 			Map<String, String> metadata = new HashMap<>();
 			// Nomenclature, store in metadata for later
-			if (data.containsKey("nomenclature") && YAMLUtils.strValue("nomenclature", data) != null) {
-				metadata.put(NOMENCLATURE_BINOCLES_KEY, YAMLUtils.strValue("nomenclature", data));
+			String nomenclature = YAMLUtils.strValue("nomenclature", data);
+			if (nomenclature != null && !nomenclature.isEmpty()) {
+				book.setNomenclature(model.getNomenclature(YAMLUtils.strValue("nomenclature", data)));
+				logger.info("'{}' linked with nomenclature '{}'", book.getTitle(), book.getNomenclature().getName());
+			} else {
+				book.setNomenclature(model.getDefaultNomenclature());
 			}
 			// Metadata
 			if (data.containsKey("metadata")) {
@@ -218,6 +221,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			Nomenclature nomenclature = book.getNomenclature();
 			CommentType type = null;
 			if (null != nomenclature) {
+				// TODO something's not right here, correct nomenclature is not found
 				type = nomenclature.getTypes().stream().filter(t -> t.getId().equals(commentTypeName)).findFirst()
 				        .get();
 			}
@@ -229,6 +233,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 				        e -> convertValueType(e));
 				comment.setFields(fields);
 			}
+			result.add(comment);
 		}
 		return result;
 	}
@@ -248,26 +253,24 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			CommentType type = new CommentType(name, description);
 			// Set fields
 			if (data.containsKey("fields")) {
-				logger.debug("Loading fields");
 				Map<String, String> fields = MapUtils.convertMap(YAMLUtils.get("fields", data), Map.Entry::getKey,
 				        e -> convertValueType(e));
 				logger.debug("Fields found: {}", fields);
 				type.setFields(fields);
 			}
 			if (data.containsKey("large")) {
-				logger.debug("Loading large fields");
+				logger.debug("Setting large fields");
 				YAMLUtils.list("large", data).forEach(l -> type.getFields().get(l.toString()).setIsLongText(true));
 			}
 			// Set styles
 			if (data.containsKey("styles")) {
-				logger.debug("Loading style");
 				Map<String, String> styles = MapUtils.convertMap(YAMLUtils.get("styles", data), Map.Entry::getKey,
 				        e -> convertValueType(e));
 				logger.debug("Style found: {}", styles);
 				type.editStyles(styles);
 			}
 			result.add(type);
-			logger.debug("Imported comment type '{}' with fields {}", type.getName(), type.getFields().keySet());
+			logger.info("Imported comment type '{}', fields: {}", type.getName(), type.getFields().keySet());
 		}
 		return result;
 	}

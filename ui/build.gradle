@@ -17,7 +17,7 @@ dependencies {
     implementation 'org.apache.commons:commons-text'
     implementation project(':model')
     implementation project(':utils')
-    implementation 'org.fxmisc.richtext:richtextfx:0.11.1'
+    implementation 'org.fxmisc.richtext:richtextfx:0.11.3'
 }
 
 application {

@@ -18,7 +18,7 @@ import com.google.common.base.Preconditions;
  */
 public class Comment implements Comparable<Comment>, Serializable {
 
-	private static final long serialVersionUID = -4916927914517373588L;
+	private static final long serialVersionUID = 8636110855533266235L;
 	/**
 	 * Type of the comment, linked to configuration.
 	 */

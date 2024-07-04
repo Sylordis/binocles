@@ -17,6 +17,7 @@ import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.ui.AppIcons;
 import com.github.sylordis.binocles.ui.components.CustomListCell;
 import com.github.sylordis.binocles.ui.functional.ListenerValidator;
+import com.github.sylordis.binocles.ui.functional.TextAreaResizeUpToListener;
 import com.github.sylordis.binocles.ui.javafxutils.StyleUtils;
 
 import javafx.beans.value.ChangeListener;
@@ -55,6 +56,11 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 	 * Index where the comment type specific fields starts.
 	 */
 	private static final int ROW_FIELDS_START = 7;
+	
+	/**
+	 * Maximum number of rows for a text area before having to scroll.
+	 */
+	private static final int COMMENT_TEXTAREA_MAX_LINES = 10; 
 
 	private Book book;
 	private Chapter chapter;
@@ -209,8 +215,10 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 				Label label = new Label(StringUtils.capitalize(entry.getKey()));
 				if (entry.getValue().getIsLongText()) {
 					TextArea textField = new TextArea();
-					textField.setPrefRowCount(3);
+					textField.setWrapText(true);
+					textField.setPrefRowCount(5);
 					textField.setPrefWidth(FIELDS_SIZES - 100);
+					textField.textProperty().addListener(new TextAreaResizeUpToListener(textField));
 					fieldsFields.put(entry.getKey(), textField);
 					getGridPane().addRow(row, label, textField);
 					GridPane.setValignment(label, VPos.TOP);

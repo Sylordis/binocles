@@ -1,5 +1,12 @@
 package com.github.sylordis.binocles.ui.javafxutils;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.commons.lang3.StringUtils;
+
 import javafx.scene.paint.Color;
 
 /**
@@ -28,7 +35,13 @@ public final class StyleUtils {
 	 * same, but prefixed with <code>-fx-</code> and some properties are changed. This method takes care
 	 * of that.<br/>
 	 * 
-	 * The result should be <pre>-fx-&lt;entry&gt;: &lt;value&gt;;</pre>.
+	 * The result should be
+	 * 
+	 * <pre>
+	 * -fx-&lt;entry&gt;: &lt;value&gt;;
+	 * </pre>
+	 * 
+	 * .
 	 * 
 	 * @param property
 	 * @param value
@@ -77,6 +90,37 @@ public final class StyleUtils {
 	private static String toHex(double val) {
 		String in = Integer.toHexString(scaleTo(val, 255));
 		return in.length() == 1 ? "0" + in : in;
+	}
+
+	/**
+	 * Creates a human-readable string from the given dictionary of styles.
+	 * 
+	 * @param styles
+	 * @return
+	 */
+	public static String toHumanString(Map<String, String> styles) {
+		// TODO Style is fucked up
+		List<String> parts = new ArrayList<>();
+		List<String> fontStyles = new ArrayList<>();
+		for (Entry<String,String> entry : styles.entrySet()) {
+			switch(entry.getKey()) {
+				case "font-style":
+				case "font-weight":
+					if (!entry.getValue().isEmpty())
+						fontStyles.add(entry.getValue());
+					break;
+				case "bg-color":
+					parts.add("Background: " + entry.getValue());
+					break;
+				default:
+					parts.add(StringUtils.capitalize(entry.getKey().replace('-', ' ')) + ": " + entry.getValue());
+					break;
+			}
+		}
+		if (!fontStyles.isEmpty()) {
+			parts.add("Styles: " + StringUtils.join(", ", fontStyles));
+		}
+		return String.join("; ", parts);
 	}
 
 	/**

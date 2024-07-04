@@ -34,6 +34,8 @@ import com.github.sylordis.binocles.utils.io.FileExporter;
  */
 public class YamlFileExporter implements FileExporter<BinoclesModel> {
 
+	// TODO SnakeYaml weird string export
+
 	/**
 	 * Class logger.
 	 */
@@ -44,7 +46,7 @@ public class YamlFileExporter implements FileExporter<BinoclesModel> {
 		Map<String, Object> binoclesRoot = new LinkedHashMap<>();
 		exportHeader(binoclesRoot);
 		List<Object> nomenclaturesRoot = new ArrayList<Object>();
-		exportNomenclatures(nomenclaturesRoot, model.getNomenclatures());
+		exportNomenclatures(nomenclaturesRoot, model.getNomenclatures(true));
 		binoclesRoot.put("nomenclatures", nomenclaturesRoot);
 		List<Object> libraryRoot = new ArrayList<Object>();
 		exportBooks(libraryRoot, model.getBooks());
@@ -53,6 +55,7 @@ public class YamlFileExporter implements FileExporter<BinoclesModel> {
 			Map<String, Object> root = Map.of("binocles", binoclesRoot);
 			DumperOptions yamlOptions = new DumperOptions();
 			yamlOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+//			yamlOptions.setDefaultScalarStyle(DumperOptions.ScalarStyle.LITERAL);
 			Yaml yaml = new Yaml(yamlOptions);
 			yaml.dump(root, writer);
 		}
@@ -82,12 +85,16 @@ public class YamlFileExporter implements FileExporter<BinoclesModel> {
 			bookMap.put("title", book.getTitle());
 			bookMap.put("nomenclature", book.getNomenclature() != null ? book.getNomenclature().getId() : "");
 			// Metadata
-			Map<String, Object> metadatas = new TreeMap<>();
-			metadatas.putAll(book.getMetadata());
-			bookMap.put("metadata", metadatas);
+			if (!book.getMetadata().isEmpty()) {
+				Map<String, Object> metadatas = new TreeMap<>();
+				metadatas.putAll(book.getMetadata());
+				bookMap.put("metadata", metadatas);
+			}
 			// Text
 			bookMap.put("synopsis", book.getSynopsis());
-			bookMap.put("globalcomment", book.getGlobalComment());
+			if (book.hasGlobalComment())
+				bookMap.put("globalcomment", book.getGlobalComment());
+			bookMap.put("description", book.getDescription());
 			// Chapters
 			List<Object> chapters = new ArrayList<>();
 			bookMap.put("chapters", chapters);

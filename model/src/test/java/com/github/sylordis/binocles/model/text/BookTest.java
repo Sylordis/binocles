@@ -22,6 +22,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.utils.Identifiable;
 import com.github.sylordis.binocles.utils.MapUtils;
+import com.github.sylordis.binocles.utils.exceptions.UniqueIDException;
 
 /**
  * Test class for {@link Book}.
@@ -132,9 +133,10 @@ class BookTest {
 
 	/**
 	 * Test method for {@link com.github.sylordis.binocles.model.text.Book#toString()}.
+	 * @throws UniqueIDException 
 	 */
 	@Test
-	void testToString_WithChapter() {
+	void testToString_WithChapter() throws UniqueIDException {
 		book.addChapter(mock(Chapter.class));
 		assertNotNull(book.toString());
 	}
@@ -197,9 +199,10 @@ class BookTest {
 	/**
 	 * Test method for
 	 * {@link com.github.sylordis.binocles.model.text.Book#addChapter(com.github.sylordis.binocles.model.text.Chapter)}.
+	 * @throws UniqueIDException 
 	 */
 	@Test
-	void testAddChapter() {
+	void testAddChapter() throws UniqueIDException {
 		final Chapter chapter = mock(Chapter.class);
 		book.addChapter(chapter);
 		assertAll(() -> assertEquals(1, book.getChapters().size()),
@@ -209,11 +212,14 @@ class BookTest {
 	/**
 	 * Test method for
 	 * {@link com.github.sylordis.binocles.model.text.Book#addChapter(com.github.sylordis.binocles.model.text.Chapter)}.
+	 * @throws UniqueIDException 
 	 */
 	@Test
-	void testAddChapter_Multiple() {
+	void testAddChapter_Multiple() throws UniqueIDException {
 		List<Chapter> chapters = List.of(mock(Chapter.class), mock(Chapter.class), mock(Chapter.class));
-		chapters.forEach(book::addChapter);
+		for (Chapter chapter : chapters) {
+			book.addChapter(chapter);
+		}
 		assertIterableEquals(chapters, book.getChapters());
 	}
 
@@ -236,9 +242,10 @@ class BookTest {
 
 	/**
 	 * Test method for {@link com.github.sylordis.binocles.model.text.Book#hasChapters()}.
+	 * @throws UniqueIDException 
 	 */
 	@Test
-	void testHasChapters() {
+	void testHasChapters() throws UniqueIDException {
 		book.addChapter(mock(Chapter.class));
 		assertTrue(book.hasChapters());
 	}
@@ -329,9 +336,10 @@ class BookTest {
 	/**
 	 * Test method for
 	 * {@link com.github.sylordis.binocles.model.text.Book#hasChapter(java.lang.String)}.
+	 * @throws UniqueIDException 
 	 */
 	@Test
-	void testHasChapter() {
+	void testHasChapter() throws UniqueIDException {
 		final String title = "I am the title";
 		final Chapter chapter = new Chapter(title);
 		book.addChapter(chapter);

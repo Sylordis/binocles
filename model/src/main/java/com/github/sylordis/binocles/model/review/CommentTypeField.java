@@ -1,11 +1,14 @@
 package com.github.sylordis.binocles.model.review;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
  * Meta fields for comment types.
  */
-public class CommentTypeField {
+public class CommentTypeField implements Serializable {
+
+	private static final long serialVersionUID = 8592334393810850293L;
 
 	/**
 	 * Name of the field.

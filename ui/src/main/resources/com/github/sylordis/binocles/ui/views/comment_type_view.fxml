@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<fx:root type="BorderPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+     <VBox styleClass="header">
+       <children>
+	      <Text fx:id="commentTypeName" styleClass="main-title" text="Comment type name" />
+	      <Text fx:id="nomenclatureName" styleClass="sub-title" text="Nomenclature name" />
+       </children>
+     </VBox>
+   </top>
+   <center>
+      <GridPane fx:id="commentTypeGrid">
+        <columnConstraints>
+          <ColumnConstraints />
+          <ColumnConstraints hgrow="ALWAYS" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints />
+          <RowConstraints />
+          <RowConstraints />
+            <RowConstraints />
+        </rowConstraints>
+         <children>
+            <Label text="Description" />
+            <TextFlow fx:id="descriptionFlow" GridPane.columnIndex="1" />
+            <Label text="Style" GridPane.rowIndex="1" />
+            <TextFlow fx:id="styleFlow" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Fields:" GridPane.rowIndex="2" />
+         </children>
+	   <styleClass>
+	      <String fx:value="content-grid" />
+	      <String fx:value="body" />
+	   </styleClass>
+      </GridPane>
+   </center>
+   <styleClass>
+      <String fx:value="content-main" />
+      <String fx:value="binocles-pane" />
+   </styleClass>
+</fx:root>

@@ -36,6 +36,7 @@ import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.utils.MapUtils;
 import com.github.sylordis.binocles.utils.exceptions.ExportException;
+import com.github.sylordis.binocles.utils.exceptions.UniqueIDException;
 
 /**
  * Tests for the YAML export structure. Since the exporter creates a whole java structure with
@@ -147,9 +148,10 @@ class YamlFileExporterTest {
 	/**
 	 * Test method for
 	 * {@link com.github.sylordis.binocles.model.io.YamlFileExporter#exportBooks(java.util.List, java.util.Set)}.
+	 * @throws UniqueIDException 
 	 */
 	@Test
-	void testExportBooks_OneNoNomenclature() {
+	void testExportBooks_OneNoNomenclature() throws UniqueIDException {
 		final String title = "The Chrysalids";
 		final String synopsis = "Now everyone fights.";
 		final String generalComment = "Third opus of the trilogy.";

@@ -1,8 +1,9 @@
-package com.github.sylordis.binocles.ui.components;
+package com.github.sylordis.binocles.ui.functional;
 
 import java.util.Comparator;
 
 import com.github.sylordis.binocles.model.review.Comment;
+import com.github.sylordis.binocles.ui.components.CommentBox;
 
 import javafx.scene.Node;
 

@@ -1,12 +1,14 @@
 package com.github.sylordis.binocles.model.text;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.utils.Identifiable;
+import com.github.sylordis.binocles.utils.exceptions.UniqueIDException;
 import com.google.common.base.Preconditions;
 
 /**
@@ -18,6 +20,8 @@ import com.google.common.base.Preconditions;
  *
  */
 public class Book extends ReviewableContent {
+
+	private static final long serialVersionUID = 8322075498271400519L;
 
 	/**
 	 * Default title for chapters.
@@ -137,9 +141,11 @@ public class Book extends ReviewableContent {
 	 * Adds a new chapter to the list of chapters.
 	 * 
 	 * @param chapter
+	 * @throws UniqueIDException
 	 * @see List#add(Object)
 	 */
-	public void addChapter(Chapter chapter) {
+	public void addChapter(Chapter chapter) throws UniqueIDException {
+		Identifiable.checkIfUnique(chapter, this.chapters);
 		this.chapters.add(chapter);
 	}
 
@@ -168,6 +174,19 @@ public class Book extends ReviewableContent {
 		this.chapters.clear();
 		if (chapters != null)
 			this.chapters.addAll(chapters);
+	}
+
+	/**
+	 * Replaces all chapters with provided one, checking for unique id.
+	 * 
+	 * @param chapters
+	 * @throws UniqueIDException
+	 */
+	public void setChaptersUnique(Collection<Chapter> chapters) throws UniqueIDException {
+		this.chapters.clear();
+		for (Chapter chapter : chapters) {
+			this.addChapter(chapter);
+		}
 	}
 
 	/**
@@ -268,7 +287,8 @@ public class Book extends ReviewableContent {
 	}
 
 	public int getCommentsCount() {
-		return getChapters().stream().mapToInt(c -> c.getCommentsCount()).sum() + (getGlobalComment().isBlank() ? 0 : 1);
+		return getChapters().stream().mapToInt(c -> c.getCommentsCount()).sum()
+		        + (getGlobalComment().isBlank() ? 0 : 1);
 	}
-	
+
 }

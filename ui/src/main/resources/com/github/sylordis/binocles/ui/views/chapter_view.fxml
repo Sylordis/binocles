@@ -2,38 +2,74 @@
 
 <?import java.lang.String?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 
 
-<fx:root type="AnchorPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-	<styleClass>
+<fx:root type="BorderPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <HBox fx:id="chapterHeader" prefHeight="56.0" prefWidth="200.0" styleClass="header" BorderPane.alignment="CENTER">
+         <children>
+            <VBox>
+               <children>
+                    <Text fx:id="chapterTitle" styleClass="main-title" text="Chapter title" />
+                  <TextFlow styleClass="sub-title">
+                     <children>
+                        <Text styleClass="small-intro" text="From " />
+                        <Text text="“" />
+                          <Text fx:id="bookTitle" styleClass="quoted" text="Book title" />
+                          <Text text="”" />
+                     </children>
+                  </TextFlow>
+               </children>
+            </VBox>
+            <Region HBox.hgrow="ALWAYS" />
+            <VBox alignment="CENTER" styleClass="button-toolbar">
+               <children>
+                  <Button fx:id="toolbarCreateComment" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" onAction="#createCommentAction" styleClass="buttonicon" text="New Comment">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                           <image>
+                              <Image url="@../img/comment.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="Create a new comment" />
+                     </tooltip>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+   </top>
+   <center>
+        <ScrollPane fx:id="mainScrollPane" fitToHeight="true" fitToWidth="true" vbarPolicy="ALWAYS" hbarPolicy="NEVER" BorderPane.alignment="CENTER">
+           <content>
+            <HBox fx:id="chapterContentContainer">
+               <children>
+                  <Region fx:id="chapterContentSeparator" prefWidth="20.0" styleClass="zone-separator" />
+                    <VBox fx:id="commentBoxContainer" prefWidth="200.0" />
+               </children>
+            </HBox>
+           </content>
+		   <styleClass>
+		      <String fx:value="edge-to-edge" />
+		      <String fx:value="body" />
+		   </styleClass>
+        </ScrollPane>
+   </center>
+   <styleClass>
       <String fx:value="binocles-pane" />
       <String fx:value="chapter-pane" />
-  </styleClass>
-   <children>
-      <SplitPane dividerPositions="0.8" stylesheets="@../styles/main.css"  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-           <items>
-              <VBox fx:id="chapterZoneBox"  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" prefHeight="17.0" prefWidth="601.0">
-                 <children>
-                    <Text fx:id="chapterTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="main-title" text="Chapter title" />
-                    <Text fx:id="bookTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="sub-title" text="Book title"/>
-                    <AnchorPane fx:id="chapterContentZone" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                 </children>
-                 <padding>
-                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                 </padding>
-              </VBox>
-              <ScrollPane fx:id="chapterCommentBoxScroll" minWidth="200.0" prefWidth="200.0"  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                 <content>
-                    <VBox fx:id="chapterCommentBox"  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
-                 </content>
-              </ScrollPane>
-           </items>
-      </SplitPane>
-   </children>
+   </styleClass>
 </fx:root>

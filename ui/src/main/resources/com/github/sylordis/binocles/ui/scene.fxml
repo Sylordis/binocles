@@ -36,7 +36,6 @@
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ContextMenu?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -50,12 +49,10 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.input.KeyCodeCombination?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.paint.Color?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <VBox prefHeight="600.0" prefWidth="900.0" stylesheets="@styles/main.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.github.sylordis.binocles.ui.BinoclesController">
   <children>
@@ -322,74 +319,53 @@
                   <Tooltip text="Create a new comment type" />
                </tooltip>
             </Button>
-            <Separator maxHeight="16.0" orientation="VERTICAL" prefHeight="16.0" />
-            <Button fx:id="toolbarCreateComment" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" onAction="#createCommentAction" text="New Comment">
-               <graphic>
-                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
-                     <image>
-                        <Image url="@img/comment.png" />
-                     </image>
-                  </ImageView>
-               </graphic>
-               <tooltip>
-                  <Tooltip text="Create a new comment" />
-               </tooltip>
-            </Button>
          </children>
          <VBox.margin>
             <Insets left="5.0" right="5.0" />
          </VBox.margin>
       </HBox>
-    <SplitPane dividerPositions="0.2" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+    <SplitPane fx:id="mainSplitPane" dividerPositions="0.2" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <items>
-            <SplitPane dividerPositions="0.3" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+            <SplitPane dividerPositions="0.3" minWidth="160.0" orientation="VERTICAL" prefWidth="160.0" SplitPane.resizableWithParent="false">
               <items>
                 <TitledPane animated="false" text="Nomenclatures">
                   <content>
-                    <AnchorPane>
-                           <children>
-                              <TreeView id="tree-nomenclatures" fx:id="nomenclaturesTree" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-	                              <contextMenu>
-	                                    <ContextMenu>
-	                                      <items>
-                                          <Menu mnemonicParsing="false" text="New">
-                                             <items>
-      	                                        <MenuItem fx:id="nomenclaturesTreeMenuNewNomenclature" mnemonicParsing="false" onAction="#createNomenclatureAction" text="New Nomenclature" />
-      	                                        <MenuItem fx:id="nomenclaturesTreeMenuNewCommentType" disable="true" mnemonicParsing="false" onAction="#createCommentTypeAction" text="New Comment Type" />
-                                             </items>
-                                          </Menu>
-	                                        <MenuItem fx:id="nomenclaturesTreeMenuEdit" disable="true" mnemonicParsing="false" onAction="#editReviewElementAction" text="Edit" />
-	                                        <MenuItem fx:id="nomenclaturesTreeMenuDelete" disable="true" mnemonicParsing="false" onAction="#deleteReviewElementsAction" text="Delete" />
-	                                      </items>
-	                                    </ContextMenu>
-                                 </contextMenu>
-                              </TreeView>
-                           </children>
-                        </AnchorPane>
+                      <TreeView id="tree-nomenclatures" fx:id="nomenclaturesTree" showRoot="false">
+                          <contextMenu>
+                                <ContextMenu>
+                                  <items>
+                                  <Menu mnemonicParsing="false" text="New">
+                                     <items>
+                                        <MenuItem fx:id="nomenclaturesTreeMenuNewNomenclature" mnemonicParsing="false" onAction="#createNomenclatureAction" text="New Nomenclature" />
+                                        <MenuItem fx:id="nomenclaturesTreeMenuNewCommentType" disable="true" mnemonicParsing="false" onAction="#createCommentTypeAction" text="New Comment Type" />
+                                     </items>
+                                  </Menu>
+                                    <MenuItem fx:id="nomenclaturesTreeMenuEdit" disable="true" mnemonicParsing="false" onAction="#editReviewElementAction" text="Edit" />
+                                    <MenuItem fx:id="nomenclaturesTreeMenuDelete" disable="true" mnemonicParsing="false" onAction="#deleteReviewElementsAction" text="Delete" />
+                                  </items>
+                                </ContextMenu>
+                         </contextMenu>
+                      </TreeView>
                   </content>
                 </TitledPane>
                 <TitledPane animated="false" text="Reviews">
                   <content>
-                    <AnchorPane>
-                           <children>
-                              <TreeView id="tree-reviews" fx:id="booksTree" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                 <contextMenu>
-                                    <ContextMenu>
-                                      <items>
-                                          <Menu mnemonicParsing="false" text="New">
-                                            <items>
-		                                        <MenuItem fx:id="booksTreeMenuNewBook" mnemonicParsing="false" onAction="#createBookAction" text="New Book" />
-		                                        <MenuItem fx:id="booksTreeMenuNewChapter" disable="true" mnemonicParsing="false" onAction="#createChapterAction" text="New Chapter" />
-                                            </items>
-                                          </Menu>
-                                        <MenuItem fx:id="booksTreeMenuEdit" disable="true" mnemonicParsing="false" onAction="#editTextElementAction" text="Edit" />
-                                        <MenuItem fx:id="booksTreeMenuDelete" disable="true" mnemonicParsing="false" onAction="#deleteTextElementsAction" text="Delete" />
-                                      </items>
-                                    </ContextMenu>
-                                 </contextMenu>
-                              </TreeView>
-                           </children>
-                        </AnchorPane>
+                      <TreeView id="tree-reviews" fx:id="booksTree" showRoot="false">
+                         <contextMenu>
+                            <ContextMenu>
+                              <items>
+                                  <Menu mnemonicParsing="false" text="New">
+                                    <items>
+                                        <MenuItem fx:id="booksTreeMenuNewBook" mnemonicParsing="false" onAction="#createBookAction" text="New Book" />
+                                        <MenuItem fx:id="booksTreeMenuNewChapter" disable="true" mnemonicParsing="false" onAction="#createChapterAction" text="New Chapter" />
+                                    </items>
+                                  </Menu>
+                                <MenuItem fx:id="booksTreeMenuEdit" disable="true" mnemonicParsing="false" onAction="#editTextElementAction" text="Edit" />
+                                <MenuItem fx:id="booksTreeMenuDelete" disable="true" mnemonicParsing="false" onAction="#deleteTextElementsAction" text="Delete" />
+                              </items>
+                            </ContextMenu>
+                         </contextMenu>
+                      </TreeView>
                   </content>
                 </TitledPane>
               </items>
@@ -397,22 +373,12 @@
             <TabPane fx:id="mainTabPane" tabClosingPolicy="ALL_TABS" />
       </items>
     </SplitPane>
-    <HBox id="HBox" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
+    <HBox id="footer" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
       <children>
-        <Label maxHeight="1.7976931348623157E308" maxWidth="-1.0" text="Left status (Modified/Saved)" HBox.hgrow="ALWAYS">
-          <font>
-            <Font size="11.0" />
-          </font>
-          <textFill>
-            <Color red="0.625" green="0.625" blue="0.625" />
-          </textFill>
-        </Label>
-        <Pane prefHeight="-1.0" prefWidth="-1.0" HBox.hgrow="ALWAYS" />
-        <Label maxWidth="-1.0" text="Right status (File name)" HBox.hgrow="NEVER" />
+        <Text styleClass="left" text="Left status (Modified/Saved)" HBox.hgrow="NEVER" />
+        <Region styleClass="separator" HBox.hgrow="ALWAYS" />
+        <Text styleClass="right" text="Right status (File name)" HBox.hgrow="NEVER" />
       </children>
-      <padding>
-        <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
-      </padding>
     </HBox>
   </children>
 </VBox>

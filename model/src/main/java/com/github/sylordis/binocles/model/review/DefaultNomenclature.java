@@ -6,6 +6,7 @@ package com.github.sylordis.binocles.model.review;
  */
 public class DefaultNomenclature extends Nomenclature {
 
+	private static final long serialVersionUID = 5081064789258446663L;
 	/**
 	 * Constant for the name of the default nomenclature.
 	 */

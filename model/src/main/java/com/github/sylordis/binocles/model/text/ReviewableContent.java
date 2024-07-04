@@ -1,5 +1,6 @@
 package com.github.sylordis.binocles.model.text;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,7 +16,9 @@ import com.github.sylordis.binocles.utils.Identifiable;
  * @author sylordis
  *
  */
-public abstract class ReviewableContent implements Identifiable {
+public abstract class ReviewableContent implements Identifiable, Serializable {
+
+	private static final long serialVersionUID = -7788297468267195354L;
 
 	/**
 	 * The general comment on the content.

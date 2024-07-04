@@ -28,7 +28,7 @@ public class BinoclesConfiguration {
 	/**
 	 * Default version number. TODO Replace from properties.
 	 */
-	public static final String VERSION_DEFAULT = "0.0.1-SNAPSHOT";
+	public static final String VERSION_DEFAULT = "0.1-SNAPSHOT";
 
 	/**
 	 * Properties for configuration.
@@ -76,9 +76,9 @@ public class BinoclesConfiguration {
 			System.out.println(new File(getClass().getClassLoader().getResource("ah").toURI()).getAbsolutePath());
 			properties.load(getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE));
 		} catch (IOException | URISyntaxException e) {
-			logger.info("Couldn't load internal settings file.");
+			logger.atInfo().withThrowable(e).log("Couldn't load internal settings file.");
 		} catch (NullPointerException e) {
-			logger.error(e);
+			logger.error("Couldn't load internal settings file: {}", e.getMessage());
 		}
 	}
 

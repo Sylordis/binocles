@@ -5,6 +5,7 @@ package com.github.sylordis.binocles.model.review;
  */
 public class DefaultCommentType extends CommentType {
 
+	private static final long serialVersionUID = 5459454206697003927L;
 	/**
 	 * Name for default comment type.
 	 */

@@ -10,6 +10,7 @@ import com.github.sylordis.binocles.utils.Identifiable;
  */
 public class Chapter extends ReviewableContent {
 
+	private static final long serialVersionUID = -372544124080055257L;
 	/**
 	 * Title of the book, optional.
 	 */

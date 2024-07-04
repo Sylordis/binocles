@@ -43,6 +43,7 @@ import com.github.sylordis.binocles.ui.settings.BinoclesUIConstants;
 import com.github.sylordis.binocles.ui.views.BinoclesTabPane;
 import com.github.sylordis.binocles.ui.views.BookView;
 import com.github.sylordis.binocles.ui.views.ChapterView;
+import com.github.sylordis.binocles.ui.views.CommentTypeView;
 import com.github.sylordis.binocles.ui.views.WelcomeView;
 import com.github.sylordis.binocles.utils.exceptions.ExportException;
 import com.github.sylordis.binocles.utils.exceptions.ImportException;
@@ -62,6 +63,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabDragPolicy;
@@ -155,13 +157,12 @@ public class BinoclesController implements Initializable {
 	private Button toolbarCreateNomenclature;
 	@FXML
 	private Button toolbarCreateCommentType;
+	
 	@FXML
-	private Button toolbarCreateComment;
+	private SplitPane mainSplitPane;
 
 	@FXML
 	private TabPane mainTabPane;
-
-	private BinoclesTabPane tempTab = null;
 
 	/**
 	 * Class logger.
@@ -209,6 +210,9 @@ public class BinoclesController implements Initializable {
 		        .setOnMouseClicked(new TreeDoubleClickEventHandler(nomenclaturesTree, this::openTabItemAction));
 		nomenclaturesTree.getSelectionModel().selectedItemProperty()
 		        .addListener((s, o, n) -> setReviewElementsContextMenuStatus());
+		// Set tabs change listener
+		mainTabPane.getSelectionModel().selectedItemProperty()
+		        .addListener((s, o, n) -> ((BinoclesTabPane) n.getContent()).updateControllerStatus(this));
 		// Other states configuration
 		mainTabPane.setTabDragPolicy(TabDragPolicy.REORDER);
 		// Add welcome tab if necessary
@@ -240,7 +244,7 @@ public class BinoclesController implements Initializable {
 
 	@FXML
 	public void editBookAction(ActionEvent event) {
-		// TODO
+		// TODO editBookAction
 	}
 
 	/**
@@ -264,15 +268,19 @@ public class BinoclesController implements Initializable {
 		ChapterDetailsDialog dialog = new ChapterDetailsDialog(model, currentBook);
 		Optional<ChapterPropertiesAnswer> answer = dialog.display();
 		if (answer.isPresent()) {
-			Book bookParent = answer.get().parent();
-			Chapter chapter = answer.get().chapter();
-			bookParent.addChapter(chapter);
-			logger.info("Created chapter '{}' in '{}'", chapter.getTitle(), bookParent.getTitle());
-			TreeItem<ReviewableContent> chapterTreeItem = new TreeItem<>(chapter);
-			TreeItem<ReviewableContent> currentBookParent = TreeViewUtils.getTreeViewItem(booksTree.getRoot(),
-			        bookParent);
-			currentBookParent.getChildren().add(chapterTreeItem);
-			currentBookParent.setExpanded(true);
+			try {
+				Book bookParent = answer.get().parent();
+				Chapter chapter = answer.get().chapter();
+				bookParent.addChapter(chapter);
+				logger.info("Created chapter '{}' in '{}'", chapter.getTitle(), bookParent.getTitle());
+				TreeItem<ReviewableContent> chapterTreeItem = new TreeItem<>(chapter);
+				TreeItem<ReviewableContent> currentBookParent = TreeViewUtils.getTreeViewItem(booksTree.getRoot(),
+				        bookParent);
+				currentBookParent.getChildren().add(chapterTreeItem);
+				currentBookParent.setExpanded(true);
+			} catch (UniqueIDException e) {
+				showErrorAlert("Unique ID error", "Books only accept unique id'd chapters.");
+			}
 		}
 		setButtonsStatus();
 	}
@@ -324,27 +332,6 @@ public class BinoclesController implements Initializable {
 			currentBookParent.setExpanded(true);
 			nomenclaturesTree.getSelectionModel().select(commentTypeTreeItem);
 		}
-	}
-
-	@FXML
-	public void createCommentAction(ActionEvent event) {
-//		TreeItem<ReviewableContent> item = booksTree.getSelectionModel().getSelectedItem();
-//		Chapter chapter = (Chapter) item.getValue();
-//		Book book = (Book) booksTree.getSelectionModel().getSelectedItem().getParent().getValue();
-//		int start = textZoneChapterContent.getSelection().getStart();
-//		int end = textZoneChapterContent.getSelection().getEnd();
-//		CommentDetailsDialog dialog = new CommentDetailsDialog(model, book, chapter, start, end);
-//		Optional<Comment> answer = dialog.display();
-//		if (answer.isPresent()) {
-//			chapter.addComment(answer.get());
-//			logger.info("New comment on {}: {}", chapter, answer.get());
-//			CommentBox cbox = new CommentBox(answer.get());
-//			commentZoneVBoxInner.getChildren().add(cbox);
-//			item.setValue(chapter);
-////			booksTree.refresh();
-//			FXCollections.sort(commentZoneVBoxInner.getChildren(), commentBoxComparator);
-//			logger.debug("Comments: {}", commentZoneVBoxInner.getChildren().size());
-//		}
 	}
 
 	/**
@@ -479,7 +466,7 @@ public class BinoclesController implements Initializable {
 			// If so just switch to it
 			mainTabPane.getSelectionModel().select(needle.get());
 		} else {
-			createNewTab(item.getValue());
+			createNewTab(item);
 		}
 	}
 
@@ -488,28 +475,35 @@ public class BinoclesController implements Initializable {
 	 * 
 	 * @param object
 	 */
-	private void createNewTab(Object object) {
-		if (object instanceof ReviewableContent) {
-			Node node = null;
-			ReviewableContent content = (ReviewableContent) object;
-			if (object instanceof Chapter) {
-				node = new ChapterView((Chapter) content);
-			} else if (object instanceof Book) {
-				node = new BookView((Book) content);
+	private void createNewTab(TreeItem<?> item) {
+		Node node = null;
+		String title = null;
+		if (item.getValue() instanceof ReviewableContent) {
+			ReviewableContent content = (ReviewableContent) item.getValue();
+			title = content.getTitle();
+			if (content instanceof Chapter) {
+				node = new ChapterView(this, (Book) item.getParent().getValue(), (Chapter) content);
+			} else if (content instanceof Book) {
+				node = new BookView(this, (Book) content);
 			}
-			if (node != null) {
-				Tab tab = new Tab(content.getTitle(), node);
-				Image img = AppIcons.getImageForType(object.getClass());
-				if (img != null)
-					tab.setGraphic(AppIcons.createImageViewFromConfig(img));
-				mainTabPane.getTabs().add(tab);
-				mainTabPane.getSelectionModel().select(tab);
+		} else if (item.getValue() instanceof NomenclatureItem) {
+			NomenclatureItem content = (NomenclatureItem) item.getValue();
+			if (content instanceof Nomenclature) {
+				title = ((Nomenclature) content).getName();
+				// TODO create node
+			} else if (content instanceof CommentType) {
+				title = ((CommentType) content).getName();
+				node = new CommentTypeView(this, (Nomenclature) item.getParent().getValue(), (CommentType) content);
 			}
-		} else if (object instanceof NomenclatureItem) {
-			// TODO
 		}
-//			else
-//				showNotImplementedAlert();
+		if (node != null && title != null) {
+			Tab tab = new Tab(title, node);
+			Image img = AppIcons.getImageForType(item.getValue().getClass());
+			if (img != null)
+				tab.setGraphic(AppIcons.createImageViewFromConfig(img));
+			mainTabPane.getTabs().add(tab);
+			mainTabPane.getSelectionModel().select(tab);
+		}
 	}
 
 	@FXML
@@ -713,4 +707,11 @@ public class BinoclesController implements Initializable {
 		}
 	}
 
+	/**
+	 * 
+	 * @return the current model
+	 */
+	public BinoclesModel getModel() {
+		return model;
+	}
 }

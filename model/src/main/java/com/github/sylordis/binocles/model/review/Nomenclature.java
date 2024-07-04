@@ -1,5 +1,6 @@
 package com.github.sylordis.binocles.model.review;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,8 +13,9 @@ import com.google.common.base.Preconditions;
  * @author Sylordis
  *
  */
-public class Nomenclature implements NomenclatureItem, Identifiable {
+public class Nomenclature implements NomenclatureItem, Identifiable, Serializable {
 
+	private static final long serialVersionUID = 4661489455335692980L;
 	/**
 	 * Name of the legend.
 	 */
