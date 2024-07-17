@@ -3,7 +3,7 @@
  */
 
 plugins {
-    id 'com.github.sylordis.binocles.java-application-conventions'
+    id 'com.github.sylordis.binocles.java-library-conventions'
 }
 
 eclipse {

@@ -45,8 +45,6 @@ Just download the latest JAR.
 
 The project is still in development, there are no executable yet.
 
-From the `ui` project:
-
 ```
 gradle run
 ```
@@ -79,4 +77,4 @@ This project is distributed under the license [GNU Affero General Public License
 
 # Links
 
-Project website: https://github.com/Sylordis/binocles
+Project website: [https://github.com/Sylordis/binocles](https://github.com/Sylordis/binocles)
