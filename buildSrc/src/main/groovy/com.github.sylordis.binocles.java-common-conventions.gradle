@@ -3,14 +3,12 @@
  */
 
 plugins {
-    // Apply the java Plugin to add support for Java.
     id 'java'
     id 'eclipse'
-    id 'jacoco'
+    //id 'jacoco' // <= creates warning/error messages
 }
 
 repositories {
-    // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
 
@@ -25,7 +23,6 @@ dependencies {
  	implementation 'org.yaml:snakeyaml:2.1'
  	runtimeOnly 'org.apache.logging.log4j:log4j-core'
 
-    // Use JUnit Jupiter for testing.
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
 	testImplementation 'org.hamcrest:hamcrest:2.2'
 	testImplementation 'org.mockito:mockito-junit-jupiter:5.4.0'
@@ -34,8 +31,7 @@ dependencies {
 }
 
 test {
-	jvmArgs("-noverify", "-XX:+EnableDynamicAgentLoading", "-Djdk.instrument.traceUsage")
-    // Use JUnit Platform for unit tests.
+	jvmArgs("-XX:+EnableDynamicAgentLoading", "-Djdk.instrument.traceUsage", "-Xshare:off")
     useJUnitPlatform()
 }
 

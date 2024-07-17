@@ -535,8 +535,8 @@ class YamlFileExporterTest {
 	private Map<String, Object> expectedBookMap(String title, String nomenclature, Map<String, String> metadata,
 	        String synopsis, String generalComment, List<Object> chapters) {
 		return MapUtils.create(new LinkedHashMap<String, Object>(),
-		        new String[] { "title", "nomenclature", "metadata", "synopsis", "globalcomment", "chapters" },
-		        new Object[] { title, nomenclature, new TreeMap<>(metadata), synopsis, generalComment, chapters });
+		        new String[] { "title", "nomenclature", "metadata", "synopsis", "globalcomment", "description", "chapters" },
+		        new Object[] { title, nomenclature, new TreeMap<>(metadata), synopsis, generalComment, "", chapters });
 	}
 
 	/**

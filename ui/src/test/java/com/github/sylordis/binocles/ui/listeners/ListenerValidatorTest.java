@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.Mockito.mock;
 
 import java.util.List;
@@ -479,14 +478,14 @@ class ListenerValidatorTest {
 	void testTriggerWhenInvalid() {
 		boolean[] result = { true };
 		validator.setActionWhenInvalid(b -> result[0] = false);
-		validator.triggerWhenInvalid(anyBoolean());
+		validator.triggerWhenInvalid(false);
 		assertFalse(result[0]);
 	}
 
 	@Test
 	void testTriggerWhenInvalid_NotSet() {
 		boolean[] result = { true };
-		validator.triggerWhenInvalid(anyBoolean());
+		validator.triggerWhenInvalid(false);
 		assertTrue(result[0]);
 	}
 
@@ -494,14 +493,14 @@ class ListenerValidatorTest {
 	void testTriggerWhenValid() {
 		boolean[] result = { false };
 		validator.setActionWhenValid(b -> result[0] = true);
-		validator.triggerWhenValid(anyBoolean());
+		validator.triggerWhenValid(true);
 		assertTrue(result[0]);
 	}
 
 	@Test
-	void testTriggerWhenValid_NotSet() {
+	void testTriggerWhenValid_NotSet() {	
 		boolean[] result = { false };
-		validator.triggerWhenInvalid(anyBoolean());
+		validator.triggerWhenInvalid(false);
 		assertFalse(result[0]);
 	}
 

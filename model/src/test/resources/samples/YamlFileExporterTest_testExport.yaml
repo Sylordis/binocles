@@ -21,9 +21,8 @@ binocles:
   library:
   - title: The First Book
     nomenclature: empty
-    metadata: {}
     synopsis: This is the first book ever
-    globalcomment: ''
+    description: ''
     chapters:
     - title: The First Chapter
       content: Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -35,7 +34,6 @@ binocles:
       comments: []
   - title: Another book
     nomenclature: my nomenclature
-    metadata: {}
     synopsis: This is the second book
-    globalcomment: ''
+    description: ''
     chapters: []
