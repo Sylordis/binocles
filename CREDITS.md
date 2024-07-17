@@ -1,13 +1,20 @@
 # Icons & images
 
-add-file_by_Kiranshastry_from_Flaticon
-book_by_Freepik_from_flaticon
-cog_by_Tanah Basah_from_Flaticon
-communication_by_Maxim_Basinski_Premium_from_Flaticon
-content_by_Freepik_from_Flaticon
-data-storage_by_juicy_fish_from_Flaticon
-document_by_Muhammad_Usman_from_Flaticon
-export_by_Andrean_Prabowo_from_Flaticon
-ink_by_Freepik_from_Flaticon
-trash-file_by_Kiranshastry_from_Flaticon
-typography_by_DinosoftLabs_from_flaticon
+| Image | Credits |
+| ----- | ------- |
+| <img alt="Create chapter icon" src="ui/src/main/resources/com/github/sylordis/binocles/ui/img/chapter_create.png" width="20px"> | "[add-file](https://www.flaticon.com/free-icon/add-file_1090923)" by [Kiranshastry](https://www.flaticon.com/authors/kiranshastry) from [Flaticon](https://www.flaticon.com)
+| <img alt="Book icon" src="ui/src/main/resources/com/github/sylordis/binocles/ui/img/book.png" width="20px"> | "[book](https://www.flaticon.com/free-icon/book_2436702)" by [Freepik](https://www.flaticon.com/authors/freepik) from [Flaticon](https://www.flaticon.com)
+| <img alt="Cog icon" src="ui/src/main/resources/com/github/sylordis/binocles/ui/img/settings.png" width="20px"> | "[cog](https://www.flaticon.com/free-icon/cog_5859499)" by [Tanah Basah](https://www.flaticon.com/authors/tanah-basah) from [Flaticon](https://www.flaticon.com)
+| <img alt="Comment icon" src="ui/src/main/resources/com/github/sylordis/binocles/ui/img/comment.png" width="20px"> | "[comment](https://www.flaticon.com/free-icon/comment_10629612)" by [Wahyu Setyanto](https://www.flaticon.com/authors/wahyusetyanto) [Flaticon](https://www.flaticon.com)
+| <img alt="Exporter render icon" src="ui/src/main/resources/com/github/sylordis/binocles/ui/img/export_render.png" width="20px"> | "[content](https://www.flaticon.com/free-icon/content_3867687)" by [Freepik](https://www.flaticon.com/authors/freepik) from [Flaticon](https://www.flaticon.com)
+| <img alt="Save as icon" src="ui/src/main/resources/com/github/sylordis/binocles/ui/img/save-as.png" width="20px"> | "[data-storage](https://www.flaticon.com/free-icon/data-storage_8317116)" by [juicy_fish](https://www.flaticon.com/free-icon/data-storage_8317116) from [Flaticon](https://www.flaticon.com)
+| <img alt="Chapter icon" src="ui/src/main/resources/com/github/sylordis/binocles/ui/img/chapter.png" width="20px"> | "[document](https://www.flaticon.com/free-icon/document_8437972)" by [Muhammad Usman](https://www.flaticon.com/authors/muhammad-usman) from [Flaticon](https://www.flaticon.com)
+| <img alt="Expand icon" src="ui/src/main/resources/com/github/sylordis/binocles/ui/img/expand.png" width="20px"> | "[expand](https://www.flaticon.com/free-icon/expand_318140)" by [Smashicons](https://www.flaticon.com/authors/smashicons) from [Flaticon](https://www.flaticon.com)
+| <img alt="Export icon" src="ui/src/main/resources/com/github/sylordis/binocles/ui/img/export.png" width="20px"> | "[export](https://www.flaticon.com/free-icon/export_4341514)" by [Andrean Prabowo](https://www.flaticon.com/authors/andrean-prabowo) from [Flaticon](https://www.flaticon.com)
+| <img alt="Open icon" src="ui/src/main/resources/com/github/sylordis/binocles/ui/img/open.png" width="20px"> | "[folder](https://www.flaticon.com/free-icon/folder_148954)" by [Smashicons](https://www.flaticon.com/authors/smashicons) from [Flaticon](https://www.flaticon.com)
+| <img alt="Collapse icon" src="ui/src/main/resources/com/github/sylordis/binocles/ui/img/minimize.png" width="20px"> | "[minimize](https://www.flaticon.com/free-icon/minimize_318141)" by [Smashicons](https://www.flaticon.com/authors/smashicons) from [Flaticon](https://www.flaticon.com)
+| <img alt="Nomenclature icon" src="ui/src/main/resources/com/github/sylordis/binocles/ui/img/nomenclature.png" width="20px"> | "[notebook](https://www.flaticon.com/free-icon/notebook_10786752)" by [Freepik](https://www.flaticon.com/authors/freepik) from [Flaticon](https://www.flaticon.com)
+| <img alt="Binocles icon" src="ui/src/main/resources/com/github/sylordis/binocles/ui/img/binocles.png" width="20px"> | "old" by [Freepik](https://www.flaticon.com/authors/freepik) from [Flaticon](https://www.flaticon.com)
+| <img alt="Help icon" src="ui/src/main/resources/com/github/sylordis/binocles/ui/img/help.png" width="20px"> | "[question](https://www.flaticon.com/free-icon/question_189665)" by [Roundicons](https://www.flaticon.com/authors/roundicons) from [Flaticon](https://www.flaticon.com)
+| <img alt="Save icon" src="ui/src/main/resources/com/github/sylordis/binocles/ui/img/save.png" width="20px"> | "[save](https://www.flaticon.com/free-icon/save_148730)" by [Smashicons](https://www.flaticon.com/authors/smashicons) from [Flaticon](https://www.flaticon.com)
+| <img alt="Comment type icon" src="ui/src/main/resources/com/github/sylordis/binocles/ui/img/comment_type.png" width="20px"> | "[typography](https://www.flaticon.com/free-icon/typography_439150)" by [DinosoftLabs](https://www.flaticon.com/authors/dinosoftlabs) from [Flaticon](https://www.flaticon.com)

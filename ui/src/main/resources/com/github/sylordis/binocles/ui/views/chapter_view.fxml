@@ -53,12 +53,12 @@
       </HBox>
    </top>
    <center>
-        <ScrollPane fx:id="mainScrollPane" fitToHeight="true" fitToWidth="true" vbarPolicy="ALWAYS" hbarPolicy="NEVER" BorderPane.alignment="CENTER">
+        <ScrollPane fx:id="mainScrollPane" fitToWidth="true" vbarPolicy="ALWAYS" hbarPolicy="NEVER" BorderPane.alignment="CENTER">
            <content>
             <HBox fx:id="chapterContentContainer">
                <children>
                   <Region fx:id="chapterContentSeparator" prefWidth="20.0" styleClass="zone-separator" />
-                    <VBox fx:id="commentBoxContainer" prefWidth="200.0" />
+                  <VBox fx:id="commentBoxContainer" prefWidth="200.0" />
                </children>
             </HBox>
            </content>

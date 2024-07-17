@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,18 +16,94 @@ import javafx.scene.paint.Color;
 public final class StyleUtils {
 
 	/**
+	 * CSS to FXCSS property replacement map.
+	 */
+	private final static Map<String, String> cssToFxcssDictionary = Map.of("color", "fill");
+
+	/**
+	 * Types of CSS to be managed.
+	 */
+	public enum CSSType {
+
+		JavaFX(e -> "-fx-" + e, cssToFxcssDictionary),
+		RichTextFX(e -> "-rtfx-" + e, cssToFxcssDictionary);
+
+		private final Function<String, String> converter;
+		private final Map<String, String> replacements;
+
+		private CSSType(Function<String, String> converter, Map<String, String> replacements) {
+			this.converter = converter;
+			this.replacements = replacements;
+		}
+
+		/**
+		 * @return the converter
+		 */
+		Function<String, String> getConverter() {
+			return converter;
+		}
+
+		/**
+		 * @return the replacements
+		 */
+		Map<String, String> getReplacements() {
+			return replacements;
+		}
+
+	}
+
+	/**
 	 * Converts a CSS Property into its JavaFX CSS declaration for styling. They are mainly the same,
 	 * but prefixed with <code>-fx-</code> and some properties are changed. This method takes care of
 	 * that.
 	 * 
-	 * @param entry
-	 * @return
+	 * @param entry entry to convert
+	 * @return the converted property
+	 * @see #convertCSSPropertyTo(String, Function, Map)
 	 */
-	public static String convertCSStoFXCSS(String entry) {
+	public static String convertPropertyCSStoFXCSS(String entry) {
+		return convertCSSPropertyTo(entry, CSSType.JavaFX);
+	}
+
+	/**
+	 * Converts a CSS Property into its JavaFX RichText CSS declaration for styling. They are mainly the
+	 * same, but prefixed with <code>-rtfx-</code> and some properties are changed.
+	 * 
+	 * @param entry entry to convert
+	 * @return the converted property
+	 * @see #convertCSSPropertyTo(String, Function, Map)
+	 */
+	public static String convertPropertyCSStoRTFXCSS(String entry) {
+		return convertCSSPropertyTo(entry, CSSType.RichTextFX);
+	}
+
+	/**
+	 * Converts a CSS Property into another property style defined in the {@link CSSType} enumeration.
+	 * 
+	 * @param entry        entry to convert
+	 * @param replacements dictionary of replacements, first applied before the converter
+	 * @param converter    basic string to string converter to apply any modifications
+	 * @return the converted property
+	 */
+	public static String convertCSSPropertyTo(String entry, CSSType type) {
+		return convertCSSPropertyTo(entry, type.getReplacements(), type.getConverter());
+	}
+
+	/**
+	 * Converts a CSS Property into another property style, by first applying a replacement dictionary
+	 * for the property and then converting it to its desired state.
+	 * 
+	 * @param entry        entry to convert
+	 * @param replacements dictionary of replacements, first applied before the converter
+	 * @param converter    basic string to string converter to apply any modifications
+	 * @return the converted property
+	 */
+	public static String convertCSSPropertyTo(String entry, Map<String, String> replacements,
+	        Function<String, String> converter) {
 		String result = entry;
-		if (entry.equals("color"))
-			result = "fill";
-		result = "-fx-" + result;
+		if (replacements != null && replacements.containsKey(entry))
+			result = replacements.get(entry);
+		result = converter.apply(result);
 		return result;
 	}
 
@@ -35,20 +112,12 @@ public final class StyleUtils {
 	 * same, but prefixed with <code>-fx-</code> and some properties are changed. This method takes care
 	 * of that.<br/>
 	 * 
-	 * The result should be
-	 * 
-	 * <pre>
-	 * -fx-&lt;entry&gt;: &lt;value&gt;;
-	 * </pre>
-	 * 
-	 * .
-	 * 
 	 * @param property
 	 * @param value
 	 * @return the full css style declaration
 	 */
-	public static String convertCSStoFXstyle(String property, String value) {
-		return convertCSStoFXCSS(property) + ": " + value + ";";
+	public static String convertCSStoTypeStyle(String property, String value, CSSType type) {
+		return convertCSSPropertyTo(property, type) + ": " + value + ";";
 	}
 
 	/**
@@ -68,6 +137,17 @@ public final class StyleUtils {
 			builder.append(toHex(color.getOpacity()));
 		}
 		return builder.toString().toUpperCase();
+	}
+
+	/**
+	 * Brightens the given color.
+	 * 
+	 * @param color
+	 * @return
+	 */
+	public static Color brighten(Color color) {
+		Color ncolor = color.brighter().desaturate();
+		return ncolor;
 	}
 
 	/**
@@ -102,8 +182,8 @@ public final class StyleUtils {
 		// TODO Style is fucked up
 		List<String> parts = new ArrayList<>();
 		List<String> fontStyles = new ArrayList<>();
-		for (Entry<String,String> entry : styles.entrySet()) {
-			switch(entry.getKey()) {
+		for (Entry<String, String> entry : styles.entrySet()) {
+			switch (entry.getKey()) {
 				case "font-style":
 				case "font-weight":
 					if (!entry.getValue().isEmpty())

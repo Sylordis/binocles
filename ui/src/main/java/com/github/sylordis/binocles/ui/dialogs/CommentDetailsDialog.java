@@ -19,6 +19,7 @@ import com.github.sylordis.binocles.ui.components.CustomListCell;
 import com.github.sylordis.binocles.ui.functional.ListenerValidator;
 import com.github.sylordis.binocles.ui.functional.TextAreaResizeUpToListener;
 import com.github.sylordis.binocles.ui.javafxutils.StyleUtils;
+import com.github.sylordis.binocles.ui.javafxutils.StyleUtils.CSSType;
 
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -56,11 +57,11 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 	 * Index where the comment type specific fields starts.
 	 */
 	private static final int ROW_FIELDS_START = 7;
-	
+
 	/**
 	 * Maximum number of rows for a text area before having to scroll.
 	 */
-	private static final int COMMENT_TEXTAREA_MAX_LINES = 10; 
+	private static final int COMMENT_TEXTAREA_MAX_LINES = 10;
 
 	private Book book;
 	private Chapter chapter;
@@ -189,8 +190,10 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 	 * @param commentText
 	 */
 	private void applyCommentTypeStyleTo(CommentType type, Text commentText) {
-		String style = String.join(" ", type.getStyles().entrySet().stream()
-		        .map(e -> StyleUtils.convertCSStoFXstyle(e.getKey(), e.getValue())).toArray(String[]::new));
+		String style = String.join(" ",
+		        type.getStyles().entrySet().stream()
+		                .map(e -> StyleUtils.convertCSStoTypeStyle(e.getKey(), e.getValue(), CSSType.JavaFX))
+		                .toArray(String[]::new));
 		commentText.setStyle(style);
 	}
 
