@@ -44,9 +44,12 @@
 }
 .comment-box .comment-box-inner .comment-entry {}
 .chapter-pane {}
-.chapter-pane .main-text-area {
+.chapter-pane .styled-text-area {
 	-fx-padding: 10px 15px 10px 15px;
 	-fx-border-color: #dcdcdc;
+}
+.chapter-pane .styled-text-area * {
+-fx-text-alignment: justify;
 }
 .chapter-pane .zone-separator {}
 .chapter-pane .splitpane {

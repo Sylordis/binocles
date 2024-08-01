@@ -19,6 +19,7 @@ import com.google.common.base.Preconditions;
 public class Comment implements Comparable<Comment>, Serializable {
 
 	private static final long serialVersionUID = 8636110855533266235L;
+
 	/**
 	 * Type of the comment, linked to configuration.
 	 */
@@ -240,8 +241,7 @@ public class Comment implements Comparable<Comment>, Serializable {
 
 	@Override
 	public String toString() {
-		return "Comment["+startIndex+","+endIndex+"] [type=" + type + ", " + fields
-		        + "]";
+		return "Comment[" + startIndex + "," + endIndex + "] [type=" + type + ", " + fields + "]";
 	}
 
 }

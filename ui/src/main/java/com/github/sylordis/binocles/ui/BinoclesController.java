@@ -61,6 +61,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitPane;
@@ -115,6 +116,8 @@ public class BinoclesController implements Initializable {
 	private MenuItem menuReviewNomenclatureCreate;
 	@FXML
 	private MenuItem menuReviewCommentTypeCreate;
+	@FXML
+	private Menu menuReviewCommentSub;
 
 	@FXML
 	private MenuItem menuHelpDocumentation;

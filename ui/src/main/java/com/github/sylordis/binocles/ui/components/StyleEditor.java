@@ -121,7 +121,7 @@ public class StyleEditor extends VBox implements Initializable {
 				values.add("underline");
 			if (controlButtonStrikethrough.isSelected())
 				values.add("line-through");
-			css.put(CSS.Attribute.TEXT_DECORATION, String.join(" ", values));
+			css.put(CSS.Attribute.TEXT_DECORATION, String.join("; ", values));
 		}
 		if (controlButtonColorPickerForeground.isSelected())
 			css.put(CSS.Attribute.COLOR, StyleUtils.toHexString(controlColorPickerForeground.getValue()));

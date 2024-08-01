@@ -49,6 +49,12 @@ public final class AppIcons {
 	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "chapter_create.png"));
 
 	/**
+	 * Icon for collapse all.
+	 */
+	public static final Image ICON_COLLAPSE = new Image(
+	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "collapse.png"));
+
+	/**
 	 * Icon for {@link CommentType}.
 	 */
 	public static final Image ICON_COMMENT_TYPE = new Image(
@@ -59,6 +65,12 @@ public final class AppIcons {
 	 */
 	public static final Image ICON_COMMENT = new Image(
 	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "comment.png"));
+
+	/**
+	 * Icon for expand all.
+	 */
+	public static final Image ICON_EXPAND = new Image(
+	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "expand.png"));
 
 	/**
 	 * Icon for help.
@@ -126,7 +138,7 @@ public final class AppIcons {
 	}
 
 	/**
-	 * Private constructor.
+	 * Private constructor to prevent instanciation.
 	 */
 	private AppIcons() {
 		// Nothing to do here

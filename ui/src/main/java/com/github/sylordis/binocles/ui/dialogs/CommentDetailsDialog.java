@@ -1,8 +1,10 @@
 package com.github.sylordis.binocles.ui.dialogs;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +22,9 @@ import com.github.sylordis.binocles.ui.functional.ListenerValidator;
 import com.github.sylordis.binocles.ui.functional.TextAreaResizeUpToListener;
 import com.github.sylordis.binocles.ui.javafxutils.StyleUtils;
 import com.github.sylordis.binocles.ui.javafxutils.StyleUtils.CSSType;
+import com.github.sylordis.binocles.utils.TextBreaker;
+import com.github.sylordis.binocles.utils.TextBreaker.BreakingPolicy;
+import com.github.sylordis.binocles.utils.TextBreaker.ReadDirection;
 
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
@@ -37,9 +42,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -47,6 +49,15 @@ import javafx.scene.text.TextFlow;
  * Dialog to create or edit a comment. When editing, the nomenclature should be fixed.
  */
 public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
+
+	/**
+	 * Minimum context size for context extracts in the comment window preview.
+	 */
+	private static final int MINIMUM_CONTEXT_LENGTH = 50;
+	/**
+	 * Maximum context size for context extracts in the comment window preview.
+	 */
+	private static final int MAXIMUM_CONTEXT_LENGTH = 150;
 
 	/**
 	 * Size of the text excerpt. Labels will usually be about 100px long.
@@ -76,7 +87,7 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 	private String commentTypeFeedback;
 
 	/**
-	 * Creates a new details dialog.
+	 * Creates a new details dialog for comments.
 	 * 
 	 * @param model
 	 * @param book
@@ -159,21 +170,26 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 		// TODO Provide proper preview:
 		// if it's a full paragraph, provide small excerpts of previous last and beginning of next
 		// paragraphs.
-		// If it's a part, provide the full paragraph, up to a point?
-		Text contextStartEtc = new Text("[..]");
-		Text contextStart = new Text(chapter.getText().substring(Math.max(0, start - 50), start));
+		// If it's a part, provide the full paragraph, up to a point? TODO define preview rules
+		// Create start context
+		TextBreaker breakerStart = new TextBreaker(BreakingPolicy.LAST, ReadDirection.BACKWARD, List.of(".", "\n"));
+		int contextStartIndex = breakerStart.findClosestBreakingPoint(chapter.getText(), start, MINIMUM_CONTEXT_LENGTH, MAXIMUM_CONTEXT_LENGTH);
+		Text contextStartEtc = contextStartIndex == 0 ? new Text("") : new Text("[..]");
+		Text contextStart = new Text(chapter.getText().substring(contextStartIndex, start));
+		// Main text part (comment)
 		Text startDelim = new Text("[");
-		Font currentFont = startDelim.getFont();
-		Font fontBold = Font.font(currentFont.getFamily(), FontWeight.BOLD, FontPosture.REGULAR, currentFont.getSize());
 		Text commentText = new Text(chapter.getText().substring(start, end));
 		Text endDelim = new Text("]");
-		Text contextEnd = new Text(chapter.getText().substring(end, Math.min(end + 50, chapter.getText().length())));
-		Text contextEndEtc = new Text("[..]");
+		// Create end context
+		TextBreaker breakerEnd = new TextBreaker(BreakingPolicy.LAST, ReadDirection.FORWARD, List.of(".", "\n"));
+		int contextEndIndex = breakerStart.findClosestBreakingPoint(chapter.getText(), end, MINIMUM_CONTEXT_LENGTH, MAXIMUM_CONTEXT_LENGTH);
+		Text contextEnd = new Text(chapter.getText().substring(end, contextEndIndex));
+		Text contextEndEtc = contextEndIndex == chapter.getText().length() ? new Text("") : new Text("[..]");
 		fieldTextExcerpt.getChildren().addAll(contextStartEtc, contextStart, startDelim, commentText, endDelim,
 		        contextEnd, contextEndEtc);
 		// Styling
-		startDelim.setFont(fontBold);
-		endDelim.setFont(fontBold);
+		StyleUtils.bolden(startDelim);
+		StyleUtils.bolden(endDelim);
 		contextStartEtc.getStyleClass().add("text-muted");
 		contextEndEtc.getStyleClass().add("text-muted");
 		if (type == null || type.getStyles().isEmpty()) {
@@ -192,7 +208,7 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 	private void applyCommentTypeStyleTo(CommentType type, Text commentText) {
 		String style = String.join(" ",
 		        type.getStyles().entrySet().stream()
-		                .map(e -> StyleUtils.convertCSStoTypeStyle(e.getKey(), e.getValue(), CSSType.JavaFX))
+		                .map(e -> StyleUtils.createCSSDeclarationOfType(e.getKey(), e.getValue(), CSSType.JAVA_FX))
 		                .toArray(String[]::new));
 		commentText.setStyle(style);
 	}
@@ -241,9 +257,12 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 
 	@Override
 	public Comment convertResult(ButtonType button) {
-		Comment result = new Comment(fieldCommentTypeChoice.getValue(), start, end);
-		result.setFields(fieldsFields.entrySet().stream()
-		        .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().getText())));
+		Comment result = null;
+		if (button.equals(getConfirmButton())) {
+			result = new Comment(fieldCommentTypeChoice.getValue(), start, end);
+			result.setFields(fieldsFields.entrySet().stream()
+			        .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().getText())));
+		}
 		return result;
 	}
 

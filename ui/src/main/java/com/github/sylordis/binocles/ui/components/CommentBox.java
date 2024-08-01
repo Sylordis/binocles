@@ -4,6 +4,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
+import java.util.Set;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.github.sylordis.binocles.model.review.Comment;
 import com.github.sylordis.binocles.model.review.Nomenclature;
@@ -11,12 +15,17 @@ import com.github.sylordis.binocles.model.review.Nomenclature;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
+/**
+ * This component is the visual element destined to show comments and be collapsible. If the comment is too long, it
+ * will display an ellipsis when collapsed.
+ */
 public class CommentBox extends TitledPane implements Initializable {
 
 	@FXML
@@ -26,7 +35,16 @@ public class CommentBox extends TitledPane implements Initializable {
 
 	private Comment comment;
 	private Nomenclature defaultNomenclature;
+//	private int heightEllipsis;
 
+	private final Logger logger = LogManager.getLogger();
+
+	/**
+	 * Creates a new Comment box, providing a default nomenclature in case the comment doesn't have any.
+	 * 
+	 * @param comment
+	 * @param defaultNomenclature
+	 */
 	public CommentBox(Comment comment, Nomenclature defaultNomenclature) {
 		this.comment = comment;
 		this.defaultNomenclature = defaultNomenclature;
@@ -47,7 +65,7 @@ public class CommentBox extends TitledPane implements Initializable {
 		else
 			this.setText(comment.getType().getName());
 		if (comment.getFields().size() == 1) {
-			Entry<String,String> entry = comment.getFields().entrySet().iterator().next();
+			Entry<String, String> entry = comment.getFields().entrySet().iterator().next();
 			Text text = new Text(entry.getValue());
 			TextFlow flow = new TextFlow(text);
 			flow.getStyleClass().add("comment-entry");
@@ -61,6 +79,10 @@ public class CommentBox extends TitledPane implements Initializable {
 				mainPane.getChildren().add(flow);
 			}
 		}
+		// Set comment box style
+		final Set<Node> node = this.lookupAll(".title");
+		logger.debug("Setting comment box style: nodes = {}", node.size());
+		node.forEach(n -> n.setStyle("-fx-background-color: #99FF99;"));
 		// TODO set max height with ellipsis
 	}
 
@@ -76,6 +98,20 @@ public class CommentBox extends TitledPane implements Initializable {
 	 */
 	public void setComment(Comment comment) {
 		this.comment = comment;
+	}
+
+	/**
+	 * @return the defaultNomenclature
+	 */
+	public Nomenclature getDefaultNomenclature() {
+		return defaultNomenclature;
+	}
+
+	/**
+	 * @param defaultNomenclature the defaultNomenclature to set
+	 */
+	public void setDefaultNomenclature(Nomenclature defaultNomenclature) {
+		this.defaultNomenclature = defaultNomenclature;
 	}
 
 }

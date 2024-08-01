@@ -31,7 +31,7 @@
                </children>
             </VBox>
             <Region HBox.hgrow="ALWAYS" />
-            <VBox alignment="CENTER" styleClass="button-toolbar">
+            <HBox alignment="CENTER" styleClass="button-toolbar">
                <children>
                   <Button fx:id="toolbarCreateComment" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" onAction="#createCommentAction" styleClass="buttonicon" text="New Comment">
                      <graphic>
@@ -45,8 +45,20 @@
                         <Tooltip text="Create a new comment" />
                      </tooltip>
                   </Button>
+                  <Button fx:id="expandCollapseButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#toggleCommentBoxesExpansion" styleClass="buttonicon" text="Expand/Collapse all">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                           <image>
+                              <Image url="@../img/collapse.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="Expand/Collapse all comments" />
+                     </tooltip>
+                  </Button>
                </children>
-            </VBox>
+            </HBox>
          </children>
       </HBox>
    </top>

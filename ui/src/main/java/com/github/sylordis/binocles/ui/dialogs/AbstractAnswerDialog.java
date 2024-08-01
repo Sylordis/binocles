@@ -174,10 +174,21 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	}
 
 	/**
-	 * Converts the result
+	 * Creates a resulting object wrapped in an {@link Optional} that can be processed by the calling
+	 * class and as a result of the {@link Dialog#showAndWait()} method. A <code>null</code> result
+	 * indicates a cancellation.<br/>
+	 * If you implement this on a normal dialog that can be cancelled, do not forget to check for which
+	 * button comes the action with:
 	 * 
-	 * @param button
-	 * @return
+	 * <pre>
+	 * <code>
+	 * if (button.equals(getConfirmButton())) { .. }
+	 * </code>
+	 * </pre>
+	 * 
+	 * @param button the button triggering the dialog's state (close, accept, ...)
+	 * @return null if no object can be processed (cancellation of a dialog for example), the expected object
+	 *         otherwise
 	 */
 	public abstract R convertResult(ButtonType button);
 
