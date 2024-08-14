@@ -10,7 +10,7 @@ import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.CommentTypeField;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.ui.BinoclesController;
-import com.github.sylordis.binocles.ui.javafxutils.StyleUtils;
+import com.github.sylordis.binocles.utils.StyleUtils;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

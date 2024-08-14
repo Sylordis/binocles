@@ -28,10 +28,10 @@ binocles:
     nomenclature: my nomenclature
     metadata:
       author: Rhiannon Frater
-      publication: 2008-08-14
+      publication: '2008-08-14'
       source: https://www.goodreads.com/book/show/9648068-the-first-days
     synopsis: |-
-      Katie is driving to work one beautiful day when a dead man jumps into her car and tries to eat her.  That same morning, Jenni opens a bedroom door to find her husband devouring their toddler son.
+      Katie is driving to work one beautiful day when a dead man jumps into her car and tries to eat her. That same morning, Jenni opens a bedroom door to find her husband devouring their toddler son.
       Fate puts Jenni and Katie—total strangers—together in a pickup, fleeing the suddenly zombie-filled streets of the Texas city in which they live. Before the sun has set, they have become more than just friends and allies—they are bonded as tightly as any two people who have been to war together. 
       During their cross-Texas odyssey to find and rescue Jenni’s oldest son, Jenni discovers the joy of watching a zombie’s head explode when she shoots its brains out. Katie learns that she’s a terrific tactician—and a pretty good shot. 
       A chance encounter puts them on the road to an isolated, fortified town, besieged by zombies, where fewer than one hundred people cling to the shreds of civilization. 
@@ -85,7 +85,7 @@ binocles:
     nomenclature: ''
     metadata:
       author: Arthur Golden
-      publication: 1997-01-01
+      publication: '1997-01-01'
     synopsis: |-
       A literary sensation and runaway bestseller, this brilliant novel presents with seamless authenticity and exquisite lyricism the true confessions of one of Japan's most celebrated geisha.
       In "Memoirs of a Geisha," we enter a world where appearances are paramount; where a girl's virginity is auctioned to the highest bidder; where women are trained to beguile the most powerful men; and where love is scorned as illusion. It is a unique and triumphant work of fiction - at once romantic, erotic, suspenseful - and completely unforgettable.
@@ -141,8 +141,8 @@ binocles:
       comments:
       - type: ''
         range:
-          start: 0
-          end: 287
+          start: 270
+          end: 556
         fields:
           text: "That's a lot of different words for one singular idea!"    
     - title: History

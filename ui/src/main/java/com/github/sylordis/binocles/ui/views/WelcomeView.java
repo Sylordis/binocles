@@ -9,7 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.BorderPane;
 
 /**
- * Pane component for a chapter.
+ * Pane component for the welcome tab.
  */
 public class WelcomeView extends BorderPane implements Initializable, BinoclesTabPane {
 

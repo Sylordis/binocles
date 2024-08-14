@@ -11,3 +11,7 @@ eclipse {
 		name = 'binocles-utils'
 	}
 }
+
+dependencies {
+    implementation 'org.apache.commons:commons-text'
+}

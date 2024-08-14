@@ -524,6 +524,8 @@ public class BinoclesController implements Initializable {
 		// Null file means dialog was cancelled
 		if (null != file) {
 			// TODO Import progress report (cancellable dialog with progress bar)
+			// Close all tabs
+			mainTabPane.getTabs().clear();
 			openFile(file);
 		}
 		setButtonsStatus();

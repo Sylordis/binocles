@@ -11,17 +11,17 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import javafx.scene.paint.Color;
 
-class ColorUtilsTest {
+class StyleUtilsFXTest {
 
 	@ParameterizedTest
 	@MethodSource("provideColorTestValues")
 	void testToHexString(Color color, String expected) {
-		assertEquals(expected, StyleUtils.toHexString(color));
+		assertEquals(expected, StyleUtilsFX.toHexString(color));
 	}
 	
 	@Test
 	void testToHexString_Null() {
-		assertEquals("", StyleUtils.toHexString(null));
+		assertEquals("", StyleUtilsFX.toHexString(null));
 	}
 
 	private static Stream<Arguments> provideColorTestValues() {

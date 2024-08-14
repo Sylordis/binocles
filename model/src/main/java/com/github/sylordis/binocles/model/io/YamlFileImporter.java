@@ -221,7 +221,6 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			Nomenclature nomenclature = book.getNomenclature();
 			CommentType type = null;
 			if (null != nomenclature) {
-				// TODO something's not right here, correct nomenclature is not found
 				type = nomenclature.getTypes().stream().filter(t -> t.getId().equals(commentTypeName)).findFirst()
 				        .get();
 			}

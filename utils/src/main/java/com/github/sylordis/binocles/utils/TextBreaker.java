@@ -135,10 +135,7 @@ public class TextBreaker {
 	 * @throws IndexOutOfBoundsException if from is out of text bounds
 	 */
 	public int findClosestBreakingPoint(String text, int from, int min, int max) {
-		// TODO Backward
 		Preconditions.checkNotNull(text, "Cannot find breaking point on a null text.");
-		Preconditions.checkElementIndex(from, text.length(),
-		        "Cannot find breaking point from an out of bounds index (" + from + " in " + text.length() + ").");
 		int index = -1;
 		// Check that minimum threshold can be done
 		if ((readsForward && from + min < text.length()) || (!readsForward && from - min > 0)) {

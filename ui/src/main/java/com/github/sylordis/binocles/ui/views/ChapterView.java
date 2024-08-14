@@ -2,7 +2,6 @@ package com.github.sylordis.binocles.ui.views;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collection;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -22,9 +21,9 @@ import com.github.sylordis.binocles.ui.BinoclesController;
 import com.github.sylordis.binocles.ui.components.CommentBox;
 import com.github.sylordis.binocles.ui.dialogs.CommentDetailsDialog;
 import com.github.sylordis.binocles.ui.functional.CommentBoxComparator;
-import com.github.sylordis.binocles.ui.javafxutils.StyleUtils;
-import com.github.sylordis.binocles.ui.javafxutils.StyleUtils.CSSBlockStyle;
-import com.github.sylordis.binocles.ui.javafxutils.StyleUtils.CSSType;
+import com.github.sylordis.binocles.ui.javafxutils.StyleUtilsFX;
+import com.github.sylordis.binocles.utils.StyleUtils;
+import com.github.sylordis.binocles.utils.StyleUtils.CSSBlockStyle;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
@@ -171,10 +170,9 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 			logger.debug("Getting default nomenclature");
 			type = defaultNomenclature.getTypes().get(0);
 		}
-		// TODO Set text styles
-		Collection<String> styles = StyleUtils.styleDictionaryToCollectionOfType(type.getStyles(), CSSType.RICH_TEXT_FX);
-		String stylesToString = StyleUtils.createCSSBlock(styles, CSSBlockStyle.INLINE);
-		logger.debug("Setting style: {}, style={}, string='{}'", comment, styles, stylesToString);
+		// Set text styles
+		String stylesToString = StyleUtils.createCSSBlock(type.getStyles(), CSSBlockStyle.INLINE, StyleUtilsFX.JAVA_FX);
+		logger.debug("Setting style: {}, style={}, string='{}'", comment, type.getStyles(), stylesToString);
 		chapterContent.setStyle(comment.getStartIndex(), comment.getEndIndex(),
 		        stylesToString);
 		expandedCommentsState.set(true);

@@ -31,6 +31,16 @@ public class BinoclesConfiguration {
 	public static final String VERSION_DEFAULT = "0.1-SNAPSHOT";
 
 	/**
+	 * Constant for the default comment type style stored in the configuration.
+	 */
+	public static final Object DEFAULT_COMMENT_TYPE_STYLE = "style.commenttype.default";
+
+	/**
+	 * Default comment type style. TODO Replace from properties.
+	 */
+	private static final Object DEFAULT_COMMENT_TYPE_STYLE_DEFAULT = "color: #4b5da1; font-style: italic;";
+
+	/**
 	 * Properties for configuration.
 	 */
 	private Properties properties;
@@ -122,6 +132,15 @@ public class BinoclesConfiguration {
 	 */
 	Properties getProperties() {
 		return properties;
+	}
+
+	/**
+	 * Gets the configured default comment type style.
+	 * 
+	 * @return
+	 */
+	public String getDefaultCommentTypeStyle() {
+		return (String) getOrDefault(DEFAULT_COMMENT_TYPE_STYLE, DEFAULT_COMMENT_TYPE_STYLE_DEFAULT);
 	}
 
 	/**
