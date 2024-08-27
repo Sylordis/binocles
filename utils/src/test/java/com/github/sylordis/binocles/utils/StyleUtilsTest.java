@@ -160,7 +160,9 @@ class StyleUtilsTest {
 		        Arguments.of(List.of("font-style", "font-weight", "color"), List.of("italic", "bold", "#2E74B5"),
 		                "Color: #2E74B5; Styles: bold, italic"),
 		        Arguments.of(List.of("color", "bg-color"), List.of("#2E74B5", "blue"),
-		                "Color: #2E74B5; Background: blue"));
+		                "Background: blue; Color: #2E74B5"),
+		        Arguments.of(List.of("color", "bg-color", "text-decoration"), List.of("#2E74B5", "blue", "underline line-through"),
+		                "Background: blue; Color: #2E74B5; Decoration: underline, line-through"));
 	}
 
 	/**

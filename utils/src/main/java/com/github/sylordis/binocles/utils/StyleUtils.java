@@ -179,9 +179,11 @@ public final class StyleUtils {
 			switch (entry.getKey()) {
 				case "font-style":
 				case "font-weight":
-				case "text-decoration":
 					if (!entry.getValue().isEmpty())
 						fontStyles.add(entry.getValue());
+					break;
+				case "text-decoration":
+					parts.add("Decoration: " + String.join(", ", entry.getValue().split("\\s* \\s*")));
 					break;
 				case "bg-color":
 					parts.add("Background: " + entry.getValue());
@@ -196,6 +198,7 @@ public final class StyleUtils {
 			Collections.sort(fontStyles);
 			parts.add("Styles: " + String.join(", ", fontStyles));
 		}
+		Collections.sort(parts);
 		return String.join(CSS_SEPARATOR + " ", parts);
 	}
 

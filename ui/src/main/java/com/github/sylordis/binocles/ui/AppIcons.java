@@ -83,6 +83,15 @@ public final class AppIcons {
 	public static final Image ICON_NOMENCLATURE = new Image(
 	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "nomenclature.png"));
 
+	/**
+	 * Icon for collapsible elements that are expanded.
+	 */
+	public static final Image ICON_ARROW_DOWN = new Image(AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "down_arrow.png"));
+	/**
+	 * Icon for collapsible elements that are collapsed.
+	 */
+	public static final Image ICON_ARROW_RIGHT = new Image(AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "right_arrow.png"));
+	
 	// Initialise icon map for Cell renderers (Tree & List)
 	static {
 		MapUtils.create(ICON_DICTIONARY, new Class<?>[] { Book.class, //

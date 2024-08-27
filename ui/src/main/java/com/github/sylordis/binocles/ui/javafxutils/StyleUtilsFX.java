@@ -17,11 +17,13 @@ public final class StyleUtilsFX {
 	 */
 	private final static Map<String, String> cssToFxcssDictionary = Map.of("color", "fill");
 	/**
-	 * JavaFX CSS style, where all properties are written <code>-fx-&lt;property&gt;</code> with some replacements.
+	 * JavaFX CSS style, where all properties are written <code>-fx-&lt;property&gt;</code> with some
+	 * replacements.
+	 * 
 	 * @see #cssToFxcssDictionary
 	 */
 	public final static CSSType JAVA_FX = new CSSType(cssToFxcssDictionary, e -> "-fx-" + e);
-	
+
 	/**
 	 * Transforms a colour into an rgba string value separated by commas, destined to be transformed
 	 * back into a {@link Color} with {@link Color#web(String)}. This method is null safe.
@@ -39,6 +41,16 @@ public final class StyleUtilsFX {
 			builder.append(toHex(color.getOpacity()));
 		}
 		return builder.toString().toUpperCase();
+	}
+
+	/**
+	 * Transforms a color text representation to its equivalent Color.
+	 * 
+	 * @param hex
+	 * @return
+	 */
+	public static Color fromHex(String hex) {
+		return Color.valueOf(hex);
 	}
 
 	/**
@@ -74,7 +86,6 @@ public final class StyleUtilsFX {
 		return in.length() == 1 ? "0" + in : in;
 	}
 
-
 	/**
 	 * Makes a font bold.
 	 * 
@@ -102,5 +113,5 @@ public final class StyleUtilsFX {
 	private StyleUtilsFX() {
 		// Nothing to see here
 	}
-	
+
 }

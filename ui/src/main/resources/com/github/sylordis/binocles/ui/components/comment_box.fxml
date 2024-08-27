@@ -3,7 +3,7 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root animated="false" contentDisplay="RIGHT" styleClass="comment-box" text="untitled" type="TitledPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root animated="false" contentDisplay="RIGHT" styleClass="comment-box" text="(comment)" type="TitledPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <VBox fx:id="mainPane" styleClass="comment-box-inner" />
    </content>

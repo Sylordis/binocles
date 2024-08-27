@@ -36,20 +36,28 @@
 .comment-box {
 	-fx-padding: 0 0 5px 0;
 }
+.comment-box-collapse:hover {
+	-fx-background-color: #AAA;
+}
+.comment-box-title {
+	-fx-padding-left: 3px;
+	-fx-margin-left: 3px;
+}
 .comment-box .comment-box-inner {
 	-fx-padding: 5px;
 	-fx-spacing: 2px;
-	-fx-background-color: #FFFFFF;
+	-fx-background-color: #FFF;
+}
+.comment-box .comment-box-inner .comment-entry {
 	-fx-text-alignment: justify;
 }
-.comment-box .comment-box-inner .comment-entry {}
 .chapter-pane {}
 .chapter-pane .styled-text-area {
 	-fx-padding: 10px 15px 10px 15px;
 	-fx-border-color: #dcdcdc;
 }
 .chapter-pane .styled-text-area * {
--fx-text-alignment: justify;
+	-fx-text-alignment: justify;
 }
 .chapter-pane .zone-separator {}
 .chapter-pane .splitpane {
