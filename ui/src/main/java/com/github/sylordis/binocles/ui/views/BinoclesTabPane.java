@@ -23,4 +23,5 @@ public interface BinoclesTabPane {
 	default void updateControllerStatus(BinoclesController controller) {
 		// Nothing to do by default
 	}
+
 }

@@ -35,7 +35,7 @@
                <children>
                   <Button fx:id="toolbarCreateComment" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" onAction="#createCommentAction" styleClass="buttonicon" text="New Comment">
                      <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                            <image>
                               <Image url="@../img/comment.png" />
                            </image>
@@ -47,7 +47,7 @@
                   </Button>
                   <Button fx:id="expandCollapseButton" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#toggleCommentBoxesExpansion" styleClass="buttonicon" text="Expand/Collapse all">
                      <graphic>
-                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                            <image>
                               <Image url="@../img/collapse.png" />
                            </image>
@@ -68,7 +68,7 @@
             <HBox fx:id="chapterContentContainer">
                <children>
                   <Region fx:id="chapterContentSeparator" prefWidth="20.0" styleClass="zone-separator" />
-                  <VBox fx:id="commentBoxContainer" prefWidth="200.0" />
+                  <VBox fx:id="commentBoxContainer" prefWidth="200.0" styleClass="comments-container" />
                </children>
             </HBox>
            </content>

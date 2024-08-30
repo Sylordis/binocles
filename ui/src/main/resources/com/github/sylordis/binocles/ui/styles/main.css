@@ -6,6 +6,13 @@
 	-fx-pref-height: 16;
 	-fx-pref-width: 16;
 }
+.buttonicon:hover {
+	-fx-background-color: #AAA;
+}
+.buttonicon.mixed-bg:hover {
+	-fx-background-color: #AAA;
+	-fx-blend-mode: multiply;
+}
 .binocles-pane {}
 .binocles-pane .content-main, .binocles-pane.content-main {
 	-fx-padding: 5px;
@@ -33,25 +40,34 @@
 .binocles-pane .body {
 	-fx-padding: 5px 0 0 10px;
 }
-.comment-box {
-	-fx-padding: 0 0 5px 0;
+.comment-box {}
+.comment-box .collapse-button {
+	-fx-border-radius: 2px;
+	-fx-margin: 0 3px 0 0;
+	-fx-padding: 0;
 }
-.comment-box-collapse:hover {
-	-fx-background-color: #AAA;
-}
-.comment-box-title {
+.comment-box .title {
 	-fx-padding-left: 3px;
 	-fx-margin-left: 3px;
 }
 .comment-box .comment-box-inner {
 	-fx-padding: 5px;
 	-fx-spacing: 2px;
-	-fx-background-color: #FFF;
 }
 .comment-box .comment-box-inner .comment-entry {
 	-fx-text-alignment: justify;
 }
+.comment-box .toolbar .button .image-view {
+	-fx-opacity: 0.3;
+	-fx-blend-mode: multiply;
+}
+.comment-box .toolbar .button:hover .image-view {
+	-fx-opacity: 1.0;
+}
 .chapter-pane {}
+.chapter-pane .comments-container {
+	-fx-spacing: 3px;
+}
 .chapter-pane .styled-text-area {
 	-fx-padding: 10px 15px 10px 15px;
 	-fx-border-color: #dcdcdc;
@@ -126,9 +142,7 @@ GridPane.form {
 
 .text-comments-separator {}
 .button-toolbar {}
-.button-toolbar .button:hover {
-	-fx-background-color: #AAA;
-}
+.button-toolbar .button {}
 .tree-view {
 	-fx-margin: 0;
 	-fx-background-insets: 0;

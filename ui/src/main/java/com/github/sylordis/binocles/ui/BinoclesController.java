@@ -26,6 +26,7 @@ import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.model.text.ReviewableContent;
 import com.github.sylordis.binocles.ui.alerts.TextElementDeletionConfirmationAlert;
 import com.github.sylordis.binocles.ui.components.BookTreeRoot;
+import com.github.sylordis.binocles.ui.components.Controller;
 import com.github.sylordis.binocles.ui.components.CustomTreeCell;
 import com.github.sylordis.binocles.ui.components.NomenclatureTreeRoot;
 import com.github.sylordis.binocles.ui.dialogs.AboutDialog;
@@ -83,7 +84,7 @@ import javafx.stage.Stage;
  * @author sylordis
  *
  */
-public class BinoclesController implements Initializable {
+public class BinoclesController implements Initializable, Controller {
 
 	@FXML
 	private TreeView<ReviewableContent> booksTree;
@@ -600,7 +601,7 @@ public class BinoclesController implements Initializable {
 	/**
 	 * Displays a small alert dialog that the feature is not implemented yet.
 	 */
-	private void showNotImplementedAlert() {
+	public void showNotImplementedAlert() {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Uhoh");
 		alert.setHeaderText(null);
@@ -718,5 +719,15 @@ public class BinoclesController implements Initializable {
 	 */
 	public BinoclesModel getModel() {
 		return model;
+	}
+
+	@Override
+	public Controller getParentController() {
+		return null;
+	}
+
+	@Override
+	public void setParentController(Controller parent) {
+		// Nothing to do here
 	}
 }

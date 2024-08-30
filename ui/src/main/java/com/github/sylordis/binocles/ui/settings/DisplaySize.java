@@ -7,6 +7,7 @@ package com.github.sylordis.binocles.ui.settings;
  */
 public enum DisplaySize {
 
+	// Font size, icon max size.
 	SMALL(10, 16),
 	NORMAL(12, 16),
 	BIG(18, 24);

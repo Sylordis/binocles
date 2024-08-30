@@ -94,6 +94,7 @@ public final class AppIcons {
 	
 	// Initialise icon map for Cell renderers (Tree & List)
 	static {
+		MapUtils.createVariable(ICON_DICTIONARY, Book.class, ICON_BOOK);
 		MapUtils.create(ICON_DICTIONARY, new Class<?>[] { Book.class, //
 		        Chapter.class, //
 		        Nomenclature.class, //

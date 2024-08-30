@@ -1,26 +1,25 @@
 package com.github.sylordis.binocles.ui.components;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.Map.Entry;
-import java.util.ResourceBundle;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.github.sylordis.binocles.model.review.Comment;
 import com.github.sylordis.binocles.model.review.Nomenclature;
-import com.github.sylordis.binocles.ui.AppIcons;
+import com.github.sylordis.binocles.ui.views.ChapterView;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -28,21 +27,12 @@ import javafx.scene.text.TextFlow;
  * This component is the visual element destined to show comments and be collapsible. If the comment
  * is too long, it will display an ellipsis when collapsed.
  */
-public class CommentBox extends VBox implements Initializable {
+public class CommentBox extends CollapsibleBox implements Controller {
 
 //	private final String DEFAULT_ELLIPSIS_STRING = "...";
 //	private final int MAX_TEXTFLOW_HEIGHT = 100;
 
-	@FXML
-	private Button buttonCollapse;
-	@FXML
-	private Text boxTitle;
-	@FXML
-	private HBox toolbar;
-	@FXML
-	private VBox mainContent;
-
-	private BooleanProperty expanded;
+	private Controller parentController;
 
 	private Comment comment;
 	private Nomenclature defaultNomenclature;
@@ -57,65 +47,79 @@ public class CommentBox extends VBox implements Initializable {
 	 * @param defaultNomenclature
 	 */
 	public CommentBox(Comment comment, Nomenclature defaultNomenclature) {
+		super();
 		this.comment = comment;
 		this.defaultNomenclature = defaultNomenclature;
-		this.expanded = new SimpleBooleanProperty(true);
-		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("comment_box2.fxml"));
-		fxmlLoader.setRoot(this);
-		fxmlLoader.setController(this);
-		try {
-			fxmlLoader.load();
-		} catch (IOException exception) {
-			throw new RuntimeException(exception);
-		}
+		updateContent();
 	}
 
 	@Override
-	public void initialize(URL location, ResourceBundle resources) {
+	public void updateContent() {
+		// Title
 		if (comment.getType() == null)
-			boxTitle.setText(defaultNomenclature.getTypes().get(0).getName());
+			setTitle(defaultNomenclature.getTypes().get(0).getName());
 		else {
-			boxTitle.setText(comment.getType().getName());
+			setTitle(comment.getType().getName());
 		}
+		// Text content
 		if (comment.getFields().size() == 1) {
 			Entry<String, String> entry = comment.getFields().entrySet().iterator().next();
 			Text text = new Text(entry.getValue());
 			TextFlow flow = new TextFlow(text);
 			flow.getStyleClass().add("comment-entry");
-			mainContent.getChildren().add(flow);
+			getMainContent().getChildren().add(flow);
 		} else {
 			for (Entry<String, String> field : comment.getFields().entrySet()) {
 				Label label = new Label(field.getKey() + ": ");
 				Text text = new Text(field.getValue());
 				TextFlow flow = new TextFlow(label, text);
 				flow.getStyleClass().add("comment-entry");
-				mainContent.getChildren().add(flow);
+				getMainContent().getChildren().add(flow);
 			}
 		}
-		// Set listeners
-		expanded.addListener((s, o, n) -> {
-			mainContent.setVisible(n);
-			buttonCollapse.setGraphic(AppIcons.createImageView(n ? AppIcons.ICON_ARROW_DOWN : AppIcons.ICON_ARROW_RIGHT, 8, 8));
-		});
-//		mainPane.setOpaqueInsets(new Insets(0, 0, 5, 0));
-		// TODO Set comment box style
-//		if (comment.getType() != null) {
-//			String colourHex = comment.getType().getStyles().get("color");
-//			logger.debug("colour: {}", colourHex);
-//			if (colourHex != null) {
-//				Color colour = Color.web(colourHex).deriveColor(1.0, 1.0, 1.9, 1.0);
-//				BackgroundFill bgfill = new BackgroundFill(colour, CornerRadii.EMPTY, mainPane.getInsets());
-//				// TODO THE FUCK WITH THE MARGIN
-//				setBackground(new Background(bgfill));
-//				backgroundProperty().set(new Background(bgfill));
-//				mainPane.setBackground(new Background(bgfill));
-//				mainPane.backgroundProperty().set(new Background(bgfill));
-//			}
-//		}
-//		final Set<Node> node = this.lookupAll(".title");
-//		logger.debug("Setting comment box style: nodes = {}", node.size());
-//		node.forEach(n -> n.setStyle("-fx-background-color: #99FF99;"));
-		// TODO set max height with ellipsis
+		// Set comment box style
+		setBoxStyle();
+	}
+
+	/**
+	 * Sets the box style according to the comment type.
+	 */
+	private void setBoxStyle() {
+		if (comment.getType() != null) {
+			String colourHex = comment.getType().getStyles().get("color");
+			logger.debug("colour: {}", colourHex);
+			if (colourHex != null) {
+				Color colour = Color.web(colourHex);
+				Color mainBgColor = colour.desaturate().desaturate().brighter().brighter();
+				Color titleBgColor = colour.desaturate().brighter();
+				Color borderColor = colour.desaturate().desaturate().brighter();
+				BackgroundFill bgfill = new BackgroundFill(mainBgColor, CornerRadii.EMPTY, this.getInsets());
+				BackgroundFill titleBgFill = new BackgroundFill(titleBgColor, CornerRadii.EMPTY,
+				        getTitleContainer().getInsets());
+				setBackground(new Background(bgfill));
+				setTitleBackground(new Background(titleBgFill));
+				setBorder(new Border(new BorderStroke(borderColor, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+				        BorderWidths.DEFAULT)));
+			} else
+				setDefaultBoxStyle();
+		} else
+			setDefaultBoxStyle();
+	}
+
+	/**
+	 * Sets a default style for the comment box.
+	 */
+	private void setDefaultBoxStyle() {
+		setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
+		setTitleBackground(new Background(new BackgroundFill(Color.web("#DDD"), CornerRadii.EMPTY, Insets.EMPTY)));
+		setBorder(new Border(new BorderStroke(Color.web("#dcdcdc"), BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
+		        BorderWidths.DEFAULT)));
+	}
+
+	@Override
+	public void toggleExpanded() {
+		super.toggleExpanded();
+		parentController.childNotify();
 	}
 
 	/**
@@ -146,21 +150,28 @@ public class CommentBox extends VBox implements Initializable {
 		this.defaultNomenclature = defaultNomenclature;
 	}
 
-	/**
-	 * Sets the expanded status of this comment box.
-	 * 
-	 * @param expanded
-	 */
-	public void setExpanded(boolean expanded) {
-		this.expanded.set(expanded);
+	@FXML
+	@Override
+	public void editAction() {
+		((ChapterView) parentController).editComment(comment);
+		clearContent();
+		updateContent();
 	}
 
-	/**
-	 * Toggles the expansion status.
-	 */
 	@FXML
-	public void toggleExpanded() {
-		this.expanded.set(!this.expanded.getValue());
+	@Override
+	public void deleteAction() {
+		((ChapterView) parentController).deleteComment(comment);
+	}
+
+	@Override
+	public Controller getParentController() {
+		return this.parentController;
+	}
+
+	@Override
+	public void setParentController(Controller parent) {
+		this.parentController = parent;
 	}
 
 }

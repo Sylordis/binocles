@@ -19,6 +19,7 @@ import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.ui.AppIcons;
 import com.github.sylordis.binocles.ui.BinoclesController;
 import com.github.sylordis.binocles.ui.components.CommentBox;
+import com.github.sylordis.binocles.ui.components.Controller;
 import com.github.sylordis.binocles.ui.dialogs.CommentDetailsDialog;
 import com.github.sylordis.binocles.ui.functional.CommentBoxComparator;
 import com.github.sylordis.binocles.ui.javafxutils.StyleUtilsFX;
@@ -46,7 +47,7 @@ import javafx.scene.text.TextFlow;
 /**
  * Pane component for a chapter.
  */
-public class ChapterView extends BorderPane implements Initializable, BinoclesTabPane {
+public class ChapterView extends BorderPane implements Initializable, BinoclesTabPane, Controller {
 
 	private Chapter chapter;
 	private Book book;
@@ -79,6 +80,10 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 	@FXML
 	private Button expandCollapseButton;
 
+	/**
+	 * Value of this boolean is modified when using the {@link #toggleCommentBoxesExpansion()}. It is
+	 * true when all comments were expanded, false when all comments were collapsed.
+	 */
 	private SimpleBooleanProperty expandedCommentsState;
 
 	/**
@@ -173,8 +178,7 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 		// Set text styles
 		String stylesToString = StyleUtils.createCSSBlock(type.getStyles(), CSSBlockStyle.INLINE, StyleUtilsFX.JAVA_FX);
 		logger.debug("Setting style: {}, style={}, string='{}'", comment, type.getStyles(), stylesToString);
-		chapterContent.setStyle(comment.getStartIndex(), comment.getEndIndex(),
-		        stylesToString);
+		chapterContent.setStyle(comment.getStartIndex(), comment.getEndIndex(), stylesToString);
 		expandedCommentsState.set(true);
 	}
 
@@ -187,6 +191,7 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 	private void createCommentBoxAndApplyStyle(Comment comment) {
 		Nomenclature defaultNomenclature = mainController.getModel().getDefaultNomenclature();
 		CommentBox cbox = new CommentBox(comment, defaultNomenclature);
+		cbox.setParentController(this);
 		commentBoxes.add(cbox);
 		commentBoxContainer.getChildren().setAll(commentBoxes);
 		applyCommentStyleOnText(comment);
@@ -229,6 +234,38 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 	 */
 	public InlineCssTextArea getChapterContentZone() {
 		return chapterContent;
+	}
+
+	@Override
+	public Controller getParentController() {
+		return mainController;
+	}
+
+	public void editComment(Comment comment) {
+		// TODO Auto-generated method stub
+		mainController.showNotImplementedAlert();
+	}
+
+	public void deleteComment(Comment comment) {
+		// TODO Auto-generated method stub
+		mainController.showNotImplementedAlert();
+	}
+
+	@Override
+	public void setParentController(Controller parent) {
+		// TODO Auto-generated method stub
+		Controller.super.setParentController(parent);
+	}
+
+	@Override
+	public void childNotify() {
+		// Check if all boxes are expanded or collapsed and modify the property accordingly. Nothing happens
+		// if not all comment boxes have the same expansion status.
+		if (commentBoxes.stream().allMatch(c -> c.isExpanded())) {
+			expandedCommentsState.set(true);
+		} else if (commentBoxes.stream().allMatch(c -> !c.isExpanded())) {
+			expandedCommentsState.set(false);
+		}
 	}
 
 }
