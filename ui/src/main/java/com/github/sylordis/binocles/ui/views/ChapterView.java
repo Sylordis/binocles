@@ -49,12 +49,30 @@ import javafx.scene.text.TextFlow;
  */
 public class ChapterView extends BorderPane implements Initializable, BinoclesTabPane, Controller {
 
+	/**
+	 * Current chapter for this view.
+	 */
 	private Chapter chapter;
+	/**
+	 * Book the chapter belong's to.
+	 */
 	private Book book;
+	/**
+	 * Parent controller.
+	 */
 	private BinoclesController mainController;
+	/**
+	 * List of all comment boxes.
+	 */
 	private Set<CommentBox> commentBoxes;
+	/**
+	 * Class logger.
+	 */
 	private final Logger logger = LogManager.getLogger();
-	private TextFlow defaultFlow;
+	/**
+	 * Text flow for the comment area when no comments are present.
+	 */
+	private TextFlow defaultCommentsFlow;
 
 	/**
 	 * Text area for chapter content.
@@ -115,8 +133,8 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 		// Default
 		Text defaultText = new Text("No comments for now.");
 		defaultText.getStyleClass().addAll("text-note");
-		defaultFlow = new TextFlow(defaultText);
-		defaultFlow.setTextAlignment(TextAlignment.CENTER);
+		defaultCommentsFlow = new TextFlow(defaultText);
+		defaultCommentsFlow.setTextAlignment(TextAlignment.CENTER);
 		// Titles
 		chapterTitle.setText(chapter.getTitle());
 		bookTitle.setText(book.getTitle());
@@ -132,7 +150,7 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 		HBox.setHgrow(chapterContent, Priority.ALWAYS);
 		// Comment boxes
 		if (chapter.getComments().isEmpty())
-			commentBoxContainer.getChildren().add(defaultFlow);
+			commentBoxContainer.getChildren().add(defaultCommentsFlow);
 		else {
 			chapter.getComments().forEach(this::createCommentBoxAndApplyStyle);
 		}
@@ -155,7 +173,7 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 		Optional<Comment> answer = dialog.display();
 		if (answer.isPresent()) {
 			if (commentBoxes.isEmpty())
-				commentBoxContainer.getChildren().remove(defaultFlow);
+				commentBoxContainer.getChildren().remove(defaultCommentsFlow);
 			chapter.addComment(answer.get());
 			logger.info("New comment on {}: {}", chapter, answer.get());
 			createCommentBoxAndApplyStyle(answer.get());
@@ -253,8 +271,7 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 
 	@Override
 	public void setParentController(Controller parent) {
-		// TODO Auto-generated method stub
-		Controller.super.setParentController(parent);
+		mainController = (BinoclesController) parent;
 	}
 
 	@Override

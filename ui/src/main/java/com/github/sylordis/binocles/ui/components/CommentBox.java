@@ -6,10 +6,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.github.sylordis.binocles.model.review.Comment;
+import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.ui.views.ChapterView;
 
-import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
@@ -78,42 +78,77 @@ public class CommentBox extends CollapsibleBox implements Controller {
 			}
 		}
 		// Set comment box style
-		setBoxStyle();
+		applyCommentTypeStyle();
+	}
+
+	private String getTypeStyleColor(CommentType type) {
+		return type.getStyles().get("color");
 	}
 
 	/**
 	 * Sets the box style according to the comment type.
 	 */
-	private void setBoxStyle() {
+	private void applyCommentTypeStyle() {
+		String colorHex = getTypeStyleColor(defaultNomenclature.getTypes().get(0));
 		if (comment.getType() != null) {
-			String colourHex = comment.getType().getStyles().get("color");
-			logger.debug("colour: {}", colourHex);
-			if (colourHex != null) {
-				Color colour = Color.web(colourHex);
-				Color mainBgColor = colour.desaturate().desaturate().brighter().brighter();
-				Color titleBgColor = colour.desaturate().brighter();
-				Color borderColor = colour.desaturate().desaturate().brighter();
-				BackgroundFill bgfill = new BackgroundFill(mainBgColor, CornerRadii.EMPTY, this.getInsets());
-				BackgroundFill titleBgFill = new BackgroundFill(titleBgColor, CornerRadii.EMPTY,
-				        getTitleContainer().getInsets());
-				setBackground(new Background(bgfill));
-				setTitleBackground(new Background(titleBgFill));
-				setBorder(new Border(new BorderStroke(borderColor, BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
-				        BorderWidths.DEFAULT)));
-			} else
-				setDefaultBoxStyle();
-		} else
-			setDefaultBoxStyle();
+			String commentColorHex = getTypeStyleColor(comment.getType());
+			logger.debug("colour: {}", colorHex);
+			if (colorHex != null)
+				colorHex = commentColorHex;
+		}
+		setBoxStyle(colorHex);
+	}
+
+	/**
+	 * 
+	 * @param colorHex
+	 */
+	private void setBoxStyle(String colorHex) {
+		Color colour = Color.web(colorHex);
+		Color mainBgColor = deriveMainBgColor(colour);
+		Color titleBgColor = deriveTitleBgColor(colour);
+		Color borderColor = deriveBorderColor(colour);
+		BackgroundFill bgfill = new BackgroundFill(mainBgColor, CornerRadii.EMPTY, this.getInsets());
+		BackgroundFill titleBgFill = new BackgroundFill(titleBgColor, CornerRadii.EMPTY,
+		        getTitleContainer().getInsets());
+		setBackground(new Background(bgfill));
+		setTitleBackground(new Background(titleBgFill));
+		setBorder(new Border(
+		        new BorderStroke(borderColor, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, BorderWidths.DEFAULT)));
 	}
 
 	/**
 	 * Sets a default style for the comment box.
 	 */
-	private void setDefaultBoxStyle() {
+	public void setDefaultBoxStyle() {
 		setBackground(new Background(new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)));
 		setTitleBackground(new Background(new BackgroundFill(Color.web("#DDD"), CornerRadii.EMPTY, Insets.EMPTY)));
 		setBorder(new Border(new BorderStroke(Color.web("#dcdcdc"), BorderStrokeStyle.SOLID, CornerRadii.EMPTY,
 		        BorderWidths.DEFAULT)));
+	}
+
+	/**
+	 * @param colour
+	 * @return
+	 */
+	private Color deriveBorderColor(Color colour) {
+		return colour.desaturate().desaturate().brighter();
+	}
+
+	/**
+	 * @param colour
+	 * @return
+	 */
+	private Color deriveTitleBgColor(Color colour) {
+		return colour.desaturate().brighter();
+	}
+
+	/**
+	 * @param colour
+	 * @return
+	 */
+	private Color deriveMainBgColor(Color colour) {
+		return deriveBorderColor(colour).brighter();
 	}
 
 	@Override
@@ -150,7 +185,6 @@ public class CommentBox extends CollapsibleBox implements Controller {
 		this.defaultNomenclature = defaultNomenclature;
 	}
 
-	@FXML
 	@Override
 	public void editAction() {
 		((ChapterView) parentController).editComment(comment);
@@ -158,7 +192,6 @@ public class CommentBox extends CollapsibleBox implements Controller {
 		updateContent();
 	}
 
-	@FXML
 	@Override
 	public void deleteAction() {
 		((ChapterView) parentController).deleteComment(comment);
