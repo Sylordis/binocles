@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import com.github.sylordis.binocles.utils.Identifiable;
 import com.github.sylordis.binocles.utils.MapUtils;
@@ -79,6 +80,24 @@ public class CommentType implements Serializable, NomenclatureItem, Identifiable
 	@Override
 	public String getId() {
 		return Identifiable.formatId(this.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(description, fields, name, styles);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CommentType other = (CommentType) obj;
+		return Objects.equals(description, other.description) && Objects.equals(fields, other.fields)
+		        && Objects.equals(name, other.name) && Objects.equals(styles, other.styles);
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package com.github.sylordis.binocles.ui.components;
 
 import java.util.Map.Entry;
+import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -187,14 +188,17 @@ public class CommentBox extends CollapsibleBox implements Controller {
 
 	@Override
 	public void editAction() {
-		((ChapterView) parentController).editComment(comment);
-		clearContent();
-		updateContent();
+		Optional<Comment> answer = ((ChapterView) parentController).editCommentAction(this.comment);
+		if (answer.isPresent()) {
+			this.comment = answer.get();
+			clearContent();
+			updateContent();
+		}
 	}
 
 	@Override
 	public void deleteAction() {
-		((ChapterView) parentController).deleteComment(comment);
+		((ChapterView) parentController).deleteCommentAction(comment);
 	}
 
 	@Override

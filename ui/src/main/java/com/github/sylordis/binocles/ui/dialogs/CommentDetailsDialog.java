@@ -76,6 +76,7 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 
 	private Book book;
 	private Chapter chapter;
+	private Comment comment;
 	private int start;
 	private int end;
 
@@ -87,7 +88,43 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 	private String commentTypeFeedback;
 
 	/**
-	 * Creates a new details dialog for comments.
+	 * Creates a new comment details dialog for an already existing comment.
+	 * 
+	 * @param model
+	 * @param book
+	 * @param chapter
+	 * @param comment
+	 * @param start
+	 * @param end
+	 */
+	private CommentDetailsDialog(BinoclesModel model, Book book, Chapter chapter, Comment comment, int start, int end) {
+		super("Comment details", model);
+		setIcon(AppIcons.ICON_COMMENT);
+		this.book = book;
+		this.chapter = chapter;
+		if (comment == null) {
+			this.start = start;
+			this.end = end;
+		} else {
+			this.comment = comment;
+			this.start = comment.getStartIndex();
+			this.end = comment.getEndIndex();
+		}
+		fieldsFields = new LinkedHashMap<>();
+	}
+	/**
+	 * Creates a new comment details dialog for an already existing comment.
+	 * 
+	 * @param model
+	 * @param book
+	 * @param chapter
+	 * @param comment
+	 */
+	public CommentDetailsDialog(BinoclesModel model, Book book, Chapter chapter, Comment comment) {
+		this(model, book, chapter, comment, 0, 0);
+	}
+	/**
+	 * Creates a new details dialog for a new comment.
 	 * 
 	 * @param model
 	 * @param book
@@ -96,13 +133,7 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 	 * @param end
 	 */
 	public CommentDetailsDialog(BinoclesModel model, Book book, Chapter chapter, int start, int end) {
-		super("Comment details", model);
-		setIcon(AppIcons.ICON_COMMENT);
-		this.book = book;
-		this.chapter = chapter;
-		this.start = start;
-		this.end = end;
-		fieldsFields = new LinkedHashMap<>();
+		this(model, book, chapter, null, start, end);
 	}
 
 	@Override
@@ -119,6 +150,10 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 		Label labelTextExcerpt = new Label("Text excerpt:");
 		fieldTextExcerpt = new TextFlow();
 		fieldTextExcerpt.getChildren().add(new Text(chapter.getText().substring(start, end)));
+		// Set values if editing
+		if (comment != null) {
+			fieldCommentTypeChoice.getSelectionModel().select(comment.getType());
+		}
 		// Set dialog content
 		addFormFeedback();
 		getGridPane().addRow(1, labelChapter, fieldChapter);
@@ -164,6 +199,11 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 		commentTypeValidator.changed(null, null, fieldCommentTypeChoice.getValue());
 	}
 
+	/**
+	 * Updates the text preview.
+	 * 
+	 * @param type
+	 */
 	private void updateTextPreview(CommentType type) {
 		fieldTextExcerpt.getChildren().clear();
 		// TODO Make preview rules configurable
@@ -232,7 +272,7 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 					textField.setWrapText(true);
 					textField.setPrefRowCount(5);
 					textField.setPrefWidth(FIELDS_SIZES - 100);
-					textField.textProperty().addListener(new TextAreaResizeUpToListener(textField));
+//					textField.textProperty().addListener(new TextAreaResizeUpToListener(textField)); TODO
 					fieldsFields.put(entry.getKey(), textField);
 					getGridPane().addRow(row, label, textField);
 					GridPane.setValignment(label, VPos.TOP);
@@ -244,6 +284,11 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 					field = textField;
 				}
 				field.promptTextProperty().set(entry.getValue().getDescription());
+				if (comment != null) {
+					String fieldValue = comment.getFields().get(entry.getKey());
+					if (fieldValue != null)
+						field.setText(fieldValue);
+				}
 				row++;
 			}
 		}

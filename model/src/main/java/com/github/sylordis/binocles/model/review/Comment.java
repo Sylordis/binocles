@@ -1,10 +1,10 @@
 package com.github.sylordis.binocles.model.review;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import com.google.common.base.Preconditions;
 
@@ -79,6 +79,36 @@ public class Comment implements Comparable<Comment>, Serializable {
 		if (ret == 0)
 			ret = Integer.compare(this.endIndex, o.endIndex);
 		return ret;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(endIndex, fields, startIndex, type);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Comment other = (Comment) obj;
+		return endIndex == other.endIndex && startIndex == other.startIndex && Objects.equals(fields, other.fields)
+		        && Objects.equals(type, other.type);
+	}
+
+	/**
+	 * Copies all fields of the provided comment.
+	 * 
+	 * @param comment comment to copy
+	 */
+	public void copy(Comment comment) {
+		this.setType(comment.getType());
+		this.setStartIndex(comment.getStartIndex());
+		this.setEndIndex(comment.getEndIndex());
+		this.setFields(comment.getFields());
 	}
 
 	/**
@@ -177,7 +207,7 @@ public class Comment implements Comparable<Comment>, Serializable {
 	 * @return
 	 */
 	public Map<String, String> getFields() {
-		return Collections.unmodifiableMap(this.fields);
+		return this.fields;
 	}
 
 	/**

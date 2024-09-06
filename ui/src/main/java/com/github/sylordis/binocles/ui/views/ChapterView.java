@@ -31,9 +31,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.IndexRange;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -201,6 +204,20 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 	}
 
 	/**
+	 * Applies all comments styling to the text.
+	 */
+	public void applyAllCommentsStylesOnText() {
+		this.chapter.getComments().forEach(this::applyCommentStyleOnText);
+	}
+
+	/**
+	 * Resets the style of the whole text.
+	 */
+	public void clearTextStyle() {
+		chapterContent.clearStyle(0, chapter.getText().length());
+	}
+
+	/**
 	 * Creates a comment box in the comment panel and applies the style of said comment's type to the
 	 * text.
 	 * 
@@ -259,14 +276,52 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 		return mainController;
 	}
 
-	public void editComment(Comment comment) {
-		// TODO Auto-generated method stub
-		mainController.showNotImplementedAlert();
+	/**
+	 * Opens the comment details dialog in order to edit a comment.
+	 * 
+	 * @param comment
+	 * @return
+	 */
+	public Optional<Comment> editCommentAction(Comment comment) {
+		CommentDetailsDialog dialog = new CommentDetailsDialog(mainController.getModel(), book, chapter, comment);
+		Optional<Comment> answer = dialog.display();
+		if (answer.isPresent()) {
+			comment.copy(answer.get());
+			clearTextStyle();
+			this.chapter.getComments().forEach(this::applyCommentStyleOnText);
+		}
+		return answer;
 	}
 
-	public void deleteComment(Comment comment) {
-		// TODO Auto-generated method stub
-		mainController.showNotImplementedAlert();
+	/**
+	 * Starts a confirmation dialog to delete a given comment.
+	 * 
+	 * @param comment
+	 */
+	public void deleteCommentAction(Comment comment) {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Confirmation");
+		alert.setContentText("Are you sure you want to delete this comment?");
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == ButtonType.OK) {
+			deleteComment(comment);
+			// Add empty message if no comments
+			if (commentBoxes.isEmpty())
+				commentBoxContainer.getChildren().add(defaultCommentsFlow);
+		}
+	}
+
+	/**
+	 * Deletes a comment from the comments of the chapter.
+	 * 
+	 * @param comment
+	 */
+	private void deleteComment(Comment comment) {
+		this.chapter.getComments().remove(comment);
+		CommentBox box = commentBoxes.stream().filter(b -> b.getComment().equals(comment)).findFirst().get();
+		this.commentBoxes.remove(box);
+		clearTextStyle();
+		applyAllCommentsStylesOnText();
 	}
 
 	@Override
