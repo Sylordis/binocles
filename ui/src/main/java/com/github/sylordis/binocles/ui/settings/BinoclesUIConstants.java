@@ -34,4 +34,8 @@ public final class BinoclesUIConstants {
 	 * Sample text when needed.
 	 */
 	public static final String TXT_SAMPLE = "The quick brown fox jumps over the lazy dog.";
+	/**
+	 * Path to local configuration file.
+	 */
+	public static final String CFG_FILE = "binocles.ini";
 }

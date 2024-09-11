@@ -36,7 +36,7 @@ import com.github.sylordis.binocles.ui.dialogs.CommentTypeDetailsDialog;
 import com.github.sylordis.binocles.ui.dialogs.NomenclatureDetailsDialog;
 import com.github.sylordis.binocles.ui.doa.ChapterPropertiesAnswer;
 import com.github.sylordis.binocles.ui.doa.CommentTypePropertiesAnswer;
-import com.github.sylordis.binocles.ui.functional.TreeDoubleClickEventHandler;
+import com.github.sylordis.binocles.ui.functional.TreeVarClickEventHandler;
 import com.github.sylordis.binocles.ui.javafxutils.Browser;
 import com.github.sylordis.binocles.ui.javafxutils.TreeViewUtils;
 import com.github.sylordis.binocles.ui.settings.BinoclesUIConfiguration;
@@ -207,11 +207,11 @@ public class BinoclesController implements Initializable, Controller {
 		});
 		rebuildNomenclaturesTree();
 		// Set trees change listener
-		booksTree.setOnMouseClicked(new TreeDoubleClickEventHandler(booksTree, this::openTabItemAction));
+		booksTree.setOnMouseClicked(TreeVarClickEventHandler.createDoubleClickHandler(booksTree, this::openTabItemAction));
 		booksTree.getSelectionModel().selectedItemProperty()
 		        .addListener((s, o, n) -> setTextElementsContextMenuStatus());
 		nomenclaturesTree
-		        .setOnMouseClicked(new TreeDoubleClickEventHandler(nomenclaturesTree, this::openTabItemAction));
+		        .setOnMouseClicked(TreeVarClickEventHandler.createDoubleClickHandler(nomenclaturesTree, this::openTabItemAction));
 		nomenclaturesTree.getSelectionModel().selectedItemProperty()
 		        .addListener((s, o, n) -> setReviewElementsContextMenuStatus());
 		// Set tabs change listener

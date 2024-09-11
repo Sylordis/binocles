@@ -37,51 +37,7 @@
             </Button>
             <Text fx:id="boxTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="Title" />
             <Region HBox.hgrow="ALWAYS" />
-            <HBox fx:id="toolbar" styleClass="toolbar">
-               <children>
-                  <Button fx:id="buttonEdit" contentDisplay="GRAPHIC_ONLY" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onAction="#editAction" prefHeight="20.0" prefWidth="20.0" text="Edit">
-                     <styleClass>
-                        <String fx:value="edit-button" />
-                        <String fx:value="buttonicon" />
-                	 	<String fx:value="mixed-bg" />
-                     </styleClass>
-                     <graphic>
-                        <ImageView fitHeight="12.0" fitWidth="12.0" opacity="0.75" preserveRatio="true">
-                           <image>
-                              <Image url="@../img/pencil.png" />
-                           </image>
-                           <styleClass>
-                              <String fx:value="icon" />
-                              <String fx:value="icon-small" />
-                           </styleClass>
-                        </ImageView>
-                     </graphic>
-                     <tooltip>
-                        <Tooltip text="Edit this comment" />
-                     </tooltip>
-                  </Button>
-                  <Button fx:id="buttonDelete" contentDisplay="GRAPHIC_ONLY" minHeight="20.0" minWidth="20.0" mnemonicParsing="false" onAction="#deleteAction" prefHeight="20.0" prefWidth="20.0" text="Delete">
-                     <styleClass>
-                        <String fx:value="delete-button" />
-                        <String fx:value="buttonicon" />
-                        <String fx:value="mixed-bg" />
-                     </styleClass>
-                     <graphic>
-                        <ImageView fitHeight="12.0" fitWidth="12.0" preserveRatio="true">
-                           <image>
-                              <Image url="@../img/trash.png" />
-                           </image>
-                           <styleClass>
-                              <String fx:value="icon" />
-                              <String fx:value="icon-small" />
-                           </styleClass>
-                        </ImageView>
-                     </graphic>
-                     <tooltip>
-                        <Tooltip text="Delete this comment" />
-                     </tooltip>
-                  </Button>
-               </children></HBox>
+            <HBox fx:id="toolbar" styleClass="toolbar"/>
          </children>
       </HBox>
       <VBox fx:id="mainContent" styleClass="comment-box-inner" />

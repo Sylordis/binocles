@@ -1,7 +1,10 @@
 package com.github.sylordis.binocles.ui.components;
 
-import java.util.Map.Entry;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import com.github.sylordis.binocles.model.review.Comment;
 import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.Nomenclature;
+import com.github.sylordis.binocles.ui.AppIcons;
 import com.github.sylordis.binocles.ui.views.ChapterView;
 
 import javafx.geometry.Insets;
@@ -32,13 +36,24 @@ public class CommentBox extends CollapsibleBox implements Controller {
 
 //	private final String DEFAULT_ELLIPSIS_STRING = "...";
 //	private final int MAX_TEXTFLOW_HEIGHT = 100;
-
-	private Controller parentController;
-
-	private Comment comment;
-	private Nomenclature defaultNomenclature;
 //	private int heightEllipsis;
 
+	/**
+	 * 
+	 */
+	private Controller parentController;
+	/**
+	 * Comment held by this box.
+	 */
+	private Comment comment;
+	/**
+	 * Default nomenclature if the comment has none.
+	 */
+	private Nomenclature defaultNomenclature;
+
+	/**
+	 * Local logger.
+	 */
 	private final Logger logger = LogManager.getLogger();
 
 	/**
@@ -56,24 +71,26 @@ public class CommentBox extends CollapsibleBox implements Controller {
 
 	@Override
 	public void updateContent() {
-		// Title
-		if (comment.getType() == null)
+		// Title & get nomenclature fields for reference
+		List<String> nomenclatureFields = new ArrayList<>();
+		if (comment.getType() == null) {
 			setTitle(defaultNomenclature.getTypes().get(0).getName());
-		else {
+			nomenclatureFields.addAll(defaultNomenclature.getTypes().get(0).getFields().keySet());
+		} else {
 			setTitle(comment.getType().getName());
+			nomenclatureFields.addAll(comment.getType().getFields().keySet());
 		}
 		// Text content
-		if (comment.getFields().size() == 1) {
-			Entry<String, String> entry = comment.getFields().entrySet().iterator().next();
-			Text text = new Text(entry.getValue());
+		if (nomenclatureFields.size() == 1) {
+			Text text = createTextField(comment.getFields().get(nomenclatureFields.get(0)));
 			TextFlow flow = new TextFlow(text);
 			flow.getStyleClass().add("comment-entry");
 			getMainContent().getChildren().add(flow);
 		} else {
-			for (Entry<String, String> field : comment.getFields().entrySet()) {
-				Label label = new Label(field.getKey() + ": ");
-				Text text = new Text(field.getValue());
-				TextFlow flow = new TextFlow(label, text);
+			for (String field : nomenclatureFields) {
+				Label label = new Label(field + ": ");
+				Text textField = createTextField(comment.getFields().get(field));
+				TextFlow flow = new TextFlow(label, textField);
 				flow.getStyleClass().add("comment-entry");
 				getMainContent().getChildren().add(flow);
 			}
@@ -82,6 +99,38 @@ public class CommentBox extends CollapsibleBox implements Controller {
 		applyCommentTypeStyle();
 	}
 
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		super.initialize(location, resources);
+		ToolbarButton edit = new ToolbarButton(AppIcons.ICON_PENCIL, "Edit this comment");
+		edit.setOnAction(e -> editAction());
+		ToolbarButton delete = new ToolbarButton(AppIcons.ICON_TRASH, "Delete this comment");
+		delete.setOnAction(e -> deleteAction());
+		setToolbar(edit, delete);
+	}
+
+	/**
+	 * Creates a text field with the provided text, or a note saying that the content is empty.
+	 * 
+	 * @param text
+	 * @return
+	 */
+	private Text createTextField(String text) {
+		Text textField = new Text();
+		if (text == null || text.isBlank()) {
+			textField.setText("<not provided>");
+			textField.getStyleClass().addAll("text-note", "mixed-bg");
+		} else
+			textField.setText(text);
+		return textField;
+	}
+
+	/**
+	 * Gets a type's color CSS property.
+	 * 
+	 * @param type
+	 * @return
+	 */
 	private String getTypeStyleColor(CommentType type) {
 		return type.getStyles().get("color");
 	}
@@ -93,7 +142,6 @@ public class CommentBox extends CollapsibleBox implements Controller {
 		String colorHex = getTypeStyleColor(defaultNomenclature.getTypes().get(0));
 		if (comment.getType() != null) {
 			String commentColorHex = getTypeStyleColor(comment.getType());
-			logger.debug("colour: {}", colorHex);
 			if (colorHex != null)
 				colorHex = commentColorHex;
 		}
@@ -109,6 +157,8 @@ public class CommentBox extends CollapsibleBox implements Controller {
 		Color mainBgColor = deriveMainBgColor(colour);
 		Color titleBgColor = deriveTitleBgColor(colour);
 		Color borderColor = deriveBorderColor(colour);
+		logger.debug("Setting colours: type={}, main bg={}, title bg={}, border={}", colorHex, mainBgColor,
+		        titleBgColor, borderColor);
 		BackgroundFill bgfill = new BackgroundFill(mainBgColor, CornerRadii.EMPTY, this.getInsets());
 		BackgroundFill titleBgFill = new BackgroundFill(titleBgColor, CornerRadii.EMPTY,
 		        getTitleContainer().getInsets());

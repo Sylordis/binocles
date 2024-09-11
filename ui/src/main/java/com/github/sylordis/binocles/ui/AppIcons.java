@@ -42,6 +42,7 @@ public final class AppIcons {
 	 */
 	public static final Image ICON_CHAPTER = new Image(
 	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "chapter.png"));
+
 	/**
 	 * Icon for {@link Chapter} creation.
 	 */
@@ -67,6 +68,18 @@ public final class AppIcons {
 	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "comment.png"));
 
 	/**
+	 * Icon for trash/delete.
+	 */
+	public static final Image ICON_TRASH = new Image(
+	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "trash.png"));
+
+	/**
+	 * Icon for pencil/edit.
+	 */
+	public static final Image ICON_PENCIL = new Image(
+	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "pencil.png"));
+
+	/**
 	 * Icon for expand all.
 	 */
 	public static final Image ICON_EXPAND = new Image(
@@ -86,12 +99,14 @@ public final class AppIcons {
 	/**
 	 * Icon for collapsible elements that are expanded.
 	 */
-	public static final Image ICON_ARROW_DOWN = new Image(AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "down_arrow.png"));
+	public static final Image ICON_ARROW_DOWN = new Image(
+	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "down_arrow.png"));
 	/**
 	 * Icon for collapsible elements that are collapsed.
 	 */
-	public static final Image ICON_ARROW_RIGHT = new Image(AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "right_arrow.png"));
-	
+	public static final Image ICON_ARROW_RIGHT = new Image(
+	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "right_arrow.png"));
+
 	// Initialise icon map for Cell renderers (Tree & List)
 	static {
 		MapUtils.createVariable(ICON_DICTIONARY, Book.class, ICON_BOOK);

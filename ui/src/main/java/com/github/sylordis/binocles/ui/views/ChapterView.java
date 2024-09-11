@@ -26,6 +26,7 @@ import com.github.sylordis.binocles.ui.javafxutils.StyleUtilsFX;
 import com.github.sylordis.binocles.utils.StyleUtils;
 import com.github.sylordis.binocles.utils.StyleUtils.CSSBlockStyle;
 
+import javafx.beans.property.SetProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -65,7 +66,11 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 	 */
 	private BinoclesController mainController;
 	/**
-	 * List of all comment boxes.
+	 * Set of all comment boxes.<br/>
+	 * This is used in order to have an sorted set according to {@link CommentBoxComparator} since we
+	 * cannot have an automatically sorted {@link SetProperty}.<br/>
+	 * The {@link #commentBoxContainer} should have all its children set to this set every time a
+	 * modification in the set is taking place.
 	 */
 	private Set<CommentBox> commentBoxes;
 	/**
@@ -285,10 +290,12 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 	public Optional<Comment> editCommentAction(Comment comment) {
 		CommentDetailsDialog dialog = new CommentDetailsDialog(mainController.getModel(), book, chapter, comment);
 		Optional<Comment> answer = dialog.display();
+		logger.info("Editing comment: {}", comment);
 		if (answer.isPresent()) {
 			comment.copy(answer.get());
+			logger.info("Edited comment: {}", comment);
 			clearTextStyle();
-			this.chapter.getComments().forEach(this::applyCommentStyleOnText);
+			applyAllCommentsStylesOnText();
 		}
 		return answer;
 	}
@@ -304,6 +311,7 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 		alert.setContentText("Are you sure you want to delete this comment?");
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {
+			logger.info("Deleting comment: {}", comment);
 			deleteComment(comment);
 			// Add empty message if no comments
 			if (commentBoxes.isEmpty())
@@ -319,7 +327,9 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 	private void deleteComment(Comment comment) {
 		this.chapter.getComments().remove(comment);
 		CommentBox box = commentBoxes.stream().filter(b -> b.getComment().equals(comment)).findFirst().get();
+		logger.debug("comment box = {}", box);
 		this.commentBoxes.remove(box);
+		this.commentBoxContainer.getChildren().remove(box);
 		clearTextStyle();
 		applyAllCommentsStylesOnText();
 	}

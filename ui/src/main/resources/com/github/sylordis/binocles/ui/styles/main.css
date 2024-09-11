@@ -139,6 +139,11 @@ GridPane.form {
 	-fx-font-style: italic;
 	-fx-fill: #6c757d;
 }
+.text-note.mixed-bg {
+	-fx-font-style: italic;
+	-fx-fill: #6c757d;
+	-fx-blend-mode: multiply;
+}
 
 .text-comments-separator {}
 .button-toolbar {}

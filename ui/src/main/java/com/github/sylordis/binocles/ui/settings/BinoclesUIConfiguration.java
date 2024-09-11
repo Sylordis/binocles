@@ -44,7 +44,7 @@ public class BinoclesUIConfiguration {
 	 * Creates a new instance.
 	 */
 	private BinoclesUIConfiguration() {
-		displaySize = DisplaySize.NORMAL;
+		displaySize = DisplaySize.MEDIUM;
 	}
 
 	/**
