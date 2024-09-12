@@ -167,12 +167,12 @@ public final class StyleUtils {
 	}
 
 	/**
-	 * Creates a human-readable inline string from the given dictionary of styles.
+	 * Creates a human-readable list of strings from the given dictionary of styles.
 	 * 
-	 * @param styles
-	 * @return
+	 * @param styles dictionary of styles with property => value
+	 * @return a list of styles alphabetically ordered
 	 */
-	public static String toHumanString(Map<String, String> styles) {
+	public static List<String> toHumanList(Map<String, String> styles) {
 		List<String> parts = new ArrayList<>();
 		List<String> fontStyles = new ArrayList<>();
 		for (Entry<String, String> entry : styles.entrySet()) {
@@ -199,7 +199,17 @@ public final class StyleUtils {
 			parts.add("Styles: " + String.join(", ", fontStyles));
 		}
 		Collections.sort(parts);
-		return String.join(CSS_SEPARATOR + " ", parts);
+		return parts;
+	}
+
+	/**
+	 * Creates a human-readable inline string from the given dictionary of styles.
+	 * 
+	 * @param styles dictionary of styles with property => value
+	 * @return a string
+	 */
+	public static String toHumanString(Map<String, String> styles) {
+		return String.join(CSS_SEPARATOR + " ", toHumanList(styles));
 	}
 
 	/**

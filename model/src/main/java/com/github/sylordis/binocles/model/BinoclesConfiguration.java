@@ -18,7 +18,7 @@ public class BinoclesConfiguration {
 	/**
 	 * Name of the properties file.
 	 */
-	public static final String PROPERTIES_FILE = "binocles.properties";
+	public static final String CFG_FILE = "binocles.ini";
 
 	/**
 	 * Constant for the version number stored in the configuration.
@@ -84,7 +84,7 @@ public class BinoclesConfiguration {
 		try {
 			System.out.println(new File(getClass().getClassLoader().getResource("ah").toURI()));
 			System.out.println(new File(getClass().getClassLoader().getResource("ah").toURI()).getAbsolutePath());
-			properties.load(getClass().getClassLoader().getResourceAsStream(PROPERTIES_FILE));
+			properties.load(getClass().getClassLoader().getResourceAsStream(CFG_FILE));
 		} catch (IOException | URISyntaxException e) {
 			logger.atInfo().withThrowable(e).log("Couldn't load internal settings file.");
 		} catch (NullPointerException e) {

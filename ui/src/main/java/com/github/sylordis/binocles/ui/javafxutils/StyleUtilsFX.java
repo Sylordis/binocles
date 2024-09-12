@@ -1,10 +1,16 @@
 package com.github.sylordis.binocles.ui.javafxutils;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import com.github.sylordis.binocles.utils.StyleUtils;
 import com.github.sylordis.binocles.utils.StyleUtils.CSSType;
 
+import javafx.scene.Node;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -105,6 +111,43 @@ public final class StyleUtilsFX {
 	public static void bolden(Text text) {
 		Font current = text.getFont();
 		text.setFont(Font.font(current.getFamily(), FontWeight.BOLD, FontPosture.REGULAR, current.getSize()));
+	}
+
+	/**
+	 * Returns a list of Nodes representing a human-readable format representation of the CSS styling.
+	 * 
+	 * @param styles Dictionary of styles with property => value
+	 */
+	public static List<Node> createDecoratedHumanFormatNodes(Map<String, String> styles) {
+		List<String> declarations = StyleUtils.toHumanList(styles);
+		List<Node> nodes = new ArrayList<>();
+		Iterator<String> it = declarations.iterator();
+		while(it.hasNext()) {
+			String declaration = it.next();
+			nodes.add(new Text(declaration));
+			if (declaration.matches(".*#[0-9a-fA-F]{6}.*")) {
+				Rectangle colorBox = createColorBox(declaration.substring(declaration.indexOf("#")));
+				nodes.add(new Text(" "));
+				nodes.add(colorBox);
+			}
+			if (it.hasNext())
+				nodes.add(new Text(StyleUtils.CSS_SEPARATOR + " "));
+			else
+				nodes.add(new Text("."));
+		}
+		return nodes;
+	}
+
+	/**
+	 * Creates a coloured box to preview a given colour.
+	 * 
+	 * @param hexcolor the colour in hex format
+	 * @return a rectangle filled with the provided colour
+	 */
+	public static Rectangle createColorBox(String hexcolor) {
+		Rectangle box = new Rectangle(12, 12, fromHex(hexcolor));
+		box.getStyleClass().add("color-box");
+		return box;
 	}
 
 	/**

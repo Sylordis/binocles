@@ -58,6 +58,7 @@ public class YamlFileExporter implements FileExporter<BinoclesModel> {
 //			yamlOptions.setDefaultScalarStyle(DumperOptions.ScalarStyle.LITERAL);
 			Yaml yaml = new Yaml(yamlOptions);
 			yaml.dump(root, writer);
+			logger.info("Structural export done ({})", file.getAbsolutePath());
 		}
 	}
 
@@ -117,7 +118,7 @@ public class YamlFileExporter implements FileExporter<BinoclesModel> {
 			// Title
 			chapterMap.put("title", chapter.getTitle());
 			// Content
-			chapterMap.put("content", chapter.getText());
+			chapterMap.put("content", chapter.getContent());
 			// Comments & Global
 			chapterMap.put("globalcomment", chapter.getGlobalComment());
 			List<Object> chapterComments = new ArrayList<>();

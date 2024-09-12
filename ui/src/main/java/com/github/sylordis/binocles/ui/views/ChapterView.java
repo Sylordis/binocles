@@ -152,7 +152,7 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 		chapterContent.setWrapText(true);
 		chapterContent.setAutoHeight(true);
 		chapterContent.getStyleClass().addAll("main-text-area");
-		chapterContent.replaceText(chapter.getText());
+		chapterContent.replaceText(chapter.getContent());
 		// Add components and layout
 		chapterContentContainer.getChildren().add(0, chapterContent);
 		HBox.setHgrow(chapterContent, Priority.ALWAYS);
@@ -219,7 +219,7 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 	 * Resets the style of the whole text.
 	 */
 	public void clearTextStyle() {
-		chapterContent.clearStyle(0, chapter.getText().length());
+		chapterContent.clearStyle(0, chapter.getContent().length());
 	}
 
 	/**

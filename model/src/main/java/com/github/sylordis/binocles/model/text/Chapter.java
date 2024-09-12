@@ -1,6 +1,7 @@
 package com.github.sylordis.binocles.model.text;
 
 import com.github.sylordis.binocles.utils.Identifiable;
+import com.github.sylordis.binocles.utils.SelfCopying;
 
 /**
  * Represents a chapter in a book, with a possible title and its content.
@@ -8,7 +9,7 @@ import com.github.sylordis.binocles.utils.Identifiable;
  * @author sylordis
  *
  */
-public class Chapter extends ReviewableContent {
+public class Chapter extends ReviewableContent implements SelfCopying<Chapter> {
 
 	private static final long serialVersionUID = -372544124080055257L;
 	/**
@@ -18,7 +19,7 @@ public class Chapter extends ReviewableContent {
 	/**
 	 * Content of the chapter.
 	 */
-	private String text;
+	private String content;
 
 	/**
 	 * Creates a new empty chapter.
@@ -45,7 +46,7 @@ public class Chapter extends ReviewableContent {
 	public Chapter(String title, String text) {
 		super();
 		this.title = title;
-		this.text = text;
+		this.content = text;
 	}
 
 	@Override
@@ -76,20 +77,20 @@ public class Chapter extends ReviewableContent {
 	}
 
 	/**
-	 * @return the text
+	 * @return the content of the chapter
 	 */
-	public String getText() {
-		return text;
+	public String getContent() {
+		return content;
 	}
 
 	/**
-	 * @param text the text to set, empty string if null
+	 * @param text the text to set as content, null will be translated to "empty string".
 	 */
-	public void setText(String text) {
+	public void setContent(String text) {
 		if (text == null)
-			this.text = "";
+			this.content = "";
 		else
-			this.text = text;
+			this.content = text;
 	}
 
 	/**
@@ -99,6 +100,17 @@ public class Chapter extends ReviewableContent {
 	 */
 	public int getCommentsCount() {
 		return getComments().size() + (getGlobalComment().isBlank() ? 0 : 1);
+	}
+
+	/**
+	 * Copies all class fields of the provided item.
+	 * 
+	 * @param chapter chapter to copy
+	 */
+	@Override
+	public void copy(Chapter chapter) {
+		this.setTitle(chapter.getTitle());
+		this.setContent(chapter.getContent());
 	}
 
 }

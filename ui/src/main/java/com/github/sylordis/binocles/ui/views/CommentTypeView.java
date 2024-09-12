@@ -10,7 +10,7 @@ import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.CommentTypeField;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.ui.BinoclesController;
-import com.github.sylordis.binocles.utils.StyleUtils;
+import com.github.sylordis.binocles.ui.javafxutils.StyleUtilsFX;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -69,7 +69,7 @@ public class CommentTypeView extends BorderPane implements Initializable, Binocl
 			Text text = new Text(commentType.getDescription());
 			descriptionFlow.getChildren().add(text);
 		}
-		styleFlow.getChildren().add(new Text(StyleUtils.toHumanString(commentType.getStyles())));
+		styleFlow.getChildren().setAll(StyleUtilsFX.createDecoratedHumanFormatNodes(commentType.getStyles()));
 		int index = FIELDS_ROW_START;
 		for (CommentTypeField field : commentType.getFields().values()) {
 			Label label = new Label(StringUtils.capitalize(field.getName()) + (field.getIsLongText() ? " (long)" : ""));

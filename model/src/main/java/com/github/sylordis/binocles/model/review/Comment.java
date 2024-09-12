@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import com.github.sylordis.binocles.utils.SelfCopying;
 import com.google.common.base.Preconditions;
 
 /**
@@ -16,7 +17,7 @@ import com.google.common.base.Preconditions;
  * @author Sylordis
  *
  */
-public class Comment implements Comparable<Comment>, Serializable {
+public class Comment implements Comparable<Comment>, Serializable, SelfCopying<Comment> {
 
 	private static final long serialVersionUID = 8636110855533266235L;
 
@@ -104,6 +105,7 @@ public class Comment implements Comparable<Comment>, Serializable {
 	 * 
 	 * @param comment comment to copy
 	 */
+	@Override
 	public void copy(Comment comment) {
 		this.setType(comment.getType());
 		this.setStartIndex(comment.getStartIndex());

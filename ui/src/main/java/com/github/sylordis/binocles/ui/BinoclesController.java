@@ -248,7 +248,12 @@ public class BinoclesController implements Initializable, Controller {
 
 	@FXML
 	public void editBookAction(ActionEvent event) {
-		// TODO editBookAction
+		TreeItem<ReviewableContent> treeSelected = booksTree.getSelectionModel().getSelectedItem();
+		if (null != treeSelected && treeSelected.getValue() instanceof Book) {
+			// TODO Open dialog and modify element
+			showNotImplementedAlert();
+		} else
+			showErrorAlert("No item selected", "Please select a book in the book tree in order to do this action.");
 	}
 
 	/**
@@ -287,6 +292,26 @@ public class BinoclesController implements Initializable, Controller {
 			}
 		}
 		setButtonsStatus();
+	}
+
+	public void editChapterAction(ActionEvent event) {
+		TreeItem<ReviewableContent> treeSelected = booksTree.getSelectionModel().getSelectedItem();
+		if (null != treeSelected && treeSelected.getValue() instanceof Chapter) {
+			// Edit dialog
+			ChapterDetailsDialog dialog = new ChapterDetailsDialog(model, (Book) treeSelected.getParent().getValue(), (Chapter) treeSelected.getValue());
+			Optional<ChapterPropertiesAnswer> answer = dialog.display();
+			if (answer.isPresent()) {
+				Chapter chapterModified = answer.get().chapter();
+				Chapter chapter = (Chapter) treeSelected.getValue();
+				logger.info("Edited chapter '{}' in '{}'", chapter.getTitle(), treeSelected.getParent().getValue().getTitle());
+				chapter.copy(chapterModified);
+				treeSelected.setValue(chapter);
+				booksTree.refresh();
+				// Check tab for update (or close the tab?)
+				// TODO Consolidate comments
+			}
+		} else
+			showErrorAlert("No item selected", "Please select a Chapter in the book tree in order to do this action.");
 	}
 
 	@FXML
@@ -387,8 +412,13 @@ public class BinoclesController implements Initializable, Controller {
 
 	@FXML
 	public void editTextElementAction(ActionEvent event) {
-		// TODO Open dialog and then modify element.
-		showNotImplementedAlert();
+		TreeItem<ReviewableContent> treeSelected = booksTree.getSelectionModel().getSelectedItem();
+		if (null != treeSelected) {
+			if (treeSelected.getValue() instanceof Chapter)
+				editChapterAction(event);
+			else if (treeSelected.getValue() instanceof Book)
+				editBookAction(event);
+		}
 	}
 
 	@FXML

@@ -3,15 +3,19 @@ package com.github.sylordis.binocles.ui.settings;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.github.sylordis.binocles.model.BinoclesConfiguration;
+
 import javafx.stage.FileChooser;
 
 /**
- * Main configuration class for the UI.
+ * Main configuration class for the UI. It uses the same file as {@link BinoclesConfiguration#CFG_FILE}.
  * 
  * @author sylordis
  *
  */
 public class BinoclesUIConfiguration {
+
+	// TODO Configuration uses the same as
 	
 	/**
 	 * Display size.
@@ -49,14 +53,16 @@ public class BinoclesUIConfiguration {
 
 	/**
 	 * Gets the file filters for the software without a wild one.
+	 * 
 	 * @return
 	 */
 	public List<FileChooser.ExtensionFilter> getFileFilters() {
 		return getFileFilters(false);
 	}
-	
+
 	/**
 	 * Gets the file filters for the software.
+	 * 
 	 * @param addWild Adds a wild option for all extensions.
 	 * @return
 	 */

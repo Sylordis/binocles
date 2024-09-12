@@ -98,7 +98,7 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 	 * @param end
 	 */
 	private CommentDetailsDialog(BinoclesModel model, Book book, Chapter chapter, Comment comment, int start, int end) {
-		super("Comment details", model);
+		super(comment == null ? "New comment" : "Editing comment", model);
 		setIcon(AppIcons.ICON_COMMENT);
 		this.book = book;
 		this.chapter = chapter;
@@ -149,7 +149,7 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 		fieldCommentTypeChoice = new ComboBox<CommentType>(FXCollections.observableList(nomenclature.getTypes()));
 		Label labelTextExcerpt = new Label("Text excerpt:");
 		fieldTextExcerpt = new TextFlow();
-		fieldTextExcerpt.getChildren().add(new Text(chapter.getText().substring(start, end)));
+		fieldTextExcerpt.getChildren().add(new Text(chapter.getContent().substring(start, end)));
 		// Set values if editing
 		if (comment != null) {
 			fieldCommentTypeChoice.getSelectionModel().select(comment.getType());
@@ -209,20 +209,20 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 		// TODO Make preview rules configurable
 		// Create start context
 		TextBreaker breakerStart = new TextBreaker(BreakingPolicy.LAST, ReadDirection.BACKWARD, List.of(".", "\n"));
-		int contextStartIndex = breakerStart.findClosestBreakingPoint(chapter.getText(), start, MINIMUM_CONTEXT_LENGTH,
+		int contextStartIndex = breakerStart.findClosestBreakingPoint(chapter.getContent(), start, MINIMUM_CONTEXT_LENGTH,
 		        MAXIMUM_CONTEXT_LENGTH);
 		Text contextStartEtc = contextStartIndex == 0 ? new Text("") : new Text("[..]");
-		Text contextStart = new Text(chapter.getText().substring(contextStartIndex, start));
+		Text contextStart = new Text(chapter.getContent().substring(contextStartIndex, start));
 		// Main text part (comment)
 		Text startDelim = new Text("[");
-		Text commentText = new Text(chapter.getText().substring(start, end));
+		Text commentText = new Text(chapter.getContent().substring(start, end));
 		Text endDelim = new Text("]");
 		// Create end context
 		TextBreaker breakerEnd = new TextBreaker(BreakingPolicy.LAST, ReadDirection.FORWARD, List.of(".", "\n"));
-		int contextEndIndex = breakerEnd.findClosestBreakingPoint(chapter.getText(), end, MINIMUM_CONTEXT_LENGTH,
+		int contextEndIndex = breakerEnd.findClosestBreakingPoint(chapter.getContent(), end, MINIMUM_CONTEXT_LENGTH,
 		        MAXIMUM_CONTEXT_LENGTH);
-		Text contextEnd = new Text(chapter.getText().substring(end, contextEndIndex));
-		Text contextEndEtc = contextEndIndex == chapter.getText().length() ? new Text("") : new Text("[..]");
+		Text contextEnd = new Text(chapter.getContent().substring(end, contextEndIndex));
+		Text contextEndEtc = contextEndIndex == chapter.getContent().length() ? new Text("") : new Text("[..]");
 		fieldTextExcerpt.getChildren().addAll(contextStartEtc, contextStart, startDelim, commentText, endDelim,
 		        contextEnd, contextEndEtc);
 		// Styling

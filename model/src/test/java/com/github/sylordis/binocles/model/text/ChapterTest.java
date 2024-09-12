@@ -43,7 +43,7 @@ class ChapterTest {
 	void testChapter() {
 		chapter = new Chapter();
 		assertAll(() -> assertNotNull(new Chapter()), () -> assertTrue(chapter.getTitle().isEmpty()),
-		        () -> assertTrue(chapter.getText().isEmpty()));
+		        () -> assertTrue(chapter.getContent().isEmpty()));
 	}
 
 	/**
@@ -53,7 +53,7 @@ class ChapterTest {
 	@Test
 	void testChapterString() {
 		assertAll(() -> assertNotNull(chapter), () -> assertEquals(DUMMY_TITLE, chapter.getTitle()),
-		        () -> assertTrue(chapter.getText().isEmpty()));
+		        () -> assertTrue(chapter.getContent().isEmpty()));
 	}
 
 	/**
@@ -68,7 +68,7 @@ class ChapterTest {
 		        		        """;
 		chapter = new Chapter(title, text);
 		assertAll(() -> assertNotNull(chapter), () -> assertEquals(title, chapter.getTitle()),
-		        () -> assertEquals(text, chapter.getText()));
+		        () -> assertEquals(text, chapter.getContent()));
 	}
 
 	/**
@@ -120,33 +120,33 @@ class ChapterTest {
 	}
 
 	/**
-	 * Test method for {@link com.github.sylordis.binocles.model.text.Chapter#getText()}.
+	 * Test method for {@link com.github.sylordis.binocles.model.text.Chapter#getContent()}.
 	 */
 	@Test
-	void testGetText() {
-		assertEquals("", chapter.getText());
+	void testGetContent() {
+		assertEquals("", chapter.getContent());
 	}
 
 	/**
 	 * Test method for
-	 * {@link com.github.sylordis.binocles.model.text.Chapter#setText(java.lang.String)}.
+	 * {@link com.github.sylordis.binocles.model.text.Chapter#setContent(java.lang.String)}.
 	 */
 	@Test
-	void testSetText() {
+	void testSetContent() {
 		final String text = "This is\na new\ntext";
-		chapter.setText(text);
-		assertEquals(text, chapter.getText());
+		chapter.setContent(text);
+		assertEquals(text, chapter.getContent());
 	}
 
 	/**
 	 * Test method for
-	 * {@link com.github.sylordis.binocles.model.text.Chapter#setText(java.lang.String)}.
+	 * {@link com.github.sylordis.binocles.model.text.Chapter#setContent(java.lang.String)}.
 	 */
 	@Test
 	void testSetText_Null() {
-		chapter.setText("something");
-		chapter.setText(null);
-		assertEquals("", chapter.getText());
+		chapter.setContent("something");
+		chapter.setContent(null);
+		assertEquals("", chapter.getContent());
 	}
 
 }

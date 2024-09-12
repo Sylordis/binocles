@@ -157,6 +157,24 @@ public class Book extends ReviewableContent {
 	}
 
 	/**
+	 * Gets a chapter of the given ID.
+	 * 
+	 * @param id
+	 * @return the chapter corresponding to the id or null if it doesn't exist.
+	 * @see Identifiable#formatId(String)
+	 */
+	public Chapter getChapter(String id) {
+		Chapter result = null;
+		for (Chapter chapter : chapters) {
+			if (chapter.is(id)) {
+				result = chapter;
+				break;
+			}
+		}
+		return result;
+	}
+
+	/**
 	 * Checks if this books has chapters.
 	 * 
 	 * @return true if this book has at least one chapter.
