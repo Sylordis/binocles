@@ -18,7 +18,7 @@ import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.ui.AppIcons;
 import com.github.sylordis.binocles.ui.components.CustomListCell;
 import com.github.sylordis.binocles.ui.functional.ListenerValidator;
-import com.github.sylordis.binocles.ui.functional.TextAreaResizeUpToListener;
+import com.github.sylordis.binocles.ui.javafxutils.GridPaneUtils;
 import com.github.sylordis.binocles.ui.javafxutils.StyleUtilsFX;
 import com.github.sylordis.binocles.utils.StyleUtils;
 import com.github.sylordis.binocles.utils.StyleUtils.CSSBlockStyle;
@@ -252,7 +252,7 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 	 * Remove all comment type specific fields.
 	 */
 	private void removeCommentTypeFields() {
-		getGridPane().getChildren().removeIf(node -> GridPane.getRowIndex(node) >= ROW_FIELDS_START);
+		GridPaneUtils.removeChildrenFromLine(getGridPane(), ROW_FIELDS_START);
 		fieldsFields.clear();
 	}
 

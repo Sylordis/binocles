@@ -8,6 +8,7 @@ import java.util.TreeMap;
 
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.utils.Identifiable;
+import com.github.sylordis.binocles.utils.SelfCopying;
 import com.github.sylordis.binocles.utils.exceptions.UniqueIDException;
 import com.google.common.base.Preconditions;
 
@@ -19,7 +20,7 @@ import com.google.common.base.Preconditions;
  * @author sylordis
  *
  */
-public class Book extends ReviewableContent {
+public class Book extends ReviewableContent implements SelfCopying<Book> {
 
 	private static final long serialVersionUID = 8322075498271400519L;
 
@@ -307,6 +308,16 @@ public class Book extends ReviewableContent {
 	public int getCommentsCount() {
 		return getChapters().stream().mapToInt(c -> c.getCommentsCount()).sum()
 		        + (getGlobalComment().isBlank() ? 0 : 1);
+	}
+
+	@Override
+	public void copy(Book item) {
+//		this.description = item.description;
+		this.nomenclature = item.nomenclature;
+//		this.synopsis = item.synopsis;
+		this.title = item.title;
+//		this.metadata.clear();
+//		this.metadata.putAll(item.metadata);
 	}
 
 }

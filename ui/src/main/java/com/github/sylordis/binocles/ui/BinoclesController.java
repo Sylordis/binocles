@@ -161,7 +161,7 @@ public class BinoclesController implements Initializable, Controller {
 	private Button toolbarCreateNomenclature;
 	@FXML
 	private Button toolbarCreateCommentType;
-	
+
 	@FXML
 	private SplitPane mainSplitPane;
 
@@ -207,11 +207,12 @@ public class BinoclesController implements Initializable, Controller {
 		});
 		rebuildNomenclaturesTree();
 		// Set trees change listener
-		booksTree.setOnMouseClicked(TreeVarClickEventHandler.createDoubleClickHandler(booksTree, this::openTabItemAction));
+		booksTree.setOnMouseClicked(
+		        TreeVarClickEventHandler.createDoubleClickHandler(booksTree, this::openTabItemAction));
 		booksTree.getSelectionModel().selectedItemProperty()
 		        .addListener((s, o, n) -> setTextElementsContextMenuStatus());
-		nomenclaturesTree
-		        .setOnMouseClicked(TreeVarClickEventHandler.createDoubleClickHandler(nomenclaturesTree, this::openTabItemAction));
+		nomenclaturesTree.setOnMouseClicked(
+		        TreeVarClickEventHandler.createDoubleClickHandler(nomenclaturesTree, this::openTabItemAction));
 		nomenclaturesTree.getSelectionModel().selectedItemProperty()
 		        .addListener((s, o, n) -> setReviewElementsContextMenuStatus());
 		// Set tabs change listener
@@ -250,8 +251,20 @@ public class BinoclesController implements Initializable, Controller {
 	public void editBookAction(ActionEvent event) {
 		TreeItem<ReviewableContent> treeSelected = booksTree.getSelectionModel().getSelectedItem();
 		if (null != treeSelected && treeSelected.getValue() instanceof Book) {
-			// TODO Open dialog and modify element
-			showNotImplementedAlert();
+			Book book = (Book) treeSelected.getValue();
+			BookDetailsDialog dialog = new BookDetailsDialog(model, book);
+			Optional<Book> answer = dialog.display();
+			if (answer.isPresent()) {
+				Optional<Tab> optTab = getTabWithItem(book);
+				logger.info("Edited book '{}' => '{}'", book, answer.get());
+				book.copy(answer.get());
+				booksTree.refresh();
+				// TODO Refresh book tab
+				if (optTab.isPresent()) {
+					optTab.get().setText(book.getTitle());
+					((BookView) optTab.get().getContent()).updateControllerStatus(this);
+				}
+			}
 		} else
 			showErrorAlert("No item selected", "Please select a book in the book tree in order to do this action.");
 	}
@@ -298,16 +311,18 @@ public class BinoclesController implements Initializable, Controller {
 		TreeItem<ReviewableContent> treeSelected = booksTree.getSelectionModel().getSelectedItem();
 		if (null != treeSelected && treeSelected.getValue() instanceof Chapter) {
 			// Edit dialog
-			ChapterDetailsDialog dialog = new ChapterDetailsDialog(model, (Book) treeSelected.getParent().getValue(), (Chapter) treeSelected.getValue());
+			ChapterDetailsDialog dialog = new ChapterDetailsDialog(model, (Book) treeSelected.getParent().getValue(),
+			        (Chapter) treeSelected.getValue());
 			Optional<ChapterPropertiesAnswer> answer = dialog.display();
 			if (answer.isPresent()) {
 				Chapter chapterModified = answer.get().chapter();
 				Chapter chapter = (Chapter) treeSelected.getValue();
-				logger.info("Edited chapter '{}' in '{}'", chapter.getTitle(), treeSelected.getParent().getValue().getTitle());
+				logger.info("Edited chapter '{}' in '{}' => {}", chapter.getTitle(),
+				        treeSelected.getParent().getValue().getTitle(), answer.get());
 				chapter.copy(chapterModified);
 				treeSelected.setValue(chapter);
 				booksTree.refresh();
-				// Check tab for update (or close the tab?)
+				// TODO Check tab for update (or close the tab?)
 				// TODO Consolidate comments
 			}
 		} else
@@ -490,18 +505,28 @@ public class BinoclesController implements Initializable, Controller {
 	 * @param event
 	 */
 	public void openTabItemAction(TreeItem<?> item) {
-		// Check if tab with same item already open
-		Optional<Tab> needle = mainTabPane.getTabs().stream()
-		        .filter(t -> ((BinoclesTabPane) t.getContent()).getItem() != null
-		                && ((BinoclesTabPane) t.getContent()).getItem().equals(item.getValue()))
-		        .findFirst();
+		Optional<Tab> needle = getTabWithItem(item.getValue());
 		if (needle.isPresent()) {
-			logger.debug("Double click: present");
+			logger.debug("Switch to {}", needle.get().getText());
 			// If so just switch to it
 			mainTabPane.getSelectionModel().select(needle.get());
 		} else {
 			createNewTab(item);
 		}
+	}
+
+	/**
+	 * Gets a tab that is already opened that is holding/representing/containing a given item.
+	 * 
+	 * @param item item that the tab is holding
+	 * @return an optional tab, it has a result if a tab could be found
+	 */
+	public Optional<Tab> getTabWithItem(Object o) {
+		Optional<Tab> needle = mainTabPane.getTabs().stream()
+		        .filter(t -> ((BinoclesTabPane) t.getContent()).getItem() != null
+		                && ((BinoclesTabPane) t.getContent()).getItem().equals(o))
+		        .findFirst();
+		return needle;
 	}
 
 	/**
@@ -531,12 +556,15 @@ public class BinoclesController implements Initializable, Controller {
 			}
 		}
 		if (node != null && title != null) {
+			logger.debug("Created new tab {}", title);
 			Tab tab = new Tab(title, node);
 			Image img = AppIcons.getImageForType(item.getValue().getClass());
 			if (img != null)
 				tab.setGraphic(AppIcons.createImageViewFromConfig(img));
 			mainTabPane.getTabs().add(tab);
 			mainTabPane.getSelectionModel().select(tab);
+		} else {
+			showNotImplementedAlert();
 		}
 	}
 

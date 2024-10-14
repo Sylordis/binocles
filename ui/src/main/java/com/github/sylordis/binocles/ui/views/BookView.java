@@ -10,6 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.ui.BinoclesController;
 import com.github.sylordis.binocles.ui.javafxutils.Browser;
+import com.github.sylordis.binocles.ui.javafxutils.GridPaneUtils;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -63,22 +64,18 @@ public class BookView extends BorderPane implements Initializable, BinoclesTabPa
 	public void initialize(URL location, ResourceBundle resources) {
 		// Set content
 		bookTitle.setText(book.getTitle());
-		if (book.getNomenclature() != null) {
-			nomenclatureField.setText(book.getNomenclature().getName());
-			nomenclatureField.getStyleClass().clear();
-		} else {
-			nomenclatureField.setText("No nomenclature set.");
-			nomenclatureField.getStyleClass().addAll("text-note");
-		}
-		bookSynopsisField.getChildren().add(new Text(book.getSynopsis()));
-		if (book.getDescription().isEmpty()) {
-			Text text = new Text("No description provided.");
-			text.getStyleClass().addAll("text-muted", "text-note");
-			bookDescriptionField.getChildren().add(text);
-		} else {
-			bookDescriptionField.getChildren().add(new Text(book.getDescription()));
-		}
+		updateNomenclature();
+		updateSynopsis();
+		updateDescription();
+		updateMetadata();
+	}
+
+	/**
+	 * 
+	 */
+	private void updateMetadata() {
 		int index = METADATA_START;
+		GridPaneUtils.removeChildrenFromLine(bookGrid, index);
 		for (Map.Entry<String, String> metadata : book.getMetadata().entrySet()) {
 			Label label = new Label(StringUtils.capitalize(metadata.getKey()));
 			Node text = null;
@@ -92,6 +89,50 @@ public class BookView extends BorderPane implements Initializable, BinoclesTabPa
 			bookGrid.addRow(index, label, textFlow);
 			index++;
 		}
+	}
+
+	/**
+	 * 
+	 */
+	private void updateDescription() {
+		bookDescriptionField.getChildren().clear();
+		if (book.getDescription().isEmpty()) {
+			Text text = new Text("No description provided.");
+			text.getStyleClass().addAll("text-muted", "text-note");
+			bookDescriptionField.getChildren().add(text);
+		} else {
+			bookDescriptionField.getChildren().add(new Text(book.getDescription()));
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void updateSynopsis() {
+		bookSynopsisField.getChildren().clear();
+		bookSynopsisField.getChildren().add(new Text(book.getSynopsis()));
+	}
+
+	/**
+	 * 
+	 */
+	private void updateNomenclature() {
+		if (book.getNomenclature() != null) {
+			nomenclatureField.setText(book.getNomenclature().getName());
+			nomenclatureField.getStyleClass().clear();
+		} else {
+			nomenclatureField.setText("No nomenclature set.");
+			nomenclatureField.getStyleClass().addAll("text-note");
+		}
+	}
+
+	@Override
+	public void updateControllerStatus(BinoclesController controller) {
+		bookTitle.setText(book.getTitle());
+		updateNomenclature();
+		updateSynopsis();
+		updateDescription();
+		updateMetadata();
 	}
 
 	@Override

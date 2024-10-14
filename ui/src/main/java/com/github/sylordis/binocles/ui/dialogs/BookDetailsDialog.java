@@ -23,6 +23,10 @@ import javafx.scene.control.TextField;
 public class BookDetailsDialog extends AbstractAnswerDialog<Book> {
 
 	/**
+	 * Book being edited, null if being created.
+	 */
+	private Book book;
+	/**
 	 * Text field for the book name.
 	 */
 	private TextField fieldBookName;
@@ -30,16 +34,27 @@ public class BookDetailsDialog extends AbstractAnswerDialog<Book> {
 	 * Combo box for the nomenclature.
 	 */
 	private ComboBox<Nomenclature> fieldNomenclatureChoice;
-	
+
 	/**
 	 * Creates a new book creation dialog.
 	 * 
-	 * @param model
+	 * @param model model for reference
 	 */
 	public BookDetailsDialog(BinoclesModel model) {
-		super("Create a new book", model);
+		this(model, null);
+	}
+
+	/**
+	 * Creates a book edit dialog.
+	 * 
+	 * @param model model for reference
+	 * @param book  Book being edited
+	 */
+	public BookDetailsDialog(BinoclesModel model, Book book) {
+		super(book == null ? "Create a new book" : "Editing book \"" + book.getTitle() + "\"", model);
 		setIcon(AppIcons.ICON_BOOK);
-		setHeader("Please indicate the name of the new book and its nomenclature (if any)");
+		setHeader("Please indicate the name of the book and its nomenclature (if any).");
+		this.book = book;
 	}
 
 	@Override
@@ -50,6 +65,9 @@ public class BookDetailsDialog extends AbstractAnswerDialog<Book> {
 		// Nomenclature fields
 		Label labelNomenclature = new Label("Nomenclature (optional)");
 		fieldNomenclatureChoice = new ComboBox<>(FXCollections.observableArrayList(getModel().getNomenclatures()));
+		// TODO Description
+		// TODO Synopsis
+		// TODO Metadata
 		// Set dialog content
 		addFormFeedback();
 		getGridPane().addRow(1, labelBookName, fieldBookName);
@@ -61,11 +79,15 @@ public class BookDetailsDialog extends AbstractAnswerDialog<Book> {
 		        .feed(this::setFeedback).onEither(b -> setConfirmButtonDisable(!b));
 		fieldBookName.textProperty().addListener(bookNameUIValidator);
 		// Set up components status
+		if (book != null) {
+			fieldBookName.setText(book.getTitle());
+			fieldNomenclatureChoice.getSelectionModel().select(book.getNomenclature());
+		}
 		getDialog().getDialogPane().lookupButton(getConfirmButton()).setDisable(true);
 		bookNameUIValidator.changed(null, null, fieldBookName.getText());
-		fieldNomenclatureChoice.setButtonCell(new CustomListCell<Nomenclature>(b -> b.getName()));
+		fieldNomenclatureChoice.setButtonCell(new CustomListCell<Nomenclature>(n -> n.getName()));
 		fieldNomenclatureChoice.setCellFactory(p -> {
-			return new CustomListCell<>(b -> b.getName());
+			return new CustomListCell<>(n -> n.getName());
 		});
 		// Focus on book name field
 		Platform.runLater(() -> fieldBookName.requestFocus());

@@ -40,7 +40,7 @@ import com.github.sylordis.binocles.utils.yaml.YAMLUtils;
 public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 
 	// TODO Import YAML keys in proper order
-	
+
 	/**
 	 * Class logger.
 	 */
@@ -128,6 +128,8 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			book.setGeneralComment(generalComment);
 			book.setDescription(description);
 			logger.info("Created book '{}'", book.getTitle());
+			logger.debug("Synopsis? {} Description? {} General comment? {}", synopsis != null ? !synopsis.isBlank() : null,
+			        description != null ? !description.isBlank() : null, generalComment != null ? !generalComment.isBlank() : null);
 			Map<String, String> metadata = new HashMap<>();
 			// Nomenclature, store in metadata for later
 			String nomenclature = YAMLUtils.strValue("nomenclature", data);
@@ -193,7 +195,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			if (YAMLUtils.checkChildType(data, "comments", YAMLType.LIST)) {
 				List<Comment> comments = loadCommentsFromYAML(YAMLUtils.list("comments", data), book);
 				chapter.setComments(comments);
-				logger.debug("{} comments loaded", comments.size());
+				logger.debug("Comments loaded: {}", comments.size());
 			}
 			logger.info("Imported chapter '{}'", chapter.getTitle());
 			result.add(chapter);
