@@ -3,8 +3,8 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.text.Font?>
@@ -12,8 +12,8 @@
 <?import javafx.scene.text.TextFlow?>
 
 <fx:root type="javafx.scene.layout.VBox" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
-  <HBox prefHeight="27.0" prefWidth="600.0" spacing="5.0">
-     <children>
+   <ToolBar>
+      <items>
         <ToggleButton fx:id="controlButtonBold" mnemonicParsing="false" onAction="#updateTextStyle" text="B">
            <font>
               <Font name="Serif Bold" size="14.0" />
@@ -79,14 +79,8 @@
               </ColorPicker>
            </graphic>
         </ToggleButton>
-     </children>
-     <opaqueInsets>
-        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-     </opaqueInsets>
-     <padding>
-        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-     </padding>
-  </HBox>
+      </items>
+   </ToolBar>
   <TextFlow fx:id="fieldTextFlow" prefHeight="62.0" prefWidth="600.0" style="-fx-background-color: white;">
      <children>
         <Text fx:id="fieldText" strokeType="OUTSIDE" strokeWidth="0.0" text="The quick brown fox jumps over the lazy dog.">

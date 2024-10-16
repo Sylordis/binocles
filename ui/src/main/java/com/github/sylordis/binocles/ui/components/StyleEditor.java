@@ -94,6 +94,7 @@ public class StyleEditor extends VBox implements Initializable {
 		fieldText.setFill(controlButtonColorPickerForeground.isSelected() ? controlColorPickerForeground.getValue()
 		        : Color.BLACK);
 		BackgroundFill whiteFill = new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, new Insets(0, 0, 0, 0));
+		// TODO set background only on text
 		if (controlButtonColorPickerBackground.isSelected()) {
 			fieldTextFlow
 			        .setBackground(new Background(whiteFill, new BackgroundFill(controlColorPickerBackground.getValue(),

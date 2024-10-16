@@ -49,7 +49,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 
 /**
- * Pane component for a chapter.
+ * Pane component for a {@link Chapter} item.
  */
 public class ChapterView extends BorderPane implements Initializable, BinoclesTabPane, Controller {
 
@@ -308,6 +308,7 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 	public void deleteCommentAction(Comment comment) {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Confirmation");
+		alert.setHeaderText(null);
 		alert.setContentText("Are you sure you want to delete this comment?");
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == ButtonType.OK) {

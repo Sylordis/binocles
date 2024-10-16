@@ -16,6 +16,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ToolBar;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -40,7 +41,7 @@ public class CollapsibleBox extends VBox implements Initializable {
 	@FXML
 	private Text boxTitle;
 	@FXML
-	private HBox toolbar;
+	private ToolBar toolbar;
 	@FXML
 	private HBox boxTitleContainer;
 	@FXML
@@ -120,10 +121,10 @@ public class CollapsibleBox extends VBox implements Initializable {
 	 * @param tools pre-configured buttons
 	 */
 	public void setToolbar(Iterable<Button> tools) {
-		toolbar.getChildren().clear();
+		toolbar.getItems().clear();
 		for (Button button : tools) {
 			if (button != null) {
-				toolbar.getChildren().add(button);
+				toolbar.getItems().add(button);
 			}
 		}
 	}

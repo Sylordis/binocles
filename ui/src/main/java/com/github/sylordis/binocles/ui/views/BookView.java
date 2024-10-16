@@ -18,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
@@ -25,16 +26,25 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 /**
- * Pane component for a book.
+ * Pane component for a {@link Book} item.
  */
 public class BookView extends BorderPane implements Initializable, BinoclesTabPane {
 
 	private static final int METADATA_START = 3;
 
+	/**
+	 * Current item being represented in this view.
+	 */
 	private Book book;
+	/**
+	 * Parent controller.
+	 */
+	private BinoclesController mainController;
 
 	@FXML
 	private Text bookTitle;
+	@FXML
+	private ScrollPane mainScrollPane;
 	@FXML
 	private VBox bookZoneVBox;
 	@FXML
@@ -48,6 +58,7 @@ public class BookView extends BorderPane implements Initializable, BinoclesTabPa
 
 	public BookView(BinoclesController mainController, Book book) {
 		super();
+		this.mainController = mainController;
 		this.book = book;
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("book_view.fxml"));
 		fxmlLoader.setRoot(this);

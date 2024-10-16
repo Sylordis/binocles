@@ -22,14 +22,22 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
 /**
- * Pane component for a chapter.
+ * Pane component for a {@link CommentType} item.
  */
 public class CommentTypeView extends BorderPane implements Initializable, BinoclesTabPane {
 
-	private final static int FIELDS_ROW_START = 3;
-
+	/**
+	 * Current item being represented in this view.
+	 */
 	private CommentType commentType;
+	/**
+	 * Parent item of the current comment type.
+	 */
 	private Nomenclature nomenclature;
+	/**
+	 * Parent controller.
+	 */
+	private BinoclesController mainController;
 
 	@FXML
 	private Text commentTypeName;
@@ -40,10 +48,22 @@ public class CommentTypeView extends BorderPane implements Initializable, Binocl
 	@FXML
 	private TextFlow styleFlow;
 	@FXML
+	private TextFlow previewFlow;
+	@FXML
 	private GridPane commentTypeGrid;
+	@FXML
+	private GridPane fieldsListGrid;
 
-	public CommentTypeView(BinoclesController parent, Nomenclature nomenclature, CommentType commentType) {
+	/**
+	 * Creates a new comment type view.
+	 * 
+	 * @param mainController parent controller
+	 * @param nomenclature   parent nomenclature
+	 * @param commentType    comment type displayed in this view
+	 */
+	public CommentTypeView(BinoclesController mainController, Nomenclature nomenclature, CommentType commentType) {
 		super();
+		this.mainController = mainController;
 		this.nomenclature = nomenclature;
 		this.commentType = commentType;
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("comment_type_view.fxml"));
@@ -70,13 +90,18 @@ public class CommentTypeView extends BorderPane implements Initializable, Binocl
 			descriptionFlow.getChildren().add(text);
 		}
 		styleFlow.getChildren().setAll(StyleUtilsFX.createDecoratedHumanFormatNodes(commentType.getStyles()));
-		int index = FIELDS_ROW_START;
+		updateFieldsList();
+	}
+
+	private void updateFieldsList() {
+		fieldsListGrid.getChildren().clear();
+		int index = 0;
 		for (CommentTypeField field : commentType.getFields().values()) {
-			Label label = new Label(StringUtils.capitalize(field.getName()) + (field.getIsLongText() ? " (long)" : ""));
+			Label label = new Label(
+			        StringUtils.capitalize(field.getName()) + (field.getIsLongText() ? " (long)" : "") + ":");
 			Text text = new Text(field.getDescription());
 			TextFlow textFlow = new TextFlow(text);
-			commentTypeGrid.addRow(index, label, textFlow);
-			index++;
+			fieldsListGrid.addRow(index++, label, textFlow);
 		}
 	}
 

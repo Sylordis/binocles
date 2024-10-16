@@ -13,6 +13,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 
 /**
  * Dialog to create a new or edit a book.
@@ -71,7 +72,10 @@ public class BookDetailsDialog extends AbstractAnswerDialog<Book> {
 		// Set dialog content
 		addFormFeedback();
 		getGridPane().addRow(1, labelBookName, fieldBookName);
-		getGridPane().addRow(2, labelNomenclature, fieldNomenclatureChoice);
+		if (book != null && book.getNomenclature() != null) {
+			getGridPane().addRow(2,  new Label("Nomenclature"), new Text(book.getNomenclature().getName()));
+		} else
+			getGridPane().addRow(2, labelNomenclature, fieldNomenclatureChoice);
 		// Set up listeners
 		ListenerValidator<String> bookNameUIValidator = new ListenerValidator<String>()
 		        .validIf("Book name can't be blank or empty.", (o, n) -> !n.isBlank())

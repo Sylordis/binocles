@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.lang.String?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
@@ -22,21 +23,39 @@
    <center>
       <GridPane fx:id="commentTypeGrid">
         <columnConstraints>
-          <ColumnConstraints />
+          <ColumnConstraints minWidth="75.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="ALWAYS" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints />
           <RowConstraints />
           <RowConstraints />
+          <RowConstraints />
             <RowConstraints />
         </rowConstraints>
          <children>
-            <Label text="Description" />
-            <TextFlow fx:id="descriptionFlow" GridPane.columnIndex="1" />
-            <Label text="Style" GridPane.rowIndex="1" />
+            <Label text="Description" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+            <Label text="Style" GridPane.columnSpan="2" GridPane.rowIndex="1" />
+            <Label text="Preview" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+            <Label text="Fields:" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+            <TextFlow fx:id="descriptionFlow" GridPane.columnIndex="1" GridPane.rowIndex="0" />
             <TextFlow fx:id="styleFlow" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label text="Fields:" GridPane.rowIndex="2" />
+            <TextFlow fx:id="previewFlow" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <GridPane fx:id="fieldsListGrid" GridPane.columnSpan="2" GridPane.rowIndex="4">
+              	<styleClass>
+              		<String fx:value="list-grid" />
+              	</styleClass>
+              <columnConstraints>
+                <ColumnConstraints minWidth="75.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="ALWAYS" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints />
+              </rowConstraints>
+               <GridPane.margin>
+                  <Insets left="10.0" />
+               </GridPane.margin>
+            </GridPane>
          </children>
 	   <styleClass>
 	      <String fx:value="content-grid" />

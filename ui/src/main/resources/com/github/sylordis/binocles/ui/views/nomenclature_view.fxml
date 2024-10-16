@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<fx:root type="BorderPane" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+	<styleClass>
+      <String fx:value="binocles-pane" />
+      <String fx:value="nomenclature-pane" />
+  </styleClass>
+  <top>
+    <VBox styleClass="header">
+      <children>
+        <Text fx:id="nomenclatureTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="main-title" text="Nomenclature name" />
+      </children>
+    </VBox>
+  </top>
+   <center>
+      <ScrollPane fx:id="mainScrollPane" fitToWidth="true" hbarPolicy="NEVER" BorderPane.alignment="CENTER">
+         <content>
+              <VBox fx:id="nomenclatureZoneVBox" styleClass="body">
+               <children>
+                  <GridPane fx:id="nomenclatureGrid" prefHeight="34.0" prefWidth="204.0">
+                  	<styleClass>
+                  		<String fx:value="content-grid" />
+                  	</styleClass>
+                    <columnConstraints>
+                      <ColumnConstraints minWidth="75.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="ALWAYS" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints />
+                	  <RowConstraints />
+                	  <RowConstraints />
+                	  <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                    </rowConstraints>
+                     <children>
+                		<Label text="Comment types:" GridPane.columnSpan="2" GridPane.rowIndex="0" />
+                        <GridPane fx:id="commentTypesListGrid" GridPane.columnSpan="2" GridPane.rowIndex="2">
+      		                  	<styleClass>
+      		                  		<String fx:value="list-grid" />
+      		                  	</styleClass>
+                          <columnConstraints>
+                            <ColumnConstraints minWidth="75.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="ALWAYS" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints />
+                          </rowConstraints>
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                        </GridPane>
+                        <Text fx:id="noteNoCommentsType" GridPane.rowIndex="1" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-note" text="">
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                        </Text>
+                        <Label text="Used in:" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                        <GridPane fx:id="usedInListGrid" GridPane.columnSpan="2" GridPane.rowIndex="5">
+      		                  	<styleClass>
+      		                  		<String fx:value="list-grid" />
+      		                  	</styleClass>
+                          <columnConstraints>
+                            <ColumnConstraints minWidth="75.0" prefWidth="100.0" />
+                            <ColumnConstraints hgrow="ALWAYS" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints />
+                          </rowConstraints>
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                        </GridPane>
+                        <Text fx:id="noteNotUsed" GridPane.rowIndex="4" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-note" text="">
+                           <GridPane.margin>
+                              <Insets left="10.0" />
+                           </GridPane.margin>
+                        </Text>
+                     </children>
+                  </GridPane>
+               </children>
+            </VBox>
+         </content>
+		   <styleClass>
+		      <String fx:value="edge-to-edge" />
+		      </styleClass>
+      </ScrollPane>
+   </center>
+</fx:root>

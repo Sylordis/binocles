@@ -2,12 +2,12 @@
 
 <?import java.lang.String?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.text.TextFlow?>
 
@@ -19,37 +19,44 @@
   <top>
     <VBox styleClass="header">
       <children>
-        <Text fx:id="bookTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="main-title" text="Book title"/>
+        <Text fx:id="bookTitle" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="main-title" text="Book title" />
       </children>
     </VBox>
   </top>
    <center>
-        <VBox fx:id="bookZoneVBox" styleClass="body">
-         <children>
-            <GridPane fx:id="bookGrid">
-            	<styleClass>
-            		<String fx:value="content-grid" />
-            	</styleClass>
-              <columnConstraints>
-                <ColumnConstraints minWidth="-Infinity" />
-                <ColumnConstraints minWidth="200.0" hgrow="ALWAYS" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints />
-          		<RowConstraints/>
-                <RowConstraints />
-          <RowConstraints />
-              </rowConstraints>
+      <ScrollPane fx:id="mainScrollPane" hbarPolicy="NEVER" BorderPane.alignment="CENTER" fitToWidth="true">
+         <content>
+              <VBox fx:id="bookZoneVBox" styleClass="body">
                <children>
-          			<Label text="Nomenclature" GridPane.rowIndex="0" />
-                  <Label text="Synopsis" GridPane.rowIndex="1" GridPane.valignment="TOP" />
-                  <Label text="Description" GridPane.rowIndex="2" GridPane.valignment="TOP" />
-          			<Text fx:id="nomenclatureField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                  <TextFlow fx:id="bookSynopsisField"  textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <TextFlow fx:id="bookDescriptionField" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <GridPane fx:id="bookGrid">
+                  	<styleClass>
+                  		<String fx:value="content-grid" />
+                  	</styleClass>
+                    <columnConstraints>
+                      <ColumnConstraints minWidth="100.0" />
+                      <ColumnConstraints hgrow="ALWAYS" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints />
+                		<RowConstraints />
+                      <RowConstraints />
+                <RowConstraints />
+                    </rowConstraints>
+                     <children>
+                			<Label text="Nomenclature" GridPane.rowIndex="0" />
+                        <Label text="Synopsis" GridPane.rowIndex="1" GridPane.valignment="TOP" />
+                        <Label text="Description" GridPane.rowIndex="2" GridPane.valignment="TOP" />
+                			<Text fx:id="nomenclatureField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <TextFlow fx:id="bookSynopsisField" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextFlow fx:id="bookDescriptionField" textAlignment="JUSTIFY" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                     </children>
+                  </GridPane>
                </children>
-            </GridPane>
-         </children>
-      </VBox>
+            </VBox>
+         </content>
+		   <styleClass>
+		      <String fx:value="edge-to-edge" />
+		      </styleClass>
+      </ScrollPane>
    </center>
 </fx:root>

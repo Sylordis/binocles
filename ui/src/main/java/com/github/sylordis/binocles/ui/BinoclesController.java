@@ -3,8 +3,11 @@ package com.github.sylordis.binocles.ui;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,6 +20,7 @@ import com.github.sylordis.binocles.model.decorators.ChapterDecorator;
 import com.github.sylordis.binocles.model.decorators.CommentTypeDecorator;
 import com.github.sylordis.binocles.model.decorators.NomenclatureDecorator;
 import com.github.sylordis.binocles.model.io.BinoclesIOFactory;
+import com.github.sylordis.binocles.model.review.Comment;
 import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.DefaultNomenclature;
 import com.github.sylordis.binocles.model.review.Nomenclature;
@@ -24,6 +28,7 @@ import com.github.sylordis.binocles.model.review.NomenclatureItem;
 import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.model.text.ReviewableContent;
+import com.github.sylordis.binocles.ui.alerts.ReviewElementDeletionConfirmationAlert;
 import com.github.sylordis.binocles.ui.alerts.TextElementDeletionConfirmationAlert;
 import com.github.sylordis.binocles.ui.components.BookTreeRoot;
 import com.github.sylordis.binocles.ui.components.Controller;
@@ -45,6 +50,7 @@ import com.github.sylordis.binocles.ui.views.BinoclesTabPane;
 import com.github.sylordis.binocles.ui.views.BookView;
 import com.github.sylordis.binocles.ui.views.ChapterView;
 import com.github.sylordis.binocles.ui.views.CommentTypeView;
+import com.github.sylordis.binocles.ui.views.NomenclatureView;
 import com.github.sylordis.binocles.ui.views.WelcomeView;
 import com.github.sylordis.binocles.utils.exceptions.ExportException;
 import com.github.sylordis.binocles.utils.exceptions.ImportException;
@@ -103,6 +109,8 @@ public class BinoclesController implements Initializable, Controller {
 	@FXML
 	private MenuItem menuFileSaveAs;
 	@FXML
+	private MenuItem menuFileImport;
+	@FXML
 	private MenuItem menuFileExportStructural;
 	@FXML
 	private MenuItem menuFileExportRender;
@@ -149,6 +157,8 @@ public class BinoclesController implements Initializable, Controller {
 	private Button toolbarSave;
 	@FXML
 	private Button toolbarSaveAs;
+	@FXML
+	private Button toolbarImport;
 	@FXML
 	private Button toolbarExportStruct;
 	@FXML
@@ -216,13 +226,21 @@ public class BinoclesController implements Initializable, Controller {
 		nomenclaturesTree.getSelectionModel().selectedItemProperty()
 		        .addListener((s, o, n) -> setReviewElementsContextMenuStatus());
 		// Set tabs change listener
-		mainTabPane.getSelectionModel().selectedItemProperty()
-		        .addListener((s, o, n) -> ((BinoclesTabPane) n.getContent()).updateControllerStatus(this));
+		mainTabPane.getSelectionModel().selectedItemProperty().addListener((s, o, n) -> {
+			if (n != null)
+				((BinoclesTabPane) n.getContent()).updateControllerStatus(this);
+		});
 		// Other states configuration
 		mainTabPane.setTabDragPolicy(TabDragPolicy.REORDER);
 		// Add welcome tab if necessary
 		mainTabPane.getTabs().add(new Tab("Welcome", new WelcomeView()));
 		logger.trace("Controller initialisation finished");
+	}
+
+	@FXML
+	public void importAction(ActionEvent event) {
+		// TODO
+		showNotImplementedAlert("Import");
 	}
 
 	/**
@@ -389,6 +407,7 @@ public class BinoclesController implements Initializable, Controller {
 		TreeItem<ReviewableContent> treeSelected = booksTree.getSelectionModel().getSelectedItem();
 		if (null != treeSelected) {
 			TextElementDeletionConfirmationAlert alert = new TextElementDeletionConfirmationAlert();
+			alert.setGraphic(AppIcons.createImageViewFromConfig(AppIcons.ICON_TRASH));
 			alert.setTreeRoot(treeSelected.getValue());
 			Optional<ButtonType> answer = alert.showAndWait();
 			if (answer.isPresent() && answer.get().equals(ButtonType.OK)) {
@@ -416,7 +435,44 @@ public class BinoclesController implements Initializable, Controller {
 	@FXML
 	public void deleteReviewElementsAction(ActionEvent event) {
 		// TODO Get all selected elements in the tree, open confirmation dialog.
-		showNotImplementedAlert();
+		// TODO Need migration done first
+		TreeItem<NomenclatureItem> treeSelected = nomenclaturesTree.getSelectionModel().getSelectedItem();
+		if (null != treeSelected) {
+			// Check if in use
+			List<Object> used = new ArrayList<>();
+			Class<?> usedBy = null;
+			if (treeSelected.getValue() instanceof Nomenclature) {
+				used = model.getBooks().stream().filter(b -> treeSelected.getValue().equals(b.getNomenclature()))
+				        .collect(Collectors.toList());
+				usedBy = Book.class;
+			} else if (treeSelected.getValue() instanceof CommentType) {
+				used = model.getBooks().stream().flatMap(b -> b.getChapters().stream())
+				        .flatMap(c -> c.getComments().stream()).filter(c -> treeSelected.getValue().equals(c.getType()))
+				        .collect(Collectors.toList());
+				usedBy = Comment.class;
+			}
+			if (!used.isEmpty()) {
+				showErrorAlert("Delete error", String.format(
+				        "The object(s) you are trying to delete are currently in use by %d %s%s.%n%nPlease perform a migration before deleting.",
+				        used.size(), usedBy.getSimpleName(), used.size() > 1 ? "s" : ""));
+			} else {
+				ReviewElementDeletionConfirmationAlert alert = new ReviewElementDeletionConfirmationAlert();
+				alert.setGraphic(AppIcons.createImageViewFromConfig(AppIcons.ICON_TRASH));
+				alert.setTreeRoot(treeSelected.getValue());
+				Optional<ButtonType> answer = alert.showAndWait();
+				if (answer.isPresent() && answer.get().equals(ButtonType.OK)) {
+					logger.info("Deleting '{}'", treeSelected.getValue());
+					// Remove in model
+					if (treeSelected.getValue() instanceof Nomenclature) {
+						model.getNomenclatures().remove(treeSelected.getValue());
+					} else if (treeSelected.getValue() instanceof CommentType) {
+						treeSelected.getParent().getValue().getChildren().remove(treeSelected.getValue());
+					}
+					// Remove in tree
+					treeSelected.getParent().getChildren().remove(treeSelected);
+				}
+			}
+		}
 	}
 
 	@FXML
@@ -505,11 +561,10 @@ public class BinoclesController implements Initializable, Controller {
 	 * @param event
 	 */
 	public void openTabItemAction(TreeItem<?> item) {
-		Optional<Tab> needle = getTabWithItem(item.getValue());
-		if (needle.isPresent()) {
-			logger.debug("Switch to {}", needle.get().getText());
-			// If so just switch to it
-			mainTabPane.getSelectionModel().select(needle.get());
+		Optional<Tab> existingTab = getTabWithItem(item.getValue());
+		if (existingTab.isPresent()) {
+			logger.debug("Switch to tab '{}'", existingTab.get().getText());
+			mainTabPane.getSelectionModel().select(existingTab.get());
 		} else {
 			createNewTab(item);
 		}
@@ -549,14 +604,14 @@ public class BinoclesController implements Initializable, Controller {
 			NomenclatureItem content = (NomenclatureItem) item.getValue();
 			if (content instanceof Nomenclature) {
 				title = ((Nomenclature) content).getName();
-				// TODO create node
+				node = new NomenclatureView(this, (Nomenclature) content);
 			} else if (content instanceof CommentType) {
 				title = ((CommentType) content).getName();
 				node = new CommentTypeView(this, (Nomenclature) item.getParent().getValue(), (CommentType) content);
 			}
 		}
 		if (node != null && title != null) {
-			logger.debug("Created new tab {}", title);
+			logger.debug("Created new tab '{}'", title);
 			Tab tab = new Tab(title, node);
 			Image img = AppIcons.getImageForType(item.getValue().getClass());
 			if (img != null)
@@ -657,44 +712,69 @@ public class BinoclesController implements Initializable, Controller {
 	}
 
 	/**
-	 * Displays a small alert dialog that the feature is not implemented yet.
+	 * Displays a small alert dialog that a feature is not implemented yet.
 	 */
 	public void showNotImplementedAlert() {
+		showNotImplementedAlert(null);
+	}
+
+	/**
+	 * Displays a small alert dialog that a feature is not implemented yet.
+	 * 
+	 * @param feature the feature name, null is no precision
+	 */
+	public void showNotImplementedAlert(String feature) {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setTitle("Uhoh");
 		alert.setHeaderText(null);
-		alert.setContentText("It seems this feature is not implemented yet, please come back later =)");
+		if (feature != null) {
+			alert.setContentText(String
+			        .format("It seems the feature '%s' is not implemented yet, please come back later =)", feature));
+		} else {
+			alert.setContentText("It seems this feature is not implemented yet, please come back later =)");
+		}
 		alert.showAndWait();
 	}
 
 	/**
-	 * Shows a small error alert dialog.
+	 * Shows a small error alert with title "Error" and no header.
 	 * 
-	 * @param string Message of the alert.
+	 * @param text Message of the alert
 	 */
 	private void showErrorAlert(String text) {
 		showErrorAlert("Error", text);
 	}
 
 	/**
-	 * Shows a small error alert dialog.
+	 * Shows an error alert with no header.
 	 * 
-	 * @param title Title of the alert.
-	 * @param text  Message of the alert.
+	 * @param title Title of the alert
+	 * @param text  Message of the alert
 	 */
 	private void showErrorAlert(String title, String text) {
+		showErrorAlert(title, null, text);
+	}
+
+	/**
+	 * Shows an error alert dialog.
+	 * 
+	 * @param title  Title of the alert
+	 * @param header Header text of the alert
+	 * @param text   Message of the alert
+	 */
+	private void showErrorAlert(String title, String header, String text) {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setTitle(title);
-		alert.setHeaderText(null);
+		alert.setHeaderText(header);
 		alert.setContentText(text);
 		alert.showAndWait();
 	}
 
 	/**
-	 * Shows a big error alert dialog.
+	 * Shows an error alert with no header and a long message in a non-editable text area.
 	 * 
-	 * @param title Title of the alert.
-	 * @param text  Message of the alert.
+	 * @param title Title of the alert
+	 * @param text  Long message of the alert, appended after a label
 	 */
 	private void showLongErrorAlert(String title, String text, String longText) {
 		Alert alert = new Alert(AlertType.ERROR);

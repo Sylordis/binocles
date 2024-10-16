@@ -32,7 +32,6 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
-<?import javafx.geometry.Insets?>
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ContextMenu?>
@@ -44,6 +43,7 @@
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToolBar?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.control.TreeView?>
 <?import javafx.scene.image.Image?>
@@ -99,6 +99,18 @@
                         </ImageView>
                      </graphic></MenuItem>
             <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="menuFileImport" mnemonicParsing="false" onAction="#importAction" text="Import...">
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="E" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                     </accelerator>
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@img/import.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
                   <MenuItem fx:id="menuFileExportStructural" mnemonicParsing="false" onAction="#exportStructuralAction" text="Export (structural)">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="E" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
@@ -215,8 +227,8 @@
         </Menu>
       </menus>
     </MenuBar>
-      <HBox id="toolbar" alignment="CENTER_LEFT" maxHeight="30.0" minHeight="30.0" prefHeight="30.0">
-         <children>
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+         <items>
             <Button fx:id="toolbarOpen" alignment="CENTER" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#openFileAction" text="Open" textAlignment="CENTER">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
@@ -251,6 +263,18 @@
                <tooltip>
                   <Tooltip text="Save as..." />
                </tooltip></Button>
+            <Button fx:id="toolbarImport" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Import">
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+                     <image>
+                        <Image url="@img/import.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+               <tooltip>
+                  <Tooltip text="Import" />
+               </tooltip>
+            </Button>
             <Button fx:id="toolbarExportStruct" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" text="Export (Structural)">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
@@ -321,11 +345,8 @@
                   <Tooltip text="Create a new comment type" />
                </tooltip>
             </Button>
-         </children>
-         <VBox.margin>
-            <Insets left="5.0" right="5.0" />
-         </VBox.margin>
-      </HBox>
+         </items>
+      </ToolBar>
     <SplitPane fx:id="mainSplitPane" dividerPositions="0.2" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <items>
             <SplitPane dividerPositions="0.3" minWidth="160.0" orientation="VERTICAL" prefWidth="160.0" SplitPane.resizableWithParent="false">

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import com.github.sylordis.binocles.model.contracts.Hierarchical;
 import com.github.sylordis.binocles.model.review.Comment;
 import com.github.sylordis.binocles.utils.Identifiable;
 
@@ -16,7 +17,7 @@ import com.github.sylordis.binocles.utils.Identifiable;
  * @author sylordis
  *
  */
-public abstract class ReviewableContent implements Identifiable, Serializable {
+public abstract class ReviewableContent implements Identifiable, Serializable, Hierarchical<ReviewableContent> {
 
 	private static final long serialVersionUID = -7788297468267195354L;
 
@@ -146,26 +147,6 @@ public abstract class ReviewableContent implements Identifiable, Serializable {
 		this.comments.clear();
 		if (comments != null)
 			this.comments.addAll(comments);
-	}
-
-	/**
-	 * Checks if this instance has children. If this returns true, then the method
-	 * {@link #getChildren()} should return a non empty list. If this item is not supposed to have
-	 * children, this method should return false.
-	 * 
-	 * @return true if this object can have children and has some, false otherwise.
-	 */
-	public boolean hasChildren() {
-		return false;
-	}
-
-	/**
-	 * Gets the list of children of this object, or null if it's not suppose to have some.
-	 * 
-	 * @return list of children or null if it's not supposed to have any.
-	 */
-	public List<? extends ReviewableContent> getChildren() {
-		return null;
 	}
 
 }
