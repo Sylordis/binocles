@@ -67,6 +67,10 @@ gradle run --args='<path-to-file>'
 
 Check out the [wiki on Github](https://github.com/Sylordis/binocles/wiki).
 
+# Report issues
+
+Please report any found issues to [issues on Github](https://github.com/Sylordis/binocles/issues)
+
 # Author & Contributors
 
 The only contributor and author is Sylvain "[Sylordis](https://github.com/Sylordis/)" Domenjoud.

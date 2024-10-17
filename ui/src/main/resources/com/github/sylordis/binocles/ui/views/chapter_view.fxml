@@ -72,6 +72,7 @@
            <content>
             <HBox fx:id="chapterContentContainer">
                <children>
+               	  <!-- InlineCssTextArea for content -->
                   <Region fx:id="chapterContentSeparator" prefWidth="20.0" styleClass="zone-separator" />
                   <VBox fx:id="commentBoxContainer" prefWidth="200.0" styleClass="comments-container" />
                </children>

@@ -76,7 +76,7 @@ public class ReviewElementDeletionConfirmationAlert extends Alert {
 			if (rootItem.hasChildren()) {
 				root.setExpanded(true);
 				rootItem.getChildren().forEach(c -> {
-					TreeItem<NomenclatureItem> item = new TreeItem<>(c);
+					TreeItem<NomenclatureItem> item = new TreeItem<>((NomenclatureItem) c);
 					root.getChildren().add(item);
 				});
 			}

@@ -17,13 +17,13 @@ import org.apache.logging.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.parser.ParserException;
 
+import com.github.sylordis.binocles.contracts.Identifiable;
 import com.github.sylordis.binocles.model.BinoclesModel;
 import com.github.sylordis.binocles.model.review.Comment;
 import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.model.text.Chapter;
-import com.github.sylordis.binocles.utils.Identifiable;
 import com.github.sylordis.binocles.utils.MapUtils;
 import com.github.sylordis.binocles.utils.exceptions.ImportException;
 import com.github.sylordis.binocles.utils.exceptions.UniqueIDException;

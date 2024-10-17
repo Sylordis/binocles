@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.github.sylordis.binocles.contracts.Identifiable;
+import com.github.sylordis.binocles.contracts.SelfCopying;
 import com.github.sylordis.binocles.model.review.Nomenclature;
-import com.github.sylordis.binocles.utils.Identifiable;
-import com.github.sylordis.binocles.utils.SelfCopying;
 import com.github.sylordis.binocles.utils.exceptions.UniqueIDException;
 import com.google.common.base.Preconditions;
 
@@ -293,11 +293,6 @@ public class Book extends ReviewableContent implements SelfCopying<Book> {
 			this.description = "";
 		else
 			this.description = description;
-	}
-
-	@Override
-	public boolean hasChildren() {
-		return hasChapters();
 	}
 
 	@Override

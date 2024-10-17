@@ -72,8 +72,7 @@
       		                  		<String fx:value="list-grid" />
       		                  	</styleClass>
                           <columnConstraints>
-                            <ColumnConstraints minWidth="75.0" prefWidth="100.0" />
-                            <ColumnConstraints hgrow="ALWAYS" />
+                            <ColumnConstraints minWidth="75.0" hgrow="ALWAYS" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints />

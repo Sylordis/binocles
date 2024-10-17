@@ -351,4 +351,10 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 		}
 	}
 
+	@Override
+	public void updateControllerStatus(BinoclesController controller) {
+		// TODO Update text
+		logger.debug("Should update.");
+	}
+
 }

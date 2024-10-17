@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import com.github.sylordis.binocles.utils.Identifiable;
+import com.github.sylordis.binocles.contracts.Identifiable;
 import com.github.sylordis.binocles.utils.MapUtils;
 import com.google.common.base.Preconditions;
 

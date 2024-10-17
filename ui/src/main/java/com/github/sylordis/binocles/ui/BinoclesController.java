@@ -188,61 +188,6 @@ public class BinoclesController implements Initializable, Controller {
 	 */
 	private BinoclesModel model;
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		logger.trace("Controller initialisation");
-		// Initialise model
-		model = new BinoclesModel();
-		try {
-			model.addNomenclature(new DefaultNomenclature());
-		} catch (UniqueIDException e) {
-			// First nomenclature added, cannot have exception
-		}
-		// Initialise the tree for text items
-		TreeItem<ReviewableContent> textTreeRoot = new TreeItem<>(new BookTreeRoot());
-		booksTree.setRoot(textTreeRoot);
-		booksTree.setCellFactory(p -> {
-			return new CustomTreeCell<ReviewableContent>()
-			        .decorate(Book.class, new BookDecorator().thenTitle().thenNomenclature())
-			        .decorate(Chapter.class, new ChapterDecorator().thenTitle().thenCommentsCount());
-		});
-		rebuildBooksTree();
-		// Initialise the tree for nomenclatures
-		TreeItem<NomenclatureItem> nomenclaturesTreeRoot = new TreeItem<>(new NomenclatureTreeRoot());
-		nomenclaturesTree.setRoot(nomenclaturesTreeRoot);
-		nomenclaturesTree.setCellFactory(p -> {
-			return new CustomTreeCell<NomenclatureItem>()
-			        .decorate(Nomenclature.class, new NomenclatureDecorator().thenName())
-			        .decorate(CommentType.class, new CommentTypeDecorator().thenName());
-		});
-		rebuildNomenclaturesTree();
-		// Set trees change listener
-		booksTree.setOnMouseClicked(
-		        TreeVarClickEventHandler.createDoubleClickHandler(booksTree, this::openTabItemAction));
-		booksTree.getSelectionModel().selectedItemProperty()
-		        .addListener((s, o, n) -> setTextElementsContextMenuStatus());
-		nomenclaturesTree.setOnMouseClicked(
-		        TreeVarClickEventHandler.createDoubleClickHandler(nomenclaturesTree, this::openTabItemAction));
-		nomenclaturesTree.getSelectionModel().selectedItemProperty()
-		        .addListener((s, o, n) -> setReviewElementsContextMenuStatus());
-		// Set tabs change listener
-		mainTabPane.getSelectionModel().selectedItemProperty().addListener((s, o, n) -> {
-			if (n != null)
-				((BinoclesTabPane) n.getContent()).updateControllerStatus(this);
-		});
-		// Other states configuration
-		mainTabPane.setTabDragPolicy(TabDragPolicy.REORDER);
-		// Add welcome tab if necessary
-		mainTabPane.getTabs().add(new Tab("Welcome", new WelcomeView()));
-		logger.trace("Controller initialisation finished");
-	}
-
-	@FXML
-	public void importAction(ActionEvent event) {
-		// TODO
-		showNotImplementedAlert("Import");
-	}
-
 	/**
 	 * Creates a new book by opening a {@link BookDetailsDialog}.
 	 * 
@@ -263,28 +208,6 @@ public class BinoclesController implements Initializable, Controller {
 			}
 			setButtonsStatus();
 		}
-	}
-
-	@FXML
-	public void editBookAction(ActionEvent event) {
-		TreeItem<ReviewableContent> treeSelected = booksTree.getSelectionModel().getSelectedItem();
-		if (null != treeSelected && treeSelected.getValue() instanceof Book) {
-			Book book = (Book) treeSelected.getValue();
-			BookDetailsDialog dialog = new BookDetailsDialog(model, book);
-			Optional<Book> answer = dialog.display();
-			if (answer.isPresent()) {
-				Optional<Tab> optTab = getTabWithItem(book);
-				logger.info("Edited book '{}' => '{}'", book, answer.get());
-				book.copy(answer.get());
-				booksTree.refresh();
-				// TODO Refresh book tab
-				if (optTab.isPresent()) {
-					optTab.get().setText(book.getTitle());
-					((BookView) optTab.get().getContent()).updateControllerStatus(this);
-				}
-			}
-		} else
-			showErrorAlert("No item selected", "Please select a book in the book tree in order to do this action.");
 	}
 
 	/**
@@ -325,47 +248,6 @@ public class BinoclesController implements Initializable, Controller {
 		setButtonsStatus();
 	}
 
-	public void editChapterAction(ActionEvent event) {
-		TreeItem<ReviewableContent> treeSelected = booksTree.getSelectionModel().getSelectedItem();
-		if (null != treeSelected && treeSelected.getValue() instanceof Chapter) {
-			// Edit dialog
-			ChapterDetailsDialog dialog = new ChapterDetailsDialog(model, (Book) treeSelected.getParent().getValue(),
-			        (Chapter) treeSelected.getValue());
-			Optional<ChapterPropertiesAnswer> answer = dialog.display();
-			if (answer.isPresent()) {
-				Chapter chapterModified = answer.get().chapter();
-				Chapter chapter = (Chapter) treeSelected.getValue();
-				logger.info("Edited chapter '{}' in '{}' => {}", chapter.getTitle(),
-				        treeSelected.getParent().getValue().getTitle(), answer.get());
-				chapter.copy(chapterModified);
-				treeSelected.setValue(chapter);
-				booksTree.refresh();
-				// TODO Check tab for update (or close the tab?)
-				// TODO Consolidate comments
-			}
-		} else
-			showErrorAlert("No item selected", "Please select a Chapter in the book tree in order to do this action.");
-	}
-
-	@FXML
-	public void createNomenclatureAction(ActionEvent event) {
-		NomenclatureDetailsDialog dialog = new NomenclatureDetailsDialog(model);
-		Optional<String> answer = dialog.display();
-		// Check answer is valid
-		if (answer.isPresent()) {
-			String title = answer.get();
-			try {
-				Nomenclature nomenclature = new Nomenclature(title);
-				// Add new book to model and front-end
-				model.addNomenclature(nomenclature);
-				rebuildNomenclaturesTree();
-			} catch (UniqueIDException e) {
-				logger.error(e);
-			}
-			setButtonsStatus();
-		}
-	}
-
 	@FXML
 	public void createCommentTypeAction(ActionEvent event) {
 		// Get currently selected item
@@ -397,32 +279,60 @@ public class BinoclesController implements Initializable, Controller {
 	}
 
 	/**
-	 * This action is triggered when the user prompts to delete one or multiple text elements (Book
-	 * and/or Chapter).
+	 * Creates a new tab in the tabbed pane.
 	 * 
-	 * @param event
+	 * @param item the current tree item
 	 */
-	@FXML
-	public void deleteTextElementsAction(ActionEvent event) {
-		TreeItem<ReviewableContent> treeSelected = booksTree.getSelectionModel().getSelectedItem();
-		if (null != treeSelected) {
-			TextElementDeletionConfirmationAlert alert = new TextElementDeletionConfirmationAlert();
-			alert.setGraphic(AppIcons.createImageViewFromConfig(AppIcons.ICON_TRASH));
-			alert.setTreeRoot(treeSelected.getValue());
-			Optional<ButtonType> answer = alert.showAndWait();
-			if (answer.isPresent() && answer.get().equals(ButtonType.OK)) {
-				logger.info("Deleting '{}'", treeSelected.getValue());
-				// Remove in model
-				if (treeSelected.getValue() instanceof Book) {
-					model.getBooks().remove(treeSelected.getValue());
-				} else if (treeSelected.getValue() instanceof Chapter) {
-					treeSelected.getParent().getValue().getChildren().remove(treeSelected.getValue());
-				}
-				// Remove in tree
-				treeSelected.getParent().getChildren().remove(treeSelected);
+	private void createNewTab(TreeItem<?> item) {
+		Node node = null;
+		String title = null;
+		// Try to create node
+		if (item.getValue() instanceof ReviewableContent) {
+			ReviewableContent content = (ReviewableContent) item.getValue();
+			title = content.getTitle();
+			if (content instanceof Chapter) {
+				node = new ChapterView(this, (Book) item.getParent().getValue(), (Chapter) content);
+			} else if (content instanceof Book) {
+				node = new BookView(this, (Book) content);
 			}
+		} else if (item.getValue() instanceof NomenclatureItem) {
+			NomenclatureItem content = (NomenclatureItem) item.getValue();
+			if (content instanceof Nomenclature) {
+				title = ((Nomenclature) content).getName();
+				node = new NomenclatureView(this, (Nomenclature) content);
+			} else if (content instanceof CommentType) {
+				title = ((CommentType) content).getName();
+				node = new CommentTypeView(this, (Nomenclature) item.getParent().getValue(), (CommentType) content);
+			}
+		}
+		// If node was created, create the tab
+		if (node != null && title != null) {
+			logger.debug("Created new tab '{}'", title);
+			Tab tab = new Tab(title, node);
+			Image img = AppIcons.getImageForType(item.getValue().getClass());
+			if (img != null)
+				tab.setGraphic(AppIcons.createImageViewFromConfig(img));
+			mainTabPane.getTabs().add(tab);
+			mainTabPane.getSelectionModel().select(tab);
 		} else {
-			showErrorAlert("No element in the book tree is selected.");
+			showNotImplementedAlert();
+		}
+	}
+
+	@FXML
+	public void createNomenclatureAction(ActionEvent event) {
+		NomenclatureDetailsDialog dialog = new NomenclatureDetailsDialog(model);
+		Optional<Nomenclature> answer = dialog.display();
+		// Check answer is valid
+		if (answer.isPresent()) {
+			Nomenclature nomenclature = answer.get();
+			try {
+				model.addNomenclature(nomenclature);
+				rebuildNomenclaturesTree();
+			} catch (UniqueIDException e) {
+				logger.error(e);
+			}
+			setButtonsStatus();
 		}
 	}
 
@@ -434,8 +344,7 @@ public class BinoclesController implements Initializable, Controller {
 	 */
 	@FXML
 	public void deleteReviewElementsAction(ActionEvent event) {
-		// TODO Get all selected elements in the tree, open confirmation dialog.
-		// TODO Need migration done first
+		// TODO Multiple selection deletion
 		TreeItem<NomenclatureItem> treeSelected = nomenclaturesTree.getSelectionModel().getSelectedItem();
 		if (null != treeSelected) {
 			// Check if in use
@@ -475,10 +384,124 @@ public class BinoclesController implements Initializable, Controller {
 		}
 	}
 
+	/**
+	 * This action is triggered when the user prompts to delete one or multiple text elements (Book
+	 * and/or Chapter).
+	 * 
+	 * @param event
+	 */
+	@FXML
+	public void deleteTextElementsAction(ActionEvent event) {
+		if (!booksTree.getSelectionModel().isEmpty()) {
+			// TODO Multi deletion
+			TreeItem<ReviewableContent> treeSelected = booksTree.getSelectionModel().getSelectedItem();
+			TextElementDeletionConfirmationAlert alert = new TextElementDeletionConfirmationAlert();
+			alert.setGraphic(AppIcons.createImageViewFromConfig(AppIcons.ICON_TRASH));
+			alert.setTreeRoot(treeSelected.getValue());
+			Optional<ButtonType> answer = alert.showAndWait();
+			if (answer.isPresent() && answer.get().equals(ButtonType.OK)) {
+				logger.info("Deleting '{}'", treeSelected.getValue());
+				// Remove in model
+				if (treeSelected.getValue() instanceof Book) {
+					model.getBooks().remove(treeSelected.getValue());
+				} else if (treeSelected.getValue() instanceof Chapter) {
+					treeSelected.getParent().getValue().getChildren().remove(treeSelected.getValue());
+				}
+				// Remove in tree
+				treeSelected.getParent().getChildren().remove(treeSelected);
+			}
+		} else {
+			showErrorAlert("No element in the book tree is selected.");
+		}
+	}
+
+	/**
+	 * Opens a book edition dialog.
+	 * 
+	 * @param book item to edit
+	 */
+	public void editBook(Book book) {
+		BookDetailsDialog dialog = new BookDetailsDialog(model, book);
+		Optional<Book> answer = dialog.display();
+		if (answer.isPresent()) {
+			Optional<Tab> optTab = getTabWithItem(book);
+			logger.info("Edited book '{}' => '{}'", book, answer.get());
+			book.copy(answer.get());
+			booksTree.refresh();
+			// TODO Refresh book tab
+			if (optTab.isPresent()) {
+				optTab.get().setText(book.getTitle());
+				((BookView) optTab.get().getContent()).updateControllerStatus(this);
+			}
+		}
+	}
+
+	/**
+	 * Opens a chapter edition dialog.
+	 * 
+	 * @param chapter item to edit
+	 * @param book    book the chapter is part of
+	 */
+	public void editChapter(Chapter chapter, Book book) {
+		ChapterDetailsDialog dialog = new ChapterDetailsDialog(model, book, chapter);
+		Optional<ChapterPropertiesAnswer> answer = dialog.display();
+		if (answer.isPresent()) {
+			Optional<Tab> optTab = getTabWithItem(chapter);
+			Chapter chapterModified = answer.get().chapter();
+			logger.info("Edited chapter '{}' in '{}' => {}", chapter.getTitle(), book.getTitle(), answer.get());
+			chapter.copy(chapterModified);
+			booksTree.refresh();
+			if (optTab.isPresent()) {
+				optTab.get().setText(chapter.getTitle());
+				((ChapterView) optTab.get().getContent()).updateControllerStatus(this);
+			}
+			// TODO Consolidate comments
+		}
+	}
+
+	/**
+	 * Opens a comment type edition dialog.
+	 * 
+	 * @param commentType  item to edit
+	 * @param nomenclature nomenclature the comment type is part of
+	 */
+	public void editCommentType(CommentType commentType, Nomenclature nomenclature) {
+		// TODO Auto-generated method stub
+		showNotImplementedAlert("Edit comment type");
+	}
+
+	/**
+	 * Opens a nomenclature edition dialog.
+	 * 
+	 * @param nomenclature item to edit
+	 */
+	public void editNomenclature(Nomenclature nomenclature) {
+		NomenclatureDetailsDialog dialog = new NomenclatureDetailsDialog(model, nomenclature);
+		Optional<Nomenclature> answer = dialog.display();
+		if (answer.isPresent()) {
+			Optional<Tab> optTab = getTabWithItem(nomenclature);
+			Nomenclature nomenclatureModified = answer.get();
+			logger.info("Edited nomenclature '{}' => '{}'", nomenclature.getName(), answer.get());
+			nomenclature.copy(nomenclatureModified);
+			nomenclaturesTree.refresh();
+			booksTree.refresh();
+			if (optTab.isPresent()) {
+				optTab.get().setText(nomenclature.getName());
+				((NomenclatureView) optTab.get().getContent()).updateControllerStatus(this);
+			}
+		}
+	}
+
 	@FXML
 	public void editReviewElementAction(ActionEvent event) {
-		// TODO Open dialog and then modify element.
-		showNotImplementedAlert();
+		TreeItem<NomenclatureItem> treeSelected = nomenclaturesTree.getSelectionModel().getSelectedItem();
+		if (null != treeSelected) {
+			if (treeSelected.getValue() instanceof Nomenclature)
+				editNomenclature((Nomenclature) treeSelected.getValue());
+			else if (treeSelected.getValue() instanceof CommentType)
+				editCommentType((CommentType) treeSelected.getValue(),
+				        (Nomenclature) treeSelected.getParent().getValue());
+		}
 	}
 
 	@FXML
@@ -486,9 +509,9 @@ public class BinoclesController implements Initializable, Controller {
 		TreeItem<ReviewableContent> treeSelected = booksTree.getSelectionModel().getSelectedItem();
 		if (null != treeSelected) {
 			if (treeSelected.getValue() instanceof Chapter)
-				editChapterAction(event);
+				editChapter((Chapter) treeSelected.getValue(), (Book) treeSelected.getParent().getValue());
 			else if (treeSelected.getValue() instanceof Book)
-				editBookAction(event);
+				editBook((Book) treeSelected.getValue());
 		}
 	}
 
@@ -534,6 +557,19 @@ public class BinoclesController implements Initializable, Controller {
 	}
 
 	/**
+	 * 
+	 * @return the current model
+	 */
+	public BinoclesModel getModel() {
+		return model;
+	}
+
+	@Override
+	public Controller getParentController() {
+		return null;
+	}
+
+	/**
 	 * Gets current stage from the event source or from the menu bar.
 	 * 
 	 * @param event
@@ -550,26 +586,6 @@ public class BinoclesController implements Initializable, Controller {
 		return stage;
 	}
 
-	@FXML
-	public void openAboutAction(ActionEvent event) {
-		new AboutDialog().display();
-	}
-
-	/**
-	 * Opens a new tab from the books tree.
-	 * 
-	 * @param event
-	 */
-	public void openTabItemAction(TreeItem<?> item) {
-		Optional<Tab> existingTab = getTabWithItem(item.getValue());
-		if (existingTab.isPresent()) {
-			logger.debug("Switch to tab '{}'", existingTab.get().getText());
-			mainTabPane.getSelectionModel().select(existingTab.get());
-		} else {
-			createNewTab(item);
-		}
-	}
-
 	/**
 	 * Gets a tab that is already opened that is holding/representing/containing a given item.
 	 * 
@@ -584,48 +600,120 @@ public class BinoclesController implements Initializable, Controller {
 		return needle;
 	}
 
+	@FXML
+	public void importAction(ActionEvent event) {
+		// TODO
+		showNotImplementedAlert("Import");
+	}
+
 	/**
-	 * Creates a new tab in the tabbed pane.
+	 * Opens a file and loads its content, replacing current content.
 	 * 
-	 * @param object
+	 * @param file    file to open
+	 * @param replace if set to true, will replace the current model
 	 */
-	private void createNewTab(TreeItem<?> item) {
-		Node node = null;
-		String title = null;
-		if (item.getValue() instanceof ReviewableContent) {
-			ReviewableContent content = (ReviewableContent) item.getValue();
-			title = content.getTitle();
-			if (content instanceof Chapter) {
-				node = new ChapterView(this, (Book) item.getParent().getValue(), (Chapter) content);
-			} else if (content instanceof Book) {
-				node = new BookView(this, (Book) content);
+	public void importFile(File file, boolean replace) {
+		try {
+			FileImporter<BinoclesModel> importer = new BinoclesIOFactory().getFileImporter(file);
+			// No importer found
+			if (null == importer) {
+				Message msg = new StringFormattedMessage("Cannot open file '{}', file type is not managed.", file);
+				logger.error(msg);
+				showErrorAlert(msg.toString());
+			} else {
+				BinoclesModel importedModel = importer.load(file);
+				if (replace) {
+					this.model = importedModel;
+					try {
+						model.addNomenclature(new DefaultNomenclature());
+					} catch (UniqueIDException e) {
+						logger.atError().withThrowable(e).log("Error during import.");
+						showErrorAlert(
+						        "Nomenclature with name 'Default' already exists in the imported file. Import was successful but Default Nomenclature was replaced.");
+					}
+				} else {
+					showNotImplementedAlert();
+				}
+				rebuildTrees();
+				setButtonsStatus();
 			}
-		} else if (item.getValue() instanceof NomenclatureItem) {
-			NomenclatureItem content = (NomenclatureItem) item.getValue();
-			if (content instanceof Nomenclature) {
-				title = ((Nomenclature) content).getName();
-				node = new NomenclatureView(this, (Nomenclature) content);
-			} else if (content instanceof CommentType) {
-				title = ((CommentType) content).getName();
-				node = new CommentTypeView(this, (Nomenclature) item.getParent().getValue(), (CommentType) content);
-			}
+		} catch (IOException e) {
+			logger.atError().withThrowable(e).log("Could not read the selected file.");
+			showErrorAlert("Could not read the selected file.");
+		} catch (ImportException e) {
+			logger.atError().withThrowable(e).log("Could not import the selected file.");
+			showLongErrorAlert("Error while opening file", "Could not import the selected file.", e.getMessage());
 		}
-		if (node != null && title != null) {
-			logger.debug("Created new tab '{}'", title);
-			Tab tab = new Tab(title, node);
-			Image img = AppIcons.getImageForType(item.getValue().getClass());
-			if (img != null)
-				tab.setGraphic(AppIcons.createImageViewFromConfig(img));
-			mainTabPane.getTabs().add(tab);
-			mainTabPane.getSelectionModel().select(tab);
-		} else {
-			showNotImplementedAlert();
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		logger.trace("Controller initialisation");
+		// Initialise model
+		model = new BinoclesModel();
+		try {
+			model.addNomenclature(new DefaultNomenclature());
+		} catch (UniqueIDException e) {
+			// First nomenclature added, cannot have exception
 		}
+		// Initialise the tree for text items
+		TreeItem<ReviewableContent> textTreeRoot = new TreeItem<>(new BookTreeRoot());
+		booksTree.setRoot(textTreeRoot);
+		booksTree.setCellFactory(p -> {
+			return new CustomTreeCell<ReviewableContent>()
+			        .decorate(Book.class, new BookDecorator().thenTitle().thenNomenclature())
+			        .decorate(Chapter.class, new ChapterDecorator().thenTitle().thenCommentsCount());
+		});
+		rebuildBooksTree();
+		// Initialise the tree for nomenclatures
+		TreeItem<NomenclatureItem> nomenclaturesTreeRoot = new TreeItem<>(new NomenclatureTreeRoot());
+		nomenclaturesTree.setRoot(nomenclaturesTreeRoot);
+		nomenclaturesTree.setCellFactory(p -> {
+			return new CustomTreeCell<NomenclatureItem>()
+			        .decorate(Nomenclature.class, new NomenclatureDecorator().thenName())
+			        .decorate(CommentType.class, new CommentTypeDecorator().thenName());
+		});
+		rebuildNomenclaturesTree();
+		// Set trees change listener
+		booksTree.setOnMouseClicked(
+		        TreeVarClickEventHandler.createDoubleClickHandler(booksTree, this::openTabItemAction));
+		booksTree.getSelectionModel().selectedItemProperty()
+		        .addListener((s, o, n) -> setTextElementsContextMenuStatus());
+		nomenclaturesTree.setOnMouseClicked(
+		        TreeVarClickEventHandler.createDoubleClickHandler(nomenclaturesTree, this::openTabItemAction));
+		nomenclaturesTree.getSelectionModel().selectedItemProperty()
+		        .addListener((s, o, n) -> setReviewElementsContextMenuStatus());
+		// Set tabs change listener
+		mainTabPane.getSelectionModel().selectedItemProperty().addListener((s, o, n) -> {
+			if (n != null)
+				((BinoclesTabPane) n.getContent()).updateControllerStatus(this);
+		});
+		// Other states configuration
+		mainTabPane.setTabDragPolicy(TabDragPolicy.REORDER);
+//		TODO nomenclaturesTree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+//		TODO booksTree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		// Add welcome tab if necessary
+		mainTabPane.getTabs().add(new Tab("Welcome", new WelcomeView()));
+		logger.trace("Controller initialisation finished");
+	}
+
+	@FXML
+	public void openAboutAction(ActionEvent event) {
+		new AboutDialog().display();
 	}
 
 	@FXML
 	public void openDocumentationAction(ActionEvent event) {
 		new Browser().open(BinoclesUIConstants.DOCUMENTATION_LINK);
+	}
+
+	/**
+	 * Opens a file and loads its content, replacing current content.
+	 * 
+	 * @param file file to open
+	 */
+	public void openFile(File file) {
+		importFile(file, true);
 	}
 
 	@FXML
@@ -646,41 +734,67 @@ public class BinoclesController implements Initializable, Controller {
 	}
 
 	/**
-	 * Opens a file and loads its content, replacing current content.
+	 * Opens a new tab from the books tree.
 	 * 
-	 * @param file
+	 * @param event
 	 */
-	public void openFile(File file) {
-		try {
-			FileImporter<BinoclesModel> importer = new BinoclesIOFactory().getFileImporter(file);
-			// No importer found
-			if (null == importer) {
-				Message msg = new StringFormattedMessage("Cannot open file '{}', file type is not managed.", file);
-				logger.error(msg);
-				showErrorAlert(msg.toString());
-			} else {
-				// Read file
-				BinoclesModel importedModel = importer.load(file);
-				// Replace model
-				this.model = importedModel;
-				try {
-					model.addNomenclature(new DefaultNomenclature());
-				} catch (UniqueIDException e) {
-					logger.atError().withThrowable(e).log("Error during import.");
-					showErrorAlert(
-					        "Nomenclature with name 'Default' already exists in the imported file. Import was successful but Default Nomenclature was replaced.");
-				}
-				// TODO (Later) Add to model: conflict management (same IDs?)
-				rebuildTrees();
-				setButtonsStatus();
-			}
-		} catch (IOException e) {
-			logger.atError().withThrowable(e).log("Could not read the selected file.");
-			showErrorAlert("Could not read the selected file.");
-		} catch (ImportException e) {
-			logger.atError().withThrowable(e).log("Could not import the selected file.");
-			showLongErrorAlert("Error while opening file", "Could not import the selected file.", e.getMessage());
+	public void openTabItemAction(TreeItem<?> item) {
+		Optional<Tab> existingTab = getTabWithItem(item.getValue());
+		if (existingTab.isPresent()) {
+			logger.debug("Switch to tab '{}'", existingTab.get().getText());
+			mainTabPane.getSelectionModel().select(existingTab.get());
+		} else {
+			createNewTab(item);
 		}
+	}
+
+	/**
+	 * Rebuilds the book tree according to model.
+	 */
+	public void rebuildBooksTree() {
+		// TODO Get all books that are expanded and expand them again after rebuilding
+		// Remove all existing books
+		booksTree.getRoot().getChildren().clear();
+		// TODO Order according to settings
+		// Add all books
+		for (Book book : model.getBooks()) {
+			TreeItem<ReviewableContent> bookNode = new TreeItem<>(book);
+			booksTree.getRoot().getChildren().add(bookNode);
+			// Add chapters to book
+			for (Chapter chapter : book.getChapters()) {
+				bookNode.getChildren().add(new TreeItem<ReviewableContent>(chapter));
+			}
+		}
+	}
+
+	/**
+	 * Rebuilds the nomenclature tree according to model.
+	 */
+	public void rebuildNomenclaturesTree() {
+		// Remove all existing nomenclatures
+		nomenclaturesTree.getRoot().getChildren().clear();
+		// TODO Order according to settings
+		// Add all nomenclatures
+		for (Nomenclature nomenclature : model.getNomenclatures()) {
+			if (!nomenclature.isDefaultNomenclature()) {
+				TreeItem<NomenclatureItem> nomenclatureNode = new TreeItem<>(nomenclature);
+				nomenclaturesTree.getRoot().getChildren().add(nomenclatureNode);
+				for (CommentType commentType : nomenclature.getTypes()) {
+					nomenclatureNode.getChildren().add(new TreeItem<NomenclatureItem>(commentType));
+				}
+			}
+		}
+	}
+
+	/**
+	 * Rebuilds the trees according to model.
+	 * 
+	 * @see BinoclesController#rebuildBooksTree()
+	 * @see #rebuildNomenclaturesTree()
+	 */
+	public void rebuildTrees() {
+		rebuildBooksTree();
+		rebuildNomenclaturesTree();
 	}
 
 	/**
@@ -695,12 +809,17 @@ public class BinoclesController implements Initializable, Controller {
 		nomenclaturesTreeMenuNewCommentType.setDisable(!model.hasCustomNomenclatures());
 	}
 
+	@Override
+	public void setParentController(Controller parent) {
+		// Nothing to do here
+	}
+
 	/**
 	 * Sets the review configuration tree's context menu items status according to current selection.
 	 */
 	public void setReviewElementsContextMenuStatus() {
 		nomenclaturesTreeMenuDelete.setDisable(nomenclaturesTree.getSelectionModel().isEmpty());
-		nomenclaturesTreeMenuEdit.setDisable(nomenclaturesTree.getSelectionModel().isEmpty());
+		nomenclaturesTreeMenuEdit.setDisable(nomenclaturesTree.getSelectionModel().getSelectedIndices().size() == 1);
 	}
 
 	/**
@@ -708,32 +827,7 @@ public class BinoclesController implements Initializable, Controller {
 	 */
 	public void setTextElementsContextMenuStatus() {
 		booksTreeMenuDelete.setDisable(booksTree.getSelectionModel().isEmpty());
-		booksTreeMenuEdit.setDisable(booksTree.getSelectionModel().isEmpty());
-	}
-
-	/**
-	 * Displays a small alert dialog that a feature is not implemented yet.
-	 */
-	public void showNotImplementedAlert() {
-		showNotImplementedAlert(null);
-	}
-
-	/**
-	 * Displays a small alert dialog that a feature is not implemented yet.
-	 * 
-	 * @param feature the feature name, null is no precision
-	 */
-	public void showNotImplementedAlert(String feature) {
-		Alert alert = new Alert(AlertType.INFORMATION);
-		alert.setTitle("Uhoh");
-		alert.setHeaderText(null);
-		if (feature != null) {
-			alert.setContentText(String
-			        .format("It seems the feature '%s' is not implemented yet, please come back later =)", feature));
-		} else {
-			alert.setContentText("It seems this feature is not implemented yet, please come back later =)");
-		}
-		alert.showAndWait();
+		booksTreeMenuEdit.setDisable(booksTree.getSelectionModel().getSelectedIndices().size() == 1);
 	}
 
 	/**
@@ -803,69 +897,27 @@ public class BinoclesController implements Initializable, Controller {
 	}
 
 	/**
-	 * Rebuilds the trees according to model.
+	 * Displays a small alert dialog that a feature is not implemented yet.
+	 */
+	public void showNotImplementedAlert() {
+		showNotImplementedAlert(null);
+	}
+
+	/**
+	 * Displays a small alert dialog that a feature is not implemented yet.
 	 * 
-	 * @see BinoclesController#rebuildBooksTree()
-	 * @see #rebuildNomenclaturesTree()
+	 * @param feature the feature name, null is no precision
 	 */
-	public void rebuildTrees() {
-		rebuildBooksTree();
-		rebuildNomenclaturesTree();
-	}
-
-	/**
-	 * Rebuilds the book tree according to model.
-	 */
-	public void rebuildBooksTree() {
-		// TODO Get all books that are expanded and expand them again after rebuilding
-		// Remove all existing books
-		booksTree.getRoot().getChildren().clear();
-		// TODO Order according to settings
-		// Add all books
-		for (Book book : model.getBooks()) {
-			TreeItem<ReviewableContent> bookNode = new TreeItem<>(book);
-			booksTree.getRoot().getChildren().add(bookNode);
-			// Add chapters to book
-			for (Chapter chapter : book.getChapters()) {
-				bookNode.getChildren().add(new TreeItem<ReviewableContent>(chapter));
-			}
+	public void showNotImplementedAlert(String feature) {
+		Alert alert = new Alert(AlertType.INFORMATION);
+		alert.setTitle("Uhoh");
+		alert.setHeaderText(null);
+		if (feature != null) {
+			alert.setContentText(String
+			        .format("It seems the feature '%s' is not implemented yet, please come back later =)", feature));
+		} else {
+			alert.setContentText("It seems this feature is not implemented yet, please come back later =)");
 		}
-	}
-
-	/**
-	 * Rebuilds the nomenclature tree according to model.
-	 */
-	public void rebuildNomenclaturesTree() {
-		// Remove all existing nomenclatures
-		nomenclaturesTree.getRoot().getChildren().clear();
-		// TODO Order according to settings
-		// Add all nomenclatures
-		for (Nomenclature nomenclature : model.getNomenclatures()) {
-			if (!nomenclature.isDefaultNomenclature()) {
-				TreeItem<NomenclatureItem> nomenclatureNode = new TreeItem<>(nomenclature);
-				nomenclaturesTree.getRoot().getChildren().add(nomenclatureNode);
-				for (CommentType commentType : nomenclature.getTypes()) {
-					nomenclatureNode.getChildren().add(new TreeItem<NomenclatureItem>(commentType));
-				}
-			}
-		}
-	}
-
-	/**
-	 * 
-	 * @return the current model
-	 */
-	public BinoclesModel getModel() {
-		return model;
-	}
-
-	@Override
-	public Controller getParentController() {
-		return null;
-	}
-
-	@Override
-	public void setParentController(Controller parent) {
-		// Nothing to do here
+		alert.showAndWait();
 	}
 }

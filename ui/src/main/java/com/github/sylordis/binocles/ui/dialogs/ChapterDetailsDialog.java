@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.github.sylordis.binocles.contracts.Identifiable;
 import com.github.sylordis.binocles.model.BinoclesModel;
 import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.model.text.Chapter;
@@ -12,7 +13,6 @@ import com.github.sylordis.binocles.ui.AppIcons;
 import com.github.sylordis.binocles.ui.components.CustomListCell;
 import com.github.sylordis.binocles.ui.doa.ChapterPropertiesAnswer;
 import com.github.sylordis.binocles.ui.functional.ListenerValidator;
-import com.github.sylordis.binocles.utils.Identifiable;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -105,7 +105,7 @@ public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterProperties
 		this.book = book;
 		this.chapter = chapter;
 		setIcon(AppIcons.ICON_CHAPTER);
-		setHeader("Please indicate the name of the new chapter in the chosen book");
+		setHeader("Please indicate the name of the chapter in the chosen book");
 	}
 
 	@Override
@@ -123,6 +123,7 @@ public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterProperties
 			fieldBookChoiceText.setText(book.getTitle());
 			fieldBookParent.setManaged(false);
 			fieldBookParent.setVisible(false);
+			fieldChapterContent.setEditable(false);
 		}
 		// Chapter title fields
 		Label labelChapterName = new Label("Chapter name");

@@ -1,6 +1,6 @@
 package com.github.sylordis.binocles.model.review;
 
-import com.github.sylordis.binocles.model.contracts.Hierarchical;
+import com.github.sylordis.binocles.contracts.Composite;
 
 /**
  * Dummy interface for trees.
@@ -8,6 +8,6 @@ import com.github.sylordis.binocles.model.contracts.Hierarchical;
  * @author sylordis
  *
  */
-public interface NomenclatureItem extends Hierarchical<NomenclatureItem> {
+public interface NomenclatureItem extends Composite<NomenclatureItem> {
 
 }

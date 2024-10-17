@@ -19,8 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import com.github.sylordis.binocles.contracts.Identifiable;
 import com.github.sylordis.binocles.model.review.Nomenclature;
-import com.github.sylordis.binocles.utils.Identifiable;
 import com.github.sylordis.binocles.utils.MapUtils;
 import com.github.sylordis.binocles.utils.exceptions.UniqueIDException;
 

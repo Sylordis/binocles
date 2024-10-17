@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.github.sylordis.binocles.utils.Identifiable;
+import com.github.sylordis.binocles.contracts.Identifiable;
 
 /**
  * 
@@ -21,7 +21,7 @@ class IdentifiableComparatorTest {
 	}
 	
 	/**
-	 * Test method for {@link com.github.sylordis.binocles.utils.comparators.IdentifiableComparator#compare(com.github.sylordis.binocles.utils.Identifiable, com.github.sylordis.binocles.utils.Identifiable)}.
+	 * Test method for {@link com.github.sylordis.binocles.utils.comparators.IdentifiableComparator#compare(com.github.sylordis.binocles.contracts.Identifiable, com.github.sylordis.binocles.contracts.Identifiable)}.
 	 */
 	@Test
 	void testCompare_Same() {
@@ -30,7 +30,7 @@ class IdentifiableComparatorTest {
 	}
 
 	/**
-	 * Test method for {@link com.github.sylordis.binocles.utils.comparators.IdentifiableComparator#compare(com.github.sylordis.binocles.utils.Identifiable, com.github.sylordis.binocles.utils.Identifiable)}.
+	 * Test method for {@link com.github.sylordis.binocles.utils.comparators.IdentifiableComparator#compare(com.github.sylordis.binocles.contracts.Identifiable, com.github.sylordis.binocles.contracts.Identifiable)}.
 	 */
 	@Test
 	void testCompare_Lower() {
@@ -41,7 +41,7 @@ class IdentifiableComparatorTest {
 	}
 
 	/**
-	 * Test method for {@link com.github.sylordis.binocles.utils.comparators.IdentifiableComparator#compare(com.github.sylordis.binocles.utils.Identifiable, com.github.sylordis.binocles.utils.Identifiable)}.
+	 * Test method for {@link com.github.sylordis.binocles.utils.comparators.IdentifiableComparator#compare(com.github.sylordis.binocles.contracts.Identifiable, com.github.sylordis.binocles.contracts.Identifiable)}.
 	 */
 	@Test
 	void testCompare_Higher() {
@@ -52,7 +52,7 @@ class IdentifiableComparatorTest {
 	}
 
 	/**
-	 * Test method for {@link com.github.sylordis.binocles.utils.comparators.IdentifiableComparator#compare(com.github.sylordis.binocles.utils.Identifiable, com.github.sylordis.binocles.utils.Identifiable)}.
+	 * Test method for {@link com.github.sylordis.binocles.utils.comparators.IdentifiableComparator#compare(com.github.sylordis.binocles.contracts.Identifiable, com.github.sylordis.binocles.contracts.Identifiable)}.
 	 */
 	@Test
 	void testCompare_NoIDHigher() {
@@ -61,7 +61,7 @@ class IdentifiableComparatorTest {
 	}
 
 	/**
-	 * Test method for {@link com.github.sylordis.binocles.utils.comparators.IdentifiableComparator#compare(com.github.sylordis.binocles.utils.Identifiable, com.github.sylordis.binocles.utils.Identifiable)}.
+	 * Test method for {@link com.github.sylordis.binocles.utils.comparators.IdentifiableComparator#compare(com.github.sylordis.binocles.contracts.Identifiable, com.github.sylordis.binocles.contracts.Identifiable)}.
 	 */
 	@Test
 	void testCompare_NoIDLower() {

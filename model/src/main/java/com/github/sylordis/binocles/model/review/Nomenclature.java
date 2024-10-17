@@ -4,7 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.sylordis.binocles.utils.Identifiable;
+import com.github.sylordis.binocles.contracts.Identifiable;
+import com.github.sylordis.binocles.contracts.SelfCopying;
 import com.google.common.base.Preconditions;
 
 /**
@@ -13,7 +14,7 @@ import com.google.common.base.Preconditions;
  * @author Sylordis
  *
  */
-public class Nomenclature implements NomenclatureItem, Identifiable, Serializable {
+public class Nomenclature implements NomenclatureItem, Identifiable, Serializable, SelfCopying<Nomenclature> {
 
 	private static final long serialVersionUID = 4661489455335692980L;
 	/**
@@ -140,6 +141,11 @@ public class Nomenclature implements NomenclatureItem, Identifiable, Serializabl
 	 */
 	public boolean isDefaultNomenclature() {
 		return false;
+	}
+
+	@Override
+	public void copy(Nomenclature item) {
+		this.name = item.name;
 	}
 
 }

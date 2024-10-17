@@ -81,7 +81,7 @@ public class TextElementDeletionConfirmationAlert extends Alert {
 			if (rootItem.hasChildren()) {
 				root.setExpanded(true);
 				rootItem.getChildren().forEach(c -> {
-					TreeItem<ReviewableContent> item = new TreeItem<>(c);
+					TreeItem<ReviewableContent> item = new TreeItem<>((ReviewableContent) c);
 					root.getChildren().add(item);
 				});
 			}

@@ -1,4 +1,4 @@
-package com.github.sylordis.binocles.utils;
+package com.github.sylordis.binocles.utils.contracts;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,6 +19,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import com.github.sylordis.binocles.contracts.Identifiable;
 import com.github.sylordis.binocles.utils.exceptions.UniqueIDException;
 
 class IdentifiableTest {

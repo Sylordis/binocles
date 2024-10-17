@@ -1,4 +1,4 @@
-package com.github.sylordis.binocles.utils;
+package com.github.sylordis.binocles.contracts;
 
 import java.util.Collection;
 

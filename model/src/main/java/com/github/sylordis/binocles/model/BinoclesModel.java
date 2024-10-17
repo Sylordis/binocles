@@ -9,10 +9,10 @@ import java.util.function.Predicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.github.sylordis.binocles.contracts.Identifiable;
 import com.github.sylordis.binocles.model.review.DefaultNomenclature;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.text.Book;
-import com.github.sylordis.binocles.utils.Identifiable;
 import com.github.sylordis.binocles.utils.exceptions.UniqueIDException;
 import com.google.common.base.Preconditions;
 
@@ -299,4 +299,5 @@ public class BinoclesModel {
 			}
 		}
 	}
+
 }

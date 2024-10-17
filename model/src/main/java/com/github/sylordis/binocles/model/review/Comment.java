@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import com.github.sylordis.binocles.utils.SelfCopying;
+import com.github.sylordis.binocles.contracts.SelfCopying;
 import com.google.common.base.Preconditions;
 
 /**

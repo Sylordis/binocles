@@ -1,6 +1,7 @@
 package com.github.sylordis.binocles.ui.dialogs;
 
 import com.github.sylordis.binocles.model.BinoclesModel;
+import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.ui.AppIcons;
 import com.github.sylordis.binocles.ui.functional.ListenerValidator;
 
@@ -15,12 +16,16 @@ import javafx.scene.control.TextField;
  * @author sylordis
  *
  */
-public class NomenclatureDetailsDialog extends AbstractAnswerDialog<String> {
+public class NomenclatureDetailsDialog extends AbstractAnswerDialog<Nomenclature> {
 
 	/**
 	 * Text field for the book name.
 	 */
 	private TextField fieldNomenclatureTitle;
+	/**
+	 * Current nomenclature for edit.
+	 */
+	private Nomenclature nomenclature;
 
 	/**
 	 * Creates a new book creation dialog.
@@ -28,9 +33,21 @@ public class NomenclatureDetailsDialog extends AbstractAnswerDialog<String> {
 	 * @param model
 	 */
 	public NomenclatureDetailsDialog(BinoclesModel model) {
-		super("Create a new nomenclature", model);
+		this(model, null);
+	}
+
+	/**
+	 * Creates a new book editing dialog.
+	 * 
+	 * @param model
+	 * @param nomenclature nomenclature for edition, null for new object
+	 */
+	public NomenclatureDetailsDialog(BinoclesModel model, Nomenclature nomenclature) {
+		super(nomenclature == null ? "Create a new nomenclature"
+		        : "Editing nomenclature \"" + nomenclature.getName() + "\"", model);
 		setIcon(AppIcons.ICON_NOMENCLATURE);
-		setHeader("Please indicate the name of the new nomenclature.");
+		setHeader("Please indicate the name of the nomenclature.");
+		this.nomenclature = nomenclature;
 	}
 
 	@Override
@@ -39,6 +56,9 @@ public class NomenclatureDetailsDialog extends AbstractAnswerDialog<String> {
 		Label labelTitle = new Label("Title");
 		fieldNomenclatureTitle = new TextField();
 		// Set dialog content
+		if (nomenclature != null) {
+			fieldNomenclatureTitle.setText(nomenclature.getName());
+		}
 		addFormFeedback();
 		getGridPane().addRow(1, labelTitle, fieldNomenclatureTitle);
 		// Set up listeners
@@ -46,8 +66,7 @@ public class NomenclatureDetailsDialog extends AbstractAnswerDialog<String> {
 		        .validIf("Nomenclature name can't be blank or empty.", (o, n) -> !n.isBlank())
 		        .validIf("Nomenclature with the same name already exists (case insensitive)",
 		                (o, n) -> !getModel().hasNomenclature(n))
-		        .feed(this::setFeedback).onEither(b -> setConfirmButtonDisable(!b))
-		        .andThen(this::sizeToScene);
+		        .feed(this::setFeedback).onEither(b -> setConfirmButtonDisable(!b)).andThen(this::sizeToScene);
 		fieldNomenclatureTitle.textProperty().addListener(nomenclatureNameUIValidator);
 		// Set up components status
 		getDialog().getDialogPane().lookupButton(getConfirmButton()).setDisable(true);
@@ -57,10 +76,10 @@ public class NomenclatureDetailsDialog extends AbstractAnswerDialog<String> {
 	}
 
 	@Override
-	public String convertResult(ButtonType button) {
-		String answer = null;
+	public Nomenclature convertResult(ButtonType button) {
+		Nomenclature answer = null;
 		if (button.equals(getConfirmButton())) {
-			answer = fieldNomenclatureTitle.getText().trim();
+			answer = new Nomenclature(fieldNomenclatureTitle.getText().trim());
 		}
 		return answer;
 	}
