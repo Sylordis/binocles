@@ -4,8 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.sylordis.binocles.contracts.Identifiable;
-import com.github.sylordis.binocles.contracts.SelfCopying;
+import com.github.sylordis.binocles.utils.contracts.Identifiable;
+import com.github.sylordis.binocles.utils.contracts.SelfCopying;
 import com.google.common.base.Preconditions;
 
 /**

@@ -1,4 +1,4 @@
-package com.github.sylordis.binocles.contracts;
+package com.github.sylordis.binocles.utils.contracts;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +40,7 @@ public interface Composite<T> {
 	 * 
 	 * @return list of children or null if it's not supposed to have any.
 	 */
-	default List<? extends T> getChildren() {
+	default List<? extends Composite<T>> getChildren() {
 		return null;
 	}
 
@@ -51,7 +51,6 @@ public interface Composite<T> {
 	 * @param parent
 	 * @return true if the current object is a transitive child of the parent, false otherwise.
 	 */
-	@SuppressWarnings("unchecked")
 	default boolean isChildOf(Composite<T> parent) {
 		boolean is = false;
 		if (parent != null && parent.hasChildren()) {

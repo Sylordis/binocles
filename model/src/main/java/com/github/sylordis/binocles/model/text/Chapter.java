@@ -1,7 +1,7 @@
 package com.github.sylordis.binocles.model.text;
 
-import com.github.sylordis.binocles.contracts.Identifiable;
-import com.github.sylordis.binocles.contracts.SelfCopying;
+import com.github.sylordis.binocles.utils.contracts.Identifiable;
+import com.github.sylordis.binocles.utils.contracts.SelfCopying;
 
 /**
  * Represents a chapter in a book, with a possible title and its content.

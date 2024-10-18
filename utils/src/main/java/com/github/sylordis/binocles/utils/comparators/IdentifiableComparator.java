@@ -2,7 +2,7 @@ package com.github.sylordis.binocles.utils.comparators;
 
 import java.util.Comparator;
 
-import com.github.sylordis.binocles.contracts.Identifiable;
+import com.github.sylordis.binocles.utils.contracts.Identifiable;
 
 /**
  * Comparator on {@link Identifiable} class. An {@link Identifiable} i1 will be located before i2 if

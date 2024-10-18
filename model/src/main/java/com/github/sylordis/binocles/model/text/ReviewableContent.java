@@ -6,9 +6,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import com.github.sylordis.binocles.contracts.Composite;
-import com.github.sylordis.binocles.contracts.Identifiable;
 import com.github.sylordis.binocles.model.review.Comment;
+import com.github.sylordis.binocles.utils.contracts.Composite;
+import com.github.sylordis.binocles.utils.contracts.Identifiable;
 
 /**
  * Reviewable content is a class to be inherited for all content that can hold comments. It will

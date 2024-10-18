@@ -1,4 +1,4 @@
-package com.github.sylordis.binocles.contracts;
+package com.github.sylordis.binocles.utils.contracts;
 
 /**
  * A self copying object is one that can take another instance of the same class and copy all its

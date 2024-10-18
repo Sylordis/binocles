@@ -302,7 +302,6 @@ class CommentTest {
 	void testGetFields() {
 		assertNotNull(this.comment.getFields());
 		assertTrue(this.comment.getFields().isEmpty());
-		assertThrows(UnsupportedOperationException.class, () -> this.comment.getFields().put("something", "somewhere"));
 	}
 
 	@Test

@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.github.sylordis.binocles.contracts.Identifiable;
-import com.github.sylordis.binocles.contracts.SelfCopying;
 import com.github.sylordis.binocles.model.review.Nomenclature;
+import com.github.sylordis.binocles.utils.contracts.Identifiable;
+import com.github.sylordis.binocles.utils.contracts.SelfCopying;
 import com.github.sylordis.binocles.utils.exceptions.UniqueIDException;
 import com.google.common.base.Preconditions;
 

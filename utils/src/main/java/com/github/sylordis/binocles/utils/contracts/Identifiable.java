@@ -1,4 +1,4 @@
-package com.github.sylordis.binocles.contracts;
+package com.github.sylordis.binocles.utils.contracts;
 
 import java.util.Collection;
 
@@ -13,7 +13,10 @@ import com.github.sylordis.binocles.utils.exceptions.UniqueIDException;
 public interface Identifiable {
 
 	/**
-	 * Default ID for items that cannot provide an ID based on their data.
+	 * Default ID for items that cannot provide an ID based on their data. According to definition, it
+	 * is defined as not having an ID.
+	 * 
+	 * @see #hasId()
 	 */
 	public final static String EMPTY_ID = "";
 
@@ -28,7 +31,7 @@ public interface Identifiable {
 	}
 
 	/**
-	 * Retrieves the unique ID of the entity.
+	 * Retrieves the unique ID of the entity. This should use {@link #formatId(String)}.
 	 * 
 	 * @return
 	 */
@@ -41,7 +44,7 @@ public interface Identifiable {
 	 * @return true if the ID of both entities match.
 	 */
 	default boolean is(Identifiable i) {
-		return null != i && getId().equals(i.getId());
+		return null != i && hasId() && getId().equals(i.getId());
 	}
 
 	/**
@@ -51,7 +54,7 @@ public interface Identifiable {
 	 * @return true if the ID of both entities match.
 	 */
 	default boolean is(String name) {
-		return null != name && getId().equals(formatId(name));
+		return null != name && hasId() && getId().equals(formatId(name));
 	}
 
 	/**

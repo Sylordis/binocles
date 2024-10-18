@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.github.sylordis.binocles.contracts.Identifiable;
 import com.github.sylordis.binocles.model.BinoclesModel;
 import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.model.text.Chapter;
@@ -13,6 +12,7 @@ import com.github.sylordis.binocles.ui.AppIcons;
 import com.github.sylordis.binocles.ui.components.CustomListCell;
 import com.github.sylordis.binocles.ui.doa.ChapterPropertiesAnswer;
 import com.github.sylordis.binocles.ui.functional.ListenerValidator;
+import com.github.sylordis.binocles.utils.contracts.Identifiable;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;

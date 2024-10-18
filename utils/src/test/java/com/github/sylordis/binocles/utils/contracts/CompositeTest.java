@@ -1,4 +1,4 @@
-package com.github.sylordis.binocles.contracts;
+package com.github.sylordis.binocles.utils.contracts;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
