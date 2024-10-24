@@ -23,7 +23,7 @@
 	-fx-padding: 5px;
 }
 .binocles-pane .body {
-	-fx-padding: 5px 0 0 10px;
+	-fx-padding: 5px 5px 0 10px;
 }
 .buttonicon {
 	-fx-background-color: transparent;
@@ -86,10 +86,10 @@
 .comment-box .tool-bar .button:hover .image-view {
 	-fx-opacity: 1.0;
 }
-GridPane.list-grid {
+.list-grid {
 	-fx-hgap: 10px;
 }
-GridPane.form-dialog {
+.form-dialog {
 	-fx-border-insets: 20 150 10 10;
     -fx-hgap: 5px;
     -fx-vgap: 5px;
@@ -97,13 +97,16 @@ GridPane.form-dialog {
 .form-dialog {
 	-fx-padding: 10px;
 }
-.form-dialog .zone-separator {
-	-fx-margin: 5px 0 5px 0;
-	-fx-padding: 5px 0 5px 0;
+.form-dialog .controls {
+	-fx-spacing: 5px;
 }
 .form-dialog .label {
 	-fx-font-weight: bold;
 	-fx-padding-right: 5px;
+}
+.form-dialog .zone-separator {
+	-fx-margin: 5px 0 5px 0;
+	-fx-padding: 5px 0 5px 0;
 }
 .header .tool-bar {
 	-fx-background-color: transparent;

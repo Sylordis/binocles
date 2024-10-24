@@ -9,11 +9,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -42,8 +45,7 @@ class IdentifiableTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link Identifiable#is(Identifiable)}.
+	 * Test method for {@link Identifiable#is(Identifiable)}.
 	 */
 	@Test
 	void testIsIdentifiable_withoutFormat() {
@@ -53,8 +55,7 @@ class IdentifiableTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link Identifiable#is(Identifiable)}.
+	 * Test method for {@link Identifiable#is(Identifiable)}.
 	 */
 	@ParameterizedTest
 	@CsvSource(value = { "foo,Foo", "FOO,foo", "FOO,FOO", "FoO,fOo" })
@@ -64,8 +65,7 @@ class IdentifiableTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link Identifiable#is(Identifiable)}.
+	 * Test method for {@link Identifiable#is(Identifiable)}.
 	 */
 	@ParameterizedTest
 	@CsvSource(value = { "foo,bar", "foo,FOO", "Foo,foo", "foo," + Identifiable.EMPTY_ID,
@@ -75,8 +75,7 @@ class IdentifiableTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link Identifiable#is(java.lang.String)}.
+	 * Test method for {@link Identifiable#is(java.lang.String)}.
 	 */
 	@ParameterizedTest
 	@CsvSource(value = { "foo,Foo", "FOO,foo", "FOO,FOO", "FoO,fOo" })
@@ -85,8 +84,7 @@ class IdentifiableTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link Identifiable#is(java.lang.String)}.
+	 * Test method for {@link Identifiable#is(java.lang.String)}.
 	 */
 	@ParameterizedTest
 	@CsvSource(value = { "foo,BAR", "FOO,bar" })
@@ -95,8 +93,7 @@ class IdentifiableTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link Identifiable#is(java.lang.String)}.
+	 * Test method for {@link Identifiable#is(java.lang.String)}.
 	 */
 	@ParameterizedTest
 	@NullAndEmptySource
@@ -105,8 +102,7 @@ class IdentifiableTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link Identifiable#is(java.lang.String)}.
+	 * Test method for {@link Identifiable#is(java.lang.String)}.
 	 */
 	@ParameterizedTest
 	@NullAndEmptySource
@@ -133,8 +129,7 @@ class IdentifiableTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link Identifiable#formatId(java.lang.String)}.
+	 * Test method for {@link Identifiable#formatId(java.lang.String)}.
 	 */
 	@ParameterizedTest
 	@CsvSource(value = { "foo,foo", "FOO,foo", "   BaR   ,bar" })
@@ -143,8 +138,7 @@ class IdentifiableTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link Identifiable#formatId(java.lang.String)}.
+	 * Test method for {@link Identifiable#formatId(java.lang.String)}.
 	 */
 	@ParameterizedTest
 	@NullAndEmptySource
@@ -153,8 +147,7 @@ class IdentifiableTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link Identifiable#checkIfUnique(Identifiable, java.util.Collection)}.
+	 * Test method for {@link Identifiable#checkIfUnique(Identifiable, java.util.Collection)}.
 	 * 
 	 * @throws UniqueIDException
 	 */
@@ -165,8 +158,7 @@ class IdentifiableTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link Identifiable#checkIfUnique(Identifiable, java.util.Collection)}.
+	 * Test method for {@link Identifiable#checkIfUnique(Identifiable, java.util.Collection)}.
 	 */
 	@ParameterizedTest
 	@ValueSource(strings = { "WE", "  are  ", "   warriors", "BorN", "\tfrom", "the   ", "LiGhT" })
@@ -176,8 +168,7 @@ class IdentifiableTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link Identifiable#checkIfUnique(Identifiable, java.util.Collection)}.
+	 * Test method for {@link Identifiable#checkIfUnique(Identifiable, java.util.Collection)}.
 	 * 
 	 * @throws UniqueIDException
 	 */
@@ -187,13 +178,31 @@ class IdentifiableTest {
 		assertDoesNotThrow(() -> Identifiable.checkIfUnique(new Id("Hello"), haystack));
 	}
 
+	@ParameterizedTest
+	@MethodSource("provideCheckNewNameUniquenessValidityAmongParent")
+	void testCheckNewNameUniquenessValidityAmongParent(Parent parent, Id id, String name, boolean expected) {
+		assertEquals(expected, Identifiable.checkNewNameUniquenessValidityAmongParent(name, parent, id, (p,s) -> p.hasChild(s)));
+	}
+
+	private static Stream<Arguments> provideCheckNewNameUniquenessValidityAmongParent() {
+		return Stream.of(Arguments.of(null, null, "So Alone", true),
+				Arguments.of(new Parent(List.of()), null, "First", true),
+				Arguments.of(new Parent(makeIdsOf("First")), null, "First", false),
+				Arguments.of(new Parent(makeIdsOf("First", "Second", "Third")), null, "Fourth", true),
+				Arguments.of(null, new Id("New born"), "Changrilah", true),
+				Arguments.of(new Parent(List.of()), new Id("Fifth"), "Fifth", true),
+				Arguments.of(new Parent(makeIdsOf("sixth")), new Id("sixth"), "Sixth", true),
+				Arguments.of(new Parent(makeIdsOf("First", "Second", "Third")), new Id("first"), "second", false)
+			);
+	}
+
 	/**
 	 * Creates a list of {@link Id} from a list of string IDs.
 	 * 
 	 * @param ids
 	 * @return a list of items
 	 */
-	private List<Id> makeIdsOf(String... ids) {
+	private static List<Id> makeIdsOf(String... ids) {
 		return Arrays.stream(ids).map(i -> new Id(i)).collect(Collectors.toList());
 	}
 
@@ -213,5 +222,12 @@ class IdentifiableTest {
 			return id;
 		}
 
+	}
+
+	record Parent(List<? extends Identifiable> children) {
+
+		public boolean hasChild(String id) {
+			return this.children.stream().anyMatch(c -> c.is(id));
+		}
 	}
 }

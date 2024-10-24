@@ -10,6 +10,7 @@ import java.util.Objects;
 
 import com.github.sylordis.binocles.utils.MapUtils;
 import com.github.sylordis.binocles.utils.contracts.Identifiable;
+import com.github.sylordis.binocles.utils.contracts.SelfCopying;
 import com.google.common.base.Preconditions;
 
 /**
@@ -19,7 +20,7 @@ import com.google.common.base.Preconditions;
  * @author Sylordis
  *
  */
-public class CommentType implements Serializable, NomenclatureItem, Identifiable {
+public class CommentType implements Serializable, NomenclatureItem, Identifiable, SelfCopying<CommentType> {
 
 	/**
 	 *
@@ -74,7 +75,7 @@ public class CommentType implements Serializable, NomenclatureItem, Identifiable
 
 	@Override
 	public String toString() {
-		return name;
+		return name + "[description=" + description + ", fields=" + fields.keySet() + ", styles=" + styles + "]";
 	}
 
 	@Override
@@ -294,6 +295,14 @@ public class CommentType implements Serializable, NomenclatureItem, Identifiable
 		this.styles.clear();
 		if (null != styles)
 			this.styles.putAll(styles);
+	}
+
+	@Override
+	public void copy(CommentType item) {
+		this.description = item.description;
+		this.fields = item.fields;
+		this.name = item.name;
+		this.styles = item.styles;
 	}
 
 }

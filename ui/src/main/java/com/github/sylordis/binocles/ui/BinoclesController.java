@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -57,6 +59,7 @@ import com.github.sylordis.binocles.utils.exceptions.ImportException;
 import com.github.sylordis.binocles.utils.exceptions.UniqueIDException;
 import com.github.sylordis.binocles.utils.io.FileExporter;
 import com.github.sylordis.binocles.utils.io.FileImporter;
+import com.google.common.base.Objects;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -448,7 +451,7 @@ public class BinoclesController implements Initializable, Controller {
 		if (answer.isPresent()) {
 			Optional<Tab> optTab = getTabWithItem(chapter);
 			Chapter chapterModified = answer.get().chapter();
-			logger.info("Edited chapter '{}' in '{}' => {}", chapter.getTitle(), book.getTitle(), answer.get());
+			logger.info("Edited chapter '{}' in '{}' => {}", chapter.getTitle(), book.getTitle(), chapterModified);
 			chapter.copy(chapterModified);
 			booksTree.refresh();
 			if (optTab.isPresent()) {
@@ -466,8 +469,20 @@ public class BinoclesController implements Initializable, Controller {
 	 * @param nomenclature nomenclature the comment type is part of
 	 */
 	public void editCommentType(CommentType commentType, Nomenclature nomenclature) {
-		// TODO Auto-generated method stub
-		showNotImplementedAlert("Edit comment type");
+		CommentTypeDetailsDialog dialog = new CommentTypeDetailsDialog(model, nomenclature, commentType);
+		Optional<CommentTypePropertiesAnswer> answer = dialog.display();
+		if (answer.isPresent()) {
+			Optional<Tab> optTab = getTabWithItem(nomenclature);
+			CommentType modified = answer.get().commentType();
+			logger.info("Edited comment type '{}' in '{}' => {}", commentType.getName(), nomenclature.getName(),
+			        modified);
+			commentType.copy(modified);
+			nomenclaturesTree.refresh();
+			if (optTab.isPresent())
+				((BinoclesTabPane) optTab.get().getContent()).updateControllerStatus(this);
+			getTabViewsOfType(ChapterView.class, v -> Objects.equal(v.getBook().getNomenclature(), nomenclature))
+			        .forEach(v -> v.updateControllerStatus(this));
+		}
 	}
 
 	/**
@@ -598,6 +613,24 @@ public class BinoclesController implements Initializable, Controller {
 		                && ((BinoclesTabPane) t.getContent()).getItem().equals(o))
 		        .findFirst();
 		return needle;
+	}
+
+	/**
+	 * Collects all open tabs that contain given view and returns their actual views.
+	 * 
+	 * @param <T>  type of the views
+	 * @param type type of the views
+	 * @return a list of views of the provided type.
+	 */
+	@SuppressWarnings("unchecked")
+	public <T extends BinoclesTabPane> List<T> getTabViewsOfType(Class<T> type, Predicate<T> filter) {
+		Stream<T> stream = mainTabPane.getTabs().stream().filter(t -> t.getContent().getClass().equals(type))
+		        .map(t -> (T) t.getContent());
+		if (filter != null)
+			stream = stream.filter(filter);
+		List<T> result = stream.collect(Collectors.toList());
+		logger.debug("Collecting all tabs of '{}' ({})", type.getSimpleName(), result.size());
+		return result;
 	}
 
 	@FXML
@@ -819,7 +852,7 @@ public class BinoclesController implements Initializable, Controller {
 	 */
 	public void setReviewElementsContextMenuStatus() {
 		nomenclaturesTreeMenuDelete.setDisable(nomenclaturesTree.getSelectionModel().isEmpty());
-		nomenclaturesTreeMenuEdit.setDisable(nomenclaturesTree.getSelectionModel().getSelectedIndices().size() == 1);
+		nomenclaturesTreeMenuEdit.setDisable(nomenclaturesTree.getSelectionModel().getSelectedIndices().size() != 1);
 	}
 
 	/**
@@ -827,7 +860,7 @@ public class BinoclesController implements Initializable, Controller {
 	 */
 	public void setTextElementsContextMenuStatus() {
 		booksTreeMenuDelete.setDisable(booksTree.getSelectionModel().isEmpty());
-		booksTreeMenuEdit.setDisable(booksTree.getSelectionModel().getSelectedIndices().size() == 1);
+		booksTreeMenuEdit.setDisable(booksTree.getSelectionModel().getSelectedIndices().size() != 1);
 	}
 
 	/**

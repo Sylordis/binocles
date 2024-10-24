@@ -1,4 +1,4 @@
-package com.github.sylordis.binocles.ui.listeners;
+package com.github.sylordis.binocles.ui.functional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.github.sylordis.binocles.ui.functional.ListenerValidator;
 import com.github.sylordis.binocles.ui.functional.ListenerValidator.FeedbackBehaviour;
 
 import javafx.beans.value.ObservableValue;

@@ -22,7 +22,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Text;
 
 /**
  * Dialog to create a new or edit a chapter.
@@ -105,26 +104,14 @@ public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterProperties
 		this.book = book;
 		this.chapter = chapter;
 		setIcon(AppIcons.ICON_CHAPTER);
-		setHeader("Please indicate the name of the chapter in the chosen book");
+		setHeader("Please indicate the name of the chapter in the chosen book.");
 	}
 
 	@Override
 	public void build() {
 		// Book choice field
-		Label labelBookChoice = new Label();
-		Text fieldBookChoiceText = new Text();
+		Label labelBookChoice = new Label("Add chapter to...");
 		fieldBookParent = new ComboBox<>(FXCollections.observableList(new ArrayList<>(getModel().getBooks())));
-		if (chapter == null) {
-			labelBookChoice.setText("Add chapter to...");
-			fieldBookChoiceText.setManaged(false);
-			fieldBookChoiceText.setVisible(false);
-		} else {
-			labelBookChoice.setText("Book");
-			fieldBookChoiceText.setText(book.getTitle());
-			fieldBookParent.setManaged(false);
-			fieldBookParent.setVisible(false);
-			fieldChapterContent.setEditable(false);
-		}
 		// Chapter title fields
 		Label labelChapterName = new Label("Chapter name");
 		fieldChapterName = new TextField();
@@ -133,7 +120,7 @@ public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterProperties
 		fieldChapterContent = new TextArea();
 		// Set dialog content
 		addFormFeedback();
-		getGridPane().addRow(1, labelBookChoice, chapter == null ? fieldBookParent : fieldBookChoiceText);
+		getGridPane().addRow(1, labelBookChoice, fieldBookParent);
 		getGridPane().addRow(2, labelChapterName, fieldChapterName);
 		getGridPane().addRow(3, labelChapterContent);
 		GridPane.setColumnSpan(labelChapterContent, GridPane.REMAINING);
@@ -143,7 +130,7 @@ public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterProperties
 		ListenerValidator<String> chapterNameUIValidator = new ListenerValidator<String>()
 		        .validIf("Chapter name cannot be blank or empty.", (o, n) -> !n.isBlank())
 		        .validIf("Chapter with the same name already exists in the book (case insensitive).",
-		                (o, n) -> checkChapterNameUniquenessValidity(n))
+		                (o, n) -> Identifiable.checkNewNameUniquenessValidityAmongParent(n, book, chapter, (b,s) -> b.hasChapter(s)))
 		        .feed(this::setChapterNameFeedback).onEither(this::setChapterNameValid).andThen(this::updateFormStatus);
 		ListenerValidator<Book> bookParentUIValidator = new ListenerValidator<Book>()
 		        .validIf("You have to pick a book to add this chapter to.", (o, n) -> null != n)
@@ -182,38 +169,17 @@ public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterProperties
 		}
 		// If edit, set components values
 		if (chapter != null) {
+			labelBookChoice.setText("Book");
+			fieldBookParent.setDisable(false);
 			fieldChapterName.setText(chapter.getTitle());
 			fieldChapterContent.setText(chapter.getContent());
+			fieldChapterContent.setEditable(false);
 		}
 		// Fire listeners
 		chapterNameUIValidator.changed(null, null, fieldChapterName.getText());
 		chapterContentUIValidator.changed(null, null, fieldChapterContent.getText());
 		// Focus on book name field
 		Platform.runLater(() -> fieldChapterName.requestFocus());
-	}
-
-	/**
-	 * Checks if the current chapter name is valid.<br/>
-	 * Conditions for being valid are:
-	 * <ul>
-	 * <li>If there's no book selected, this doesn't apply and therefore considered valid.</li>
-	 * <li>It's a chapter creation dialog (chapter == null) and the title doesn't match any known
-	 * chapter's title from the book.</li>
-	 * <li>It's a chapter editing dialog (chapter != null) and the title as id doesn't match any known
-	 * chapter's id from the book except if it's the same chapter.</li>
-	 * </ul>
-	 * 
-	 * @param title new chapter title
-	 * @return
-	 */
-	private boolean checkChapterNameUniquenessValidity(String title) {
-		String id = Identifiable.formatId(title);
-		return // No book selected
-		this.book == null
-		        // New dialog & book doesn't have the chapter
-		        || (chapter == null && !book.hasChapter(id))
-				// Edit dialog, id(title) == chapter's id
-		        || (chapter != null && (chapter.is(id) || !book.hasChapter(id)));
 	}
 
 	@Override

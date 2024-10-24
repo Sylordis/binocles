@@ -22,7 +22,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class NomenclatureCommentTypeChangeTest {
+class CommentTypeMigrationTest {
 
 	@Mock(answer = Answers.RETURNS_DEEP_STUBS)
 	private Comment comment;
@@ -34,12 +34,12 @@ class NomenclatureCommentTypeChangeTest {
 	/**
 	 * Object under test.
 	 */
-	private NomenclatureCommentTypeChange change;
+	private CommentTypeMigration change;
 
 	@BeforeEach
 	void setUp() throws Exception {
 		this.subst = Map.of("a", "x", "b", "y");
-		change = new NomenclatureCommentTypeChange(future);
+		change = new CommentTypeMigration(future);
 	}
 
 	@Test
@@ -49,14 +49,14 @@ class NomenclatureCommentTypeChangeTest {
 
 	@Test
 	void testNomenclatureCommentTypeChangeCommentTypeMapOfStringString() {
-		change = new NomenclatureCommentTypeChange(future, subst);
+		change = new CommentTypeMigration(future, subst);
 		assertNotNull(change);
 		assertEquals(subst, change.getSubstitutions());
 	}
 
 	@Test
 	void testNomenclatureCommentTypeChangeCommentTypeMapOfStringString_Null() {
-		change = new NomenclatureCommentTypeChange(future, null);
+		change = new CommentTypeMigration(future, null);
 		assertNotNull(change);
 		assertNotNull(change.getSubstitutions());
 		assertTrue(change.getSubstitutions().isEmpty());
@@ -135,7 +135,7 @@ class NomenclatureCommentTypeChangeTest {
 
 	@Test
 	void testSetSubstitutions_WithoutSubstDefinedOnConstructor() {
-		change = new NomenclatureCommentTypeChange(future);
+		change = new CommentTypeMigration(future);
 		assertNotNull(change.getSubstitutions());
 		assertTrue(change.getSubstitutions().isEmpty());
 	}

@@ -2,6 +2,7 @@ package com.github.sylordis.binocles.utils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -130,6 +131,50 @@ public final class MapUtils {
 			else
 				map.put(key, value);
 		}
+	}
+
+	/**
+	 * Checks that a map contains the provided key and/or value (if not null).
+	 * 
+	 * @param <K>            Type of map's keys
+	 * @param <V>            Type of map's values
+	 * @param <L>            Type of searched keys
+	 * @param <W>            Type of searched values
+	 * @param map            Map to search in
+	 * @param key            Key to search for in the map
+	 * @param value          Value to search for in the map if the key is contained, provide null if the
+	 *                       value doesn't matter
+	 * @param keyTransformer Transformer for the key type
+	 * @param valueMatcher   Matcher for the provided value and the one contained in the map
+	 * @return true if the map contains the desired key and the searched value is null or matched by the
+	 *         predicate
+	 */
+	public static <K, V, L, W> boolean containsKeyAndValue(Map<K, V> map, L key, W value, Function<L, K> keyTransformer,
+	        BiPredicate<V, W> valueMatcher) {
+		return map.containsKey(keyTransformer.apply(key))
+		        && (value == null || valueMatcher.test(map.get(keyTransformer.apply(key)), value));
+	}
+
+	/**
+	 * Checks that a map contains the provided key and/or value (if not null).
+	 * 
+	 * For this method, the type of the keys is the same as the searched key's
+	 * (<code>keyTransformer</code> is identity).
+	 * 
+	 * @param <K>          Type of map's keys
+	 * @param <V>          Type of map's values
+	 * @param <W>          Type of searched values
+	 * @param map          Map to search in
+	 * @param key          Key to search for in the map
+	 * @param value        Value to search for in the map if the key is contained, provide null if the
+	 *                     value doesn't matter
+	 * @param valueMatcher Matcher for the provided value and the one contained in the map
+	 * @return true if the map contains the desired key and the searched value is null or matched by the
+	 *         predicate
+	 * @see #containsKeyAndValue(Map, Object, Object, Function, BiPredicate)
+	 */
+	public static <K, V, W> boolean containsKeyAndValue(Map<K, V> map, K key, W value, BiPredicate<V, W> valueMatcher) {
+		return containsKeyAndValue(map, key, value, Function.identity(), valueMatcher);
 	}
 
 }

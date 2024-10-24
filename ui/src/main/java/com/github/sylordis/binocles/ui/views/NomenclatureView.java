@@ -39,10 +39,6 @@ public class NomenclatureView extends BorderPane implements Initializable, Binoc
 	@FXML
 	private Text nomenclatureTitle;
 	@FXML
-	private Text noteNoCommentsType;
-	@FXML
-	private Text noteNotUsed;
-	@FXML
 	private ScrollPane mainScrollPane;
 	@FXML
 	private VBox nomenclatureZoneVBox;
@@ -71,8 +67,6 @@ public class NomenclatureView extends BorderPane implements Initializable, Binoc
 	public void initialize(URL location, ResourceBundle resources) {
 		// Set content
 		nomenclatureTitle.setText(nomenclature.getName());
-		noteNoCommentsType.setText("No comment types registered for this nomenclature.");
-		noteNotUsed.setText("This nomenclature is not used.");
 		updateCommentTypesList();
 		updateUsedInList();
 	}
@@ -80,19 +74,15 @@ public class NomenclatureView extends BorderPane implements Initializable, Binoc
 	private void updateCommentTypesList() {
 		commentTypesListGrid.getChildren().clear();
 		if (nomenclature.getTypes().isEmpty()) {
-			commentTypesListGrid.setVisible(false);
-			commentTypesListGrid.setManaged(false);
-			noteNoCommentsType.setVisible(true);
-			noteNoCommentsType.setManaged(true);
+			Text noteNoCommentsType = new Text("No comment types registered for this nomenclature.");
+			noteNoCommentsType.getStyleClass().add("text-note");
+			commentTypesListGrid.add(noteNoCommentsType, 0, 0, 2, 1);
 		} else {
-			commentTypesListGrid.setVisible(true);
-			commentTypesListGrid.setManaged(true);
-			noteNoCommentsType.setVisible(false);
-			noteNoCommentsType.setManaged(false);
 			int i = 0;
 			for (CommentType type : nomenclature.getTypes()) {
 				Label label = new Label(type.getName() + ":");
 				Text description = new Text(type.getDescription());
+				// TODO Add colour preview, with boxes for foreground and background
 				TextFlow descriptionFlow = new TextFlow(description);
 				commentTypesListGrid.addRow(i++, label, descriptionFlow);
 			}
@@ -104,15 +94,10 @@ public class NomenclatureView extends BorderPane implements Initializable, Binoc
 		List<Book> booksUsing = mainController.getModel().getBooks().stream()
 		        .filter(b -> nomenclature.equals(b.getNomenclature())).collect(Collectors.toList());
 		if (booksUsing.isEmpty()) {
-			usedInListGrid.setVisible(false);
-			usedInListGrid.setManaged(false);
-			noteNotUsed.setVisible(true);
-			noteNotUsed.setManaged(true);
+			Text noteNotUsed = new Text("This nomenclature is not used.");
+			noteNotUsed.getStyleClass().add("text-note");
+			usedInListGrid.add(noteNotUsed, 0, 0, 2, 1);
 		} else {
-			usedInListGrid.setVisible(true);
-			usedInListGrid.setManaged(true);
-			noteNotUsed.setVisible(false);
-			noteNotUsed.setManaged(false);
 			int i = 0;
 			for (Book book : booksUsing) {
 				Text title = new Text(book.getTitle());

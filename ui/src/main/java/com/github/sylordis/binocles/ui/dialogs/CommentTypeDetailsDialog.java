@@ -9,6 +9,7 @@ import com.github.sylordis.binocles.ui.components.CustomListCell;
 import com.github.sylordis.binocles.ui.components.StyleEditor;
 import com.github.sylordis.binocles.ui.doa.CommentTypePropertiesAnswer;
 import com.github.sylordis.binocles.ui.functional.ListenerValidator;
+import com.github.sylordis.binocles.utils.contracts.Identifiable;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -42,6 +43,10 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 	 * Nomenclature to add the comment type to.
 	 */
 	private Nomenclature nomenclature;
+	/**
+	 * Current item being edited.
+	 */
+	private CommentType commentType;
 
 	/**
 	 * Combo box for the nomenclature.
@@ -99,16 +104,40 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 	private String fieldsFeedback = "";
 
 	/**
-	 * Creates a new book creation dialog.
+	 * Creates a new comment type creation dialog.
 	 * 
-	 * @param model
-	 * @param currentNomenclature
+	 * @param model        current model being edited for other data collection
+	 * @param nomenclature possible current parent
 	 */
 	public CommentTypeDetailsDialog(BinoclesModel model, Nomenclature nomenclature) {
-		super("Create a new comment type", model);
+		this(model, nomenclature, null, "Create a new comment type");
+	}
+
+	/**
+	 * Creates a new comment type edition dialog.
+	 * 
+	 * @param model        current model being edited for other data collection
+	 * @param nomenclature current parent
+	 * @param type         comment type being edited
+	 */
+	public CommentTypeDetailsDialog(BinoclesModel model, Nomenclature nomenclature, CommentType type) {
+		this(model, nomenclature, type, "Editing comment type '" + type.getName() + "'");
+	}
+
+	/**
+	 * Creates a new comment type edition/creation dialog.
+	 * 
+	 * @param model        current model being edited for other data collection
+	 * @param nomenclature current parent
+	 * @param type         comment type being edited
+	 * @param title        title of the dialog
+	 */
+	private CommentTypeDetailsDialog(BinoclesModel model, Nomenclature nomenclature, CommentType type, String title) {
+		super(title, model);
 		setIcon(AppIcons.ICON_COMMENT_TYPE);
-		setHeader("Please fill in the name of the new comment type and the nomenclature it belongs too.");
+		setHeader("Please fill in the name of the comment type in the chosen nomenclature.");
 		this.nomenclature = nomenclature;
+		this.commentType = type;
 	}
 
 	@Override
@@ -155,14 +184,25 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 		fieldMetaFieldsControlsDescription.promptTextProperty().set("Field description");
 		fieldMetaFieldsControlsIsLong = new CheckBox("Long?");
 		HBox fieldCommentTypeFieldsControlsBottom = new HBox();
+		fieldCommentTypeFieldsControlsBottom.getStyleClass().add("controls");
 		fieldMetaFieldsControlsAdd = new Button("Add");
 		fieldCommentTypeFieldsControlsBottom.alignmentProperty().set(Pos.CENTER_RIGHT);
 		fieldCommentTypeFieldsControlsBottom.getChildren().addAll(fieldMetaFieldsControlsName,
-		        fieldMetaFieldsControlsDescription, fieldMetaFieldsControlsIsLong, new Separator(Orientation.VERTICAL), fieldMetaFieldsControlsAdd);
+		        fieldMetaFieldsControlsDescription, fieldMetaFieldsControlsIsLong, new Separator(Orientation.VERTICAL),
+		        fieldMetaFieldsControlsAdd);
 		// Style field
 		Label labelCommentTypeStyle = new Label("Comment style:");
 		fieldStyle = new StyleEditor();
 		// Set dialog components
+		if (commentType != null) {
+			fieldNomenclatureChoice.getSelectionModel().select(nomenclature);
+			fieldNomenclatureChoice.setDisable(true);
+			fieldName.setText(commentType.getName());
+			fieldDescription.setText(commentType.getDescription());
+			fieldMetaFieldsData.clear();
+			fieldMetaFieldsData.addAll(commentType.getFields().values());
+			fieldStyle.loadStringStyles(commentType.getStyles());
+		}
 		addFormFeedback();
 		getGridPane().addRow(1, labelNomenclature, fieldNomenclatureChoice);
 		getGridPane().addRow(2, labelCommentTypeName, fieldName);
@@ -180,7 +220,8 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 		        .validIf("Comment type name can't be blank or empty.", (o, n) -> !n.isBlank())
 		        .validIf(
 		                "Comment type with the same name already exists (case insensitive) in the selected nomenclature.",
-		                (o, n) -> this.nomenclature == null || !this.nomenclature.hasCommentType(n))
+		                (o, n) -> Identifiable.checkNewNameUniquenessValidityAmongParent(n, nomenclature, commentType,
+		                        (nom, s) -> nom.hasCommentType(s)))
 		        .feed(s -> nameFeedback = s).onEither(b -> nameValid = b).andThen(this::updateFormStatus);
 		fieldName.textProperty().addListener(commentTypeNameUIValidator);
 		ListenerValidator<Nomenclature> nomenclatureParentUIValidator = new ListenerValidator<Nomenclature>()
@@ -205,24 +246,8 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 				fieldMetaFieldsControlsAdd.setText("Add");
 			}
 		});
-		fieldMetaFieldsControlsAdd.setOnAction(e -> {
-			addNewField();
-			fieldsFeedback = "";
-			fieldsValid = true;
-			updateFormStatus();
-		});
-		fieldMetaFieldsControlsDelete.setOnAction(e -> {
-			fieldMetaFieldsData.removeAll(fieldMetafields.getSelectionModel().getSelectedItems());
-			if (fieldMetaFieldsData.isEmpty()) {
-				fieldsFeedback = "You need at least one field.";
-				fieldsValid = false;
-			} else {
-				fieldsFeedback = "";
-				fieldsValid = true;
-			}
-			updateFormStatus();
-			fieldMetafields.refresh();
-		});
+		fieldMetaFieldsControlsAdd.setOnAction(e -> addMetafieldEntry());
+		fieldMetaFieldsControlsDelete.setOnAction(e -> deleteMetafieldEntry());
 		ListenerValidator<String> fieldNameUIValidator = new ListenerValidator<String>()
 		        .validIf("Field name can't be blank or empty.", (o, n) -> !n.isBlank())
 		        .onEither(b -> fieldNameValid = b)
@@ -259,10 +284,26 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 	}
 
 	/**
+	 * Deletes a field from the table.
+	 */
+	private void deleteMetafieldEntry() {
+		fieldMetaFieldsData.removeAll(fieldMetafields.getSelectionModel().getSelectedItems());
+		if (fieldMetaFieldsData.isEmpty()) {
+			fieldsFeedback = "You need at least one field.";
+			fieldsValid = false;
+		} else {
+			fieldsFeedback = "";
+			fieldsValid = true;
+		}
+		updateFormStatus();
+		fieldMetafields.refresh();
+	}
+
+	/**
 	 * Adds a new field in the table view, resetting the text fields and the button. If an existing
 	 * field has the same name, it will only update its description.
 	 */
-	public void addNewField() {
+	private void addMetafieldEntry() {
 		String name = fieldMetaFieldsControlsName.getText();
 		String description = fieldMetaFieldsControlsDescription.getText();
 		boolean isLong = fieldMetaFieldsControlsIsLong.isSelected();
@@ -278,6 +319,9 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 		fieldMetaFieldsControlsDescription.setText("");
 		fieldMetaFieldsControlsIsLong.setSelected(false);
 		fieldMetaFieldsControlsAdd.setDisable(true);
+		fieldsFeedback = "";
+		fieldsValid = true;
+		updateFormStatus();
 	}
 
 	/**

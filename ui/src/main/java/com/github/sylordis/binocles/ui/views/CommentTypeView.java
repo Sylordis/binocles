@@ -83,7 +83,7 @@ public class CommentTypeView extends BorderPane implements Initializable, Binocl
 		nomenclatureName.setText(StringUtils.capitalize(nomenclature.getName()));
 		if (commentType.getDescription().isEmpty()) {
 			Text text = new Text("No description provided.");
-			text.getStyleClass().addAll("text-muted", "text-note");
+			text.getStyleClass().addAll("text-note");
 			descriptionFlow.getChildren().add(text);
 		} else {
 			Text text = new Text(commentType.getDescription());

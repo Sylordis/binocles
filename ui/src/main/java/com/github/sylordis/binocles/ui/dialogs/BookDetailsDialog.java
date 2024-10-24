@@ -6,6 +6,7 @@ import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.ui.AppIcons;
 import com.github.sylordis.binocles.ui.components.CustomListCell;
 import com.github.sylordis.binocles.ui.functional.ListenerValidator;
+import com.github.sylordis.binocles.utils.contracts.Identifiable;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -13,7 +14,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
 
 /**
  * Dialog to create a new or edit a book.
@@ -72,20 +72,20 @@ public class BookDetailsDialog extends AbstractAnswerDialog<Book> {
 		// Set dialog content
 		addFormFeedback();
 		getGridPane().addRow(1, labelBookName, fieldBookName);
-		if (book != null && book.getNomenclature() != null) {
-			getGridPane().addRow(2,  new Label("Nomenclature"), new Text(book.getNomenclature().getName()));
-		} else
-			getGridPane().addRow(2, labelNomenclature, fieldNomenclatureChoice);
+		getGridPane().addRow(2, labelNomenclature, fieldNomenclatureChoice);
 		// Set up listeners
 		ListenerValidator<String> bookNameUIValidator = new ListenerValidator<String>()
 		        .validIf("Book name can't be blank or empty.", (o, n) -> !n.isBlank())
-		        .validIf("Book with the same name already exists (case insensitive)", (o, n) -> !getModel().hasBook(n))
+		        .validIf("Book with the same name already exists (case insensitive)",
+		                (o, n) -> Identifiable.checkNewNameUniquenessValidityAmongParent(n, getModel(), book,
+		                        (p, s) -> p.hasBook(s)))
 		        .feed(this::setFeedback).onEither(b -> setConfirmButtonDisable(!b));
 		fieldBookName.textProperty().addListener(bookNameUIValidator);
 		// Set up components status
 		if (book != null) {
 			fieldBookName.setText(book.getTitle());
 			fieldNomenclatureChoice.getSelectionModel().select(book.getNomenclature());
+			fieldNomenclatureChoice.setDisable(true);
 		}
 		getDialog().getDialogPane().lookupButton(getConfirmButton()).setDisable(true);
 		bookNameUIValidator.changed(null, null, fieldBookName.getText());

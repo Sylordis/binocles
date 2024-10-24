@@ -31,6 +31,8 @@ import com.github.sylordis.binocles.utils.io.FileImporter;
 import com.github.sylordis.binocles.utils.yaml.YAMLType;
 import com.github.sylordis.binocles.utils.yaml.YAMLUtils;
 
+import static com.github.sylordis.binocles.utils.DecoratorUtils.hasTextYNN;
+
 /**
  * Imports a Yaml structure file.
  * 
@@ -128,8 +130,8 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 			book.setGeneralComment(generalComment);
 			book.setDescription(description);
 			logger.info("Created book '{}'", book.getTitle());
-			logger.debug("Synopsis? {} Description? {} General comment? {}", synopsis != null ? !synopsis.isBlank() : null,
-			        description != null ? !description.isBlank() : null, generalComment != null ? !generalComment.isBlank() : null);
+			logger.debug("Synopsis? {} Description? {} General comment? {}", hasTextYNN(synopsis),
+			        hasTextYNN(description), hasTextYNN(generalComment));
 			Map<String, String> metadata = new HashMap<>();
 			// Nomenclature, store in metadata for later
 			String nomenclature = YAMLUtils.strValue("nomenclature", data);
@@ -271,7 +273,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 				type.editStyles(styles);
 			}
 			result.add(type);
-			logger.info("Imported comment type '{}', fields: {}", type.getName(), type.getFields().keySet());
+			logger.info("Imported comment type '{}'", type);
 		}
 		return result;
 	}

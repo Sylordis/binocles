@@ -11,7 +11,7 @@ import java.util.function.Consumer;
  * @author Sylordis
  *
  */
-public class NomenclatureCommentTypeChange implements Consumer<Comment> {
+public class CommentTypeMigration implements Consumer<Comment> {
 
 	/**
 	 * Future type to be applied.
@@ -28,7 +28,7 @@ public class NomenclatureCommentTypeChange implements Consumer<Comment> {
 	 * @param origin        type to be changed
 	 * @param future        type to be applied
 	 */
-	public NomenclatureCommentTypeChange(CommentType future) {
+	public CommentTypeMigration(CommentType future) {
 		this(future, null);
 	}
 
@@ -39,7 +39,7 @@ public class NomenclatureCommentTypeChange implements Consumer<Comment> {
 	 * @param future        type to be applied
 	 * @param substitutions to be done, old field => new field mapping
 	 */
-	public NomenclatureCommentTypeChange(CommentType future,
+	public CommentTypeMigration(CommentType future,
 			Map<String, String> substitutions) {
 		this.future = future;
 		this.substitutions = new HashMap<>();

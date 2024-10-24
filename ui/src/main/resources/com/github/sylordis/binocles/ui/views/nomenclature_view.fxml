@@ -28,12 +28,11 @@
          <content>
               <VBox fx:id="nomenclatureZoneVBox" styleClass="body">
                <children>
-                  <GridPane fx:id="nomenclatureGrid" prefHeight="34.0" prefWidth="204.0">
+                  <GridPane fx:id="nomenclatureGrid">
                   	<styleClass>
                   		<String fx:value="content-grid" />
                   	</styleClass>
                     <columnConstraints>
-                      <ColumnConstraints minWidth="75.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="ALWAYS" />
                     </columnConstraints>
                     <rowConstraints>
@@ -41,17 +40,16 @@
                 	  <RowConstraints />
                 	  <RowConstraints />
                 	  <RowConstraints />
-                        <RowConstraints />
-                        <RowConstraints />
                     </rowConstraints>
                      <children>
-                		<Label text="Comment types:" GridPane.columnSpan="2" GridPane.rowIndex="0" />
-                        <GridPane fx:id="commentTypesListGrid" GridPane.columnSpan="2" GridPane.rowIndex="2">
+                		<Label text="Comment types:" GridPane.rowIndex="0" />
+                        <GridPane fx:id="commentTypesListGrid" GridPane.rowIndex="1">
       		                  	<styleClass>
       		                  		<String fx:value="list-grid" />
       		                  	</styleClass>
                           <columnConstraints>
                             <ColumnConstraints minWidth="75.0" prefWidth="100.0" />
+                            <ColumnConstraints minWidth="15.0" prefWidth="15.0" />
                             <ColumnConstraints hgrow="ALWAYS" />
                           </columnConstraints>
                           <rowConstraints>
@@ -61,18 +59,13 @@
                               <Insets left="10.0" />
                            </GridPane.margin>
                         </GridPane>
-                        <Text fx:id="noteNoCommentsType" GridPane.rowIndex="1" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-note" text="">
-                           <GridPane.margin>
-                              <Insets left="10.0" />
-                           </GridPane.margin>
-                        </Text>
-                        <Label text="Used in:" GridPane.columnSpan="2" GridPane.rowIndex="3" />
-                        <GridPane fx:id="usedInListGrid" GridPane.columnSpan="2" GridPane.rowIndex="5">
+                        <Label text="Used in:" GridPane.rowIndex="2" />
+                        <GridPane fx:id="usedInListGrid" GridPane.rowIndex="3">
       		                  	<styleClass>
       		                  		<String fx:value="list-grid" />
       		                  	</styleClass>
                           <columnConstraints>
-                            <ColumnConstraints minWidth="75.0" hgrow="ALWAYS" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="75.0" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints />
@@ -81,11 +74,6 @@
                               <Insets left="10.0" />
                            </GridPane.margin>
                         </GridPane>
-                        <Text fx:id="noteNotUsed" GridPane.rowIndex="4" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-note" text="">
-                           <GridPane.margin>
-                              <Insets left="10.0" />
-                           </GridPane.margin>
-                        </Text>
                      </children>
                   </GridPane>
                </children>

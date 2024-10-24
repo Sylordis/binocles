@@ -50,16 +50,6 @@ public final class StyleUtilsFX {
 	}
 
 	/**
-	 * Transforms a color text representation to its equivalent Color.
-	 * 
-	 * @param hex
-	 * @return
-	 */
-	public static Color fromHex(String hex) {
-		return Color.valueOf(hex);
-	}
-
-	/**
 	 * Brightens and desaturates the given colour.
 	 * 
 	 * @param color
@@ -145,7 +135,7 @@ public final class StyleUtilsFX {
 	 * @return a rectangle filled with the provided colour
 	 */
 	public static Rectangle createColorBox(String hexcolor) {
-		Rectangle box = new Rectangle(12, 12, fromHex(hexcolor));
+		Rectangle box = new Rectangle(12, 12, Color.web(hexcolor));
 		box.getStyleClass().add("color-box");
 		return box;
 	}

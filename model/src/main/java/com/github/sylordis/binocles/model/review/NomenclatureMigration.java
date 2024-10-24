@@ -13,7 +13,7 @@ import com.google.common.base.Preconditions;
  * @author Sylordis
  *
  */
-public class NomenclatureChange {
+public class NomenclatureMigration {
 
 	/**
 	 * Next legend configuration to replace the current one.
@@ -22,12 +22,12 @@ public class NomenclatureChange {
 	/**
 	 * Map of all type conversions, with old type => type conversion. This map should never be null.
 	 */
-	private Map<CommentType, NomenclatureCommentTypeChange> conversions;
+	private Map<CommentType, CommentTypeMigration> conversions;
 
 	/**
 	 * Creates an empty legend configuration change.
 	 */
-	public NomenclatureChange() {
+	public NomenclatureMigration() {
 		this(null);
 	}
 
@@ -37,7 +37,7 @@ public class NomenclatureChange {
 	 *
 	 * @param next legend configuration to be applied
 	 */
-	public NomenclatureChange(Nomenclature next) {
+	public NomenclatureMigration(Nomenclature next) {
 		this(next, null);
 	}
 
@@ -45,8 +45,8 @@ public class NomenclatureChange {
 	 * @param next     legend configuration to be applied
 	 * @param conversions conversions to apply
 	 */
-	public NomenclatureChange(Nomenclature next,
-			Map<CommentType, NomenclatureCommentTypeChange> conversions) {
+	public NomenclatureMigration(Nomenclature next,
+			Map<CommentType, CommentTypeMigration> conversions) {
 		this.nextConfiguration = next;
 		this.conversions = new HashMap<>();
 		if (conversions != null)
@@ -85,7 +85,7 @@ public class NomenclatureChange {
 	/**
 	 * @return the list of conversions as unmodifiable object
 	 */
-	public Map<CommentType, NomenclatureCommentTypeChange> getTypeConversions() {
+	public Map<CommentType, CommentTypeMigration> getTypeConversions() {
 		return Collections.unmodifiableMap(this.conversions);
 	}
 
@@ -96,7 +96,7 @@ public class NomenclatureChange {
 	 * @param change conversion to apply
 	 * @throws NullPointerException if any of the arguments is null
 	 */
-	public void addTypeConversion(CommentType from, NomenclatureCommentTypeChange change) {
+	public void addTypeConversion(CommentType from, CommentTypeMigration change) {
 		Preconditions.checkNotNull(from, "Cannot add a conversion without a base type");
 		Preconditions.checkNotNull(change, "Cannot add a conversion without the actual conversion");
 		this.conversions.put(from, change);
@@ -107,7 +107,7 @@ public class NomenclatureChange {
 	 *
 	 * @param conversions to put instead of actual ones
 	 */
-	public void setTypeConversions(Map<CommentType, NomenclatureCommentTypeChange> conversions) {
+	public void setTypeConversions(Map<CommentType, CommentTypeMigration> conversions) {
 		this.conversions.clear();
 		if (conversions != null)
 			this.conversions.putAll(conversions);
@@ -119,7 +119,7 @@ public class NomenclatureChange {
 	 * @param from type conversion to remove in the change
 	 * @return the element that was removed, null otherwise
 	 */
-	public NomenclatureCommentTypeChange removeTypeConversion(CommentType from) {
+	public CommentTypeMigration removeTypeConversion(CommentType from) {
 		return this.conversions.remove(from);
 	}
 

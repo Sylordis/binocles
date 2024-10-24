@@ -57,7 +57,7 @@ public class AboutDialog implements Displayable<Void> {
 		officialWebsiteLink.setOnAction(e -> new Browser().open(BinoclesUIConstants.WEBSITE_LINK));
 		gridPane.addRow(2, new Label("Official website"), officialWebsiteLink);
 		// License
-		gridPane.addRow(3, new Label("License"));
+		gridPane.addRow(3, new Label("License (short version)"));
 		TextArea licenseField = new TextArea(BinoclesUIConstants.LICENSE_SHORT);
 		licenseField.setEditable(false);
 		licenseField.setFocusTraversable(false);

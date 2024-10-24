@@ -4,6 +4,7 @@ import com.github.sylordis.binocles.model.BinoclesModel;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.ui.AppIcons;
 import com.github.sylordis.binocles.ui.functional.ListenerValidator;
+import com.github.sylordis.binocles.utils.contracts.Identifiable;
 
 import javafx.application.Platform;
 import javafx.scene.control.ButtonType;
@@ -65,7 +66,8 @@ public class NomenclatureDetailsDialog extends AbstractAnswerDialog<Nomenclature
 		ListenerValidator<String> nomenclatureNameUIValidator = new ListenerValidator<String>()
 		        .validIf("Nomenclature name can't be blank or empty.", (o, n) -> !n.isBlank())
 		        .validIf("Nomenclature with the same name already exists (case insensitive)",
-		                (o, n) -> !getModel().hasNomenclature(n))
+		                (o, n) -> Identifiable.checkNewNameUniquenessValidityAmongParent(n, getModel(), nomenclature,
+		                        (p, s) -> p.hasNomenclature(s)))
 		        .feed(this::setFeedback).onEither(b -> setConfirmButtonDisable(!b)).andThen(this::sizeToScene);
 		fieldNomenclatureTitle.textProperty().addListener(nomenclatureNameUIValidator);
 		// Set up components status

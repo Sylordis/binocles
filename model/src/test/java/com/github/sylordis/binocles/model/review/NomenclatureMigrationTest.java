@@ -18,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class NomenclatureChangeTest {
+class NomenclatureMigrationTest {
 
 	@Mock
 	private Nomenclature next;
@@ -27,26 +27,26 @@ class NomenclatureChangeTest {
 	@Mock
 	private CommentType type2;
 	@Mock
-	private NomenclatureCommentTypeChange change1;
+	private CommentTypeMigration change1;
 	@Mock
-	private NomenclatureCommentTypeChange change2;
+	private CommentTypeMigration change2;
 
-	private Map<CommentType, NomenclatureCommentTypeChange> converts;
+	private Map<CommentType, CommentTypeMigration> converts;
 
 	/**
 	 * Object under test.
 	 */
-	private NomenclatureChange change;
+	private NomenclatureMigration change;
 
 	@BeforeEach
 	void setUp() throws Exception {
-		change = new NomenclatureChange(next);
+		change = new NomenclatureMigration(next);
 		converts = Map.of(type1, change1, type2, change2);
 	}
 
 	@Test
 	void testNomenclatureChange() {
-		change = new NomenclatureChange();
+		change = new NomenclatureMigration();
 		assertNotNull(change);
 		assertNull(change.getNextConfiguration());
 	}
@@ -58,7 +58,7 @@ class NomenclatureChangeTest {
 
 	@Test
 	void testNomenclatureChangeLegendConfiguration_Null() {
-		change = new NomenclatureChange(null);
+		change = new NomenclatureMigration(null);
 		assertNotNull(change);
 		assertNull(change.getNextConfiguration());
 	}
@@ -66,7 +66,7 @@ class NomenclatureChangeTest {
 	@Test
 	void testNomenclatureChangeLegendConfigurationMapOfLegendConfigurationTypeLegendConfigurationTypeChange(
 			@Mock Nomenclature nextCfg) {
-		change = new NomenclatureChange(nextCfg, converts);
+		change = new NomenclatureMigration(nextCfg, converts);
 		assertNotNull(change);
 		assertEquals(nextCfg, change.getNextConfiguration());
 		assertEquals(converts, change.getTypeConversions());
@@ -88,17 +88,17 @@ class NomenclatureChangeTest {
 		assertNotNull(change.getTypeConversions());
 		assertTrue(change.getTypeConversions().isEmpty());
 		assertThrows(UnsupportedOperationException.class, () -> change.getTypeConversions()
-				.put(mock(CommentType.class), mock(NomenclatureCommentTypeChange.class)));
+				.put(mock(CommentType.class), mock(CommentTypeMigration.class)));
 	}
 
 	@Test
-	void testAddTypeConversion(@Mock CommentType origin, @Mock NomenclatureCommentTypeChange convert) {
+	void testAddTypeConversion(@Mock CommentType origin, @Mock CommentTypeMigration convert) {
 		change.addTypeConversion(origin, convert);
 		assertTrue(change.hasTypeChangeFor(origin));
 	}
 
 	@Test
-	void testAddTypeConversion_NullOriginType(@Mock NomenclatureCommentTypeChange convert) {
+	void testAddTypeConversion_NullOriginType(@Mock CommentTypeMigration convert) {
 		assertThrows(NullPointerException.class, () -> change.addTypeConversion(null, convert));
 	}
 
@@ -129,7 +129,7 @@ class NomenclatureChangeTest {
 
 	@Test
 	void testRemoveTypeConversion() {
-		Map<CommentType, NomenclatureCommentTypeChange> expected = new HashMap<>();
+		Map<CommentType, CommentTypeMigration> expected = new HashMap<>();
 		expected.put(type2, change2);
 		change.setTypeConversions(converts);
 		assertEquals(change1, change.removeTypeConversion(type1));
