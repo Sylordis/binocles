@@ -1,21 +1,26 @@
 package com.github.sylordis.binocles.ui.settings;
 
-import java.util.ArrayList;
+import java.util.AbstractMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import com.github.sylordis.binocles.model.BinoclesConfiguration;
+import com.github.sylordis.binocles.model.io.BinoclesIOFactory;
+import com.github.sylordis.binocles.model.io.BinoclesIOFactory.IOOperation;
+import com.github.sylordis.binocles.utils.Flags;
 
 import javafx.stage.FileChooser;
 
 /**
- * Main configuration class for the UI. It uses the same file as {@link BinoclesConfiguration#CFG_FILE}.
+ * Main configuration class for the UI. It uses the same file as
+ * {@link BinoclesConfiguration#CFG_FILE}.
  * 
  * @author sylordis
  *
  */
 public class BinoclesUIConfiguration {
-
-	// TODO Configuration uses the same as
 
 	/**
 	 * Display size.
@@ -52,12 +57,22 @@ public class BinoclesUIConfiguration {
 	}
 
 	/**
-	 * Gets the file filters for the software without a wild one.
+	 * Gets all file filters for the software without a wild one.
 	 * 
 	 * @return
 	 */
 	public List<FileChooser.ExtensionFilter> getFileFilters() {
-		return getFileFilters(false);
+		return getFileFilters(IOOperation.ALL, false);
+	}
+
+	/**
+	 * Gets all file filters for the software.
+	 * 
+	 * @param addWild Adds a wild option for all extensions.
+	 * @return
+	 */
+	public List<FileChooser.ExtensionFilter> getFileFilters(boolean addWild) {
+		return getFileFilters(IOOperation.ALL, addWild);
 	}
 
 	/**
@@ -66,13 +81,16 @@ public class BinoclesUIConfiguration {
 	 * @param addWild Adds a wild option for all extensions.
 	 * @return
 	 */
-	public List<FileChooser.ExtensionFilter> getFileFilters(boolean addWild) {
-		List<FileChooser.ExtensionFilter> filters = new ArrayList<>();
+	public List<FileChooser.ExtensionFilter> getFileFilters(int operations, boolean addWild) {
+		Set<Map.Entry<String, String[]>> extensions = new HashSet<>();
+		if (Flags.any(operations, IOOperation.OPEN, IOOperation.SAVE))
+			extensions.add(new AbstractMap.SimpleEntry<String, String[]>(BinoclesIOFactory.SAVE_FILE_DESCRIPTION,
+			        new String[] { BinoclesIOFactory.SAVE_FILE_EXTENSION_FILE_CHOOSER }));
+		if (Flags.any(operations, IOOperation.IMPORT, IOOperation.EXPORT_STRUCTURAL))
+			extensions.addAll(BinoclesIOFactory.EXPORT_STRUCTURAL_FORMATS_EXTENSIONS.entrySet());
 		if (addWild)
-			filters.add(new FileChooser.ExtensionFilter("All files", "*.*"));
-		filters.addAll(List.of(new FileChooser.ExtensionFilter("Binocles format", "*.bino"),
-		        new FileChooser.ExtensionFilter("YAML file", "*.yaml")));
-		return filters;
+			extensions.add(new AbstractMap.SimpleEntry<String, String[]>("All files", new String[] { "*.*" }));
+		return extensions.stream().map(e -> new FileChooser.ExtensionFilter(e.getKey(), e.getValue())).toList();
 	}
 
 	/**

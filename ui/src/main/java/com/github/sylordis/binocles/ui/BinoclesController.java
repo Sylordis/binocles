@@ -3,6 +3,7 @@ package com.github.sylordis.binocles.ui;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import com.github.sylordis.binocles.model.decorators.ChapterDecorator;
 import com.github.sylordis.binocles.model.decorators.CommentTypeDecorator;
 import com.github.sylordis.binocles.model.decorators.NomenclatureDecorator;
 import com.github.sylordis.binocles.model.io.BinoclesIOFactory;
+import com.github.sylordis.binocles.model.io.BinoclesIOFactory.IOOperation;
 import com.github.sylordis.binocles.model.review.Comment;
 import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.DefaultNomenclature;
@@ -84,6 +86,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -99,6 +102,11 @@ public class BinoclesController implements Initializable, Controller {
 	private TreeView<ReviewableContent> booksTree;
 	@FXML
 	private TreeView<NomenclatureItem> nomenclaturesTree;
+
+	@FXML
+	private Text footerLeftStatusText;
+	@FXML
+	private Text footerRightStatusText;
 
 	@FXML
 	private MenuBar menuBar;
@@ -182,6 +190,11 @@ public class BinoclesController implements Initializable, Controller {
 	private TabPane mainTabPane;
 
 	/**
+	 * User infos (directories, saving, etc).
+	 */
+	private BinoclesUserInteraction user;
+
+	/**
 	 * Class logger.
 	 */
 	private final Logger logger = LogManager.getLogger();
@@ -210,6 +223,7 @@ public class BinoclesController implements Initializable, Controller {
 				logger.error(e);
 			}
 			setButtonsStatus();
+			user.modelWasModified();
 		}
 	}
 
@@ -244,6 +258,7 @@ public class BinoclesController implements Initializable, Controller {
 				        bookParent);
 				currentBookParent.getChildren().add(chapterTreeItem);
 				currentBookParent.setExpanded(true);
+				user.modelWasModified();
 			} catch (UniqueIDException e) {
 				showErrorAlert("Unique ID error", "Books only accept unique id'd chapters.");
 			}
@@ -278,6 +293,7 @@ public class BinoclesController implements Initializable, Controller {
 			currentBookParent.getChildren().add(commentTypeTreeItem);
 			currentBookParent.setExpanded(true);
 			nomenclaturesTree.getSelectionModel().select(commentTypeTreeItem);
+			user.modelWasModified();
 		}
 	}
 
@@ -330,8 +346,9 @@ public class BinoclesController implements Initializable, Controller {
 		if (answer.isPresent()) {
 			Nomenclature nomenclature = answer.get();
 			try {
-				model.addNomenclature(nomenclature);
+				model.addNomenclatureUnique(nomenclature);
 				rebuildNomenclaturesTree();
+				user.modelWasModified();
 			} catch (UniqueIDException e) {
 				logger.error(e);
 			}
@@ -382,6 +399,7 @@ public class BinoclesController implements Initializable, Controller {
 					}
 					// Remove in tree
 					treeSelected.getParent().getChildren().remove(treeSelected);
+					user.modelWasModified();
 				}
 			}
 		}
@@ -412,6 +430,7 @@ public class BinoclesController implements Initializable, Controller {
 				}
 				// Remove in tree
 				treeSelected.getParent().getChildren().remove(treeSelected);
+				user.modelWasModified();
 			}
 		} else {
 			showErrorAlert("No element in the book tree is selected.");
@@ -436,6 +455,7 @@ public class BinoclesController implements Initializable, Controller {
 				optTab.get().setText(book.getTitle());
 				((BookView) optTab.get().getContent()).updateControllerStatus(this);
 			}
+			user.modelWasModified();
 		}
 	}
 
@@ -458,6 +478,7 @@ public class BinoclesController implements Initializable, Controller {
 				optTab.get().setText(chapter.getTitle());
 				((ChapterView) optTab.get().getContent()).updateControllerStatus(this);
 			}
+			user.modelWasModified();
 			// TODO Consolidate comments
 		}
 	}
@@ -482,6 +503,7 @@ public class BinoclesController implements Initializable, Controller {
 				((BinoclesTabPane) optTab.get().getContent()).updateControllerStatus(this);
 			getTabViewsOfType(ChapterView.class, v -> Objects.equal(v.getBook().getNomenclature(), nomenclature))
 			        .forEach(v -> v.updateControllerStatus(this));
+			user.modelWasModified();
 		}
 	}
 
@@ -504,6 +526,7 @@ public class BinoclesController implements Initializable, Controller {
 				optTab.get().setText(nomenclature.getName());
 				((NomenclatureView) optTab.get().getContent()).updateControllerStatus(this);
 			}
+			user.modelWasModified();
 		}
 	}
 
@@ -548,7 +571,8 @@ public class BinoclesController implements Initializable, Controller {
 	@FXML
 	public void exportStructuralAction(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters().addAll(BinoclesUIConfiguration.getInstance().getFileFilters(true));
+		fileChooser.getExtensionFilters()
+		        .addAll(BinoclesUIConfiguration.getInstance().getFileFilters(IOOperation.EXPORT_STRUCTURAL, true));
 		fileChooser.setTitle("Export file");
 		// Open file saver
 		Stage stage = getStageFromSourceOrMenuBar(event);
@@ -569,6 +593,32 @@ public class BinoclesController implements Initializable, Controller {
 				showErrorAlert("Could not export the selected file.");
 			}
 		}
+	}
+
+	/**
+	 * Exports the current model to the given file.
+	 * 
+	 * @param file File to export to
+	 * @return true if the export was a success, false otherwise
+	 */
+	public boolean exportToFile(File file) {
+		boolean success = false;
+		if (null != file) {
+			try {
+				FileExporter<BinoclesModel> exporter = new BinoclesIOFactory().getFileExporter(file);
+				if (null != exporter) {
+					exporter.export(this.model, file);
+					success = true;
+				}
+			} catch (IOException e) {
+				logger.atError().withThrowable(e).log("Could not write to the selected file.");
+				showErrorAlert("Could not write to the selected file.");
+			} catch (ExportException e) {
+				logger.atError().withThrowable(e).log("Could not export the selected file.");
+				showErrorAlert("Could not export the selected file.");
+			}
+		}
+		return success;
 	}
 
 	/**
@@ -658,7 +708,7 @@ public class BinoclesController implements Initializable, Controller {
 				if (replace) {
 					this.model = importedModel;
 					try {
-						model.addNomenclature(new DefaultNomenclature());
+						model.addNomenclatureUnique(new DefaultNomenclature());
 					} catch (UniqueIDException e) {
 						logger.atError().withThrowable(e).log("Error during import.");
 						showErrorAlert(
@@ -682,13 +732,10 @@ public class BinoclesController implements Initializable, Controller {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		logger.trace("Controller initialisation");
+		user = new BinoclesUserInteraction();
 		// Initialise model
 		model = new BinoclesModel();
-		try {
-			model.addNomenclature(new DefaultNomenclature());
-		} catch (UniqueIDException e) {
-			// First nomenclature added, cannot have exception
-		}
+		model.getNomenclatures().add(new DefaultNomenclature());
 		// Initialise the tree for text items
 		TreeItem<ReviewableContent> textTreeRoot = new TreeItem<>(new BookTreeRoot());
 		booksTree.setRoot(textTreeRoot);
@@ -707,6 +754,10 @@ public class BinoclesController implements Initializable, Controller {
 			        .decorate(CommentType.class, new CommentTypeDecorator().thenName());
 		});
 		rebuildNomenclaturesTree();
+		// Bindings & listeners
+		user.currentSaveFileProperty().addListener((s, o, n) -> updateFooter());
+		user.currentModelIsSavedProperty().addListener((s, o, n) -> updateFooter());
+		user.lastSaveTimeProperty().addListener((s, o, n) -> updateFooter());
 		// Set trees change listener
 		booksTree.setOnMouseClicked(
 		        TreeVarClickEventHandler.createDoubleClickHandler(booksTree, this::openTabItemAction));
@@ -725,6 +776,7 @@ public class BinoclesController implements Initializable, Controller {
 		mainTabPane.setTabDragPolicy(TabDragPolicy.REORDER);
 //		TODO nomenclaturesTree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 //		TODO booksTree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+		// Trigger change listeners
 		// Add welcome tab if necessary
 		mainTabPane.getTabs().add(new Tab("Welcome", new WelcomeView()));
 		logger.trace("Controller initialisation finished");
@@ -747,6 +799,10 @@ public class BinoclesController implements Initializable, Controller {
 	 */
 	public void openFile(File file) {
 		importFile(file, true);
+		if (file.getName().endsWith("." + BinoclesIOFactory.SAVE_FILE_EXTENSION)) {
+			logger.debug("binocles files opened! Setting save status.");
+			user.setSaved(file);
+		}
 	}
 
 	@FXML
@@ -831,6 +887,40 @@ public class BinoclesController implements Initializable, Controller {
 	}
 
 	/**
+	 * Saves the current model to given file.
+	 * 
+	 * @param file
+	 */
+	public void saveToFile(File file) {
+		if (file != null && exportToFile(file)) {
+			user.setSaved(file);
+		}
+	}
+
+	@FXML
+	public void saveAction(ActionEvent event) {
+		if (!user.hasSaveFile()) {
+			saveAsAction(event);
+		} else {
+			saveToFile(user.getCurrentSaveFile());
+		}
+	}
+
+	@FXML
+	public void saveAsAction(ActionEvent event) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.getExtensionFilters()
+		        .addAll(BinoclesUIConfiguration.getInstance().getFileFilters(IOOperation.SAVE, true));
+		fileChooser.setTitle("Save file");
+		// Open file saver
+		Stage stage = getStageFromSourceOrMenuBar(event);
+		File file = fileChooser.showSaveDialog(stage);
+		if (file != null) {
+			saveToFile(file);
+		}
+	}
+
+	/**
 	 * Changes the status of the buttons according to software state.
 	 */
 	public void setButtonsStatus() {
@@ -842,6 +932,13 @@ public class BinoclesController implements Initializable, Controller {
 		nomenclaturesTreeMenuNewCommentType.setDisable(!model.hasCustomNomenclatures());
 	}
 
+	/**
+	 * Update method callable by user controllers.
+	 */
+	public void setModelChanged() { 
+		user.modelWasModified();
+	}
+	
 	@Override
 	public void setParentController(Controller parent) {
 		// Nothing to do here
@@ -952,5 +1049,25 @@ public class BinoclesController implements Initializable, Controller {
 			alert.setContentText("It seems this feature is not implemented yet, please come back later =)");
 		}
 		alert.showAndWait();
+	}
+
+	/**
+	 * Updates the footer informations according to user information.
+	 */
+	public void updateFooter() {
+		logger.debug("Updating footer: saved?{} time={} file={}", user.isCurrentModelSaved(), user.getLastSaveTime(),
+		        user.getCurrentSaveFile());
+		if (!user.isCurrentModelSaved() && user.getCurrentSaveFile() == null) {
+			footerLeftStatusText.setText("Unsaved");
+		} else {
+			String msg = user.isCurrentModelSaved() ? "Saved" : "Modified";
+			if (user.getLastSaveTime() != null) {
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+				msg = msg.concat(String.format(" (last save: %s)", user.getLastSaveTime().format(formatter)));
+			}
+			footerLeftStatusText.setText(msg);
+		}
+		footerRightStatusText
+		        .setText(user.hasSaveFile() ? user.getCurrentSaveFile().getAbsolutePath() : "No save file");
 	}
 }

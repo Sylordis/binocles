@@ -1,5 +1,6 @@
 package com.github.sylordis.binocles.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -22,7 +23,9 @@ import com.google.common.base.Preconditions;
  * @author sylordis
  *
  */
-public class BinoclesModel {
+public class BinoclesModel implements Serializable {
+
+	private static final long serialVersionUID = 7966044367410993297L;
 
 	/**
 	 * Set of books, as a {@link TreeSet} alphabetically ordered by ID.
@@ -67,7 +70,7 @@ public class BinoclesModel {
 	 * @param nomenclature
 	 * @throws UniqueIDException if a nomenclature with the same id exists in the model.
 	 */
-	public void addNomenclature(Nomenclature nomenclature) throws UniqueIDException {
+	public void addNomenclatureUnique(Nomenclature nomenclature) throws UniqueIDException {
 		Preconditions.checkArgument(nomenclature.hasId(), "Nomenclature id cannot be empty or null", nomenclature);
 		Identifiable.checkIfUnique(nomenclature, this.nomenclatures);
 		nomenclatures.add(nomenclature);
@@ -295,7 +298,7 @@ public class BinoclesModel {
 		this.nomenclatures.clear();
 		if (null != nomenclatures) {
 			for (Nomenclature nomenclature : nomenclatures) {
-				addNomenclature(nomenclature);
+				addNomenclatureUnique(nomenclature);
 			}
 		}
 	}

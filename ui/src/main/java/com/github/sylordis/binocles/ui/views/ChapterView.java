@@ -171,6 +171,7 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 		});
 		expandedCommentsState.addListener((s, o, n) -> expandCollapseButton
 		        .setGraphic(AppIcons.createImageViewFromConfig(n ? AppIcons.ICON_COLLAPSE : AppIcons.ICON_EXPAND)));
+		// TODO Add Mnemonic to create comment button 
 	}
 
 	@FXML
@@ -235,6 +236,7 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 		commentBoxes.add(cbox);
 		commentBoxContainer.getChildren().setAll(commentBoxes);
 		applyCommentStyleOnText(comment);
+		mainController.setModelChanged();
 		// TODO Set listeners for hovering and going away to draw and remove lines
 	}
 
@@ -333,6 +335,7 @@ public class ChapterView extends BorderPane implements Initializable, BinoclesTa
 		this.commentBoxContainer.getChildren().remove(box);
 		clearTextStyle();
 		applyAllCommentsStylesOnText();
+		mainController.setModelChanged();
 	}
 
 	@Override

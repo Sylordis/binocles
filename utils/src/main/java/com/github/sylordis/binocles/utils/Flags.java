@@ -20,6 +20,23 @@ public final class Flags {
 	}
 
 	/**
+	 * Checks if the input matches at least one of the provided flags.
+	 * 
+	 * @param input input to match
+	 * @param flags all flags to check against
+	 * @return true if at least one of the flags matches the input
+	 */
+	public static boolean any(int input, int... flags) {
+		boolean has = false;
+		for (int flag : flags) {
+			has = has(input, flag);
+			if (has)
+				break;
+		}
+		return has;
+	}
+
+	/**
 	 * Checks if an input matches a flag.
 	 * 
 	 * @param input provided input

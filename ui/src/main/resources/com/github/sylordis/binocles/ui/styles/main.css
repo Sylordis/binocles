@@ -185,6 +185,10 @@
 }
 #footer .left {
 	-fx-fill: #9F9F9F;
+	-fx-margin: 0 0 0 3px;
 }
-#footer .right {}
+#footer .right {
+	-fx-fill: #9F9F9F;
+	-fx-margin: 0 3px 0 0;
+}
 #footer .separator {}

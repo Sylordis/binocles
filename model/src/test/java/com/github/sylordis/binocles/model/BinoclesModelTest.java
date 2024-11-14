@@ -84,28 +84,28 @@ class BinoclesModelTest {
 
 	/**
 	 * Test method for
-	 * {@link com.github.sylordis.binocles.model.BinoclesModel#addNomenclature(com.github.sylordis.binocles.model.review.Nomenclature)}.
+	 * {@link com.github.sylordis.binocles.model.BinoclesModel#addNomenclatureUnique(com.github.sylordis.binocles.model.review.Nomenclature)}.
 	 * 
 	 * @throws UniqueIDException
 	 */
 	@Test
 	void testAddNomenclature() throws UniqueIDException {
 		final String name = "Nomenclatures are witchcraft";
-		model.addNomenclature(new Nomenclature(name));
+		model.addNomenclatureUnique(new Nomenclature(name));
 		assertEquals(1, model.getNomenclatures().size());
 		assertTrue(model.hasNomenclature(name));
 	}
 
 	/**
 	 * Test method for
-	 * {@link com.github.sylordis.binocles.model.BinoclesModel#addNomenclature(com.github.sylordis.binocles.model.review.Nomenclature)}.
+	 * {@link com.github.sylordis.binocles.model.BinoclesModel#addNomenclatureUnique(com.github.sylordis.binocles.model.review.Nomenclature)}.
 	 * 
 	 * @throws UniqueIDException
 	 */
 	@Test
 	void testAddNomenclature_UniqueIDException() throws UniqueIDException {
 		final String name = "Nomenclatures are witchcraft";
-		model.addNomenclature(new Nomenclature(name));
+		model.addNomenclatureUnique(new Nomenclature(name));
 		assertEquals(1, model.getNomenclatures().size());
 		assertTrue(model.hasNomenclature(name));
 	}
@@ -358,7 +358,7 @@ class BinoclesModelTest {
 	@Test
 	void testHasNomenclatureNomenclature() throws UniqueIDException {
 		final Nomenclature nomenclature = new Nomenclature("TheDuck");
-		model.addNomenclature(nomenclature);
+		model.addNomenclatureUnique(nomenclature);
 		assertTrue(model.hasNomenclature(nomenclature));
 	}
 
@@ -389,7 +389,7 @@ class BinoclesModelTest {
 	@Test
 	void testHasNomenclatureString() throws UniqueIDException {
 		final String name = "Everybody do the flop!";
-		model.addNomenclature(new Nomenclature(name));
+		model.addNomenclatureUnique(new Nomenclature(name));
 		assertTrue(model.hasNomenclature(name));
 	}
 
@@ -409,7 +409,7 @@ class BinoclesModelTest {
 	 */
 	@Test
 	void testHasNomenclatures() throws UniqueIDException {
-		model.addNomenclature(new Nomenclature("Brikoo"));
+		model.addNomenclatureUnique(new Nomenclature("Brikoo"));
 		assertTrue(model.hasNomenclatures());
 	}
 
@@ -437,8 +437,8 @@ class BinoclesModelTest {
 			}
 
 		};
-		model.addNomenclature(nomD);
-		model.addNomenclature(new Nomenclature("Customise hippity hop"));
+		model.addNomenclatureUnique(nomD);
+		model.addNomenclatureUnique(new Nomenclature("Customise hippity hop"));
 		assertTrue(model.hasCustomNomenclatures());
 	}
 
@@ -467,7 +467,7 @@ class BinoclesModelTest {
 			}
 
 		};
-		model.addNomenclature(nomD);
+		model.addNomenclatureUnique(nomD);
 		assertFalse(model.hasCustomNomenclatures());
 	}
 
@@ -582,7 +582,7 @@ class BinoclesModelTest {
 	void testGetNomenclature() throws UniqueIDException {
 		final String name = "My Nom and Clature";
 		final Nomenclature nomenclature = new Nomenclature(name);
-		model.addNomenclature(nomenclature);
+		model.addNomenclatureUnique(nomenclature);
 		assertEquals(nomenclature, model.getNomenclature(name));
 	}
 
@@ -597,7 +597,7 @@ class BinoclesModelTest {
 	void testGetNomenclature_NotExisting() throws UniqueIDException {
 		final String name = "My Nom and Clature";
 		final Nomenclature nomenclature = new Nomenclature("Cloak and dagger");
-		model.addNomenclature(nomenclature);
+		model.addNomenclatureUnique(nomenclature);
 		assertNull(model.getNomenclature(name));
 	}
 

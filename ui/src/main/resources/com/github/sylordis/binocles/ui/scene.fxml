@@ -76,7 +76,7 @@
                         </ImageView>
                      </graphic></MenuItem>
             <SeparatorMenuItem mnemonicParsing="false" />
-            <MenuItem fx:id="menuFileSave" disable="true" mnemonicParsing="false" text="Save">
+            <MenuItem fx:id="menuFileSave" mnemonicParsing="false" onAction="#saveAction" text="Save">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
@@ -87,7 +87,7 @@
                            </image>
                         </ImageView>
                      </graphic></MenuItem>
-            <MenuItem fx:id="menuFileSaveAs" disable="true" mnemonicParsing="false" text="Save As…">
+            <MenuItem fx:id="menuFileSaveAs" mnemonicParsing="false" onAction="#saveAsAction" text="Save As…">
                      <accelerator>
                         <KeyCodeCombination alt="UP" code="S" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
                      </accelerator>
@@ -240,7 +240,7 @@
                   <Tooltip text="Open file" />
                </tooltip>
             </Button>
-            <Button fx:id="toolbarSave" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" text="Save">
+            <Button fx:id="toolbarSave" contentDisplay="GRAPHIC_ONLY" onAction="#saveAction" mnemonicParsing="false" text="Save">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                      <image>
@@ -251,7 +251,7 @@
                <tooltip>
                   <Tooltip text="Save" />
                </tooltip></Button>
-            <Button fx:id="toolbarSaveAs" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" text="Save As">
+            <Button fx:id="toolbarSaveAs" contentDisplay="GRAPHIC_ONLY" onAction="#saveAsAction" mnemonicParsing="false" text="Save As">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                      <image>
@@ -397,9 +397,9 @@
     </SplitPane>
     <HBox id="footer" alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
       <children>
-        <Text styleClass="left" text="Left status (Modified/Saved)" HBox.hgrow="NEVER" />
+        <Text fx:id="footerLeftStatusText" styleClass="left" text="Unsaved" HBox.hgrow="NEVER" />
         <Region styleClass="separator" HBox.hgrow="ALWAYS" />
-        <Text styleClass="right" text="Right status (File name)" HBox.hgrow="NEVER" />
+        <Text fx:id="footerRightStatusText" text="None" styleClass="right" HBox.hgrow="NEVER" />
       </children>
     </HBox>
   </children>

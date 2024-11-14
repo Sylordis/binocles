@@ -67,8 +67,7 @@ public final class YamlFileImporter implements FileImporter<BinoclesModel> {
 	public BinoclesModel load(File file) throws ImportException, IOException {
 		logger.info("Loading YAML file {}", file);
 		model = new BinoclesModel();
-		try {
-			InputStream inputStream = new FileInputStream(file);
+		try (InputStream inputStream = new FileInputStream(file)) {
 			Yaml yaml = new Yaml();
 			Map<String, Object> data = yaml.load(inputStream);
 			if (data.containsKey("binocles")) {

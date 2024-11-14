@@ -46,6 +46,29 @@ class FlagsTest {
 	}
 
 	@ParameterizedTest
+	@MethodSource("provideAny")
+	void testAny(boolean expected, int input, int[] flags) {
+		assertEquals(expected, Flags.any(input, flags));
+	}
+	
+	private static Stream<Arguments> provideAny() {
+		return Stream.of(
+				// One with normal int true
+				Arguments.of(true, 0x01, new int[] { 1 }),
+				// One true
+				Arguments.of(true, 0x01, new int[] { 0x01 }),
+				// One false
+				Arguments.of(false, 0x01, new int[] { 0x111 }),
+				// One of true
+				Arguments.of(true, 0x01, new int[] { 0x1000, 0x011, 0x0001 }),
+				// One false
+				Arguments.of(false, 0x10, new int[] { 0x10000 }),
+				// One of false
+				Arguments.of(false, 0x10, new int[] { 0x00100, 0x11 })
+		);
+	}
+	
+	@ParameterizedTest
 	@CsvSource(value = { "0x001,0x001,true", "0x100,0x001,false", "0x111,0x001,true", "0x1000,0x1,false" })
 	void testHas(int input, int wanted, boolean expected) {
 		assertEquals(expected, Flags.has(input, wanted));

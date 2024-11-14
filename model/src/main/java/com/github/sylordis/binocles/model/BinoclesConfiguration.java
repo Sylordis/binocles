@@ -82,8 +82,8 @@ public class BinoclesConfiguration {
 	 */
 	private void loadInternalConfigFile() {
 		try {
-			System.out.println(new File(getClass().getClassLoader().getResource("ah").toURI()));
-			System.out.println(new File(getClass().getClassLoader().getResource("ah").toURI()).getAbsolutePath());
+			System.out.println(new File(getClass().getClassLoader().getResource(CFG_FILE).toURI()));
+			System.out.println(new File(getClass().getClassLoader().getResource(CFG_FILE).toURI()).getAbsolutePath());
 			properties.load(getClass().getClassLoader().getResourceAsStream(CFG_FILE));
 		} catch (IOException | URISyntaxException e) {
 			logger.atInfo().withThrowable(e).log("Couldn't load internal settings file.");
