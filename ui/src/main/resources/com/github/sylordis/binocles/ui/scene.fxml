@@ -187,7 +187,6 @@
                      </accelerator>
                   </MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <Menu fx:id="menuReviewCommentSub" disable="true" mnemonicParsing="false" text="Add comment" />
           </items>
                <accelerator>
                   <KeyCodeCombination alt="DOWN" code="R" control="UP" meta="UP" shift="UP" shortcut="UP" />

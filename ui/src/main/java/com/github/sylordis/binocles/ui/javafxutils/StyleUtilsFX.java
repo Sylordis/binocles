@@ -5,12 +5,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.github.sylordis.binocles.ui.components.ColorPreviewBox;
 import com.github.sylordis.binocles.utils.StyleUtils;
 import com.github.sylordis.binocles.utils.StyleUtils.CSSType;
 
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -116,7 +116,7 @@ public final class StyleUtilsFX {
 			String declaration = it.next();
 			nodes.add(new Text(declaration));
 			if (declaration.matches(".*#[0-9a-fA-F]{6}.*")) {
-				Rectangle colorBox = createColorBox(declaration.substring(declaration.indexOf("#")));
+				ColorPreviewBox colorBox = createColorBox(declaration.substring(declaration.indexOf("#")));
 				nodes.add(new Text(" "));
 				nodes.add(colorBox);
 			}
@@ -132,10 +132,10 @@ public final class StyleUtilsFX {
 	 * Creates a coloured box to preview a given colour.
 	 * 
 	 * @param hexcolor the colour in hex format
-	 * @return a rectangle filled with the provided colour
+	 * @return a ColorPreviewBox filled with the provided colour
 	 */
-	public static Rectangle createColorBox(String hexcolor) {
-		Rectangle box = new Rectangle(12, 12, Color.web(hexcolor));
+	public static ColorPreviewBox createColorBox(String hexcolor) {
+		ColorPreviewBox box = new ColorPreviewBox(12, Color.web(hexcolor));
 		box.getStyleClass().add("color-box");
 		return box;
 	}

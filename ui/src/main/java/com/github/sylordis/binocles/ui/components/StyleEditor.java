@@ -14,7 +14,6 @@ import javax.swing.text.html.CSS;
 import com.github.sylordis.binocles.ui.javafxutils.StyleUtilsFX;
 import com.github.sylordis.binocles.utils.MapUtils;
 
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -27,7 +26,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -80,27 +78,6 @@ public class StyleEditor extends VBox implements Initializable {
 		}
 	}
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		ColorPreviewBox box = new ColorPreviewBox(18);
-		box.initialize(location, resources);
-		box.foregroundColorProperty().bind(Bindings.createObjectBinding(
-		        () -> getColorIfSelected(controlColorPickerForeground, controlButtonColorPickerForeground),
-		        controlButtonColorPickerForeground.selectedProperty(), controlColorPickerForeground.valueProperty()));
-		box.backgroundColorProperty().bind(Bindings.createObjectBinding(
-		        () -> getColorIfSelected(controlColorPickerBackground, controlButtonColorPickerBackground),
-		        controlButtonColorPickerBackground.selectedProperty(), controlColorPickerBackground.valueProperty()));
-		toolbar.getItems().add(box);
-	}
-
-	private Paint getColorIfSelected(ColorPicker picker, ToggleButton selector) {
-		Paint paint = null;
-		if (selector.isSelected()) {
-			paint = picker.valueProperty().orElse(null).getValue();
-		}
-		return paint;
-	}
-	
 	/**
 	 * Sets the content of the style editor, e.g. the text displayed.
 	 * 
@@ -200,6 +177,11 @@ public class StyleEditor extends VBox implements Initializable {
 		if (controlButtonColorPickerBackground.isSelected())
 			css.put(CSS.Attribute.BACKGROUND_COLOR, StyleUtilsFX.toHexString(controlColorPickerBackground.getValue()));
 		return css;
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+
 	}
 
 }

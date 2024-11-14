@@ -32,7 +32,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 
 /**
- * Dialog to create a new or edit a book.
+ * Dialog to create a new or edit a comment type.
  * 
  * @author sylordis
  *

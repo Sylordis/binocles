@@ -16,7 +16,7 @@ import javafx.stage.FileChooser;
 public class BinoclesUIConfiguration {
 
 	// TODO Configuration uses the same as
-	
+
 	/**
 	 * Display size.
 	 */

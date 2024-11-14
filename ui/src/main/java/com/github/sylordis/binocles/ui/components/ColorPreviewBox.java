@@ -3,9 +3,6 @@ package com.github.sylordis.binocles.ui.components;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.github.sylordis.binocles.ui.javafxutils.FXBindUtils;
 
 import javafx.beans.binding.Bindings;
@@ -14,6 +11,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.StackPane;
@@ -33,13 +31,16 @@ import javafx.scene.shape.Rectangle;
  */
 public class ColorPreviewBox extends StackPane implements Initializable {
 
-	private static float REDUCTION_IF_MULTIPLE = 0.75f;
-	private final Logger logger = LogManager.getLogger();
+	private static float DEFAULT_SIZE_REDUCTION_RATIO = 0.75f;
 
 	/**
-	 * Size property of the box on all sides (min, pref and max).
+	 * Size property of this component for both width and height (min, pref and max).
 	 */
 	private DoubleProperty size;
+	/**
+	 * Size property for smaller size.
+	 */
+	private DoubleProperty sizeSmaller;
 	/**
 	 * Dynamic property for rectangle sizes.
 	 */
@@ -72,6 +73,15 @@ public class ColorPreviewBox extends StackPane implements Initializable {
 	}
 
 	/**
+	 * Builds a colour preview box with no set colours to preview.
+	 * 
+	 * @param size maximum size of the box
+	 */
+	public ColorPreviewBox(double size, double sizeSmaller) {
+		this(size, sizeSmaller, null, null);
+	}
+
+	/**
 	 * Builds a colour preview box with only one colour to preview.
 	 * 
 	 * @param size  maximum size of the box
@@ -82,6 +92,16 @@ public class ColorPreviewBox extends StackPane implements Initializable {
 	}
 
 	/**
+	 * Builds a colour preview box with only one colour to preview.
+	 * 
+	 * @param size  maximum size of the box
+	 * @param color colour to preview
+	 */
+	public ColorPreviewBox(double size, double sizeSmaller, Paint color) {
+		this(size, sizeSmaller, color, null);
+	}
+
+	/**
 	 * Builds a colour preview box with two colours to preview, a foreground and a background one.
 	 * 
 	 * @param size       maximum size of the box
@@ -89,8 +109,20 @@ public class ColorPreviewBox extends StackPane implements Initializable {
 	 * @param background colour to preview in the background (can be null)
 	 */
 	public ColorPreviewBox(double size, Paint foreground, Paint background) {
+		this(size, size * DEFAULT_SIZE_REDUCTION_RATIO, foreground, background);
+	}
+
+	/**
+	 * Builds a colour preview box with two colours to preview, a foreground and a background one.
+	 * 
+	 * @param size       maximum size of the box
+	 * @param foreground colour to preview in the foreground (can be null)
+	 * @param background colour to preview in the background (can be null)
+	 */
+	public ColorPreviewBox(double size, double sizeSmaller, Paint foreground, Paint background) {
 		super();
 		this.size = new SimpleDoubleProperty(size);
+		this.sizeSmaller = new SimpleDoubleProperty(sizeSmaller);
 		this.rectangleSize = new SimpleDoubleProperty(size);
 		this.foregroundColor = new SimpleObjectProperty<Paint>();
 		this.backgroundColor = new SimpleObjectProperty<Paint>();
@@ -104,28 +136,27 @@ public class ColorPreviewBox extends StackPane implements Initializable {
 		this.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
 		foregroundRectangle = new Rectangle();
 		backgroundRectangle = new Rectangle();
+		foregroundRectangle.setFill(foregroundColor.get());
+		backgroundRectangle.setFill(backgroundColor.get());
 		foregroundRectangle.fillProperty().bind(foregroundColor.orElse(Color.TRANSPARENT));
 		backgroundRectangle.fillProperty().bind(backgroundColor.orElse(Color.TRANSPARENT));
 		FXBindUtils.bindDimensions(foregroundRectangle, rectangleSize);
 		FXBindUtils.bindDimensions(backgroundRectangle, rectangleSize);
 		rectangleSize.bind(
 		        Bindings.createDoubleBinding(this::calculateNewRectangleSize, foregroundColor, backgroundColor, size));
-		backgroundRectangle.xProperty().bind(size.subtract(rectangleSize));
-		backgroundRectangle.yProperty().bind(size.subtract(rectangleSize));
-		this.getChildren().addAll(foregroundRectangle, backgroundRectangle);
-		// Debug
-		foregroundRectangle.widthProperty()
-		        .addListener((o, c, n) -> logger.debug("fg: {}x{} on ({},{})", foregroundRectangle.getWidth(),
-		                foregroundRectangle.getHeight(), foregroundRectangle.getX(), foregroundRectangle.getY()));
-		backgroundRectangle.yProperty()
-		        .addListener((o, c, n) -> logger.debug("bg: {}x{} on ({},{})", backgroundRectangle.getWidth(),
-		                backgroundRectangle.getHeight(), backgroundRectangle.getX(), backgroundRectangle.getY()));
+		this.getChildren().addAll(backgroundRectangle, foregroundRectangle);
 	}
 
+	/**
+	 * Calculates the new size for both rectangles according to how many should be visible.
+	 * 
+	 * @return the smaller size if both should be visible, the box size otherwise
+	 */
 	private double calculateNewRectangleSize() {
-		return size.get()
-		        * (foregroundColor.isNotNull().get() && backgroundColor.isNotNull().get() ? REDUCTION_IF_MULTIPLE
-		                : 1.0f);
+		boolean bothVisible = foregroundColor.isNotNull().get() && backgroundColor.isNotNull().get();
+		StackPane.setAlignment(foregroundRectangle, bothVisible ? Pos.TOP_LEFT : Pos.CENTER);
+		StackPane.setAlignment(backgroundRectangle, bothVisible ? Pos.BOTTOM_RIGHT : Pos.CENTER);
+		return bothVisible ? sizeSmaller.get() : size.get();
 	}
 
 	/**

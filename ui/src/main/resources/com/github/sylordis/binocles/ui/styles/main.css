@@ -131,7 +131,6 @@
 .style-justified {
 	-fx-text-align: justify;
 }
-
 .text-danger {
 	-fx-fill: #dc3545;
 }

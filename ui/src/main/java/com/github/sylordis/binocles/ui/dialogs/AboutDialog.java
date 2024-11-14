@@ -61,7 +61,7 @@ public class AboutDialog implements Displayable<Void> {
 		TextArea licenseField = new TextArea(BinoclesUIConstants.LICENSE_SHORT);
 		licenseField.setEditable(false);
 		licenseField.setFocusTraversable(false);
-		licenseField.getStyleClass().add("edge-to-edge");
+		licenseField.getStyleClass().addAll("edge-to-edge", "no-focus");
 		gridPane.addRow(4, licenseField);
 		GridPane.setColumnSpan(licenseField, GridPane.REMAINING);
 	}

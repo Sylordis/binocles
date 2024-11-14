@@ -70,9 +70,9 @@ public abstract class IOFactory<T> {
 		} else {
 			try {
 				Class<? extends FileImporter<T>> type = importers.get(ext);
-				logger.debug("Extension={} Importer type={}", ext, type);
+				logger.debug("Extension={} Importer={}", ext, type);
 				if (null == type) {
-					throw new ImportException("File type {} is not managed by this software");
+					throw new ImportException(String.format("Import of file type %s is not managed by this software", ext));
 				}
 				importer = type.getDeclaredConstructor().newInstance();
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
@@ -100,9 +100,9 @@ public abstract class IOFactory<T> {
 		} else {
 			try {
 				Class<? extends FileExporter<T>> type = exporters.get(ext);
-				logger.debug("Extension={} Exporter type={}", ext, type);
+				logger.debug("Extension={} Exporter={}", ext, type);
 				if (null == type) {
-					throw new ExportException("File type {} is not managed by this software");
+					throw new ExportException("Export of file type {} is not managed by this software");
 				}
 				exporter = type.getDeclaredConstructor().newInstance();
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
