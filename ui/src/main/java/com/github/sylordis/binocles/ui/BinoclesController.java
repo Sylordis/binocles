@@ -555,11 +555,17 @@ public class BinoclesController implements Initializable, Controller {
 
 	@FXML
 	public void exitAction(ActionEvent event) {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setHeaderText("Are you sure you want to quit?");
-		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == ButtonType.OK)
-			Platform.exit();
+		Platform.exit();
+		// TODO Add the following in the stop() from Application
+		// https://stackoverflow.com/questions/26619566/javafx-stage-close-handler
+		// https://stackoverflow.com/questions/26060859/javafx-getting-scene-from-a-controller
+//		if (!user.isCurrentModelSaved()) {
+//			Alert alert = new Alert(AlertType.CONFIRMATION);
+//			alert.setHeaderText("You have unsaved changes. Are you sure you want to quit?");
+//			Optional<ButtonType> result = alert.showAndWait();
+//			if (result.get() == ButtonType.OK)
+//				Platform.exit();
+//		}
 	}
 
 	@FXML
@@ -710,6 +716,8 @@ public class BinoclesController implements Initializable, Controller {
 					try {
 						model.addNomenclatureUnique(new DefaultNomenclature());
 					} catch (UniqueIDException e) {
+						model.getNomenclatures().removeIf(n -> n.isDefaultNomenclature());
+						model.getNomenclatures().add(new DefaultNomenclature());
 						logger.atError().withThrowable(e).log("Error during import.");
 						showErrorAlert(
 						        "Nomenclature with name 'Default' already exists in the imported file. Import was successful but Default Nomenclature was replaced.");
@@ -727,6 +735,15 @@ public class BinoclesController implements Initializable, Controller {
 			logger.atError().withThrowable(e).log("Could not import the selected file.");
 			showLongErrorAlert("Error while opening file", "Could not import the selected file.", e.getMessage());
 		}
+	}
+
+	@FXML
+	public void newAction(ActionEvent event) {
+		logger.info("New model");
+		this.model = new BinoclesModel();
+		mainTabPane.getTabs().clear();
+		rebuildTrees();
+		setButtonsStatus();
 	}
 
 	@Override
@@ -776,7 +793,6 @@ public class BinoclesController implements Initializable, Controller {
 		mainTabPane.setTabDragPolicy(TabDragPolicy.REORDER);
 //		TODO nomenclaturesTree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 //		TODO booksTree.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		// Trigger change listeners
 		// Add welcome tab if necessary
 		mainTabPane.getTabs().add(new Tab("Welcome", new WelcomeView()));
 		logger.trace("Controller initialisation finished");
