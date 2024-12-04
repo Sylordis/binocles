@@ -81,6 +81,7 @@ public class CommentBox extends CollapsibleBox implements Controller {
 			nomenclatureFields.addAll(comment.getType().getFields().keySet());
 		}
 		// Text content
+		getMainContent().getChildren().clear();
 		if (nomenclatureFields.size() == 1) {
 			Text text = createTextField(comment.getFields().get(nomenclatureFields.get(0)));
 			TextFlow flow = new TextFlow(text);
