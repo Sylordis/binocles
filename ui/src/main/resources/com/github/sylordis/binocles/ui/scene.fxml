@@ -122,7 +122,7 @@
                            </image>
                         </ImageView>
                      </graphic></MenuItem>
-                  <MenuItem fx:id="menuFileExportRender" disable="true" mnemonicParsing="false" text="Export (render)">
+                  <MenuItem fx:id="menuFileExportRender" onAction="#exportRenderAction" mnemonicParsing="false" text="Export (render)">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -262,7 +262,7 @@
                <tooltip>
                   <Tooltip text="Save as..." />
                </tooltip></Button>
-            <Button fx:id="toolbarImport" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Import">
+            <Button fx:id="toolbarImport" onAction="#importAction" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Import">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                      <image>
@@ -274,7 +274,7 @@
                   <Tooltip text="Import" />
                </tooltip>
             </Button>
-            <Button fx:id="toolbarExportStruct" contentDisplay="GRAPHIC_ONLY" disable="true" mnemonicParsing="false" text="Export (Structural)">
+            <Button fx:id="toolbarExportStruct" onAction="#exportStructuralAction" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Export (Structural)">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                      <image>
@@ -284,8 +284,9 @@
                </graphic>
                <tooltip>
                   <Tooltip text="Export (Structural)" />
-               </tooltip></Button>
-            <Button fx:id="toolbarExportRender" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Export (Render)">
+               </tooltip>
+            </Button>
+            <Button fx:id="toolbarExportRender" onAction="#exportRenderAction" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Export (Render)">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                      <image>
@@ -383,6 +384,7 @@
                                     </items>
                                   </Menu>
                                 <MenuItem fx:id="booksTreeMenuEdit" disable="true" mnemonicParsing="false" onAction="#editTextElementAction" text="Edit" />
+                                <MenuItem fx:id="booksTreeMenuExportRender" disable="true" mnemonicParsing="false" onAction="#exportRenderTextElementAction" text="Export (render)" />
                                 <MenuItem fx:id="booksTreeMenuDelete" disable="true" mnemonicParsing="false" onAction="#deleteTextElementsAction" text="Delete" />
                               </items>
                             </ContextMenu>

@@ -161,6 +161,8 @@ public class BinoclesController implements Initializable, Controller {
 	private MenuItem booksTreeMenuEdit;
 	@FXML
 	private MenuItem booksTreeMenuDelete;
+	@FXML
+	private MenuItem booksTreeMenuExportRender;
 
 	@FXML
 	private Button toolbarOpen;
@@ -554,6 +556,18 @@ public class BinoclesController implements Initializable, Controller {
 	}
 
 	@FXML
+	public void exportRenderAction(ActionEvent event) {
+		// TODO Export given selection with a wizard
+		showNotImplementedAlert();
+	}
+
+	@FXML
+	public void exportRenderTextElementAction(ActionEvent event) {
+		// TODO
+		showNotImplementedAlert();
+	}
+
+	@FXML
 	public void exitAction(ActionEvent event) {
 		Platform.exit();
 		// TODO Add the following in the stop() from Application
@@ -566,12 +580,6 @@ public class BinoclesController implements Initializable, Controller {
 //			if (result.get() == ButtonType.OK)
 //				Platform.exit();
 //		}
-	}
-
-	@FXML
-	public void exportRenderAction(ActionEvent event) {
-		// TODO Export given selection with a wizard
-		showNotImplementedAlert();
 	}
 
 	@FXML
@@ -778,8 +786,10 @@ public class BinoclesController implements Initializable, Controller {
 		// Set trees change listener
 		booksTree.setOnMouseClicked(
 		        TreeVarClickEventHandler.createDoubleClickHandler(booksTree, this::openTabItemAction));
-		booksTree.getSelectionModel().selectedItemProperty()
-		        .addListener((s, o, n) -> setTextElementsContextMenuStatus());
+		booksTree.getSelectionModel().selectedItemProperty().addListener((s, o, n) -> {
+			logger.debug("");
+			setTextElementsContextMenuStatus();
+		});
 		nomenclaturesTree.setOnMouseClicked(
 		        TreeVarClickEventHandler.createDoubleClickHandler(nomenclaturesTree, this::openTabItemAction));
 		nomenclaturesTree.getSelectionModel().selectedItemProperty()
@@ -941,8 +951,8 @@ public class BinoclesController implements Initializable, Controller {
 	 */
 	public void setButtonsStatus() {
 		menuReviewChapterCreate.setDisable(!model.hasBooks());
-		toolbarCreateChapter.setDisable(!model.hasBooks());
 		menuReviewCommentTypeCreate.setDisable(!model.hasCustomNomenclatures());
+		toolbarCreateChapter.setDisable(!model.hasBooks());
 		toolbarCreateCommentType.setDisable(!model.hasCustomNomenclatures());
 		booksTreeMenuNewChapter.setDisable(!model.hasBooks());
 		nomenclaturesTreeMenuNewCommentType.setDisable(!model.hasCustomNomenclatures());
@@ -951,10 +961,10 @@ public class BinoclesController implements Initializable, Controller {
 	/**
 	 * Update method callable by user controllers.
 	 */
-	public void setModelChanged() { 
+	public void setModelChanged() {
 		user.modelWasModified();
 	}
-	
+
 	@Override
 	public void setParentController(Controller parent) {
 		// Nothing to do here
@@ -962,6 +972,8 @@ public class BinoclesController implements Initializable, Controller {
 
 	/**
 	 * Sets the review configuration tree's context menu items status according to current selection.
+	 * 
+	 * This is triggered every time the selection model of the tree changes.
 	 */
 	public void setReviewElementsContextMenuStatus() {
 		nomenclaturesTreeMenuDelete.setDisable(nomenclaturesTree.getSelectionModel().isEmpty());
@@ -970,10 +982,15 @@ public class BinoclesController implements Initializable, Controller {
 
 	/**
 	 * Sets the text elements tree's context menu items status according to current selection.
+	 * 
+	 * This is triggered every time the selection model of the tree changes.
 	 */
 	public void setTextElementsContextMenuStatus() {
 		booksTreeMenuDelete.setDisable(booksTree.getSelectionModel().isEmpty());
+		booksTreeMenuExportRender.setDisable(booksTree.getSelectionModel().isEmpty());
 		booksTreeMenuEdit.setDisable(booksTree.getSelectionModel().getSelectedIndices().size() != 1);
+		menuFileExportRender.setDisable(booksTree.getSelectionModel().isEmpty());
+		toolbarExportStruct.setDisable(booksTree.getSelectionModel().isEmpty());
 	}
 
 	/**
