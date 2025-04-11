@@ -10,31 +10,20 @@ The software’s purpose is to facilitate the beta reading of texts by their use
 
 # Dependencies
 
-Only [Java 21 JDK](https://openjdk.org/projects/jdk/21/) is required for runtime.
+Only [Java 21 JDK](https://openjdk.org/projects/jdk/21/) is required for runtime, as all dependencies are included in the jar.
 
 This software is developed with [Gradle](https://gradle.org/) as dependency manager.
 
-It uses the following dependencies (already included as-is in the jar):
-
-- [Apache Commons Text](https://commons.apache.org/proper/commons-text/)
-- [JavaFX 21](https://openjfx.io/)
-- [Guava](https://github.com/google/guava)
-- [Log4J](https://logging.apache.org/log4j/2.x/)
-- [RichTextFX](https://github.com/FXMisc/RichTextFX)
-- [SnakeYAML](https://bitbucket.org/snakeyaml/snakeyaml/src)
-
-Testing dependencies:
-
-- [JUnit 5 (Jupiter)](https://junit.org/junit5/)
-- [Hamcrest](https://hamcrest.org/JavaHamcrest/)
-- [Mockito](https://site.mockito.org/)
+The dependencies used by this project are indicated in the different gradle files:
+- [java common conventions](buildSrc/src/main/groovy/com.github.sylordis.binocles.java-common-conventions.gradle) for common dependencies
+- [model](model/build.gradle)
+- [ui](ui/build.gradle) for UI related things (like JavaFX)
+- [utils](utils/build.gradle)
 
 The project is a gradle multi-project with the following sub-projects:
 
 - `model` model of the application
-  - uses `utils` as dependency
-- `ui` everything regarding the ui
-  - uses `model` and `utils` as dependency
+- `ui` everything regarding the UI.
 - `utils` utils unrelated to business logic
 
 # Installation

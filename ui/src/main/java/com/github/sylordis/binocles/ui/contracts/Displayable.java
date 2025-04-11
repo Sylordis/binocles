@@ -1,4 +1,4 @@
-package com.github.sylordis.binocles.ui.dialogs;
+package com.github.sylordis.binocles.ui.contracts;
 
 import java.util.Optional;
 

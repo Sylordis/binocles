@@ -2,6 +2,7 @@ package com.github.sylordis.binocles.ui.dialogs;
 
 import com.github.sylordis.binocles.model.BinoclesConfiguration;
 import com.github.sylordis.binocles.ui.AppIcons;
+import com.github.sylordis.binocles.ui.contracts.Displayable;
 import com.github.sylordis.binocles.ui.javafxutils.Browser;
 import com.github.sylordis.binocles.ui.settings.BinoclesUIConstants;
 

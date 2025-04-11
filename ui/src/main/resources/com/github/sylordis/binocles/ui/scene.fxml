@@ -122,7 +122,7 @@
                            </image>
                         </ImageView>
                      </graphic></MenuItem>
-                  <MenuItem fx:id="menuFileExportRender" onAction="#exportRenderAction" mnemonicParsing="false" text="Export (render)">
+                  <MenuItem fx:id="menuFileExportRender" mnemonicParsing="false" onAction="#exportRenderAction" text="Export (render)">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -186,7 +186,6 @@
                         <KeyCodeCombination alt="UP" code="T" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
                      </accelerator>
                   </MenuItem>
-                  <SeparatorMenuItem mnemonicParsing="false" />
           </items>
                <accelerator>
                   <KeyCodeCombination alt="DOWN" code="R" control="UP" meta="UP" shift="UP" shortcut="UP" />
@@ -194,7 +193,7 @@
         </Menu>
             <Menu mnemonicParsing="false" text="Settings">
                <items>
-                  <MenuItem fx:id="menuSettingsSettings" mnemonicParsing="false" text="Settings">
+                  <MenuItem fx:id="menuSettingsSettings" mnemonicParsing="false" onAction="#openSettingsAction" text="Settings">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                            <image>
@@ -240,7 +239,7 @@
                   <Tooltip text="Open file" />
                </tooltip>
             </Button>
-            <Button fx:id="toolbarSave" contentDisplay="GRAPHIC_ONLY" onAction="#saveAction" mnemonicParsing="false" text="Save">
+            <Button fx:id="toolbarSave" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#saveAction" text="Save">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                      <image>
@@ -251,7 +250,7 @@
                <tooltip>
                   <Tooltip text="Save" />
                </tooltip></Button>
-            <Button fx:id="toolbarSaveAs" contentDisplay="GRAPHIC_ONLY" onAction="#saveAsAction" mnemonicParsing="false" text="Save As">
+            <Button fx:id="toolbarSaveAs" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#saveAsAction" text="Save As">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                      <image>
@@ -262,7 +261,7 @@
                <tooltip>
                   <Tooltip text="Save as..." />
                </tooltip></Button>
-            <Button fx:id="toolbarImport" onAction="#importAction" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Import">
+            <Button fx:id="toolbarImport" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#importAction" text="Import">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                      <image>
@@ -274,7 +273,7 @@
                   <Tooltip text="Import" />
                </tooltip>
             </Button>
-            <Button fx:id="toolbarExportStruct" onAction="#exportStructuralAction" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Export (Structural)">
+            <Button fx:id="toolbarExportStruct" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#exportStructuralAction" text="Export (Structural)">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                      <image>
@@ -286,7 +285,7 @@
                   <Tooltip text="Export (Structural)" />
                </tooltip>
             </Button>
-            <Button fx:id="toolbarExportRender" onAction="#exportRenderAction" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" text="Export (Render)">
+            <Button fx:id="toolbarExportRender" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" onAction="#exportRenderAction" text="Export (Render)">
                <graphic>
                   <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
                      <image>
@@ -401,7 +400,7 @@
       <children>
         <Text fx:id="footerLeftStatusText" styleClass="left" text="Unsaved" HBox.hgrow="NEVER" />
         <Region styleClass="separator" HBox.hgrow="ALWAYS" />
-        <Text fx:id="footerRightStatusText" text="None" styleClass="right" HBox.hgrow="NEVER" />
+        <Text fx:id="footerRightStatusText" styleClass="right" text="None" HBox.hgrow="NEVER" />
       </children>
     </HBox>
   </children>

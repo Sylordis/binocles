@@ -130,7 +130,8 @@ public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterProperties
 		ListenerValidator<String> chapterNameUIValidator = new ListenerValidator<String>()
 		        .validIf("Chapter name cannot be blank or empty.", (o, n) -> !n.isBlank())
 		        .validIf("Chapter with the same name already exists in the book (case insensitive).",
-		                (o, n) -> Identifiable.checkNewNameUniquenessValidityAmongParent(n, book, chapter, (b,s) -> b.hasChapter(s)))
+		                (o, n) -> Identifiable.checkNewNameUniquenessValidityAmongParent(n, book, chapter,
+		                        (b, s) -> b.hasChapter(s)))
 		        .feed(this::setChapterNameFeedback).onEither(this::setChapterNameValid).andThen(this::updateFormStatus);
 		ListenerValidator<Book> bookParentUIValidator = new ListenerValidator<Book>()
 		        .validIf("You have to pick a book to add this chapter to.", (o, n) -> null != n)
@@ -150,12 +151,9 @@ public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterProperties
 		fieldChapterName.textProperty().addListener(chapterNameUIValidator);
 		fieldChapterContent.textProperty().addListener(chapterContentUIValidator);
 		// Feedback setup
-		addFeedbackCollector(() -> bookParentFeedback);
-		addFeedbackCollector(() -> chapterNameFeedback);
-		addFeedbackCollector(() -> chapterContentFeedback);
-		addFormValidator(() -> bookParentValid);
-		addFormValidator(() -> chapterContentValid);
-		addFormValidator(() -> chapterNameValid);
+		getFormUserCtrl().addFeedbackCollectors(() -> bookParentFeedback, () -> chapterNameFeedback,
+		        () -> chapterContentFeedback);
+		getFormUserCtrl().addFormValidators(() -> bookParentValid, () -> chapterContentValid, () -> chapterNameValid);
 		// Set up components status
 		setConfirmButtonDisable(true);
 		fieldBookParent.setButtonCell(new CustomListCell<Book>(b -> b.getTitle()));

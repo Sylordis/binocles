@@ -254,12 +254,8 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 		        .andThen(() -> fieldMetaFieldsControlsAdd.setDisable(!fieldNameValid));
 		fieldMetaFieldsControlsName.textProperty().addListener(fieldNameUIValidator);
 		// Set feedback collectors & form validators
-		addFeedbackCollector(() -> nameFeedback);
-		addFeedbackCollector(() -> nomenclatureChoiceFeedback);
-		addFeedbackCollector(() -> fieldsFeedback);
-		addFormValidator(() -> nameValid);
-		addFormValidator(() -> nomenclatureChoiceValid);
-		addFormValidator(() -> fieldsValid);
+		getFormUserCtrl().addFeedbackCollectors(() -> nameFeedback, () -> nomenclatureChoiceFeedback, () -> fieldsFeedback);
+		getFormUserCtrl().addFormValidators(() -> nameValid, () -> nomenclatureChoiceValid, () -> fieldsValid);
 		// Set up components status
 		fieldNomenclatureChoice.setButtonCell(new CustomListCell<Nomenclature>(n -> n.getName()));
 		fieldNomenclatureChoice.setCellFactory(p -> {

@@ -1,13 +1,11 @@
 package com.github.sylordis.binocles.ui.dialogs;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import com.github.sylordis.binocles.model.BinoclesModel;
+import com.github.sylordis.binocles.ui.components.FormValidationControl;
+import com.github.sylordis.binocles.ui.contracts.Displayable;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -63,21 +61,13 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	 */
 	private Image icon;
 	/**
-	 * All suppliers to gather feedback when needed.
-	 * 
-	 * @see #combineFeedbacks()
-	 */
-	private List<Supplier<String>> feedbackCollectors;
-	/**
-	 * Suppliers that check the current dialog validity. A field is valid when its validator returns
-	 * true.
-	 */
-	private List<Supplier<Boolean>> formValidators;
-
-	/**
 	 * User feedback, only set if {@link #addFormFeedback(int)} is called.
 	 */
 	private Text formFeedback;
+	/**
+	 * Manages all feedback and validation.
+	 */
+	protected FormValidationControl formCtrl;
 
 	/**
 	 * Creates a new custom dialog.
@@ -87,8 +77,7 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	public AbstractAnswerDialog(String title, BinoclesModel model) {
 		this.title = title;
 		this.model = model;
-		feedbackCollectors = new ArrayList<>();
-		formValidators = new ArrayList<>();
+		this.formCtrl = new FormValidationControl();
 	}
 
 	/**
@@ -161,19 +150,6 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	}
 
 	/**
-	 * Checks all validators set in this dialog and returns a final answer.
-	 * 
-	 * @return
-	 */
-	public boolean checkFormValidity() {
-		boolean validity = true;
-		for (Supplier<Boolean> validator : formValidators) {
-			validity = validity && validator.get();
-		}
-		return validity;
-	}
-
-	/**
 	 * Creates a resulting object wrapped in an {@link Optional} that can be processed by the calling
 	 * class and as a result of the {@link Dialog#showAndWait()} method. A <code>null</code> result
 	 * indicates a cancellation.<br/>
@@ -193,21 +169,6 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	public abstract R convertResult(ButtonType button);
 
 	/**
-	 * Combines all feedback from the collectors and consumes it.
-	 * 
-	 * @param consumer
-	 */
-	public void combineAndProcessFeedback(Consumer<String> consumer) {
-		StringBuilder collect = new StringBuilder();
-		for (Supplier<String> s : feedbackCollectors) {
-			if (!collect.isEmpty())
-				collect.append("\n");
-			collect.append(s.get());
-		}
-		consumer.accept(collect.toString());
-	}
-
-	/**
 	 * Default method to update the form status, triggering an update of the status of the confirm
 	 * button and processes all feedback from the feedback collectors to set the feedback field. Check
 	 * the "see also" to see which methods are called.
@@ -217,7 +178,7 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	 */
 	public void updateFormStatus() {
 		setConfirmButtonDisabledOnValidity();
-		combineAndProcessFeedback(formFeedback::setText);
+		formCtrl.combineAndProcessFeedback(formFeedback::setText);
 		sizeToScene();
 	}
 
@@ -312,70 +273,6 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	}
 
 	/**
-	 * @return the feedbackCollectors
-	 */
-	public List<Supplier<String>> getFeedbackCollectors() {
-		return feedbackCollectors;
-	}
-
-	/**
-	 * @param feedbackCollectors the feedbackCollectors to set
-	 */
-	public void setFeedbackCollectors(List<Supplier<String>> feedbackCollectors) {
-		this.feedbackCollectors = feedbackCollectors;
-	}
-
-	/**
-	 * Adds a new feedback collector.
-	 * 
-	 * @param collector
-	 */
-	public void addFeedbackCollector(Supplier<String> collector) {
-		feedbackCollectors.add(collector);
-	}
-
-	/**
-	 * Adds multiple feedback collectors.
-	 * 
-	 * @param collectors
-	 */
-	public void addFeedbackCollectors(Collection<? extends Supplier<String>> collectors) {
-		feedbackCollectors.addAll(collectors);
-	}
-
-	/**
-	 * @return the formValidators
-	 */
-	public List<Supplier<Boolean>> getFormValidators() {
-		return formValidators;
-	}
-
-	/**
-	 * @param formValidators the formValidators to set
-	 */
-	public void setFormValidators(List<Supplier<Boolean>> formValidators) {
-		this.formValidators = formValidators;
-	}
-
-	/**
-	 * Adds a new validator for this dialog.
-	 * 
-	 * @param validator
-	 */
-	public void addFormValidator(Supplier<Boolean> validator) {
-		formValidators.add(validator);
-	}
-
-	/**
-	 * Adds multiple validators for this dialog.
-	 * 
-	 * @param validators
-	 */
-	public void addFormValidators(Collection<? extends Supplier<Boolean>> validators) {
-		formValidators.addAll(validators);
-	}
-
-	/**
 	 * Sets the disabled status of the confirm button.
 	 * 
 	 * @param disable true to disable, false to enable
@@ -389,11 +286,11 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	 * Sets the confirmation button disabled property according to the form validity. If the form is
 	 * valid, the button will be enabled, it will be disabled otherwise.
 	 * 
-	 * @see #checkFormValidity()
+	 * @see #checkValidity()
 	 * @see #setConfirmButtonDisable(boolean)
 	 */
 	public void setConfirmButtonDisabledOnValidity() {
-		setConfirmButtonDisable(!checkFormValidity());
+		setConfirmButtonDisable(!formCtrl.checkValidity());
 	}
 
 	/**
@@ -408,6 +305,13 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	 */
 	public Text getFormFeedback() {
 		return formFeedback;
+	}
+
+	/**
+	 * @return the formUserCtrl
+	 */
+	protected FormValidationControl getFormUserCtrl() {
+		return formCtrl;
 	}
 
 }

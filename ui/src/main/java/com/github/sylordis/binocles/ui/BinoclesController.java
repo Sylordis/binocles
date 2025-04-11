@@ -224,7 +224,7 @@ public class BinoclesController implements Initializable, Controller {
 			} catch (UniqueIDException e) {
 				logger.error(e);
 			}
-			setButtonsStatus();
+			setButtonsAndMenuStatus();
 			user.modelWasModified();
 		}
 	}
@@ -265,7 +265,7 @@ public class BinoclesController implements Initializable, Controller {
 				showErrorAlert("Unique ID error", "Books only accept unique id'd chapters.");
 			}
 		}
-		setButtonsStatus();
+		setButtonsAndMenuStatus();
 	}
 
 	@FXML
@@ -354,7 +354,7 @@ public class BinoclesController implements Initializable, Controller {
 			} catch (UniqueIDException e) {
 				logger.error(e);
 			}
-			setButtonsStatus();
+			setButtonsAndMenuStatus();
 		}
 	}
 
@@ -734,7 +734,7 @@ public class BinoclesController implements Initializable, Controller {
 					showNotImplementedAlert();
 				}
 				rebuildTrees();
-				setButtonsStatus();
+				setButtonsAndMenuStatus();
 			}
 		} catch (IOException e) {
 			logger.atError().withThrowable(e).log("Could not read the selected file.");
@@ -751,7 +751,7 @@ public class BinoclesController implements Initializable, Controller {
 		this.model = new BinoclesModel();
 		mainTabPane.getTabs().clear();
 		rebuildTrees();
-		setButtonsStatus();
+		setButtonsAndMenuStatus();
 	}
 
 	@Override
@@ -845,9 +845,15 @@ public class BinoclesController implements Initializable, Controller {
 			mainTabPane.getTabs().clear();
 			openFile(file);
 		}
-		setButtonsStatus();
+		setButtonsAndMenuStatus();
 	}
 
+	@FXML
+	public void openSettingsAction(ActionEvent event) {
+		// TODO
+		showNotImplementedAlert();
+	}
+	
 	/**
 	 * Opens a new tab from the books tree.
 	 * 
@@ -950,12 +956,26 @@ public class BinoclesController implements Initializable, Controller {
 	 * Changes the status of the buttons according to software state.
 	 */
 	public void setButtonsStatus() {
-		menuReviewChapterCreate.setDisable(!model.hasBooks());
-		menuReviewCommentTypeCreate.setDisable(!model.hasCustomNomenclatures());
 		toolbarCreateChapter.setDisable(!model.hasBooks());
 		toolbarCreateCommentType.setDisable(!model.hasCustomNomenclatures());
-		booksTreeMenuNewChapter.setDisable(!model.hasBooks());
-		nomenclaturesTreeMenuNewCommentType.setDisable(!model.hasCustomNomenclatures());
+	}
+
+	/**
+	 * Changes the status of the buttons according to software state.
+	 */
+	public void setButtonsAndMenuStatus() {
+		setButtonsStatus();
+		setMenusStatus();
+		setReviewElementsContextMenuStatus();
+		setTextElementsContextMenuStatus();
+	}
+
+	/**
+	 * Sets the menus status according to software state.
+	 */
+	public void setMenusStatus() {
+		menuReviewChapterCreate.setDisable(!model.hasBooks());
+		menuReviewCommentTypeCreate.setDisable(!model.hasCustomNomenclatures());
 	}
 
 	/**
@@ -989,7 +1009,7 @@ public class BinoclesController implements Initializable, Controller {
 		booksTreeMenuDelete.setDisable(booksTree.getSelectionModel().isEmpty());
 		booksTreeMenuExportRender.setDisable(booksTree.getSelectionModel().isEmpty());
 		booksTreeMenuEdit.setDisable(booksTree.getSelectionModel().getSelectedIndices().size() != 1);
-		menuFileExportRender.setDisable(booksTree.getSelectionModel().isEmpty());
+		menuFileExportRender.setDisable(booksTree.getSelectionModel().isEmpty() || booksTree.getSelectionModel().getSelectedItem().getValue().getClass() == Chapter.class);
 		toolbarExportStruct.setDisable(booksTree.getSelectionModel().isEmpty());
 	}
 

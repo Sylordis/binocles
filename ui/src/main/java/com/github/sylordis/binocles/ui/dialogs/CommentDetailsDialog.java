@@ -186,8 +186,8 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 			return new CustomListCell<>(b -> b.getName());
 		});
 		// Feedback setup
-		addFeedbackCollector(() -> commentTypeFeedback);
-		addFormValidator(() -> commentTypeValidity);
+		getFormUserCtrl().addFeedbackCollectors(() -> commentTypeFeedback);
+		getFormUserCtrl().addFormValidators(() -> commentTypeValidity);
 		// Components set up
 		fieldTextExcerpt.setMaxSize(FIELDS_SIZES, 200);
 		fieldTextExcerpt.setOpaqueInsets(new Insets(10, 10, 10, 10));
