@@ -93,16 +93,6 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 	 */
 	private StyleEditor fieldStyle;
 
-	// Form validity controls and feedback
-
-	private boolean nomenclatureChoiceValid = false;
-	private String nomenclatureChoiceFeedback = "";
-	private boolean nameValid = false;
-	private String nameFeedback = "";
-	private boolean fieldNameValid = false;
-	private boolean fieldsValid = false;
-	private String fieldsFeedback = "";
-
 	/**
 	 * Creates a new comment type creation dialog.
 	 * 
@@ -141,7 +131,7 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 	}
 
 	@Override
-	public void build() {
+	protected void build() {
 		// Nomenclature field
 		Label labelNomenclature = new Label("Nomenclature");
 		fieldNomenclatureChoice = new ComboBox<>(FXCollections.observableArrayList(getModel().getNomenclatures(true)));
@@ -154,7 +144,6 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 		// Metafields field
 		fieldMetaFieldsData = FXCollections.observableArrayList();
 		fieldMetaFieldsData.add(new CommentTypeField("text", "Body text of the comment"));
-		fieldsValid = !fieldMetaFieldsData.isEmpty(); // if metafields are not empty, then it is valid by default
 		fieldMetafields = new TableView<>(fieldMetaFieldsData);
 		fieldMetafields.setPlaceholder(new Label("No fields set"));
 		TableColumn<CommentTypeField, String> tableFieldNameColumn = new TableColumn<>("Name");
@@ -203,31 +192,34 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 			fieldMetaFieldsData.addAll(commentType.getFields().values());
 			fieldStyle.loadStringStyles(commentType.getStyles());
 		}
+		int row = 0;
 		addFormFeedback();
-		getGridPane().addRow(1, labelNomenclature, fieldNomenclatureChoice);
-		getGridPane().addRow(2, labelCommentTypeName, fieldName);
-		getGridPane().addRow(3, labelCommentTypeDescription, fieldDescription);
-		getGridPane().addRow(4, labelCommentTypeFields, fieldCommentTypeFieldsControlsTop);
-		getGridPane().addRow(5, fieldMetafields);
+		getGridPane().addRow(++row, labelNomenclature, fieldNomenclatureChoice);
+		getGridPane().addRow(++row, labelCommentTypeName, fieldName);
+		getGridPane().addRow(++row, labelCommentTypeDescription, fieldDescription);
+		getGridPane().addRow(++row, labelCommentTypeFields, fieldCommentTypeFieldsControlsTop);
+		getGridPane().addRow(++row, fieldMetafields);
 		GridPane.setColumnSpan(fieldMetafields, GridPane.REMAINING);
-		getGridPane().addRow(6, fieldCommentTypeFieldsControlsBottom);
+		getGridPane().addRow(++row, fieldCommentTypeFieldsControlsBottom);
 		GridPane.setColumnSpan(fieldCommentTypeFieldsControlsBottom, GridPane.REMAINING);
-		getGridPane().addRow(7, labelCommentTypeStyle);
-		getGridPane().addRow(8, fieldStyle);
+		getGridPane().addRow(++row, labelCommentTypeStyle);
+		getGridPane().addRow(++row, fieldStyle);
 		GridPane.setColumnSpan(fieldStyle, GridPane.REMAINING);
 		// Set up listeners
-		ListenerValidator<String> commentTypeNameUIValidator = new ListenerValidator<String>()
+		ListenerValidator<String> commentTypeNameUIValidator = new ListenerValidator<String>().link(fieldName)
+				.link(fieldName)
 		        .validIf("Comment type name can't be blank or empty.", (o, n) -> !n.isBlank())
 		        .validIf(
 		                "Comment type with the same name already exists (case insensitive) in the selected nomenclature.",
 		                (o, n) -> Identifiable.checkNewNameUniquenessValidityAmongParent(n, nomenclature, commentType,
 		                        (nom, s) -> nom.hasCommentType(s)))
-		        .feed(s -> nameFeedback = s).onEither(b -> nameValid = b).andThen(this::updateFormStatus);
+		        .feed(getFormCtrl()::feedback).onEither(getFormCtrl()::valid).andThen(this::updateFormStatus);
 		fieldName.textProperty().addListener(commentTypeNameUIValidator);
 		ListenerValidator<Nomenclature> nomenclatureParentUIValidator = new ListenerValidator<Nomenclature>()
+				.link(fieldNomenclatureChoice)
 		        .validIf("You have to pick a nomenclature to add this comment type to.", (o, n) -> null != n)
-		        .feed(s -> nomenclatureChoiceFeedback = s).onEither(b -> {
-			        nomenclatureChoiceValid = b;
+		        .feed(getFormCtrl()::feedback).onEither((o, b) -> {
+		        	getFormCtrl().valid(o, b);
 			        this.nomenclature = fieldNomenclatureChoice.getSelectionModel().getSelectedItem();
 		        }).andThen(this::updateFormStatus);
 		fieldMetafields.getSelectionModel().getSelectedItems().addListener(new ListChangeListener<CommentTypeField>() {
@@ -249,13 +241,15 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 		fieldMetaFieldsControlsAdd.setOnAction(e -> addMetafieldEntry());
 		fieldMetaFieldsControlsDelete.setOnAction(e -> deleteMetafieldEntry());
 		ListenerValidator<String> fieldNameUIValidator = new ListenerValidator<String>()
+				.link(fieldMetafields)
 		        .validIf("Field name can't be blank or empty.", (o, n) -> !n.isBlank())
-		        .onEither(b -> fieldNameValid = b)
-		        .andThen(() -> fieldMetaFieldsControlsAdd.setDisable(!fieldNameValid));
+		        .feed(getFormCtrl()::feedback)
+		        .onEither(getFormCtrl()::valid)
+		        .andThen(() -> fieldMetaFieldsControlsAdd.setDisable(!getFormCtrl().valid(fieldMetafields)));
 		fieldMetaFieldsControlsName.textProperty().addListener(fieldNameUIValidator);
 		// Set feedback collectors & form validators
-		getFormUserCtrl().addFeedbackCollectors(() -> nameFeedback, () -> nomenclatureChoiceFeedback, () -> fieldsFeedback);
-		getFormUserCtrl().addFormValidators(() -> nameValid, () -> nomenclatureChoiceValid, () -> fieldsValid);
+		getFormCtrl().register(fieldName, fieldNomenclatureChoice, fieldMetafields);
+		getFormCtrl().valid(fieldMetafields, true);
 		// Set up components status
 		fieldNomenclatureChoice.setButtonCell(new CustomListCell<Nomenclature>(n -> n.getName()));
 		fieldNomenclatureChoice.setCellFactory(p -> {
@@ -284,6 +278,8 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 	 */
 	private void deleteMetafieldEntry() {
 		fieldMetaFieldsData.removeAll(fieldMetafields.getSelectionModel().getSelectedItems());
+		String fieldsFeedback;
+		boolean fieldsValid;
 		if (fieldMetaFieldsData.isEmpty()) {
 			fieldsFeedback = "You need at least one field.";
 			fieldsValid = false;
@@ -291,6 +287,7 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 			fieldsFeedback = "";
 			fieldsValid = true;
 		}
+		getFormCtrl().set(fieldDescription, fieldsValid, fieldsFeedback);
 		updateFormStatus();
 		fieldMetafields.refresh();
 	}
@@ -315,8 +312,7 @@ public class CommentTypeDetailsDialog extends AbstractAnswerDialog<CommentTypePr
 		fieldMetaFieldsControlsDescription.setText("");
 		fieldMetaFieldsControlsIsLong.setSelected(false);
 		fieldMetaFieldsControlsAdd.setDisable(true);
-		fieldsFeedback = "";
-		fieldsValid = true;
+		getFormCtrl().set(fieldDescription, true, "");
 		updateFormStatus();
 	}
 

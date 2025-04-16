@@ -310,8 +310,7 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	/**
 	 * @return the formUserCtrl
 	 */
-	protected FormValidationControl getFormUserCtrl() {
+	public FormValidationControl getFormCtrl() {
 		return formCtrl;
 	}
-
 }

@@ -9,8 +9,8 @@ import static org.mockito.Mockito.mock;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -95,8 +95,8 @@ class ListenerValidatorTest {
 		final String andThenMessage = "Job done";
 		final BiFunction<String, String, Boolean> conditionChanged = (o, n) -> !o.equals(n);
 		final BiFunction<String, String, Boolean> conditionEmpty = (o, n) -> !n.isBlank();
-		validator.validIf(errors[0], conditionChanged).validIf(errors[1], conditionEmpty).onInvalid(b -> data[0]--)
-		        .onValid(b -> data[0]++).feed(s -> dataString[0] = s).feedDefault(idle).andThen(() -> dataString[1] = andThenMessage);
+		validator.validIf(errors[0], conditionChanged).validIf(errors[1], conditionEmpty).onInvalid((o,b) -> data[0]--)
+		        .onValid((o,b) -> data[0]++).feed((o,s) -> dataString[0] = s).feedDefault(idle).andThen(() -> dataString[1] = andThenMessage);
 		validator.changed(mock(ObservableValue.class), "", "abcd");
 		assertEquals(1, data[0]);
 		assertEquals(idle, dataString[0]);
@@ -110,7 +110,7 @@ class ListenerValidatorTest {
 		int[] data = { 0 };
 		final String error = "Value didn't change";
 		final BiFunction<String, String, Boolean> conditionChanged = (o, n) -> !o.equals(n);
-		validator.validIf(error, conditionChanged).onInvalid(b -> data[0]--).onValid(b -> data[0]++);
+		validator.validIf(error, conditionChanged).onInvalid((o,b) -> data[0]--).onValid((o,b) -> data[0]++);
 		validator.changed(mock(ObservableValue.class), "a", "a");
 		assertEquals(-1, data[0]);
 		assertEquals(List.of(error), validator.getErrorMessages());
@@ -123,8 +123,8 @@ class ListenerValidatorTest {
 		final String[] errors = { "Value did change", "Value is empty" };
 		final BiFunction<String, String, Boolean> conditionChanged = (o, n) -> o.equals(n);
 		final BiFunction<String, String, Boolean> conditionEmpty = (o, n) -> !n.isBlank();
-		validator.validIf(errors[0], conditionChanged).validIf(errors[1], conditionEmpty).onInvalid(b -> data[0]--)
-		        .onValid(b -> data[0]++);
+		validator.validIf(errors[0], conditionChanged).validIf(errors[1], conditionEmpty).onInvalid((o,b) -> data[0]--)
+		        .onValid((o,b) -> data[0]++);
 		validator.changed(mock(ObservableValue.class), "a", "");
 		assertEquals(-1, data[0]);
 		assertEquals(List.of(errors), validator.getErrorMessages());
@@ -153,7 +153,7 @@ class ListenerValidatorTest {
 	@Test
 	void testFeedConsumerOfString() {
 		String[] result = { "" };
-		final Consumer<String> feed = s -> result[0] = s;
+		final BiConsumer<Object,String> feed = (o,s) -> result[0] = s;
 		final Function<List<String>, String> behaviour = validator.getFeedbackBehaviour();
 		validator.feed(feed);
 		assertEquals(feed, validator.getFeedbackConsumer());
@@ -163,7 +163,7 @@ class ListenerValidatorTest {
 	@Test
 	void testFeedConsumerOfStringFunctionOfListOfStringString() {
 		String[] result = { "" };
-		final Consumer<String> feed = s -> result[0] = s;
+		final BiConsumer<Object,String> feed = (o,s) -> result[0] = s;
 		final Function<List<String>, String> behaviour = l -> "";
 		validator.feed(feed, behaviour);
 		assertEquals(feed, validator.getFeedbackConsumer());
@@ -230,7 +230,7 @@ class ListenerValidatorTest {
 
 	@Test
 	void testOnEither() {
-		final Consumer<Boolean> action = b -> {
+		final BiConsumer<Object,Boolean> action = (o,b) -> {
 		};
 		validator.onEither(action);
 		assertEquals(action, validator.getActionWhenValid());
@@ -239,7 +239,7 @@ class ListenerValidatorTest {
 
 	@Test
 	void testOnInvalid() {
-		final Consumer<Boolean> action = b -> {
+		final BiConsumer<Object,Boolean> action = (o,b) -> {
 		};
 		validator.onInvalid(action);
 		assertNull(validator.getActionWhenValid());
@@ -248,7 +248,7 @@ class ListenerValidatorTest {
 
 	@Test
 	void testOnValid() {
-		final Consumer<Boolean> action = b -> {
+		final BiConsumer<Object,Boolean> action = (o,b) -> {
 		};
 		validator.onValid(action);
 		assertNull(validator.getActionWhenInvalid());
@@ -258,7 +258,7 @@ class ListenerValidatorTest {
 	@Test
 	void testSetActionWhenInvalid() {
 		boolean[] result = { false };
-		final Consumer<Boolean> action = b -> result[0] = true;
+		final BiConsumer<Object,Boolean> action = (o,b) -> result[0] = true;
 		validator.setActionWhenInvalid(action);
 		assertEquals(action, validator.getActionWhenInvalid());
 		assertFalse(result[0]);
@@ -267,7 +267,7 @@ class ListenerValidatorTest {
 	@Test
 	void testSetActionWhenValid() {
 		boolean[] result = { true };
-		final Consumer<Boolean> action = b -> result[0] = false;
+		final BiConsumer<Object,Boolean> action = (o,b) -> result[0] = false;
 		validator.setActionWhenValid(action);
 		assertEquals(action, validator.getActionWhenValid());
 		assertTrue(result[0]);
@@ -320,7 +320,7 @@ class ListenerValidatorTest {
 
 	@Test
 	void testSetFeedbackConsumer() {
-		final Consumer<String> consumer = s -> {
+		final BiConsumer<Object,String> consumer = (o,s) -> {
 		};
 		validator.setFeedbackConsumer(consumer);
 		assertEquals(consumer, validator.getFeedbackConsumer());
@@ -376,7 +376,7 @@ class ListenerValidatorTest {
 		String[] result = { "not idle" };
 		final List<String> errors = List.of("a1", "b1", "c1");
 		final String expected = "a1\nb1\nc1";
-		validator.setFeedbackConsumer(s -> result[0] = s);
+		validator.setFeedbackConsumer((o,s) -> result[0] = s);
 		validator.setFeedbackBehaviour(FeedbackBehaviour.AGGREGATE_NEWLINE);
 		validator.setErrorMessages(errors);
 		validator.triggerFeedback();
@@ -388,7 +388,7 @@ class ListenerValidatorTest {
 		String[] result = { "not idle" };
 		final List<String> errors = List.of("aggregateMe!");
 		final String expected = "aggregateMe!";
-		validator.setFeedbackConsumer(s -> result[0] = s);
+		validator.setFeedbackConsumer((o,s) -> result[0] = s);
 		validator.setFeedbackBehaviour(FeedbackBehaviour.AGGREGATE_NEWLINE);
 		validator.setErrorMessages(errors);
 		validator.triggerFeedback();
@@ -400,7 +400,7 @@ class ListenerValidatorTest {
 		String[] result = { "not idle" };
 		final List<String> errors = List.of("a1", "b1", "c1");
 		final String expected = "a1";
-		validator.setFeedbackConsumer(s -> result[0] = s);
+		validator.setFeedbackConsumer((o,s) -> result[0] = s);
 		validator.setFeedbackBehaviour(FeedbackBehaviour.FIRST_ONLY);
 		validator.setErrorMessages(errors);
 		validator.triggerFeedback();
@@ -412,7 +412,7 @@ class ListenerValidatorTest {
 		String[] result = { "not idle" };
 		final List<String> errors = List.of("onmeown");
 		final String expected = "onmeown";
-		validator.setFeedbackConsumer(s -> result[0] = s);
+		validator.setFeedbackConsumer((o,s) -> result[0] = s);
 		validator.setFeedbackBehaviour(FeedbackBehaviour.FIRST_ONLY);
 		validator.setErrorMessages(errors);
 		validator.triggerFeedback();
@@ -424,7 +424,7 @@ class ListenerValidatorTest {
 		String[] result = { "not idle" };
 		final List<String> errors = List.of("a1", "b1", "c1");
 		final String expected = "c1";
-		validator.setFeedbackConsumer(s -> result[0] = s);
+		validator.setFeedbackConsumer((o,s) -> result[0] = s);
 		validator.setFeedbackBehaviour(FeedbackBehaviour.LAST_ONLY);
 		validator.setErrorMessages(errors);
 		validator.triggerFeedback();
@@ -436,7 +436,7 @@ class ListenerValidatorTest {
 		String[] result = { "not idle" };
 		final List<String> errors = List.of("first&last");
 		final String expected = "first&last";
-		validator.setFeedbackConsumer(s -> result[0] = s);
+		validator.setFeedbackConsumer((o,s) -> result[0] = s);
 		validator.setFeedbackBehaviour(FeedbackBehaviour.LAST_ONLY);
 		validator.setErrorMessages(errors);
 		validator.triggerFeedback();
@@ -446,7 +446,7 @@ class ListenerValidatorTest {
 	@Test
 	void testTriggerFeedback_Idle() {
 		String[] result = { "not idle" };
-		validator.setFeedbackConsumer(s -> result[0] = s);
+		validator.setFeedbackConsumer((o,s) -> result[0] = s);
 		validator.triggerFeedback();
 		assertEquals(ListenerValidator.FEEDBACK_DEFAULT, result[0]);
 	}
@@ -476,7 +476,7 @@ class ListenerValidatorTest {
 	@Test
 	void testTriggerWhenInvalid() {
 		boolean[] result = { true };
-		validator.setActionWhenInvalid(b -> result[0] = false);
+		validator.setActionWhenInvalid((o,b) -> result[0] = false);
 		validator.triggerWhenInvalid(false);
 		assertFalse(result[0]);
 	}
@@ -491,7 +491,7 @@ class ListenerValidatorTest {
 	@Test
 	void testTriggerWhenValid() {
 		boolean[] result = { false };
-		validator.setActionWhenValid(b -> result[0] = true);
+		validator.setActionWhenValid((o,b) -> result[0] = true);
 		validator.triggerWhenValid(true);
 		assertTrue(result[0]);
 	}

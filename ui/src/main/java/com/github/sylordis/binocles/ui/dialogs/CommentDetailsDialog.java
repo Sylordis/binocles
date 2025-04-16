@@ -79,13 +79,11 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 	private Comment comment;
 	private int start;
 	private int end;
+	private Text formFeedback;
 
 	private ComboBox<CommentType> fieldCommentTypeChoice;
 	private TextFlow fieldTextExcerpt;
 	private Map<String, TextInputControl> fieldsFields;
-
-	private boolean commentTypeValidity = false;
-	private String commentTypeFeedback;
 
 	/**
 	 * Creates a new comment details dialog for an already existing comment.
@@ -112,6 +110,7 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 		}
 		fieldsFields = new LinkedHashMap<>();
 	}
+
 	/**
 	 * Creates a new comment details dialog for an already existing comment.
 	 * 
@@ -123,6 +122,7 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 	public CommentDetailsDialog(BinoclesModel model, Book book, Chapter chapter, Comment comment) {
 		this(model, book, chapter, comment, 0, 0);
 	}
+
 	/**
 	 * Creates a new details dialog for a new comment.
 	 * 
@@ -155,17 +155,21 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 			fieldCommentTypeChoice.getSelectionModel().select(comment.getType());
 		}
 		// Set dialog content
-		addFormFeedback();
-		getGridPane().addRow(1, labelChapter, fieldChapter);
-		getGridPane().addRow(2, labelNomenclature, fieldNomenclature);
-		getGridPane().addRow(3, labelCommentType, fieldCommentTypeChoice);
-		getGridPane().addRow(4, labelTextExcerpt);
+		int row = 0;
+		formFeedback = new Text("");
+		formFeedback.getStyleClass().add("text-danger");
+		getGridPane().addRow(row, formFeedback);
+		GridPane.setColumnSpan(formFeedback, GridPane.REMAINING);
+		getGridPane().addRow(++row, labelChapter, fieldChapter);
+		getGridPane().addRow(++row, labelNomenclature, fieldNomenclature);
+		getGridPane().addRow(++row, labelCommentType, fieldCommentTypeChoice);
+		getGridPane().addRow(++row, labelTextExcerpt);
 		GridPane.setColumnSpan(labelTextExcerpt, GridPane.REMAINING);
-		getGridPane().addRow(5, fieldTextExcerpt);
+		getGridPane().addRow(++row, fieldTextExcerpt);
 		GridPane.setColumnSpan(fieldTextExcerpt, GridPane.REMAINING);
 		Separator separator = new Separator();
 //		separator.setPrefHeight(10);
-		getGridPane().addRow(6, separator);
+		getGridPane().addRow(++row, separator);
 		GridPane.setColumnSpan(separator, GridPane.REMAINING);
 		GridPane.setValignment(separator, VPos.CENTER);
 		// Setup listeners
@@ -177,8 +181,8 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 		fieldCommentTypeChoice.valueProperty().addListener(fieldCommentTypeChoiceListener);
 		// Set feedback collectors & form validators
 		ListenerValidator<CommentType> commentTypeValidator = new ListenerValidator<CommentType>()
-		        .validIf("You have to pick a comment type.", (o, n) -> null != n).feed(this::setCommentTypeFeedback)
-		        .onEither(b -> this.commentTypeValidity = b).andThen(this::updateFormStatus);
+		        .link(fieldCommentTypeChoice).validIf("You have to pick a comment type.", (o, n) -> null != n)
+		        .feed(getFormCtrl()::feedback).onEither(getFormCtrl()::valid).andThen(this::updateFormStatus);
 		fieldCommentTypeChoice.valueProperty().addListener(commentTypeValidator);
 		// Styling and component status
 		fieldCommentTypeChoice.setButtonCell(new CustomListCell<CommentType>(b -> b.getName()));
@@ -186,8 +190,7 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 			return new CustomListCell<>(b -> b.getName());
 		});
 		// Feedback setup
-		getFormUserCtrl().addFeedbackCollectors(() -> commentTypeFeedback);
-		getFormUserCtrl().addFormValidators(() -> commentTypeValidity);
+		getFormCtrl().register(fieldCommentTypeChoice);
 		// Components set up
 		fieldTextExcerpt.setMaxSize(FIELDS_SIZES, 200);
 		fieldTextExcerpt.setOpaqueInsets(new Insets(10, 10, 10, 10));
@@ -209,8 +212,8 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 		// TODO Make preview rules configurable
 		// Create start context
 		TextBreaker breakerStart = new TextBreaker(BreakingPolicy.LAST, ReadDirection.BACKWARD, List.of(".", "\n"));
-		int contextStartIndex = breakerStart.findClosestBreakingPoint(chapter.getContent(), start, MINIMUM_CONTEXT_LENGTH,
-		        MAXIMUM_CONTEXT_LENGTH);
+		int contextStartIndex = breakerStart.findClosestBreakingPoint(chapter.getContent(), start,
+		        MINIMUM_CONTEXT_LENGTH, MAXIMUM_CONTEXT_LENGTH);
 		Text contextStartEtc = contextStartIndex == 0 ? new Text("") : new Text("[..]");
 		Text contextStart = new Text(chapter.getContent().substring(contextStartIndex, start));
 		// Main text part (comment)
@@ -304,15 +307,6 @@ public class CommentDetailsDialog extends AbstractAnswerDialog<Comment> {
 			        .collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue().getText())));
 		}
 		return result;
-	}
-
-	/**
-	 * Sets the feedback message for the comment type feedback.
-	 * 
-	 * @param msg
-	 */
-	private void setCommentTypeFeedback(String msg) {
-		commentTypeFeedback = msg;
 	}
 
 }

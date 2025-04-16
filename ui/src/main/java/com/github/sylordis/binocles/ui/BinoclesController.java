@@ -56,6 +56,7 @@ import com.github.sylordis.binocles.ui.views.ChapterView;
 import com.github.sylordis.binocles.ui.views.CommentTypeView;
 import com.github.sylordis.binocles.ui.views.NomenclatureView;
 import com.github.sylordis.binocles.ui.views.WelcomeView;
+import com.github.sylordis.binocles.ui.wizards.RenderExportWizard;
 import com.github.sylordis.binocles.utils.exceptions.ExportException;
 import com.github.sylordis.binocles.utils.exceptions.ImportException;
 import com.github.sylordis.binocles.utils.exceptions.UniqueIDException;
@@ -557,16 +558,24 @@ public class BinoclesController implements Initializable, Controller {
 
 	@FXML
 	public void exportRenderAction(ActionEvent event) {
-		// TODO Export given selection with a wizard
-		showNotImplementedAlert();
+		exportRender(null);
 	}
 
 	@FXML
 	public void exportRenderTextElementAction(ActionEvent event) {
-		// TODO
-		showNotImplementedAlert();
+		Chapter chapter = null;
+		ReviewableContent treeSelected = booksTree.getSelectionModel().getSelectedItem().getValue();
+		if (treeSelected instanceof Chapter)
+			chapter = (Chapter) treeSelected;
+		exportRender(chapter);
 	}
 
+	public void exportRender(Chapter chapter) {
+		// TODO
+		RenderExportWizard wizard = new RenderExportWizard(model, chapter);
+		wizard.display();
+	}
+	
 	@FXML
 	public void exitAction(ActionEvent event) {
 		Platform.exit();
@@ -1007,9 +1016,8 @@ public class BinoclesController implements Initializable, Controller {
 	 */
 	public void setTextElementsContextMenuStatus() {
 		booksTreeMenuDelete.setDisable(booksTree.getSelectionModel().isEmpty());
-		booksTreeMenuExportRender.setDisable(booksTree.getSelectionModel().isEmpty());
+		booksTreeMenuExportRender.setDisable(booksTree.getSelectionModel().isEmpty() || booksTree.getSelectionModel().getSelectedItem().getValue().getClass() != Chapter.class);
 		booksTreeMenuEdit.setDisable(booksTree.getSelectionModel().getSelectedIndices().size() != 1);
-		menuFileExportRender.setDisable(booksTree.getSelectionModel().isEmpty() || booksTree.getSelectionModel().getSelectedItem().getValue().getClass() == Chapter.class);
 		toolbarExportStruct.setDisable(booksTree.getSelectionModel().isEmpty());
 	}
 

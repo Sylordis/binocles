@@ -31,11 +31,14 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-test {
-	jvmArgs("-XX:+EnableDynamicAgentLoading", "-Djdk.instrument.traceUsage", "-Xshare:off")
-    useJUnitPlatform()
+ tasks {
+    test {
+        jvmArgs += "-XX:+EnableDynamicAgentLoading"
+        jvmArgs += "-Djdk.instrument.traceUsage"
+        jvmArgs += "-Xshare:off"
+    	useJUnitPlatform()
+    }
 }
-
 compileJava.options.encoding = 'UTF-8'
 
 /*task createProperties(dependsOn: processResources) {

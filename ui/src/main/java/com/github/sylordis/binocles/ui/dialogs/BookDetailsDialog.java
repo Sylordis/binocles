@@ -66,20 +66,23 @@ public class BookDetailsDialog extends AbstractAnswerDialog<Book> {
 		// Nomenclature fields
 		Label labelNomenclature = new Label("Nomenclature (optional)");
 		fieldNomenclatureChoice = new ComboBox<>(FXCollections.observableArrayList(getModel().getNomenclatures()));
+		fieldNomenclatureChoice.getSelectionModel().select(getModel().getDefaultNomenclature());
 		// TODO Description
 		// TODO Synopsis
 		// TODO Metadata
 		// Set dialog content
+		int row = 0;
 		addFormFeedback();
-		getGridPane().addRow(1, labelBookName, fieldBookName);
-		getGridPane().addRow(2, labelNomenclature, fieldNomenclatureChoice);
+		getGridPane().addRow(++row, labelBookName, fieldBookName);
+		getGridPane().addRow(++row, labelNomenclature, fieldNomenclatureChoice);
 		// Set up listeners
 		ListenerValidator<String> bookNameUIValidator = new ListenerValidator<String>()
+				.link(fieldBookName)
 		        .validIf("Book name can't be blank or empty.", (o, n) -> !n.isBlank())
 		        .validIf("Book with the same name already exists (case insensitive)",
 		                (o, n) -> Identifiable.checkNewNameUniquenessValidityAmongParent(n, getModel(), book,
 		                        (p, s) -> p.hasBook(s)))
-		        .feed(this::setFeedback).onEither(b -> setConfirmButtonDisable(!b));
+		        .feed((o,f) -> this.setFeedback(f)).onEither((o,b) -> setConfirmButtonDisable(!b));
 		fieldBookName.textProperty().addListener(bookNameUIValidator);
 		// Set up components status
 		if (book != null) {

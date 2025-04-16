@@ -53,31 +53,6 @@ public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterProperties
 	private ComboBox<Book> fieldBookParent;
 
 	/**
-	 * Error feedback for the book choice field.
-	 */
-	private String bookParentFeedback = "";
-	/**
-	 * Error feedback for the name field.
-	 */
-	private String chapterNameFeedback = "";
-	/**
-	 * Error feedback for the content field.
-	 */
-	private String chapterContentFeedback = "";
-	/**
-	 * Validity of the book choice's input. False means there's an error (not valid).
-	 */
-	private boolean bookParentValid = false;
-	/**
-	 * Validity of the name field's input. False means there's an error (not valid).
-	 */
-	private boolean chapterNameValid = false;
-	/**
-	 * Validity status of the content field's input. False means there's an error (not valid).
-	 */
-	private boolean chapterContentValid = false;
-
-	/**
 	 * Class logger.
 	 */
 	private final Logger logger = LogManager.getLogger();
@@ -108,7 +83,7 @@ public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterProperties
 	}
 
 	@Override
-	public void build() {
+	protected void build() {
 		// Book choice field
 		Label labelBookChoice = new Label("Add chapter to...");
 		fieldBookParent = new ComboBox<>(FXCollections.observableList(new ArrayList<>(getModel().getBooks())));
@@ -119,31 +94,36 @@ public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterProperties
 		Label labelChapterContent = new Label("Content of the chapter");
 		fieldChapterContent = new TextArea();
 		// Set dialog content
+		int row = 0;
 		addFormFeedback();
-		getGridPane().addRow(1, labelBookChoice, fieldBookParent);
-		getGridPane().addRow(2, labelChapterName, fieldChapterName);
-		getGridPane().addRow(3, labelChapterContent);
+		getGridPane().addRow(++row, labelBookChoice, fieldBookParent);
+		getGridPane().addRow(++row, labelChapterName, fieldChapterName);
+		getGridPane().addRow(++row, labelChapterContent);
 		GridPane.setColumnSpan(labelChapterContent, GridPane.REMAINING);
-		getGridPane().addRow(4, fieldChapterContent);
+		getGridPane().addRow(++row, fieldChapterContent);
 		GridPane.setColumnSpan(fieldChapterContent, GridPane.REMAINING);
 		// Set up listeners
 		ListenerValidator<String> chapterNameUIValidator = new ListenerValidator<String>()
+				.link(fieldChapterName)
 		        .validIf("Chapter name cannot be blank or empty.", (o, n) -> !n.isBlank())
 		        .validIf("Chapter with the same name already exists in the book (case insensitive).",
 		                (o, n) -> Identifiable.checkNewNameUniquenessValidityAmongParent(n, book, chapter,
 		                        (b, s) -> b.hasChapter(s)))
-		        .feed(this::setChapterNameFeedback).onEither(this::setChapterNameValid).andThen(this::updateFormStatus);
+		        .feed(getFormCtrl()::feedback)
+		        .onEither(getFormCtrl()::valid).andThen(this::updateFormStatus);
 		ListenerValidator<Book> bookParentUIValidator = new ListenerValidator<Book>()
+				.link(fieldBookParent)
 		        .validIf("You have to pick a book to add this chapter to.", (o, n) -> null != n)
-		        .feed(this::setBookParentFeedback).onEither(b -> {
+		        .feed(getFormCtrl()::feedback).onEither((o,b) -> {
 			        this.book = fieldBookParent.getSelectionModel().getSelectedItem();
-			        setBookParentValidity(b);
+			        getFormCtrl().valid(o, b);
 			        chapterNameUIValidator.changed(null, null, fieldChapterName.getText());
 			        logger.debug("Book parent changed, new={}", fieldBookParent.getSelectionModel().getSelectedItem());
 		        }).andThen(this::updateFormStatus);
 		ListenerValidator<String> chapterContentUIValidator = new ListenerValidator<String>()
+				.link(fieldChapterContent)
 		        .validIf("Chapter content cannot be blank or empty.", (o, n) -> !n.isBlank())
-		        .feed(this::setChapterContentFeedback).onEither(this::setChapterContentValid)
+		        .feed(getFormCtrl()::feedback).onEither(getFormCtrl()::valid)
 		        .andThen(this::updateFormStatus);
 		fieldBookParent.selectionModelProperty().addListener((opt, o, n) -> logger
 		        .debug("Book parent changed, old={}, new={}", n.getSelectedItem(), o.getSelectedItem()));
@@ -151,9 +131,7 @@ public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterProperties
 		fieldChapterName.textProperty().addListener(chapterNameUIValidator);
 		fieldChapterContent.textProperty().addListener(chapterContentUIValidator);
 		// Feedback setup
-		getFormUserCtrl().addFeedbackCollectors(() -> bookParentFeedback, () -> chapterNameFeedback,
-		        () -> chapterContentFeedback);
-		getFormUserCtrl().addFormValidators(() -> bookParentValid, () -> chapterContentValid, () -> chapterNameValid);
+		getFormCtrl().register(fieldBookParent, fieldChapterName, fieldChapterContent);
 		// Set up components status
 		setConfirmButtonDisable(true);
 		fieldBookParent.setButtonCell(new CustomListCell<Book>(b -> b.getTitle()));
@@ -189,48 +167,6 @@ public class ChapterDetailsDialog extends AbstractAnswerDialog<ChapterProperties
 			answer = new ChapterPropertiesAnswer(parentBook, chapter);
 		}
 		return answer;
-	}
-
-	/**
-	 * @param valid the bookParentValid to set
-	 */
-	public void setBookParentValidity(boolean valid) {
-		this.bookParentValid = valid;
-	}
-
-	/**
-	 * @param feedback the bookParentFeedback to set
-	 */
-	public void setBookParentFeedback(String feedback) {
-		this.bookParentFeedback = feedback;
-	}
-
-	/**
-	 * @param valid the chapterContentValid to set
-	 */
-	public void setChapterContentValid(boolean valid) {
-		this.chapterContentValid = valid;
-	}
-
-	/**
-	 * @param feedback the chapterContentFeedback to set
-	 */
-	public void setChapterContentFeedback(String feedback) {
-		this.chapterContentFeedback = feedback;
-	}
-
-	/**
-	 * @param valid the chapterNameValid to set
-	 */
-	public void setChapterNameValid(boolean valid) {
-		this.chapterNameValid = valid;
-	}
-
-	/**
-	 * @param feedback the chapterNameFeedback to set
-	 */
-	public void setChapterNameFeedback(String feedback) {
-		this.chapterNameFeedback = feedback;
 	}
 
 }

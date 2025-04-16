@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -38,15 +39,15 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	/**
 	 * Action when validation is valid.
 	 */
-	private Consumer<Boolean> actionWhenValid;
+	private BiConsumer<Object, Boolean> actionWhenValid;
 	/**
 	 * Action when validation is invalid.
 	 */
-	private Consumer<Boolean> actionWhenInvalid;
+	private BiConsumer<Object, Boolean> actionWhenInvalid;
 	/**
 	 * Feedback writing when triggered.
 	 */
-	private Consumer<String> feedbackConsumer;
+	private BiConsumer<Object, String> feedbackConsumer;
 	/**
 	 * All raised error messages. This list should never be null.
 	 */
@@ -59,6 +60,10 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	 * Basic text when there's no error. Default is {@link #FEEDBACK_DEFAULT}.
 	 */
 	private String feedbackDefault = FEEDBACK_DEFAULT;
+	/**
+	 * Object this validator is for. Is used to inject data for a specific field.
+	 */
+	private Object fieldFor;
 
 	/**
 	 * Default configured value for the feedback.
@@ -152,7 +157,7 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	 */
 	public void triggerWhenInvalid(boolean valid) {
 		if (null != actionWhenInvalid)
-			actionWhenInvalid.accept(valid);
+			actionWhenInvalid.accept(fieldFor, valid);
 	}
 
 	/**
@@ -162,7 +167,7 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	 */
 	public void triggerWhenValid(boolean valid) {
 		if (null != actionWhenValid)
-			actionWhenValid.accept(valid);
+			actionWhenValid.accept(fieldFor, valid);
 	}
 
 	/**
@@ -173,9 +178,9 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	public void triggerFeedback() {
 		if (null != feedbackConsumer) {
 			if (this.errorMessages.isEmpty())
-				feedbackConsumer.accept(feedbackDefault);
+				feedbackConsumer.accept(fieldFor, feedbackDefault);
 			else
-				feedbackConsumer.accept(feedbackBehaviour.apply(errorMessages));
+				feedbackConsumer.accept(fieldFor, feedbackBehaviour.apply(errorMessages));
 		}
 	}
 
@@ -193,43 +198,57 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	/**
 	 * @return the onValid
 	 */
-	public Consumer<Boolean> getActionWhenValid() {
+	public BiConsumer<Object, Boolean> getActionWhenValid() {
 		return actionWhenValid;
 	}
 
 	/**
 	 * @param whenValid the onValid to set
 	 */
-	public void setActionWhenValid(Consumer<Boolean> whenValid) {
+	public void setActionWhenValid(BiConsumer<Object, Boolean> whenValid) {
 		this.actionWhenValid = whenValid;
 	}
 
 	/**
 	 * @return the whenInvalid
 	 */
-	public Consumer<Boolean> getActionWhenInvalid() {
+	public BiConsumer<Object, Boolean> getActionWhenInvalid() {
 		return actionWhenInvalid;
 	}
 
 	/**
 	 * @param whenInvalid the onInvalid to set
 	 */
-	public void setActionWhenInvalid(Consumer<Boolean> whenInvalid) {
+	public void setActionWhenInvalid(BiConsumer<Object, Boolean> whenInvalid) {
 		this.actionWhenInvalid = whenInvalid;
 	}
 
 	/**
 	 * @return the feedback consumer
 	 */
-	public Consumer<String> getFeedbackConsumer() {
+	public BiConsumer<Object, String> getFeedbackConsumer() {
 		return feedbackConsumer;
 	}
 
 	/**
 	 * @param consumer the feedback consumer to set
 	 */
-	public void setFeedbackConsumer(Consumer<String> consumer) {
+	public void setFeedbackConsumer(BiConsumer<Object, String> consumer) {
 		this.feedbackConsumer = consumer;
+	}
+
+	/**
+	 * @return the fieldFor
+	 */
+	protected Object getFieldFor() {
+		return fieldFor;
+	}
+
+	/**
+	 * @param fieldFor the fieldFor to set
+	 */
+	protected void setFieldFor(Object fieldFor) {
+		this.fieldFor = fieldFor;
 	}
 
 	/**
@@ -324,6 +343,11 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 			this.feedbackBehaviour = FeedbackBehaviour.AGGREGATE_NEWLINE;
 	}
 
+	public ListenerValidator<T> link(Object o) {
+		this.fieldFor = o;
+		return this;
+	}
+	
 	/**
 	 * Adds a new condition to this validator. Multiple conditions can be added.
 	 * 
@@ -344,7 +368,7 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	 * @return itself for chain configuration
 	 * @see #setActionWhenValid(Consumer)
 	 */
-	public ListenerValidator<T> onValid(Consumer<Boolean> action) {
+	public ListenerValidator<T> onValid(BiConsumer<Object,Boolean> action) {
 		setActionWhenValid(action);
 		return this;
 	}
@@ -356,7 +380,7 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	 * @return itself for chain configuration
 	 * @see #setActionWhenInvalid(Consumer)
 	 */
-	public ListenerValidator<T> onInvalid(Consumer<Boolean> action) {
+	public ListenerValidator<T> onInvalid(BiConsumer<Object,Boolean> action) {
 		setActionWhenInvalid(action);
 		return this;
 	}
@@ -370,7 +394,7 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	 * @see #setActionWhenInvalid(Consumer)
 	 * @see #setActionWhenValid(Consumer)
 	 */
-	public ListenerValidator<T> onEither(Consumer<Boolean> action) {
+	public ListenerValidator<T> onEither(BiConsumer<Object,Boolean> action) {
 		setActionWhenInvalid(action);
 		setActionWhenValid(action);
 		return this;
@@ -383,7 +407,7 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	 * @return itself for chain configuration
 	 * @see #setFeedbackConsumer(Consumer)
 	 */
-	public ListenerValidator<T> feed(Consumer<String> feedback) {
+	public ListenerValidator<T> feed(BiConsumer<Object,String> feedback) {
 		setFeedbackConsumer(feedback);
 		return this;
 	}
@@ -396,7 +420,7 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 	 * @return itself for chain configuration
 	 * @see FeedbackBehaviour
 	 */
-	public ListenerValidator<T> feed(Consumer<String> feedback, Function<List<String>, String> behaviour) {
+	public ListenerValidator<T> feed(BiConsumer<Object,String> feedback, Function<List<String>, String> behaviour) {
 		setFeedbackConsumer(feedback);
 		setFeedbackBehaviour(behaviour);
 		return this;
@@ -426,4 +450,5 @@ public class ListenerValidator<T> implements ChangeListener<T> {
 		setFeedbackDefault(idle);
 		return this;
 	}
+
 }

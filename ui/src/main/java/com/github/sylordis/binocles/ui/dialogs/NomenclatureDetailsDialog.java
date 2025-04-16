@@ -64,11 +64,12 @@ public class NomenclatureDetailsDialog extends AbstractAnswerDialog<Nomenclature
 		getGridPane().addRow(1, labelTitle, fieldNomenclatureTitle);
 		// Set up listeners
 		ListenerValidator<String> nomenclatureNameUIValidator = new ListenerValidator<String>()
+		        .link(fieldNomenclatureTitle)
 		        .validIf("Nomenclature name can't be blank or empty.", (o, n) -> !n.isBlank())
 		        .validIf("Nomenclature with the same name already exists (case insensitive)",
 		                (o, n) -> Identifiable.checkNewNameUniquenessValidityAmongParent(n, getModel(), nomenclature,
 		                        (p, s) -> p.hasNomenclature(s)))
-		        .feed(this::setFeedback).onEither(b -> setConfirmButtonDisable(!b)).andThen(this::sizeToScene);
+		        .feed(getFormCtrl()::feedback).onEither(getFormCtrl()::valid).andThen(this::updateFormStatus);
 		fieldNomenclatureTitle.textProperty().addListener(nomenclatureNameUIValidator);
 		// Set up components status
 		getDialog().getDialogPane().lookupButton(getConfirmButton()).setDisable(true);
