@@ -1,4 +1,4 @@
-package com.github.sylordis.binocles.ui.alerts;
+package com.github.sylordis.binocles.ui.dialogs;
 
 import com.github.sylordis.binocles.model.decorators.CommentTypeDecorator;
 import com.github.sylordis.binocles.model.decorators.NomenclatureDecorator;
@@ -6,6 +6,7 @@ import com.github.sylordis.binocles.model.review.CommentType;
 import com.github.sylordis.binocles.model.review.Nomenclature;
 import com.github.sylordis.binocles.model.review.NomenclatureItem;
 import com.github.sylordis.binocles.ui.components.CustomTreeCell;
+import com.github.sylordis.binocles.ui.javafxutils.TreeItemTextSupplierManager;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -44,9 +45,9 @@ public class ReviewElementDeletionConfirmationAlert extends Alert {
 		label = new Label("This is what you'll be deleting:");
 		tree = new TreeView<NomenclatureItem>();
 		tree.setCellFactory(p -> {
-			return new CustomTreeCell<NomenclatureItem>()
-			        .decorate(Nomenclature.class, new NomenclatureDecorator().thenName())
-			        .decorate(CommentType.class, new CommentTypeDecorator().thenName());
+			return new CustomTreeCell<NomenclatureItem>(new TreeItemTextSupplierManager<NomenclatureItem>()
+					.decorate(Nomenclature.class, new NomenclatureDecorator().thenName())
+			        .decorate(CommentType.class, new CommentTypeDecorator().thenName()));
 		});
 
 		tree.setMaxWidth(Double.MAX_VALUE);

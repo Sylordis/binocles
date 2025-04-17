@@ -101,7 +101,7 @@
             <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="menuFileImport" mnemonicParsing="false" onAction="#importAction" text="Import...">
                      <accelerator>
-                        <KeyCodeCombination alt="UP" code="E" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
+                        <KeyCodeCombination alt="UP" code="I" control="DOWN" meta="UP" shift="UP" shortcut="UP" />
                      </accelerator>
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
@@ -129,7 +129,10 @@
                               <Image url="@img/export_render.png" />
                            </image>
                         </ImageView>
-                     </graphic></MenuItem>
+                     </graphic>
+                     <accelerator>
+                        <KeyCodeCombination alt="UP" code="E" control="DOWN" meta="UP" shift="DOWN" shortcut="UP" />
+                     </accelerator></MenuItem>
                   <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem fx:id="menuFileQuit" mnemonicParsing="false" onAction="#exitAction" text="Quit" />
           </items>

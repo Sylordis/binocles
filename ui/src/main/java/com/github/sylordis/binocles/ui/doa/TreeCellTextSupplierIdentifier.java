@@ -2,6 +2,11 @@ package com.github.sylordis.binocles.ui.doa;
 
 import javafx.scene.control.TreeItem;
 
+/**
+ * Record to identify a type of cell expansion.
+ * 
+ * @param <T>
+ */
 public record TreeCellTextSupplierIdentifier<T>(Class<? extends T> type, CellExpansion state) {
 
 	/**

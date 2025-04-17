@@ -1,4 +1,4 @@
-package com.github.sylordis.binocles.ui.alerts;
+package com.github.sylordis.binocles.ui.dialogs;
 
 import com.github.sylordis.binocles.model.decorators.BookDecorator;
 import com.github.sylordis.binocles.model.decorators.ChapterDecorator;
@@ -7,6 +7,7 @@ import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.model.text.ReviewableContent;
 import com.github.sylordis.binocles.ui.components.CustomTreeCell;
 import com.github.sylordis.binocles.ui.doa.TreeCellTextSupplierIdentifier.CellExpansion;
+import com.github.sylordis.binocles.ui.javafxutils.TreeItemTextSupplierManager;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -44,14 +45,12 @@ public class TextElementDeletionConfirmationAlert extends Alert {
 	private void build() {
 		label = new Label("This is what you'll be deleting:");
 		tree = new TreeView<ReviewableContent>();
-		ChapterDecorator chapterDecorator = new ChapterDecorator().thenTitle().thenCommentsCountWithText();
 		tree.setCellFactory(p -> {
-			return new CustomTreeCell<ReviewableContent>()
+			return new CustomTreeCell<ReviewableContent>(new TreeItemTextSupplierManager<ReviewableContent>()
 			        .decorate(Book.class, CellExpansion.COLLAPSED,
 			                new BookDecorator().thenTitle().thenChapterCountWithText())
-			        .decorate(Book.class, CellExpansion.EXPANDED,
-			                new BookDecorator().thenTitle())
-			        .decorate(Chapter.class, chapterDecorator);
+			        .decorate(Book.class, CellExpansion.EXPANDED, new BookDecorator().thenTitle())
+			        .decorate(Chapter.class, new ChapterDecorator().thenTitle().thenCommentsCountWithText()));
 		});
 
 		tree.setMaxWidth(Double.MAX_VALUE);

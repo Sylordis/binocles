@@ -70,8 +70,7 @@ public final class AppIcons {
 	/**
 	 * Icon for trash/delete.
 	 */
-	public static final Image ICON_TRASH = new Image(
-	        AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "trash.png"));
+	public static final Image ICON_TRASH = new Image(AppIcons.class.getResourceAsStream(BASE_ICON_PATH + "trash.png"));
 
 	/**
 	 * Icon for pencil/edit.
@@ -160,6 +159,17 @@ public final class AppIcons {
 	 */
 	public static final Image getImageForType(Class<?> type) {
 		return ICON_DICTIONARY.get(type);
+	}
+
+	/**
+	 * Creates the image view from configuration for a given object.
+	 * 
+	 * @param <T> Any
+	 * @param o   the object to get the icon for
+	 * @return the image view for an object type that is catalogued, null otherwise
+	 */
+	public static final ImageView getFor(Object o) {
+		return createImageViewFromConfig(getImageForType(o.getClass()));
 	}
 
 	/**

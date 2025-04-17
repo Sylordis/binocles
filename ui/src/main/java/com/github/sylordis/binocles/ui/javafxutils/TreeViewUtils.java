@@ -1,7 +1,12 @@
 package com.github.sylordis.binocles.ui.javafxutils;
 
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.CheckBoxTreeItem;
+import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.control.cell.CheckBoxTreeCell;
+import javafx.util.Callback;
 
 /**
  * Utilities classes for {@link TreeView} component.
@@ -35,6 +40,20 @@ public final class TreeViewUtils {
 			}
 		}
 		return value;
+	}
+
+	/**
+	 * Builds a default callback for CheckboxTreeCells.
+	 * 
+	 * @param <T> Type of the tree view items.
+	 * @return a default callback or null if the cell is not a {@link CheckBoxTreeItem}.
+	 */
+	public static <T> Callback<TreeItem<T>, ObservableValue<Boolean>> getCheckBoxTreeCellDefaultCallback() {
+		return item -> {
+			if (item instanceof CheckBoxTreeItem<?>)
+				return ((CheckBoxTreeItem<?>) item).selectedProperty();
+			return null;
+		};
 	}
 
 	/**

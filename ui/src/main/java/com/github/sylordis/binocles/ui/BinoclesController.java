@@ -32,8 +32,6 @@ import com.github.sylordis.binocles.model.review.NomenclatureItem;
 import com.github.sylordis.binocles.model.text.Book;
 import com.github.sylordis.binocles.model.text.Chapter;
 import com.github.sylordis.binocles.model.text.ReviewableContent;
-import com.github.sylordis.binocles.ui.alerts.ReviewElementDeletionConfirmationAlert;
-import com.github.sylordis.binocles.ui.alerts.TextElementDeletionConfirmationAlert;
 import com.github.sylordis.binocles.ui.components.BookTreeRoot;
 import com.github.sylordis.binocles.ui.components.Controller;
 import com.github.sylordis.binocles.ui.components.CustomTreeCell;
@@ -43,10 +41,13 @@ import com.github.sylordis.binocles.ui.dialogs.BookDetailsDialog;
 import com.github.sylordis.binocles.ui.dialogs.ChapterDetailsDialog;
 import com.github.sylordis.binocles.ui.dialogs.CommentTypeDetailsDialog;
 import com.github.sylordis.binocles.ui.dialogs.NomenclatureDetailsDialog;
+import com.github.sylordis.binocles.ui.dialogs.ReviewElementDeletionConfirmationAlert;
+import com.github.sylordis.binocles.ui.dialogs.TextElementDeletionConfirmationAlert;
 import com.github.sylordis.binocles.ui.doa.ChapterPropertiesAnswer;
 import com.github.sylordis.binocles.ui.doa.CommentTypePropertiesAnswer;
 import com.github.sylordis.binocles.ui.functional.TreeVarClickEventHandler;
 import com.github.sylordis.binocles.ui.javafxutils.Browser;
+import com.github.sylordis.binocles.ui.javafxutils.TreeItemTextSupplierManager;
 import com.github.sylordis.binocles.ui.javafxutils.TreeViewUtils;
 import com.github.sylordis.binocles.ui.settings.BinoclesUIConfiguration;
 import com.github.sylordis.binocles.ui.settings.BinoclesUIConstants;
@@ -575,7 +576,7 @@ public class BinoclesController implements Initializable, Controller {
 		RenderExportWizard wizard = new RenderExportWizard(model, chapter);
 		wizard.display();
 	}
-	
+
 	@FXML
 	public void exitAction(ActionEvent event) {
 		Platform.exit();
@@ -774,18 +775,18 @@ public class BinoclesController implements Initializable, Controller {
 		TreeItem<ReviewableContent> textTreeRoot = new TreeItem<>(new BookTreeRoot());
 		booksTree.setRoot(textTreeRoot);
 		booksTree.setCellFactory(p -> {
-			return new CustomTreeCell<ReviewableContent>()
+			return new CustomTreeCell<ReviewableContent>(new TreeItemTextSupplierManager<ReviewableContent>()
 			        .decorate(Book.class, new BookDecorator().thenTitle().thenNomenclature())
-			        .decorate(Chapter.class, new ChapterDecorator().thenTitle().thenCommentsCount());
+			        .decorate(Chapter.class, new ChapterDecorator().thenTitle().thenCommentsCount()));
 		});
 		rebuildBooksTree();
 		// Initialise the tree for nomenclatures
 		TreeItem<NomenclatureItem> nomenclaturesTreeRoot = new TreeItem<>(new NomenclatureTreeRoot());
 		nomenclaturesTree.setRoot(nomenclaturesTreeRoot);
 		nomenclaturesTree.setCellFactory(p -> {
-			return new CustomTreeCell<NomenclatureItem>()
+			return new CustomTreeCell<NomenclatureItem>(new TreeItemTextSupplierManager<NomenclatureItem>()
 			        .decorate(Nomenclature.class, new NomenclatureDecorator().thenName())
-			        .decorate(CommentType.class, new CommentTypeDecorator().thenName());
+			        .decorate(CommentType.class, new CommentTypeDecorator().thenName()));
 		});
 		rebuildNomenclaturesTree();
 		// Bindings & listeners
@@ -862,7 +863,7 @@ public class BinoclesController implements Initializable, Controller {
 		// TODO
 		showNotImplementedAlert();
 	}
-	
+
 	/**
 	 * Opens a new tab from the books tree.
 	 * 
@@ -1016,7 +1017,8 @@ public class BinoclesController implements Initializable, Controller {
 	 */
 	public void setTextElementsContextMenuStatus() {
 		booksTreeMenuDelete.setDisable(booksTree.getSelectionModel().isEmpty());
-		booksTreeMenuExportRender.setDisable(booksTree.getSelectionModel().isEmpty() || booksTree.getSelectionModel().getSelectedItem().getValue().getClass() != Chapter.class);
+		booksTreeMenuExportRender.setDisable(booksTree.getSelectionModel().isEmpty()
+		        || booksTree.getSelectionModel().getSelectedItem().getValue().getClass() != Chapter.class);
 		booksTreeMenuEdit.setDisable(booksTree.getSelectionModel().getSelectedIndices().size() != 1);
 		toolbarExportStruct.setDisable(booksTree.getSelectionModel().isEmpty());
 	}

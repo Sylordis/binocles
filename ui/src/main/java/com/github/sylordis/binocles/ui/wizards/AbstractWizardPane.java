@@ -42,8 +42,6 @@ public abstract class AbstractWizardPane extends WizardPane {
 	public AbstractWizardPane(BinoclesModel model) {
 		formCtrl = new FormValidationControl();
 		this.model = model;
-		gridPane = new GridPane();
-		gridPane.getStyleClass().add("form-dialog");
 	}
 
 	/**
