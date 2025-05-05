@@ -56,7 +56,7 @@ public class Chapter extends ReviewableContent implements SelfCopying<Chapter> {
 
 	@Override
 	public String toString() {
-		return "Chapter [title=" + title + ", content=#"+content.length()+"]";
+		return "Chapter [title=" + title + ", content length="+content.length()+"]";
 	}
 
 	/**

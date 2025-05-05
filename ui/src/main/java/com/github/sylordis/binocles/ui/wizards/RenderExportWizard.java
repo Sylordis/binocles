@@ -22,17 +22,20 @@ public class RenderExportWizard extends AbstractWizard<Void> {
 	 * Wizard pane for conclusion.
 	 */
 	private RenderExportConclusionPane conclusionPane;
-	
+	/**
+	 * Chapter under use.
+	 */
 	private Chapter chapter;
 
 	/**
 	 * Builds a new render export wizard.
 	 * 
-	 * @param model Model to get data from
+	 * @param model   Model to get data from
 	 * @param chapter Chapter that might have been preselected
+	 * @param owner   Owner of the wizard
 	 */
-	public RenderExportWizard(BinoclesModel model, Chapter chapter) {
-		super("Render export", model);
+	public RenderExportWizard(Object owner, BinoclesModel model, Chapter chapter) {
+		super(owner, "Render export", model);
 		this.chapter = chapter;
 	}
 

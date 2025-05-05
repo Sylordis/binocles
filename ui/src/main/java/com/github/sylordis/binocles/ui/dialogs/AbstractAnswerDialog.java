@@ -106,6 +106,7 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 		// Set grid
 		gridPane = new GridPane();
 		gridPane.getStyleClass().add("form-dialog");
+		formFeedback = new Text("");
 
 		build();
 
@@ -143,7 +144,6 @@ public abstract class AbstractAnswerDialog<R> implements Displayable<Optional<R>
 	 * Instantiates and adds the form feedback field at the specified row.
 	 */
 	public void addFormFeedback(int row) {
-		formFeedback = new Text("");
 		formFeedback.getStyleClass().add("text-danger");
 		getGridPane().addRow(row, formFeedback);
 		GridPane.setColumnSpan(formFeedback, GridPane.REMAINING);

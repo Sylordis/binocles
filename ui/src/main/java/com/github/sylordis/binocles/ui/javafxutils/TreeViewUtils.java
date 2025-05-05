@@ -1,11 +1,11 @@
 package com.github.sylordis.binocles.ui.javafxutils;
 
+import java.util.Collection;
+
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.CheckBoxTreeItem;
-import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.control.cell.CheckBoxTreeCell;
 import javafx.util.Callback;
 
 /**
@@ -54,6 +54,28 @@ public final class TreeViewUtils {
 				return ((CheckBoxTreeItem<?>) item).selectedProperty();
 			return null;
 		};
+	}
+
+	public static <T> void removeSubtree(Collection<TreeItem<T>> collection, CheckBoxTreeItem<T> item) {
+	    if (item.isSelected()) {
+	        collection.remove(item);
+	    } else if (!item.isIndeterminate() && !item.isIndependent()) {
+	        return;
+	    }
+	    for (TreeItem<T> child : item.getChildren()) {
+	        removeSubtree(collection, (CheckBoxTreeItem<T>) child);
+	    }
+	}
+	
+	public static <T> void addSubtree(Collection<TreeItem<T>> collection, CheckBoxTreeItem<T> item) {
+	    if (item.isSelected()) {
+	        collection.add(item);
+	    } else if (!item.isIndeterminate() && !item.isIndependent()) {
+	        return;
+	    }
+	    for (TreeItem<T> child : item.getChildren()) {
+	        addSubtree(collection, (CheckBoxTreeItem<T>) child);
+	    }
 	}
 
 	/**

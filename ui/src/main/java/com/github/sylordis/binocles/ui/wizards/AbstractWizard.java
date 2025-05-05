@@ -14,6 +14,7 @@ import com.github.sylordis.binocles.ui.contracts.Displayable;
 
 import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
 /**
  * Abstract class serving as base for all future Wizards, either with a return type or none. This
@@ -56,17 +57,32 @@ public abstract class AbstractWizard<R> implements Displayable<Optional<R>> {
 	 * Set of all panes of the wizard, strictly used for controls and pre-actions.
 	 */
 	private Set<AbstractWizardPane> panes;
+	/**
+	 * Owner of the wizard.
+	 */
+	private Object owner;
 
 	/**
 	 * Creates a new custom wizard.
 	 * 
+	 * @param owner Owner of the wizard
+	 * @param title Title of the wizard window
 	 * @param model
 	 */
-	public AbstractWizard(String title, BinoclesModel model) {
+	public AbstractWizard(Object owner, String title, BinoclesModel model) {
 		super();
 		this.title = title;
 		this.model = model;
 		this.panes = new HashSet<AbstractWizardPane>();
+	}
+
+	/**
+	 * Creates a new custom wizard with no owner.
+	 * 
+	 * @param model
+	 */
+	public AbstractWizard(String title, BinoclesModel model) {
+		this(null, title, model);
 	}
 
 	/**
@@ -89,6 +105,10 @@ public abstract class AbstractWizard<R> implements Displayable<Optional<R>> {
 	public Optional<R> display() {
 		wizard = new Wizard();
 		wizard.setTitle(title);
+		if (null != icon) {
+			Stage dialogStage = (Stage) wizard.getDialog().getDialogPane().getScene().getWindow();
+			dialogStage.getIcons().add(icon);
+		}
 
 		build();
 		for (AbstractWizardPane pane : panes)
@@ -192,4 +212,21 @@ public abstract class AbstractWizard<R> implements Displayable<Optional<R>> {
 	protected void addPanes(AbstractWizardPane... panes) {
 		this.panes.addAll(Arrays.asList(panes));
 	}
+
+	public Set<AbstractWizardPane> getPanes() {
+		return panes;
+	}
+
+	public void setPanes(Set<AbstractWizardPane> panes) {
+		this.panes = panes;
+	}
+
+	public Object getOwner() {
+		return owner;
+	}
+
+	public void setOwner(Object owner) {
+		this.owner = owner;
+	}
+	
 }

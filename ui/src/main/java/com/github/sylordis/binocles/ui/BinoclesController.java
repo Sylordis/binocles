@@ -244,8 +244,8 @@ public class BinoclesController implements Initializable, Controller {
 		if (null != treeSelected) {
 			// Get current book
 			TreeItem<ReviewableContent> currentTreeBookParent = Book.class.equals(treeSelected.getValue().getClass())
-			        ? treeSelected
-			        : treeSelected.getParent();
+					? treeSelected
+					: treeSelected.getParent();
 			currentBook = (Book) currentTreeBookParent.getValue();
 		}
 		// Create dialog
@@ -259,7 +259,7 @@ public class BinoclesController implements Initializable, Controller {
 				logger.info("Created chapter '{}' in '{}'", chapter.getTitle(), bookParent.getTitle());
 				TreeItem<ReviewableContent> chapterTreeItem = new TreeItem<>(chapter);
 				TreeItem<ReviewableContent> currentBookParent = TreeViewUtils.getTreeViewItem(booksTree.getRoot(),
-				        bookParent);
+						bookParent);
 				currentBookParent.getChildren().add(chapterTreeItem);
 				currentBookParent.setExpanded(true);
 				user.modelWasModified();
@@ -278,7 +278,7 @@ public class BinoclesController implements Initializable, Controller {
 		if (null != treeSelected) {
 			// Get current book
 			TreeItem<NomenclatureItem> currentTreeNomenclatureParent = Nomenclature.class
-			        .equals(treeSelected.getValue().getClass()) ? treeSelected : treeSelected.getParent();
+					.equals(treeSelected.getValue().getClass()) ? treeSelected : treeSelected.getParent();
 			currentNomenclature = (Nomenclature) currentTreeNomenclatureParent.getValue();
 		}
 		CommentTypeDetailsDialog dialog = new CommentTypeDetailsDialog(model, currentNomenclature);
@@ -293,7 +293,7 @@ public class BinoclesController implements Initializable, Controller {
 			type.getStyles().forEach((k, v) -> logger.debug("    {}: {}", k, v));
 			TreeItem<NomenclatureItem> commentTypeTreeItem = new TreeItem<>(type);
 			TreeItem<NomenclatureItem> currentBookParent = TreeViewUtils.getTreeViewItem(nomenclaturesTree.getRoot(),
-			        nomenclature);
+					nomenclature);
 			currentBookParent.getChildren().add(commentTypeTreeItem);
 			currentBookParent.setExpanded(true);
 			nomenclaturesTree.getSelectionModel().select(commentTypeTreeItem);
@@ -361,8 +361,8 @@ public class BinoclesController implements Initializable, Controller {
 	}
 
 	/**
-	 * This action is triggered when the user prompts to delete one or multiple review elements
-	 * (Nomenclature and/or Comment Type).
+	 * This action is triggered when the user prompts to delete one or multiple
+	 * review elements (Nomenclature and/or Comment Type).
 	 * 
 	 * @param event
 	 */
@@ -376,18 +376,18 @@ public class BinoclesController implements Initializable, Controller {
 			Class<?> usedBy = null;
 			if (treeSelected.getValue() instanceof Nomenclature) {
 				used = model.getBooks().stream().filter(b -> treeSelected.getValue().equals(b.getNomenclature()))
-				        .collect(Collectors.toList());
+						.collect(Collectors.toList());
 				usedBy = Book.class;
 			} else if (treeSelected.getValue() instanceof CommentType) {
 				used = model.getBooks().stream().flatMap(b -> b.getChapters().stream())
-				        .flatMap(c -> c.getComments().stream()).filter(c -> treeSelected.getValue().equals(c.getType()))
-				        .collect(Collectors.toList());
+						.flatMap(c -> c.getComments().stream()).filter(c -> treeSelected.getValue().equals(c.getType()))
+						.collect(Collectors.toList());
 				usedBy = Comment.class;
 			}
 			if (!used.isEmpty()) {
 				showErrorAlert("Delete error", String.format(
-				        "The object(s) you are trying to delete are currently in use by %d %s%s.%n%nPlease perform a migration before deleting.",
-				        used.size(), usedBy.getSimpleName(), used.size() > 1 ? "s" : ""));
+						"The object(s) you are trying to delete are currently in use by %d %s%s.%n%nPlease perform a migration before deleting.",
+						used.size(), usedBy.getSimpleName(), used.size() > 1 ? "s" : ""));
 			} else {
 				ReviewElementDeletionConfirmationAlert alert = new ReviewElementDeletionConfirmationAlert();
 				alert.setGraphic(AppIcons.createImageViewFromConfig(AppIcons.ICON_TRASH));
@@ -410,8 +410,8 @@ public class BinoclesController implements Initializable, Controller {
 	}
 
 	/**
-	 * This action is triggered when the user prompts to delete one or multiple text elements (Book
-	 * and/or Chapter).
+	 * This action is triggered when the user prompts to delete one or multiple text
+	 * elements (Book and/or Chapter).
 	 * 
 	 * @param event
 	 */
@@ -500,13 +500,13 @@ public class BinoclesController implements Initializable, Controller {
 			Optional<Tab> optTab = getTabWithItem(nomenclature);
 			CommentType modified = answer.get().commentType();
 			logger.info("Edited comment type '{}' in '{}' => {}", commentType.getName(), nomenclature.getName(),
-			        modified);
+					modified);
 			commentType.copy(modified);
 			nomenclaturesTree.refresh();
 			if (optTab.isPresent())
 				((BinoclesTabPane) optTab.get().getContent()).updateControllerStatus(this);
 			getTabViewsOfType(ChapterView.class, v -> Objects.equal(v.getBook().getNomenclature(), nomenclature))
-			        .forEach(v -> v.updateControllerStatus(this));
+					.forEach(v -> v.updateControllerStatus(this));
 			user.modelWasModified();
 		}
 	}
@@ -542,7 +542,7 @@ public class BinoclesController implements Initializable, Controller {
 				editNomenclature((Nomenclature) treeSelected.getValue());
 			else if (treeSelected.getValue() instanceof CommentType)
 				editCommentType((CommentType) treeSelected.getValue(),
-				        (Nomenclature) treeSelected.getParent().getValue());
+						(Nomenclature) treeSelected.getParent().getValue());
 		}
 	}
 
@@ -573,7 +573,7 @@ public class BinoclesController implements Initializable, Controller {
 
 	public void exportRender(Chapter chapter) {
 		// TODO
-		RenderExportWizard wizard = new RenderExportWizard(model, chapter);
+		RenderExportWizard wizard = new RenderExportWizard(this, model, chapter);
 		wizard.display();
 	}
 
@@ -596,7 +596,7 @@ public class BinoclesController implements Initializable, Controller {
 	public void exportStructuralAction(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters()
-		        .addAll(BinoclesUIConfiguration.getInstance().getFileFilters(IOOperation.EXPORT_STRUCTURAL, true));
+				.addAll(BinoclesUIConfiguration.getInstance().getFileFilters(IOOperation.EXPORT_STRUCTURAL, true));
 		fileChooser.setTitle("Export file");
 		// Open file saver
 		Stage stage = getStageFromSourceOrMenuBar(event);
@@ -676,21 +676,23 @@ public class BinoclesController implements Initializable, Controller {
 	}
 
 	/**
-	 * Gets a tab that is already opened that is holding/representing/containing a given item.
+	 * Gets a tab that is already opened that is holding/representing/containing a
+	 * given item.
 	 * 
 	 * @param item item that the tab is holding
 	 * @return an optional tab, it has a result if a tab could be found
 	 */
 	public Optional<Tab> getTabWithItem(Object o) {
 		Optional<Tab> needle = mainTabPane.getTabs().stream()
-		        .filter(t -> ((BinoclesTabPane) t.getContent()).getItem() != null
-		                && ((BinoclesTabPane) t.getContent()).getItem().equals(o))
-		        .findFirst();
+				.filter(t -> ((BinoclesTabPane) t.getContent()).getItem() != null
+						&& ((BinoclesTabPane) t.getContent()).getItem().equals(o))
+				.findFirst();
 		return needle;
 	}
 
 	/**
-	 * Collects all open tabs that contain given view and returns their actual views.
+	 * Collects all open tabs that contain given view and returns their actual
+	 * views.
 	 * 
 	 * @param <T>  type of the views
 	 * @param type type of the views
@@ -699,7 +701,7 @@ public class BinoclesController implements Initializable, Controller {
 	@SuppressWarnings("unchecked")
 	public <T extends BinoclesTabPane> List<T> getTabViewsOfType(Class<T> type, Predicate<T> filter) {
 		Stream<T> stream = mainTabPane.getTabs().stream().filter(t -> t.getContent().getClass().equals(type))
-		        .map(t -> (T) t.getContent());
+				.map(t -> (T) t.getContent());
 		if (filter != null)
 			stream = stream.filter(filter);
 		List<T> result = stream.collect(Collectors.toList());
@@ -738,7 +740,7 @@ public class BinoclesController implements Initializable, Controller {
 						model.getNomenclatures().add(new DefaultNomenclature());
 						logger.atError().withThrowable(e).log("Error during import.");
 						showErrorAlert(
-						        "Nomenclature with name 'Default' already exists in the imported file. Import was successful but Default Nomenclature was replaced.");
+								"Nomenclature with name 'Default' already exists in the imported file. Import was successful but Default Nomenclature was replaced.");
 					}
 				} else {
 					showNotImplementedAlert();
@@ -776,8 +778,8 @@ public class BinoclesController implements Initializable, Controller {
 		booksTree.setRoot(textTreeRoot);
 		booksTree.setCellFactory(p -> {
 			return new CustomTreeCell<ReviewableContent>(new TreeItemTextSupplierManager<ReviewableContent>()
-			        .decorate(Book.class, new BookDecorator().thenTitle().thenNomenclature())
-			        .decorate(Chapter.class, new ChapterDecorator().thenTitle().thenCommentsCount()));
+					.decorate(Book.class, new BookDecorator().thenTitle().thenNomenclature())
+					.decorate(Chapter.class, new ChapterDecorator().thenTitle().thenCommentsCount()));
 		});
 		rebuildBooksTree();
 		// Initialise the tree for nomenclatures
@@ -785,8 +787,8 @@ public class BinoclesController implements Initializable, Controller {
 		nomenclaturesTree.setRoot(nomenclaturesTreeRoot);
 		nomenclaturesTree.setCellFactory(p -> {
 			return new CustomTreeCell<NomenclatureItem>(new TreeItemTextSupplierManager<NomenclatureItem>()
-			        .decorate(Nomenclature.class, new NomenclatureDecorator().thenName())
-			        .decorate(CommentType.class, new CommentTypeDecorator().thenName()));
+					.decorate(Nomenclature.class, new NomenclatureDecorator().thenName())
+					.decorate(CommentType.class, new CommentTypeDecorator().thenName()));
 		});
 		rebuildNomenclaturesTree();
 		// Bindings & listeners
@@ -795,15 +797,15 @@ public class BinoclesController implements Initializable, Controller {
 		user.lastSaveTimeProperty().addListener((s, o, n) -> updateFooter());
 		// Set trees change listener
 		booksTree.setOnMouseClicked(
-		        TreeVarClickEventHandler.createDoubleClickHandler(booksTree, this::openTabItemAction));
+				TreeVarClickEventHandler.createDoubleClickHandler(booksTree, this::openTabItemAction));
 		booksTree.getSelectionModel().selectedItemProperty().addListener((s, o, n) -> {
 			logger.debug("");
 			setTextElementsContextMenuStatus();
 		});
 		nomenclaturesTree.setOnMouseClicked(
-		        TreeVarClickEventHandler.createDoubleClickHandler(nomenclaturesTree, this::openTabItemAction));
+				TreeVarClickEventHandler.createDoubleClickHandler(nomenclaturesTree, this::openTabItemAction));
 		nomenclaturesTree.getSelectionModel().selectedItemProperty()
-		        .addListener((s, o, n) -> setReviewElementsContextMenuStatus());
+				.addListener((s, o, n) -> setReviewElementsContextMenuStatus());
 		// Set tabs change listener
 		mainTabPane.getSelectionModel().selectedItemProperty().addListener((s, o, n) -> {
 			if (n != null)
@@ -952,7 +954,7 @@ public class BinoclesController implements Initializable, Controller {
 	public void saveAsAction(ActionEvent event) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.getExtensionFilters()
-		        .addAll(BinoclesUIConfiguration.getInstance().getFileFilters(IOOperation.SAVE, true));
+				.addAll(BinoclesUIConfiguration.getInstance().getFileFilters(IOOperation.SAVE, true));
 		fileChooser.setTitle("Save file");
 		// Open file saver
 		Stage stage = getStageFromSourceOrMenuBar(event);
@@ -968,6 +970,7 @@ public class BinoclesController implements Initializable, Controller {
 	public void setButtonsStatus() {
 		toolbarCreateChapter.setDisable(!model.hasBooks());
 		toolbarCreateCommentType.setDisable(!model.hasCustomNomenclatures());
+		toolbarExportStruct.setDisable(booksTree.getSelectionModel().isEmpty());
 	}
 
 	/**
@@ -1001,7 +1004,8 @@ public class BinoclesController implements Initializable, Controller {
 	}
 
 	/**
-	 * Sets the review configuration tree's context menu items status according to current selection.
+	 * Sets the review configuration tree's context menu items status according to
+	 * current selection.
 	 * 
 	 * This is triggered every time the selection model of the tree changes.
 	 */
@@ -1011,16 +1015,16 @@ public class BinoclesController implements Initializable, Controller {
 	}
 
 	/**
-	 * Sets the text elements tree's context menu items status according to current selection.
+	 * Sets the text elements tree's context menu items status according to current
+	 * selection.
 	 * 
 	 * This is triggered every time the selection model of the tree changes.
 	 */
 	public void setTextElementsContextMenuStatus() {
 		booksTreeMenuDelete.setDisable(booksTree.getSelectionModel().isEmpty());
 		booksTreeMenuExportRender.setDisable(booksTree.getSelectionModel().isEmpty()
-		        || booksTree.getSelectionModel().getSelectedItem().getValue().getClass() != Chapter.class);
+				|| booksTree.getSelectionModel().getSelectedItem().getValue().getClass() != Chapter.class);
 		booksTreeMenuEdit.setDisable(booksTree.getSelectionModel().getSelectedIndices().size() != 1);
-		toolbarExportStruct.setDisable(booksTree.getSelectionModel().isEmpty());
 	}
 
 	/**
@@ -1058,7 +1062,8 @@ public class BinoclesController implements Initializable, Controller {
 	}
 
 	/**
-	 * Shows an error alert with no header and a long message in a non-editable text area.
+	 * Shows an error alert with no header and a long message in a non-editable text
+	 * area.
 	 * 
 	 * @param title Title of the alert
 	 * @param text  Long message of the alert, appended after a label
@@ -1107,7 +1112,7 @@ public class BinoclesController implements Initializable, Controller {
 		alert.setHeaderText(null);
 		if (feature != null) {
 			alert.setContentText(String
-			        .format("It seems the feature '%s' is not implemented yet, please come back later =)", feature));
+					.format("It seems the feature '%s' is not implemented yet, please come back later =)", feature));
 		} else {
 			alert.setContentText("It seems this feature is not implemented yet, please come back later =)");
 		}
@@ -1119,7 +1124,7 @@ public class BinoclesController implements Initializable, Controller {
 	 */
 	public void updateFooter() {
 		logger.debug("Updating footer: saved?{} time={} file={}", user.isCurrentModelSaved(), user.getLastSaveTime(),
-		        user.getCurrentSaveFile());
+				user.getCurrentSaveFile());
 		if (!user.isCurrentModelSaved() && user.getCurrentSaveFile() == null) {
 			footerLeftStatusText.setText("Unsaved");
 		} else {
@@ -1131,6 +1136,6 @@ public class BinoclesController implements Initializable, Controller {
 			footerLeftStatusText.setText(msg);
 		}
 		footerRightStatusText
-		        .setText(user.hasSaveFile() ? user.getCurrentSaveFile().getAbsolutePath() : "No save file");
+				.setText(user.hasSaveFile() ? user.getCurrentSaveFile().getAbsolutePath() : "No save file");
 	}
 }

@@ -12,8 +12,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 
 /**
- * Abstract class to manage base for Wizard panes. It handles a basic grid pane, the feedback and
- * validation if need be and has a link to the model.
+ * Abstract class to manage base for Wizard panes. It handles a basic grid pane,
+ * the feedback and validation if need be and has a link to the model.
  */
 public abstract class AbstractWizardPane extends WizardPane {
 
@@ -82,9 +82,10 @@ public abstract class AbstractWizardPane extends WizardPane {
 	}
 
 	/**
-	 * Default method to update the form status, triggering an update of the status of the confirm
-	 * button and processes all feedback from the feedback collectors to set the feedback field. Check
-	 * the "see also" to see which methods are called.
+	 * Default method to update the form status, triggering an update of the status
+	 * of the confirm button and processes all feedback from the feedback collectors
+	 * to set the feedback field. Check the "see also" to see which methods are
+	 * called.
 	 * 
 	 * @see #setConfirmButtonDisabledOnValidity()
 	 * @see #combineAndProcessFeedback(Consumer)
